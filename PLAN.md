@@ -4,7 +4,7 @@
 
 ## In Progress
 
-- [ ] [T-020] Add Spanish README translation
+- _No active tasks._
 
 ## Done
 
@@ -27,3 +27,4 @@
 - [x] [T-003] Move tasks data into .AGENTS/TASKS.json
 - [x] [T-002] Restructure agent registry into JSON files
 - [x] [T-001] Document framework in README
+- [x] [T-020] Add Spanish README translation
