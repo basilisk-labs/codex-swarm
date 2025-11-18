@@ -123,7 +123,7 @@
     {
       "id": "T-016",
       "title": "Remove tool references from AGENTS.md for Codex-only workflow",
-      "status": "TODO",
+      "status": "DOING",
       "priority": "high",
       "owner": "codex",
       "tags": ["docs", "agents"]

@@ -11,6 +11,7 @@ shared_state:
 - This spec is consumed inside the OpenAI Codex IDE extension that runs in VS Code, Cursor, and Windsurf on macOS and Linux; Windows support relies on opening the repo through WSL. Treat the checked-out git repository as the only environment you can touch.
 - Keep the Codex panel pinned in Cursor (or the right sidebar in VS Code) and treat it as the primary surface for coding tasks—no remote sandboxes or cloud runtimes exist in this workflow.
 - Codex defaults to the **Agent** approval mode, which can read files, edit them, and run commands inside the workspace. Always request explicit approval before leaving the repo root or accessing the network. Switch to **Chat** for planning-only discussions and reserve **Agent (Full Access)** for rare, user-approved tasks that truly need unrestricted access.
+- There are no extra agent tools—every action happens by describing context and precise edits to Codex. Treat your reply as the only interface to the workspace.
 - Reference files and folders with `@relative/path` mentions so the extension can load the exact buffers you need. For example:
 
 ```text
@@ -48,7 +49,8 @@ Use @example.tsx as a reference to add a Resources page that renders the list de
 # THINKING & TOOLING
 
 - Think step by step internally, surfacing only the concise plan, key checks, and final answer. Avoid spilling raw chain-of-thought.
-- Reach for the `update_plan` tool whenever work spans multiple sub-steps or when progress needs to be tracked mid-task. Keep the plan synchronized with actual work.
+- When work spans multiple sub-steps, write a short numbered plan directly in your reply before editing anything. Update that list as progress is made so everyone can see the latest path.
+- There is no separate automation surface—spell out each edit, command, or validation so Codex can apply it verbatim inside the IDE.
 - Anchor every action in the currently open local workspace; if you truly need context outside the repo, state it explicitly and pause for approval.
 - Describe the exact edits Codex should make (file + snippet + replacement) so the extension can apply the diff locally. Keep changes incremental and easy to review.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
@@ -207,14 +209,14 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 * Step 2: Draft the plan.
   * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
   * Be realistic about what can be done in one run; chunk larger work into multiple steps.
-  * Call `update_plan` with the proposed sub-steps so every agent can see the execution path.
+  * Record the plan inline (numbered list) so every agent can see the execution path.
 * Step 3: Ask for approval.
   * Stop and wait for user input before executing steps.
 * Step 4: Execute.
   * For each step, follow the corresponding agent’s JSON definition as if you switched `agent_mode` to that agent.
   * Update `PLAN.md` / `.AGENTS/TASKS.json` through `PLANNER` or via the agent that owns task updates.
   * Ensure the acting agent stages and commits its changes with a concise message (including task IDs) before proceeding to the next plan step, then confirm the working tree is clean and report the commit hash in the progress summary.
-  * Keep the user in the loop: after each block of work, show a short progress summary referencing the `update_plan` steps.
+  * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
 * Step 5: Finalize.
   * Present a concise summary: what changed, which tasks were created/updated, and suggested next steps.
 

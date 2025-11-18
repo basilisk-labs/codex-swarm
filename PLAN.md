@@ -1,11 +1,10 @@
 ## Backlog
 
-- [ ] [T-016] Remove tool references from AGENTS.md for Codex-only workflow
 - [ ] [T-017] Update agent prompts for tool-less Codex context
 
 ## In Progress
 
-- _No active tasks._
+- [ ] [T-016] Remove tool references from AGENTS.md for Codex-only workflow
 
 ## Done
 
