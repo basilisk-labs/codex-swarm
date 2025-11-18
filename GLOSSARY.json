@@ -5,27 +5,30 @@
       "description": "Название легковесного фреймворка для кооперативных Codex-агентов внутри IDE.",
       "translations": {
         "en": "Codex Agents Swarm",
-        "ru": "Рой агентов Codex"
+        "ru": "Рой агентов Codex",
+        "es": "Enjambre de agentes Codex"
       },
-      "frequency": 1
+      "frequency": 2
     },
     {
       "term": "OpenAI Codex Plugin",
       "description": "Плагин Codex, который соединяет IDE с возможностями OpenAI.",
       "translations": {
         "en": "OpenAI Codex Plugin",
-        "ru": "плагин OpenAI Codex"
+        "ru": "плагин OpenAI Codex",
+        "es": "plugin OpenAI Codex"
       },
-      "frequency": 1
+      "frequency": 2
     },
     {
       "term": "Orchestrator",
       "description": "Агент, который интерпретирует цели пользователя и координирует остальных исполнителей.",
       "translations": {
         "en": "Orchestrator",
-        "ru": "оркестратор"
+        "ru": "оркестратор",
+        "es": "Orquestador"
       },
-      "frequency": 1
+      "frequency": 2
     }
   ]
 }
