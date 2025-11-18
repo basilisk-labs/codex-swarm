@@ -139,7 +139,7 @@
     {
       "id": "T-018",
       "title": "Streamline AGENTS.md English guidelines",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "high",
       "owner": "codex",
       "tags": ["docs", "agents"]

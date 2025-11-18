@@ -4,10 +4,11 @@
 
 ## In Progress
 
-- [ ] [T-018] Streamline AGENTS.md English guidelines (DOING)
+- _No active tasks._
 
 ## Done
 
+- [x] [T-018] Streamline AGENTS.md English guidelines
 - [x] [T-017] Update agent prompts for tool-less Codex context
 - [x] [T-016] Remove tool references from AGENTS.md for Codex-only workflow
 - [x] [T-015] Align agent prompts with Cursor + Codex constraints
