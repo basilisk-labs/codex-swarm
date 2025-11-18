@@ -119,6 +119,22 @@
       "priority": "high",
       "owner": "codex",
       "tags": ["prompting", "agents"]
+    },
+    {
+      "id": "T-016",
+      "title": "Remove tool references from AGENTS.md for Codex-only workflow",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["docs", "agents"]
+    },
+    {
+      "id": "T-017",
+      "title": "Update agent prompts for tool-less Codex context",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["prompting", "agents"]
     }
   ]
 }
