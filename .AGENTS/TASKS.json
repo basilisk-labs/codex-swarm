@@ -63,6 +63,14 @@
       "priority": "med",
       "owner": "codex",
       "tags": ["docs", "readme"]
+    },
+    {
+      "id": "T-009",
+      "title": "Define status transition protocol",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["workflow", "tasks"]
     }
   ]
 }

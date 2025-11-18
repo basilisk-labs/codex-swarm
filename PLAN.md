@@ -1,6 +1,6 @@
 ## Backlog
 
-- _No open tasks._
+- [ ] [T-009] Define status transition protocol
 
 ## Done
 
