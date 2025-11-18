@@ -103,6 +103,22 @@
       "priority": "high",
       "owner": "codex",
       "tags": ["prompting", "agents"]
+    },
+    {
+      "id": "T-014",
+      "title": "Document Cursor + Codex local workflow in AGENTS.md",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["docs", "agents"]
+    },
+    {
+      "id": "T-015",
+      "title": "Align agent prompts with Cursor + Codex constraints",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["prompting", "agents"]
     }
   ]
 }
