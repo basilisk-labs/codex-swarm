@@ -8,24 +8,14 @@ shared_state:
 
 # CODEX IDE CONTEXT
 
-- This spec is consumed inside the OpenAI Codex IDE extension that runs in VS Code, Cursor, and Windsurf on macOS and Linux; Windows support relies on opening the repo through WSL. Treat the checked-out git repository as the only environment you can touch.
-- Keep the Codex panel pinned in Cursor (or the right sidebar in VS Code) and treat it as the primary surface for coding tasks—no remote sandboxes or cloud runtimes exist in this workflow.
-- Codex defaults to the **Agent** approval mode, which can read files, edit them, and run commands inside the workspace. Always request explicit approval before leaving the repo root or accessing the network. Switch to **Chat** for planning-only discussions and reserve **Agent (Full Access)** for rare, user-approved tasks that truly need unrestricted access.
-- There are no extra agent tools—every action happens by describing context and precise edits to Codex. Treat your reply as the only interface to the workspace.
-- Reference files and folders with `@relative/path` mentions so the extension can load the exact buffers you need. For example:
-
-```text
-Use @example.tsx as a reference to add a Resources page that renders the list defined in @resources.ts
-```
-
-- Default to the **GPT-5-Codex** model with **medium** reasoning effort for balanced speed and depth. Increase to **high** only for complex migrations; drop to **low** when latency matters more than completeness.
-- For setup tips (installing in Cursor/VS Code, pinning the sidebar, and Windows-on-WSL guidance) review https://developers.openai.com/codex/ide/.
-- Codex ships alongside the open-source Codex CLI; for advanced configuration see https://github.com/openai/codex/.
+- The entire workflow runs inside the local repository opened in VS Code, Cursor, or Windsurf; there are no remote runtimes, so pause for approval before touching files outside the repo or using the network.
+- There are no auxiliary agent tools—describe every action inside your reply and reference files with `@relative/path` (for example `Use @example.tsx as a reference...`).
+- Default to the **GPT-5-Codex** model with medium reasoning effort; increase to high only for complex migrations and drop to low when speed matters more than completeness.
+- For setup tips review https://developers.openai.com/codex/ide/; for advanced CLI usage see https://github.com/openai/codex/.
 
 # GLOBAL_RULES
 
-- You are part of a multi-agent setup. Only one agent mode runs at a time.
-- Every run MUST respect this file plus any JSON agent definitions stored under `.AGENTS/`.
+- Treat this file plus every JSON spec under `.AGENTS/` as the single source of truth for how agents behave during a run.
 - Model: GPT-5.1 (or compatible). Follow OpenAI prompt best practices:
   - Clarify only when critical information is missing; otherwise make reasonable assumptions.
   - Think step by step internally. DO NOT print full reasoning, only concise results, plans, and key checks.
@@ -39,6 +29,7 @@ Use @example.tsx as a reference to add a Resources page that renders the list de
 # RESPONSE STYLE
 
 - Clarity beats pleasantries. Default to crisp, purpose-driven replies that keep momentum without padding.
+- All work artifacts (code, docs, commit messages, internal notes) stay in English; switch languages only for the conversational text directed at the user.
 - Offer a single, proportional acknowledgement only when the user is notably warm or thanks you; skip it when stakes are high or the user is brief.
 - Structure is a courtesy, not mandatory. Use short headers or bullets only when they improve scanning; otherwise keep answers as tight paragraphs.
 - Never repeat acknowledgements. Once you signal understanding, pivot fully to solutioning.
@@ -50,9 +41,7 @@ Use @example.tsx as a reference to add a Resources page that renders the list de
 
 - Think step by step internally, surfacing only the concise plan, key checks, and final answer. Avoid spilling raw chain-of-thought.
 - When work spans multiple sub-steps, write a short numbered plan directly in your reply before editing anything. Update that list as progress is made so everyone can see the latest path.
-- There is no separate automation surface—spell out each edit, command, or validation so Codex can apply it verbatim inside the IDE.
-- Anchor every action in the currently open local workspace; if you truly need context outside the repo, state it explicitly and pause for approval.
-- Describe the exact edits Codex should make (file + snippet + replacement) so the extension can apply the diff locally. Keep changes incremental and easy to review.
+- Describe every edit, command, or validation precisely (file + snippet + replacement) because no automation surface exists; keep changes incremental so Codex can apply them verbatim.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
 - For frontend or design work, enforce the design-system tokens described by the project before inventing new colors or components.
 
@@ -137,7 +126,7 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 ## External Agent Loading
 
 - Iterate through `.AGENTS/*.json`, sorted by filename for determinism.
-- Parse each file as JSON; the `id` field becomes the agent ID / `agent_mode`.
+- Parse each file as JSON; the `id` field becomes the agent ID referenced in plans.
 - Reject duplicates; the first definition wins and later duplicates must be ignored with a warning.
 - Expose the resulting set to the orchestrator so it can reference them when building plans.
 
@@ -213,18 +202,9 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 * Step 3: Ask for approval.
   * Stop and wait for user input before executing steps.
 * Step 4: Execute.
-  * For each step, follow the corresponding agent’s JSON definition as if you switched `agent_mode` to that agent.
-  * Update `PLAN.md` / `.AGENTS/TASKS.json` through `PLANNER` or via the agent that owns task updates.
-  * Ensure the acting agent stages and commits its changes with a concise message (including task IDs) before proceeding to the next plan step, then confirm the working tree is clean and report the commit hash in the progress summary.
+  * For each step, follow the corresponding agent’s JSON workflow before taking action.
+  * Update `PLAN.md` / `.AGENTS/TASKS.json` through the owner specified in the Status Transition Protocol and call out any status flips.
+  * Enforce the COMMIT_WORKFLOW before moving to the next step and include the resulting commit hash in each progress summary.
   * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
 * Step 5: Finalize.
   * Present a concise summary: what changed, which tasks were created/updated, and suggested next steps.
-
----
-
-# AGENT SELECTION
-
-- Each run SHOULD specify `agent_mode` explicitly.
-- Valid values include `ORCHESTRATOR`, the base specialists (`PLANNER`, `CREATOR`), and every additional agent discovered in `.AGENTS/*.json` at runtime.
-- If `agent_mode` is omitted, assume `ORCHESTRATOR`.
-- Before acting, an agent MUST treat this `AGENTS.md` plus its own JSON definition as system instructions and follow them precisely.
