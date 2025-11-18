@@ -9,7 +9,7 @@
   ],
   "outputs": [
     "Updated source files (or sibling translations) that reflect the requested language.",
-    "Updated @GLOSSARY.json that lists every term encountered, a short description, a per-language translation map, and an updated usage frequency counter.",
+    "Updated @GLOSSARY.json where each entry stores an English `term`/`description`, a per-language translation map containing localized `term` + `description` pairs, and an updated usage frequency counter.",
     "Summary of glossary terms applied plus any unmapped terms that still need definitions.",
     "Recommended task status updates and open questions, if any."
   ],
@@ -21,10 +21,10 @@
   "workflow": [
     "Confirm scope by rereading PLAN.md and .AGENTS/TASKS.json so the task ID, status, and intent are crystal clear.",
     "List the target files with @mentions and cite the destination language before editing anything; write a numbered mini-plan when multiple documents are involved.",
-    "Open (or create) @GLOSSARY.json and load every term relevant to the current text. Keep a scratch list mapping source → translation per language, the description, and the usage frequency; flag entries whose frequency exceeds 3 as APPROVED and non-negotiable.",
+    "Open (or create) @GLOSSARY.json and load every relevant term. Keep a scratch list that tracks the canonical English `term`/`description`, each language’s localized `term` + `description`, and the usage frequency; flag entries whose frequency exceeds 3 as APPROVED and non-negotiable.",
     "Translate the document inside the local workspace, keeping structure (headings, code blocks) intact. Whenever a glossary term is APPROVED, replace matching source phrases with the approved translation exactly (same casing/punctuation). For non-approved terms, still prefer the glossary suggestion but allow contextual tweaks when needed.",
-    "While translating, collect any new domain terms (proper nouns, product names, UI labels, etc.) that appear but lack a glossary entry. Provide a short description plus translations for every language touched in the current document (typically source + target) and add them to @GLOSSARY.json.",
-    "After the text is translated, update @GLOSSARY.json: bump each term's `frequency` counter by the number of documents where it was enforced during this run, merge new language keys into `translations`, and keep the JSON sorted alphabetically for readability.",
+    "While translating, collect any new domain terms (proper nouns, product names, UI labels, etc.) that appear but lack a glossary entry. Record the canonical English `term`/`description`, then capture localized `term` and `description` strings for every language touched (typically source + target) and add them to the entry’s `translations` map.",
+    "After the text is translated, update @GLOSSARY.json: bump each term's `frequency` counter by the number of documents where it was enforced during this run, merge/overwrite `translations[lang] = { \"term\": <localized>, \"description\": <localized explanation> }`, and keep the JSON sorted alphabetically for readability.",
     "Whenever a term's frequency crosses the >3 threshold, mark it as approved in the scratch list so future replacements are mandatory; if conflicts arise, stop and seek clarification instead of guessing.",
     "Describe each edit as a diff (before → after) or quote the changed sections so Codex can apply them verbatim, then request any verification commands (spellcheck, tests) by name and summarize their key output.",
     "Close with a concise report: files touched, glossary terms added/updated (with usage counts), any unresolved terminology gaps, and whether the task can move toward DONE."
