@@ -1,10 +1,10 @@
 ## Backlog
 
-- [ ] [T-012] Generalize AGENTS.md to remove agent-specific guidance
+- _No open tasks._
 
 ## In Progress
 
-- _No active tasks._
+- [ ] [T-012] Generalize AGENTS.md to remove agent-specific guidance
 
 ## Done
 

@@ -24,18 +24,12 @@ shared_state:
 
 - Treat each plan task (`T-###`) as an atomic unit of work that must end with its own git commit.
 - Commit messages must stay short, human friendly, and include the relevant task ID when possible.
-- Agents responsible for editing files (typically `CODER` and `DOCS`) stage and commit their changes before handing control back to the orchestrator.
+- Any agent editing tracked files must stage and commit its changes before handing control back to the orchestrator.
 - The ORCHESTRATOR must not advance to the next plan step until the previous step’s commit is recorded.
 - Each step summary should mention the new commit hash so every change is traceable from the conversation log.
 - Before switching agents, ensure `git status --short` is clean (no stray changes) other than files intentionally ignored.
 
-## Commit Message Patterns
-
-- **Planning commits (PLANNER)** — When opening or reshaping tasks, use messages like `Plan T-010 data cleanup tasks` so the log makes it obvious which IDs entered the backlog.
-- **Implementation commits (CODER)** — Describe the delivered change while naming every task, e.g., `Implement T-007 commit policy updates`.
-- **Documentation commits (DOCS)** — Tie the docs change to the task and audience, such as `Docs T-008 describe repo layout`.
-- **Review/closure commits (REVIEWER)** — When marking work DONE or BLOCKED without code edits, prefer messages like `Review T-007 completed` to clarify intent.
-- If one commit spans multiple IDs, list them all (`Finish T-007/T-008 release tweaks`). Avoid vague phrases like “misc fixes”.
+> Role-specific commit conventions live in each agent’s JSON profile.
 
 ---
 
@@ -58,10 +52,10 @@ Allowed statuses (semantic, not necessarily printed): `TODO`, `DOING`, `DONE`, `
 ### Status Transition Protocol
 
 - **Create / Reprioritize (PLANNER only).** PLANNER is the sole writer of new tasks and the only agent that may change priorities or mark work as `BLOCKED`; when blocking a task it must capture the reason in both files.
-- **Start Work (CODER or DOCS).** The agent assuming ownership flips the task to `DOING` in both trackers before editing files, signaling that the work is in progress.
-- **Complete Work (REVIEWER or DOCS).** REVIEWER marks tasks `DONE` after validating the deliverable. DOCS may mark doc-only tasks as `DONE` when no code change occurred; otherwise they request REVIEWER sign-off.
+- **Start Work (specialist agent).** Whoever assumes ownership flips the task to `DOING` in both trackers before editing files, signaling that the work is in progress.
+- **Complete Work (review/doc specialist).** The reviewer or documentation-focused agent marks tasks `DONE` only after validating the deliverable; otherwise they request follow-up work.
 - **Status Sync.** Every transition must be mirrored in `PLAN.md` and `.AGENTS/TASKS.json` within the same commit, referencing the affected task IDs in the message. If a discrepancy is detected, pause and reconcile before continuing.
-- **Escalations.** Agents lacking permission for a desired transition must request PLANNER or REVIEWER involvement rather than editing statuses directly.
+- **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule an appropriate reviewer via the plan rather than editing statuses directly.
 
 Protocol:
 
@@ -100,7 +94,7 @@ Protocol:
 
 # AGENT REGISTRY
 
-All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` directory. On startup, dynamically import every `.AGENTS/*.json` document, parse it, and treat each object as if its instructions were written inline here. Adding or modifying an agent therefore requires no changes to this root file.
+All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` directory. On startup, dynamically import every `.AGENTS/*.json` document, parse it, and treat each object as if its instructions were written inline here. Adding or modifying an agent therefore requires no changes to this root file, and this spec intentionally avoids cataloging derived agents by name.
 
 ## External Agent Loading
 
@@ -163,7 +157,7 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 ## Output
 
 1. A clear, numbered plan that:
-   * Maps each step to one of the available agent IDs (loaded from `.AGENTS/*.json`, e.g., `PLANNER`, `CODER`, `REVIEWER`, `DOCS`).
+   * Maps each step to one of the available agent IDs (base agents such as `PLANNER` plus any dynamically loaded specialists discovered under `.AGENTS/*.json`).
    * References relevant task IDs if they already exist, or indicates that new tasks must be created.
 2. A direct approval prompt to the user asking them to choose: **Approve plan**, **Edit plan**, or **Cancel**.
 3. After approval:
@@ -192,6 +186,6 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 # AGENT SELECTION
 
 - Each run SHOULD specify `agent_mode` explicitly.
-- Valid values include `ORCHESTRATOR` plus every `id` discovered in `.AGENTS/*.json` (currently: `PLANNER`, `CODER`, `REVIEWER`, `DOCS`, `CREATOR`).
+- Valid values include `ORCHESTRATOR`, the base specialists (`PLANNER`, `CREATOR`), and every additional agent discovered in `.AGENTS/*.json` at runtime.
 - If `agent_mode` is omitted, assume `ORCHESTRATOR`.
 - Before acting, an agent MUST treat this `AGENTS.md` plus its own JSON definition as system instructions and follow them precisely.
