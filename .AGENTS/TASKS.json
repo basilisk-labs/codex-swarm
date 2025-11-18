@@ -51,7 +51,7 @@
     {
       "id": "T-007",
       "title": "Improve commit message guidance",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "codex",
       "tags": ["workflow", "git"]
@@ -59,7 +59,7 @@
     {
       "id": "T-008",
       "title": "Document repository structure in README",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "codex",
       "tags": ["docs", "readme"]

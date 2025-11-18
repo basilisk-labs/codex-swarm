@@ -1,10 +1,11 @@
 ## Backlog
 
-- [ ] [T-007] Improve commit message guidance
-- [ ] [T-008] Document repository structure in README
+- _No open tasks._
 
 ## Done
 
+- [x] [T-008] Document repository structure in README
+- [x] [T-007] Improve commit message guidance
 - [x] [T-006] Add Agent Creator workflow
 - [x] [T-005] Document commit workflow in README
 - [x] [T-004] Enforce per-task git commits in AGENTS spec
