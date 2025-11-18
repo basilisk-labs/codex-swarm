@@ -191,6 +191,14 @@
       "priority": "high",
       "owner": "codex",
       "tags": ["docs", "localization", "glossary"]
+    },
+    {
+      "id": "T-025",
+      "title": "Clarify emoji commit workflow",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["workflow", "git"]
     }
   ]
 }

@@ -1,6 +1,6 @@
 ## Backlog
 
-- _No open tasks._
+- [ ] [T-025] Clarify emoji commit workflow
 
 ## In Progress
 
