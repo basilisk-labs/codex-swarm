@@ -1,6 +1,6 @@
 ## Backlog
 
-- [ ] [T-019] Add glossary-aware translation agent
+- _No open tasks._
 
 ## In Progress
 
@@ -8,6 +8,7 @@
 
 ## Done
 
+- [x] [T-019] Add glossary-aware translation agent
 - [x] [T-018] Streamline AGENTS.md English guidelines
 - [x] [T-017] Update agent prompts for tool-less Codex context
 - [x] [T-016] Remove tool references from AGENTS.md for Codex-only workflow

@@ -147,7 +147,7 @@
     {
       "id": "T-019",
       "title": "Add glossary-aware translation agent",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "codex",
       "tags": ["agents", "localization"]
