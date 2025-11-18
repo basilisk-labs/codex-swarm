@@ -99,7 +99,7 @@
     {
       "id": "T-013",
       "title": "Align agent prompts with GPT-5.1 guide",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "high",
       "owner": "codex",
       "tags": ["prompting", "agents"]
