@@ -4,7 +4,7 @@
 
 ## In Progress
 
-- [ ] [T-022] Add Russian README translation
+- _No active tasks._
 
 ## Done
 
@@ -30,3 +30,5 @@
 - [x] [T-020] Add Spanish README translation
 - [x] [T-021] Enhance translator glossary workflow
   - Review: Updated the TRANSLATOR agent so every run maintains @GLOSSARY.json, tracks usage frequencies, and enforces approved glossary terms automatically.
+- [x] [T-022] Add Russian README translation
+  - Review: Added README.ru.md plus @GLOSSARY.json so translation terminology stays consistent.
