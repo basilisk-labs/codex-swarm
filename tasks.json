@@ -314,7 +314,7 @@
       "id": "T-028",
       "title": "Add virtualenv installation reminder",
       "description": "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments.",
-      "status": "TODO",
+      "status": "DOING",
       "priority": "med",
       "owner": "docs",
       "tags": ["docs", "workflow"],

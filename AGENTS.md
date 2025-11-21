@@ -43,6 +43,7 @@ shared_state:
 - Describe every edit, command, or validation precisely (file + snippet + replacement) because no automation surface exists; keep changes incremental so Codex can apply them verbatim.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
 - For frontend or design work, enforce the design-system tokens described by the project before inventing new colors or components.
+- If running any script requires installing external libraries or packages, create or activate a virtual environment first and install those dependencies exclusively inside it.
 
 ---
 
