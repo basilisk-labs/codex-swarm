@@ -1,13 +1,19 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-21 18:29:18 UTC_
+_Last updated: 2025-11-21 18:29:59 UTC_
 
 ## **⭐ Summary**
-- 🧮 **Total:** 36
-- 📋 **Backlog:** 0
-- 🚧 **In Progress:** 1
-- ⛔ **Blocked:** 0
-- ✅ **Done:** 35
+
+| Icon | Metric | Count |
+| --- | --- | --- |
+| 🧮 | **Total** | 36 |
+| 📋 | **Backlog** | 0 |
+| 🚧 | **In Progress** | 1 |
+| ⛔ | **Blocked** | 0 |
+| ✅ | **Done** | 35 |
+
+🌈 **Palette note:** Keep `python scripts/tasks.py` handy so the table stays in sync after every update.
+🎉 **Vibe check:** Emoji commits + clear summaries = joyful collaborators.
 
 ## **📋 Backlog**
 _No open tasks._

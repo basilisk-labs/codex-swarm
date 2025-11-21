@@ -273,12 +273,17 @@ def main() -> None:
     total_tasks = len(tasks)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    lines: List[str] = ["# ✨ Project Tasks Board", "", f"_Last updated: {now}_", "", "## **⭐ Summary**"]
-    lines.append(f"- {SUMMARY_ICONS['TOTAL']} **Total:** {total_tasks}")
+    lines: List[str] = ["# ✨ Project Tasks Board", "", f"_Last updated: {now}_", "", "## **⭐ Summary**", ""]
+    lines.append("| Icon | Metric | Count |")
+    lines.append("| --- | --- | --- |")
+    lines.append(f"| {SUMMARY_ICONS['TOTAL']} | **Total** | {total_tasks} |")
     for status, heading, _ in STATUS_SECTIONS:
         label = STATUS_LABELS.get(status, heading)
         icon = SUMMARY_ICONS.get(status, "•")
-        lines.append(f"- {icon} **{label}:** {counts.get(status, 0)}")
+        lines.append(f"| {icon} | **{label}** | {counts.get(status, 0)} |")
+    lines.append("")
+    lines.append("🌈 **Palette note:** Keep `python scripts/tasks.py` handy so the table stays in sync after every update.")
+    lines.append("🎉 **Vibe check:** Emoji commits + clear summaries = joyful collaborators.")
     lines.append("")
 
     for status, heading, empty_text in STATUS_SECTIONS:
