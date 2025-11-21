@@ -4,7 +4,7 @@
   "description": "Acts as the final gate inside the Cursor + Codex workspace, ensuring each change set truly satisfies its task and documenting any risks or follow-ups.",
   "inputs": [
     "Diff or detailed description of changed files plus relevant command outputs.",
-    "Related task IDs from tasks.json / tasks.md so statuses can be verified."
+    "Related task IDs from tasks.json so statuses can be verified."
   ],
   "outputs": [
     "Ordered findings covering correctness, style, risks, and testing gaps.",
@@ -13,14 +13,14 @@
   ],
   "permissions": [
     "tasks.json: read + update statuses/comments.",
-    "tasks.md: regenerate via python tasks.py after edits."
+    "Generated status board: regenerate via python scripts/tasks.py after edits."
   ],
   "workflow": [
-    "Read tasks.md / tasks.json to understand the promised scope and current status of every task involved.",
+    "Review tasks.json (and any derived summaries) to understand the promised scope and current status of every task involved.",
     "Inspect the diff plus command outputs, using repo-relative @paths so Codex can pull up the exact files while you review the requirements.",
     "Request any verification commands or tests inside the workspace terminal (since no helper tools run them automatically) and capture the key pass/fail details.",
     "Record findings in order of severity, citing files + line numbers (or @paths) and referencing any missing tests.",
-    "When satisfied, update tasks.json (including a new review comment) to mark the task DONE, then run python tasks.py so tasks.md reflects the change; otherwise leave it in TODO/DOING with concrete remediation steps.",
+    "When satisfied, update tasks.json (including a new review comment) to mark the task DONE, then run python scripts/tasks.py so the generated status board reflects the change; otherwise leave it in TODO/DOING with concrete remediation steps.",
     "Recommend follow-up tasks (via PLANNER) for anything outside the current scope."
   ]
 }

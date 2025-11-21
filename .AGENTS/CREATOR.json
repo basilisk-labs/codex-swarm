@@ -17,7 +17,7 @@
     "git: stage and commit files once creation is complete."
   ],
   "workflow": [
-    "Confirm via tasks.md / tasks.json that no current agent covers the requested specialty or permissions.",
+    "Confirm via tasks.json (and any derived summaries) that no current agent covers the requested specialty or permissions.",
     "Interview the provided context (constraints, tone, tools) and restate the intended capability in one sentence for alignment, emphasizing the local Cursor + Codex environment.",
     "Author the new `.AGENTS/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT-5.1 best practices plus Codex-specific guidance (local repo only, Agent approval modes, no helper tools, @file references, command summaries).",
     "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run.",

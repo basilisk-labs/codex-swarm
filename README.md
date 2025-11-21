@@ -6,7 +6,7 @@ Codex Agents Swarm is a lightweight framework that bridges the OpenAI Codex Plug
 
 1. **Orchestrator-focused contract.** `AGENTS.md` defines only the global rules, shared state, and the ORCHESTRATOR agent. The orchestrator interprets the user’s goal, drafts a plan, requests approval, and delegates work to other agents.
 2. **External agent registry.** Every non-orchestrator agent lives in `.AGENTS/<ID>.json`. When the IDE loads this repository, it dynamically imports each JSON document and registers the agent ID, role, permissions, and workflow.
-3. **Shared task state.** All task data lives in the root-level `tasks.json`, and the `tasks.py` script regenerates a human-readable `tasks.md` so everyone can scan the backlog without editing JSON.
+3. **Shared task state.** All task data lives in the root-level `tasks.json`, and `scripts/tasks.py` regenerates a human-readable `tasks.md` so everyone can scan the backlog without editing JSON.
 4. **Plugin-agnostic operation.** Because the instructions are plain Markdown and JSON, any IDE that supports the Codex Plugin can execute the same flows without extra configuration.
 
 ## Repository Layout
@@ -18,7 +18,8 @@ Codex Agents Swarm is a lightweight framework that bridges the OpenAI Codex Plug
 ├── README.md
 ├── tasks.json
 ├── tasks.md
-├── tasks.py
+├── scripts
+│   └── tasks.py
 └── .AGENTS/
     ├── PLANNER.json
     ├── CODER.json
@@ -37,7 +38,7 @@ Codex Agents Swarm is a lightweight framework that bridges the OpenAI Codex Plug
 | `.AGENTS/CREATOR.json` | On-demand agent factory that writes new JSON agents plus registry updates. |
 | `tasks.json` | Canonical backlog with status, priority, description, tags, and threaded comments. |
 | `tasks.md` | Generated human-readable board grouped by status buckets (do not edit by hand). |
-| `tasks.py` | Utility script that reads `tasks.json` and rewrites `tasks.md` so both stay in sync. |
+| `scripts/tasks.py` | Utility script that reads `tasks.json` and rewrites `tasks.md` so both stay in sync. |
 | `README.md` | High-level overview and onboarding material for the repository. |
 | `LICENSE` | MIT License for the project. |
 
@@ -46,7 +47,7 @@ Codex Agents Swarm is a lightweight framework that bridges the OpenAI Codex Plug
 1. **Planning:** The ORCHESTRATOR reads `AGENTS.md`, loads `.AGENTS/*.json`, and creates a plan that maps each step to a registered agent (e.g., PLANNER, CODER, REVIEWER, DOCS).
 2. **Approval:** The user can approve, edit, or cancel the plan before any work starts.
 3. **Execution:** The orchestrator switches `agent_mode` according to the plan, allowing each agent to follow its JSON-defined workflow inside the IDE.
-4. **Progress tracking:** Agents edit `tasks.json` according to their permissions and rerun `python tasks.py` so `tasks.md` instantly reflects the new state.
+4. **Progress tracking:** Agents edit `tasks.json` according to their permissions and rerun `python scripts/tasks.py` so `tasks.md` instantly reflects the new state.
 
 This structure lets you string together arbitrary workflows such as code implementation, documentation refreshes, research digests, or task triage—all from the same IDE session.
 
@@ -61,8 +62,8 @@ This structure lets you string together arbitrary workflows such as code impleme
 ## Shared State Details
 
 - **`tasks.json`**: Canonical backlog file containing every task’s ID, title, description, status, priority, owner, tags, and threaded comments. Agents edit this file directly (usually via PLANNER/REVIEWER) so automation always has reliable state.
-- **`tasks.md`**: Generated dashboard created by running `python tasks.py`. It groups tasks into Backlog / In Progress / Blocked / Done, shows metadata, and mirrors the latest `comments` snippets so humans can skim progress without opening the JSON.
-- **`tasks.py`**: Small CLI helper that reads `tasks.json` and rewrites `tasks.md`. Run it every time task data changes; do not edit `tasks.md` manually.
+- **`tasks.md`**: Generated dashboard created by running `python scripts/tasks.py`. It groups tasks into Backlog / In Progress / Blocked / Done, shows metadata, and mirrors the latest `comments` snippets so humans can skim progress without opening the JSON.
+- **`scripts/tasks.py`**: Small CLI helper that reads `tasks.json` and rewrites `tasks.md`. Run it every time task data changes; do not edit `tasks.md` manually.
 
 ## Adding a New Agent
 

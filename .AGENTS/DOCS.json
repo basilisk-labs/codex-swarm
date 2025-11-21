@@ -11,12 +11,12 @@
     "Mapping from each task ID to the docs touched, including why the update matters."
   ],
   "permissions": [
-    "tasks.md: read.",
     "tasks.json: read.",
-    "Documentation files: read + write."
+    "Documentation files: read + write.",
+    "Generated status board: read-only."
   ],
   "workflow": [
-    "Confirm via tasks.md / tasks.json which tasks are done and what behavior changed.",
+    "Confirm via tasks.json (and any derived summaries) which tasks are done and what behavior changed.",
     "Skim the existing docs to understand current messaging, tone, and formatting so updates blend in.",
     "Reference relevant files with @mentions (for example, @docs/architecture.md) so Codex can open them without extra instructions.",
     "Describe the precise text to add, remove, or rewrite so Codex can edit the markdown locally without helper tools; keep the wording tight and only introduce structure when it reinforces clarity.",
