@@ -3,7 +3,6 @@ AGENTS_SPEC: v0.2
 default_agent: ORCHESTRATOR
 shared_state:
   - tasks.json
-  - tasks.md
 -->
 
 # CODEX IDE CONTEXT
@@ -21,7 +20,7 @@ shared_state:
   - Think step by step internally. DO NOT print full reasoning, only concise results, plans, and key checks.
   - Prefer structured outputs (lists, tables, JSON) when they help execution.
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
-- Never invent external facts. For tasks and project state, use the canonical `tasks.json` (plus the generated `tasks.md`) as the sources of truth.
+- Never invent external facts. For tasks and project state, use the canonical `tasks.json` as the single source of truth.
 - The workspace is always a git repository. After completing each atomic task tracked in `tasks.json`, create a concise, human-readable commit before continuing.
 
 ---
@@ -100,25 +99,15 @@ Schema (JSON):
 - **Create / Reprioritize (PLANNER only).** PLANNER is the sole writer of new tasks and the only agent that may change priorities or mark work as `BLOCKED`; record the reasoning directly inside `tasks.json` (usually via `description` or a new `comments` entry).
 - **Start Work (specialist agent).** Whoever assumes ownership flips the task to `DOING` inside `tasks.json` before editing files so the backlog always reflects current work.
 - **Complete Work (review/doc specialist).** REVIEWER or DOCS marks tasks `DONE` only after validating the deliverable; add a `comments` entry summarizing the verification (this replaces the old indented `Review:` line in `PLAN.md`).
-- **Status Sync.** `tasks.json` is canonical. After editing it, immediately run `python tasks.py` at the repo root to regenerate the human-readable `tasks.md` before committing.
+- **Status Sync.** `tasks.json` is canonical. After editing it, immediately run `python scripts/tasks.py` at the repo root so the generated status board stays current before committing.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
 
 Protocol:
 
-- Before changing tasks: review the entire `tasks.md` (or the raw `tasks.json`) so you understand the latest state.
+- Before changing tasks: review the latest `tasks.json` so you understand the current state.
 - When updating: edit the existing JSON entries; do NOT silently drop tasks.
 - In your reply: list every task ID you touched plus the new status or notes.
-- Never edit `tasks.md` by hand—run `python tasks.py` so the generated view always matches `tasks.json`.
-
-### `tasks.md` (generated log)
-
-Purpose: human-readable status board derived from `tasks.json` via `tasks.py`.
-
-- Regenerate via `python tasks.py` whenever `tasks.json` changes; the script overwrites `tasks.md` deterministically.
-- Sections mirror the status buckets (Backlog, In Progress, Blocked, Done) and show metadata plus the latest comments.
-- Since the file is generated, treat it like build output: never edit it manually, but commit it so humans can glance at the project state without inspecting JSON.
-
----
+- Only `tasks.json` stores task data. Regenerate the read-only status board with `python scripts/tasks.py` whenever you need a refreshed view.
 
 # AGENT REGISTRY
 
@@ -171,6 +160,8 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 - After writing the file, CREATOR triggers the automatic registry refresh (filesystem scan) so the “Current JSON Agents” list immediately includes the new entry without any manual editing.
 - CREATOR stages and commits the new agent plus any supporting docs with the relevant task ID, enabling the orchestrator to reuse the updated roster in the next planning cycle.
 
+**UPDATER usage.** Only call the UPDATER specialist when the user explicitly asks to optimize existing agents. In that case UPDATER audits the entire repository, inspects `.AGENTS/*.json`, and returns a prioritized improvement plan without touching code.
+
 ---
 
 # AGENT: ORCHESTRATOR
@@ -204,7 +195,7 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
   * Stop and wait for user input before executing steps.
 * Step 4: Execute.
   * For each step, follow the corresponding agent’s JSON workflow before taking action.
-  * Update `tasks.json` through the owner specified in the Status Transition Protocol, then run `python tasks.py` so `tasks.md` stays in sync, calling out any status flips in the user-facing summary.
+  * Update `tasks.json` through the owner specified in the Status Transition Protocol, then run `python scripts/tasks.py` so the generated status board stays in sync, calling out any status flips in the user-facing summary.
   * Enforce the COMMIT_WORKFLOW before moving to the next step and include the resulting commit hash in each progress summary.
   * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
 * Step 5: Finalize.
