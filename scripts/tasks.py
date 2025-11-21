@@ -42,6 +42,73 @@ STATUS_LABELS = {
     "DONE": "Done",
 }
 
+AGENT_ICONS = {
+    "CODEX": "🤖",
+    "DOCS": "📚",
+    "CODER": "🛠️",
+    "REVIEWER": "👀",
+    "UPDATER": "🔍",
+    "PLANNER": "🗺️",
+    "CREATOR": "🏗️",
+}
+DEFAULT_AGENT_ICON = "🧠"
+
+
+def normalize_remote_url(url: str) -> Optional[str]:
+    raw = (url or "").strip()
+    if not raw:
+        return None
+    if raw.startswith("git@"):
+        raw = raw.replace(":", "/", 1)
+        raw = raw.replace("git@", "https://", 1)
+    elif raw.startswith("ssh://"):
+        raw = raw[len("ssh://") :]
+        if raw.startswith("git@"):
+            raw = raw.replace("git@", "https://", 1)
+        else:
+            raw = "https://" + raw
+    elif not (raw.startswith("http://") or raw.startswith("https://")):
+        return None
+    if raw.endswith(".git"):
+        raw = raw[:-4]
+    return raw
+
+
+def get_repo_commit_base() -> Optional[str]:
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", "remote.origin.url"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return normalize_remote_url(result.stdout)
+
+
+REPO_COMMIT_BASE = get_repo_commit_base()
+
+
+def codeify(value: str) -> str:
+    return f"`{value}`"
+
+
+def format_owner_value(owner: Optional[str]) -> str:
+    owner_text = (owner or "").strip()
+    if not owner_text:
+        return codeify("-")
+    owner_upper = owner_text.upper()
+    icon = AGENT_ICONS.get(owner_upper, DEFAULT_AGENT_ICON)
+    return codeify(f"{icon} {owner_upper}")
+
+
+def format_tags_value(tags: List[str]) -> str:
+    if not tags:
+        return codeify("-")
+    return ", ".join(codeify(tag) for tag in tags)
+
 
 def load_tasks_data() -> Dict[str, List[Dict]]:
     with TASKS_PATH.open("r", encoding="utf-8") as fp:
@@ -116,16 +183,21 @@ def persist_tasks_data(data: Dict[str, List[Dict]]) -> None:
 
 
 def format_metadata(task: Dict) -> str:
-    priority = task.get("priority", "-")
-    owner = task.get("owner", "-")
-    tags = task.get("tags") or []
-    tags_text = ", ".join(tags) if tags else "—"
-    return f"**Priority:** {priority} • **Owner:** {owner} • **Tags:** {tags_text}"
+    priority_value = codeify(str(task.get("priority", "-")))
+    owner_value = format_owner_value(task.get("owner"))
+    tags_value = format_tags_value(task.get("tags") or [])
+    return f"**Priority:** {priority_value} • **Owner:** {owner_value} • **Tags:** {tags_value}"
 
 
 def format_description(task: Dict) -> str:
     description = (task.get("description") or "").strip()
     return description if description else "No description provided."
+
+
+def build_commit_link(commit_hash: str) -> Optional[str]:
+    if not REPO_COMMIT_BASE:
+        return None
+    return f"{REPO_COMMIT_BASE}/commit/{commit_hash}"
 
 
 def format_commit_line(task: Dict) -> Optional[str]:
@@ -137,9 +209,13 @@ def format_commit_line(task: Dict) -> Optional[str]:
         return None
     short_hash = commit_hash[:7]
     commit_message = (commit.get("message") or "").strip()
+    link = build_commit_link(commit_hash)
+    hash_display = (
+        f"[`{short_hash}`]({link})" if link else f"`{short_hash}`"
+    )
     if commit_message:
-        return f"  - _Commit:_ `{short_hash}` — {commit_message}"
-    return f"  - _Commit:_ `{short_hash}`"
+        return f"  - _Commit:_ {hash_display} — {commit_message}"
+    return f"  - _Commit:_ {hash_display}"
 
 
 def format_comments(task: Dict) -> List[str]:
@@ -158,7 +234,7 @@ def format_comments(task: Dict) -> List[str]:
 
 
 def build_section(tasks: List[Dict], status: str, heading: str, empty_text: str) -> List[str]:
-    block: List[str] = [f"## {heading}"]
+    block: List[str] = [f"## **{heading}**"]
     section_tasks = [task for task in tasks if task.get("status") == status]
     if not section_tasks:
         block.append(empty_text)
@@ -197,7 +273,7 @@ def main() -> None:
     total_tasks = len(tasks)
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    lines: List[str] = ["# ✨ Project Tasks Board", "", f"_Last updated: {now}_", "", "## ⭐ Summary"]
+    lines: List[str] = ["# ✨ Project Tasks Board", "", f"_Last updated: {now}_", "", "## **⭐ Summary**"]
     lines.append(f"- {SUMMARY_ICONS['TOTAL']} **Total:** {total_tasks}")
     for status, heading, _ in STATUS_SECTIONS:
         label = STATUS_LABELS.get(status, heading)
