@@ -246,7 +246,7 @@ def build_section(tasks: List[Dict], status: str, heading: str, empty_text: str)
         block.append(f"- {symbol} **[{task_id}] {title}**")
         block.append(f"  - **_Status:_** *{STATUS_LABELS.get(status, 'Unknown')}*")
         block.append(f"  - {format_metadata(task)}")
-        block.append(f"  - **_Description:_** {format_description(task)}")
+        block.append(f"  - **Description:** {format_description(task)}")
         commit_line = format_commit_line(task)
         if commit_line:
             block.append(commit_line)
