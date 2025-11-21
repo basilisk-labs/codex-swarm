@@ -329,7 +329,7 @@
       "id": "T-029",
       "title": "Audit agents for optimization opportunities",
       "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
-      "status": "TODO",
+      "status": "DOING",
       "priority": "high",
       "owner": "UPDATER",
       "tags": ["agents", "optimization"],
