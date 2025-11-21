@@ -214,8 +214,8 @@ def format_commit_line(task: Dict) -> Optional[str]:
         f"[`{short_hash}`]({link})" if link else f"`{short_hash}`"
     )
     if commit_message:
-        return f"  - _Commit:_ {hash_display} — {commit_message}"
-    return f"  - _Commit:_ {hash_display}"
+        return f"  - **_Commit:_** {hash_display} — {commit_message}"
+    return f"  - **_Commit:_** {hash_display}"
 
 
 def format_comments(task: Dict) -> List[str]:
@@ -244,9 +244,9 @@ def build_section(tasks: List[Dict], status: str, heading: str, empty_text: str)
         task_id = task.get("id", "<no-id>")
         title = task.get("title", "(untitled task)")
         block.append(f"- {symbol} **[{task_id}] {title}**")
-        block.append(f"  - _Status:_ *{STATUS_LABELS.get(status, 'Unknown')}*")
+        block.append(f"  - **_Status:_** *{STATUS_LABELS.get(status, 'Unknown')}*")
         block.append(f"  - {format_metadata(task)}")
-        block.append(f"  - _Description:_ {format_description(task)}")
+        block.append(f"  - **_Description:_** {format_description(task)}")
         commit_line = format_commit_line(task)
         if commit_line:
             block.append(commit_line)
