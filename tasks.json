@@ -667,5 +667,20 @@
         "message": "🛠️ T-035 remove description italic"
       }
     }
+,
+    {
+      "id": "T-036",
+      "title": "Beautify summary table",
+      "description": "Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is.",
+      "status": "DOING",
+      "priority": "high",
+      "owner": "codex",
+      "tags": [
+        "docs",
+        "workflow",
+        "formatting"
+      ],
+      "comments": []
+    }
   ]
 }

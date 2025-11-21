@@ -1,11 +1,11 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-21 18:25:18 UTC_
+_Last updated: 2025-11-21 18:29:18 UTC_
 
 ## **⭐ Summary**
-- 🧮 **Total:** 35
+- 🧮 **Total:** 36
 - 📋 **Backlog:** 0
-- 🚧 **In Progress:** 0
+- 🚧 **In Progress:** 1
 - ⛔ **Blocked:** 0
 - ✅ **Done:** 35
 
@@ -13,7 +13,12 @@ _Last updated: 2025-11-21 18:25:18 UTC_
 _No open tasks._
 
 ## **🚧 In Progress**
-_No active tasks._
+- ⚙️ **[T-036] Beautify summary table**
+  - **_Status:_** *In Progress*
+  - **Priority:** `high` • **Owner:** `🤖 CODEX` • **Tags:** `docs`, `workflow`, `formatting`
+  - **Description:** Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is.
+  - 💬 **Comments:**
+    - _No comments yet._
 
 ## **⛔ Blocked**
 _No blocked tasks._
