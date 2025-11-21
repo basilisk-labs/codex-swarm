@@ -76,8 +76,8 @@ This structure lets you string together arbitrary workflows such as code impleme
 
 ## 📚 Shared State Details
 
-- **`tasks.json`**: Canonical backlog file containing every task’s ID, title, description, status, priority, owner, tags, and threaded comments. Agents edit this file directly (usually via PLANNER/REVIEWER) so automation always has reliable state.
-- **`tasks.md`**: Generated dashboard created by running `python scripts/tasks.py`. It groups tasks into Backlog / In Progress / Blocked / Done, shows metadata, and mirrors the latest `comments` snippets so humans can skim progress without opening the JSON.
+- **`tasks.json`**: Canonical backlog file containing every task’s ID, title, description, status, priority, owner, tags, and threaded comments; completed entries now also store a `commit` object (hash + message) so every “Done” task points back to the git change that closed it.
+- **`tasks.md`**: Generated dashboard created by running `python scripts/tasks.py`. It groups tasks into Backlog / In Progress / Blocked / Done, shows metadata, mirrors the latest `comments` snippets, and now also renders a `_Commit:_` line for each task that carries commit metadata so the provenance is visible at a glance.
 - **`scripts/tasks.py`**: Small CLI helper that reads `tasks.json` and rewrites `tasks.md`. Run it every time task data changes; do not edit `tasks.md` manually.
 
 ## 🆕 Adding a New Agent

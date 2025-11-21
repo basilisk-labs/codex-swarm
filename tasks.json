@@ -7,7 +7,10 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "readme"],
+      "tags": [
+        "docs",
+        "readme"
+      ],
       "comments": []
     },
     {
@@ -17,7 +20,10 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["agents", "architecture"],
+      "tags": [
+        "agents",
+        "architecture"
+      ],
       "comments": []
     },
     {
@@ -27,7 +33,10 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["state", "persistence"],
+      "tags": [
+        "state",
+        "persistence"
+      ],
       "comments": []
     },
     {
@@ -37,8 +46,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["workflow", "agents"],
-      "comments": []
+      "tags": [
+        "workflow",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "fb9f40ff9b294361cf2d6322d4b68d220ebbf1c6",
+        "message": "T-004: enforce per-task commits"
+      }
     },
     {
       "id": "T-005",
@@ -47,8 +63,15 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "workflow"],
-      "comments": []
+      "tags": [
+        "docs",
+        "workflow"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "fa8627b7e1cb31047987216d42f6664cd1fe8767",
+        "message": "T-005: document commit workflow"
+      }
     },
     {
       "id": "T-006",
@@ -57,8 +80,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["agents", "automation"],
-      "comments": []
+      "tags": [
+        "agents",
+        "automation"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "3a9cc7dcbf8d8ada931d5318ce04ed855254888c",
+        "message": "Mark T-006 done"
+      }
     },
     {
       "id": "T-007",
@@ -67,8 +97,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["workflow", "git"],
-      "comments": []
+      "tags": [
+        "workflow",
+        "git"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "6e8c80e12a6127ec040d1148cee1bfe1e0e41772",
+        "message": "Mark T-007 and T-008 done"
+      }
     },
     {
       "id": "T-008",
@@ -77,8 +114,15 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "readme"],
-      "comments": []
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "6e8c80e12a6127ec040d1148cee1bfe1e0e41772",
+        "message": "Mark T-007 and T-008 done"
+      }
     },
     {
       "id": "T-009",
@@ -87,8 +131,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["workflow", "tasks"],
-      "comments": []
+      "tags": [
+        "workflow",
+        "tasks"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "bb1d0296309f47bcfe7b541b9157a92306cb8543",
+        "message": "Mark T-009 done"
+      }
     },
     {
       "id": "T-010",
@@ -97,8 +148,15 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["agents", "automation"],
-      "comments": []
+      "tags": [
+        "agents",
+        "automation"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1",
+        "message": "Mark T-010 done"
+      }
     },
     {
       "id": "T-011",
@@ -107,8 +165,15 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["workflow", "analysis"],
-      "comments": []
+      "tags": [
+        "workflow",
+        "analysis"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "d9572ab9f3738eced63f4d13f9d149d1d6af6517",
+        "message": "Docs T-011 workflow analysis"
+      }
     },
     {
       "id": "T-012",
@@ -117,8 +182,15 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "agents"],
-      "comments": []
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "e92c42039af7d566e79e2d7651c718e1fdaa8b88",
+        "message": "Review T-012 generalize AGENTS spec"
+      }
     },
     {
       "id": "T-013",
@@ -127,8 +199,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["prompting", "agents"],
-      "comments": []
+      "tags": [
+        "prompting",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "a70b1319af38ab8f8cc3d04d002a01aa4ef70e92",
+        "message": "Mark T-013 done"
+      }
     },
     {
       "id": "T-014",
@@ -137,8 +216,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["docs", "agents"],
-      "comments": []
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "db8902599b40ae42ed97c009f1c17e3402664783",
+        "message": "Mark T-014 done"
+      }
     },
     {
       "id": "T-015",
@@ -147,8 +233,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["prompting", "agents"],
-      "comments": []
+      "tags": [
+        "prompting",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "9358629edcbdb575b58a9903e647d765b5dfe03f",
+        "message": "Mark T-015 done"
+      }
     },
     {
       "id": "T-016",
@@ -157,8 +250,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["docs", "agents"],
-      "comments": []
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "d5b3e2eac2dc04098d97248ddba1dcca271311fa",
+        "message": "Mark T-016 done"
+      }
     },
     {
       "id": "T-017",
@@ -167,8 +267,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["prompting", "agents"],
-      "comments": []
+      "tags": [
+        "prompting",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "6ed438a36b77e1ae7ca742ce4ace0fd4391c978e",
+        "message": "Mark T-017 done"
+      }
     },
     {
       "id": "T-018",
@@ -177,8 +284,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["docs", "agents"],
-      "comments": []
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "673ff98d3b5efdba4cf81a4ce4b5558748d8ed3e",
+        "message": "Mark T-018 complete"
+      }
     },
     {
       "id": "T-019",
@@ -187,8 +301,15 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["agents", "localization"],
-      "comments": []
+      "tags": [
+        "agents",
+        "localization"
+      ],
+      "comments": [],
+      "commit": {
+        "hash": "4cf2f07b1c9c8dddeb76cd85aa9cdff07cf4bb07",
+        "message": "Add T-019 translator agent"
+      }
     },
     {
       "id": "T-020",
@@ -197,13 +318,20 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "localization"],
+      "tags": [
+        "docs",
+        "localization"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Added README.es.md and ensured glossary coverage for Spanish terminology."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "631c837f044c2f8ff5a3a785cca6d695a990b3a2",
+        "message": "Mark T-020 done after README.es review"
+      }
     },
     {
       "id": "T-021",
@@ -212,13 +340,20 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["agents", "localization"],
+      "tags": [
+        "agents",
+        "localization"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated the TRANSLATOR agent so every run maintains GLOSSARY.json, tracks usage frequencies, and enforces approved terms."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "e19258da08620b2b494932ebaa96c806ada33699",
+        "message": "Mark T-021 done"
+      }
     },
     {
       "id": "T-022",
@@ -227,13 +362,20 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "localization"],
+      "tags": [
+        "docs",
+        "localization"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Added README.ru.md plus GLOSSARY.json context so translation terminology stays consistent."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "934d327f0938d4b76760cb585073b6d69b223e6d",
+        "message": "Mark T-022 done after translation review"
+      }
     },
     {
       "id": "T-023",
@@ -242,13 +384,20 @@
       "status": "DONE",
       "priority": "med",
       "owner": "codex",
-      "tags": ["docs", "localization"],
+      "tags": [
+        "docs",
+        "localization"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Created README.es.md and updated GLOSSARY.json with Spanish equivalents for existing terms."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "1f58561634734d0e73374ccd1264d15d57f7c251",
+        "message": "T-023: mark Spanish README translation done"
+      }
     },
     {
       "id": "T-024",
@@ -257,13 +406,21 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["docs", "localization", "glossary"],
+      "tags": [
+        "docs",
+        "localization",
+        "glossary"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated the TRANSLATOR workflow and converted GLOSSARY.json so languages own their preferred terms and descriptions."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "eb5a18530947e3387e401f9539595db257492b0c",
+        "message": "T-024: finalize glossary schema work"
+      }
     },
     {
       "id": "T-025",
@@ -272,13 +429,20 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["workflow", "git"],
+      "tags": [
+        "workflow",
+        "git"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated AGENTS.md and README.md so commit messages start with meaningful emojis referencing the finished plan item."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
+        "message": "✅ Mark T-025 done"
+      }
     },
     {
       "id": "T-026",
@@ -287,13 +451,20 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["workflow", "planning"],
+      "tags": [
+        "workflow",
+        "planning"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated .AGENTS/PLANNER.json, AGENTS.md, and README.md so the PLANNER keeps tasks atomic."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "851c576b97b52541b3cab13ed3555c97d4d1f475",
+        "message": "🧩 T-026 enforce atomic planning"
+      }
     },
     {
       "id": "T-027",
@@ -302,13 +473,20 @@
       "status": "DONE",
       "priority": "high",
       "owner": "codex",
-      "tags": ["agents", "optimization"],
+      "tags": [
+        "agents",
+        "optimization"
+      ],
       "comments": [
         {
           "author": "reviewer",
           "body": "Verified .AGENTS/UPDATER.json and AGENTS.md to ensure the new agent only runs on explicit optimization requests and outputs a repo-wide optimization plan."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
+        "message": "✅ Review UPDATER agent deliverable (T-027)"
+      }
     },
     {
       "id": "T-028",
@@ -317,76 +495,108 @@
       "status": "DONE",
       "priority": "med",
       "owner": "docs",
-      "tags": ["docs", "workflow"],
+      "tags": [
+        "docs",
+        "workflow"
+      ],
       "comments": [
         {
           "author": "docs",
           "body": "Added AGENTS.md guidance reminding contributors to install external dependencies only within virtual environments before running scripts."
         }
-      ]
+      ],
+      "commit": {
+        "hash": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
+        "message": "✅ mark T-028 done"
+      }
     },
-  {
-    "id": "T-029",
-    "title": "Audit agents for optimization opportunities",
-    "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
-    "status": "DONE",
-    "priority": "high",
-    "owner": "UPDATER",
-    "tags": ["agents", "optimization"],
-    "comments": [
-      {
-        "author": "UPDATER",
-        "body": "Reported the missing glossary and CODER permission gaps plus suggested focused follow-ups."
+    {
+      "id": "T-029",
+      "title": "Audit agents for optimization opportunities",
+      "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "UPDATER",
+      "tags": [
+        "agents",
+        "optimization"
+      ],
+      "comments": [
+        {
+          "author": "UPDATER",
+          "body": "Reported the missing glossary and CODER permission gaps plus suggested focused follow-ups."
+        }
+      ],
+      "commit": {
+        "hash": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
+        "message": "🧭 T-029 finish agent audit"
       }
-    ]
-  }
-  ,
-  {
-    "id": "T-030",
-    "title": "Clarify CODER agent permissions",
-    "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request.",
-    "status": "DONE",
-    "priority": "high",
-    "owner": "CODER",
-    "tags": ["agents", "permissions"],
-    "comments": [
-      {
-        "author": "CODER",
-        "body": "Expanded permissions, workflow detail, and verification guidance to match the current responsibilities."
+    },
+    {
+      "id": "T-030",
+      "title": "Clarify CODER agent permissions",
+      "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request.",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "agents",
+        "permissions"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Expanded permissions, workflow detail, and verification guidance to match the current responsibilities."
+        }
+      ],
+      "commit": {
+        "hash": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
+        "message": "🧩 T-030 revise coder agent"
       }
-    ]
-  }
-  ,
-  {
-    "id": "T-031",
-    "title": "Sync README with current agent lineup",
-    "description": "Refresh README.md so it describes the existing agents (including UPDATER), workflow rules, and repository layout that reflect the latest codebase.",
-    "status": "DONE",
-    "priority": "med",
-    "owner": "docs",
-    "tags": ["docs", "readme"],
-    "comments": [
-      {
-        "author": "docs",
-        "body": "README now mentions the UPDATER optimization agent and lifecycle so the doc mirrors the current codebase."
+    },
+    {
+      "id": "T-031",
+      "title": "Sync README with current agent lineup",
+      "description": "Refresh README.md so it describes the existing agents (including UPDATER), workflow rules, and repository layout that reflect the latest codebase.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "README now mentions the UPDATER optimization agent and lifecycle so the doc mirrors the current codebase."
+        }
+      ],
+      "commit": {
+        "hash": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
+        "message": "✅ T-031 finish README sync task"
       }
-    ]
-  }
-  ,
-  {
-    "id": "T-032",
-    "title": "Stylize README with icons and ASCII art",
-    "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact.",
-    "status": "DONE",
-    "priority": "med",
-    "owner": "docs",
-    "tags": ["docs", "readme"],
-    "comments": [
-      {
-        "author": "docs",
-        "body": "README now shows ASCII art, icons, and refreshed formatting so it feels more polished."
+    },
+    {
+      "id": "T-032",
+      "title": "Stylize README with icons and ASCII art",
+      "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "README now shows ASCII art, icons, and refreshed formatting so it feels more polished."
+        }
+      ],
+      "commit": {
+        "hash": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
+        "message": "📝 T-032 stylize README"
       }
-    ]
-  }
-]
+    }
+  ]
 }

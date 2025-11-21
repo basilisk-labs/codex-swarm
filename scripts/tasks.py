@@ -5,7 +5,8 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List
+import subprocess
+from typing import Dict, List, Optional
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
@@ -42,13 +43,76 @@ STATUS_LABELS = {
 }
 
 
-def load_tasks() -> List[Dict]:
+def load_tasks_data() -> Dict[str, List[Dict]]:
     with TASKS_PATH.open("r", encoding="utf-8") as fp:
         data = json.load(fp)
     tasks = data.get("tasks", [])
     if not isinstance(tasks, list):
         raise ValueError("tasks.json must contain a top-level 'tasks' list")
+    return {"tasks": tasks}
+
+
+def sorted_tasks(tasks: List[Dict]) -> List[Dict]:
     return sorted(tasks, key=lambda task: task.get("id", ""))
+
+
+COMMIT_DELIMITER = "\x1f"
+
+
+def find_commit_for_task(task_id: str) -> Optional[Dict[str, str]]:
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "log",
+                "--grep",
+                task_id,
+                "-n",
+                "1",
+                f"--pretty=format:%H{COMMIT_DELIMITER}%s",
+            ],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except FileNotFoundError:
+        return None
+    if result.returncode != 0:
+        return None
+    line = result.stdout.strip().splitlines()
+    if not line:
+        return None
+    parts = line[0].split(COMMIT_DELIMITER, 1)
+    if not parts or not parts[0]:
+        return None
+    commit_hash = parts[0]
+    commit_message = parts[1] if len(parts) > 1 else ""
+    return {"hash": commit_hash, "message": commit_message}
+
+
+def ensure_commit_metadata(tasks: List[Dict]) -> bool:
+    updated = False
+    for task in tasks:
+        if task.get("status") != "DONE":
+            continue
+        if task.get("commit"):
+            continue
+        task_id = task.get("id")
+        if not task_id:
+            continue
+        commit_info = find_commit_for_task(task_id)
+        if not commit_info:
+            continue
+        task["commit"] = commit_info
+        updated = True
+    return updated
+
+
+def persist_tasks_data(data: Dict[str, List[Dict]]) -> None:
+    TASKS_PATH.write_text(
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
 
 
 def format_metadata(task: Dict) -> str:
@@ -62,6 +126,20 @@ def format_metadata(task: Dict) -> str:
 def format_description(task: Dict) -> str:
     description = (task.get("description") or "").strip()
     return description if description else "No description provided."
+
+
+def format_commit_line(task: Dict) -> Optional[str]:
+    commit = task.get("commit")
+    if not commit:
+        return None
+    commit_hash = (commit.get("hash") or "").strip()
+    if not commit_hash:
+        return None
+    short_hash = commit_hash[:7]
+    commit_message = (commit.get("message") or "").strip()
+    if commit_message:
+        return f"  - _Commit:_ `{short_hash}` — {commit_message}"
+    return f"  - _Commit:_ `{short_hash}`"
 
 
 def format_comments(task: Dict) -> List[str]:
@@ -93,6 +171,9 @@ def build_section(tasks: List[Dict], status: str, heading: str, empty_text: str)
         block.append(f"  - _Status:_ *{STATUS_LABELS.get(status, 'Unknown')}*")
         block.append(f"  - {format_metadata(task)}")
         block.append(f"  - _Description:_ {format_description(task)}")
+        commit_line = format_commit_line(task)
+        if commit_line:
+            block.append(commit_line)
         block.append("  - 💬 **Comments:**")
         block.extend(format_comments(task))
         block.append("")
@@ -102,7 +183,12 @@ def build_section(tasks: List[Dict], status: str, heading: str, empty_text: str)
 
 
 def main() -> None:
-    tasks = load_tasks()
+    data = load_tasks_data()
+    tasks = data["tasks"]
+    if ensure_commit_metadata(tasks):
+        persist_tasks_data(data)
+        print("Updated tasks.json with commit metadata.")
+    tasks = sorted_tasks(tasks)
     counts: Dict[str, int] = {status: 0 for status, *_ in STATUS_SECTIONS}
     for task in tasks:
         status = task.get("status")
