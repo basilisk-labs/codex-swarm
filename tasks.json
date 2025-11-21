@@ -597,6 +597,20 @@
         "hash": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
         "message": "📝 T-032 stylize README"
       }
+    },
+    {
+      "id": "T-033",
+      "title": "Style tasks board markdown output",
+      "description": "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board.",
+      "status": "DOING",
+      "priority": "high",
+      "owner": "codex",
+      "tags": [
+        "docs",
+        "workflow",
+        "formatting"
+      ],
+      "comments": []
     }
   ]
 }

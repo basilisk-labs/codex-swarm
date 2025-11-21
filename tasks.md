@@ -1,11 +1,11 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-21 17:32:28 UTC_
+_Last updated: 2025-11-21 18:09:34 UTC_
 
 ## ⭐ Summary
-- 🧮 **Total:** 32
+- 🧮 **Total:** 33
 - 📋 **Backlog:** 0
-- 🚧 **In Progress:** 0
+- 🚧 **In Progress:** 1
 - ⛔ **Blocked:** 0
 - ✅ **Done:** 32
 
@@ -13,7 +13,12 @@ _Last updated: 2025-11-21 17:32:28 UTC_
 _No open tasks._
 
 ## 🚧 In Progress
-_No active tasks._
+- ⚙️ **[T-033] Style tasks board markdown output**
+  - _Status:_ *In Progress*
+  - **Priority:** high • **Owner:** codex • **Tags:** docs, workflow, formatting
+  - _Description:_ Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board.
+  - 💬 **Comments:**
+    - _No comments yet._
 
 ## ⛔ Blocked
 _No blocked tasks._
