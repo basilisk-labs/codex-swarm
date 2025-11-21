@@ -294,6 +294,16 @@
           "body": "Updated .AGENTS/PLANNER.json, AGENTS.md, and README.md so the PLANNER keeps tasks atomic."
         }
       ]
+    },
+    {
+      "id": "T-027",
+      "title": "Add UPDATER optimization agent",
+      "description": "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "codex",
+      "tags": ["agents", "optimization"],
+      "comments": []
     }
   ]
 }
