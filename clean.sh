@@ -7,7 +7,7 @@ rm -rf assets README.md .git .gitattributes .github LICENSE tasks.json tasks.md 
 
 # Initialize a fresh repository after the cleanup so the folder can be reused independently.
 git init
-git add .AGENTS scripts .gitattributes .gitignore AGENTS.md
+git add .AGENTS scripts .gitignore AGENTS.md
 git commit -m "Initial commit"
 
 rm -rf clean.sh
