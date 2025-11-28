@@ -1,16 +1,16 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-28 16:25:23 UTC_
+_Last updated: 2025-11-28 16:41:10 UTC_
 
 ## **⭐ Summary**
 
 | Icon | Metric | Count |
 | --- | --- | --- |
-| 🧮 | **Total** | 43 |
+| 🧮 | **Total** | 44 |
 | 📋 | **Backlog** | 0 |
 | 🚧 | **In Progress** | 0 |
 | ⛔ | **Blocked** | 0 |
-| ✅ | **Done** | 43 |
+| ✅ | **Done** | 44 |
 
 🌈 **Palette note:** Keep `python scripts/tasks.py` handy so the table stays in sync after every update.
 🎉 **Vibe check:** Emoji commits + clear summaries = joyful collaborators.
@@ -365,3 +365,11 @@ _No blocked tasks._
   - **_Commit:_** [`7b8445b`](https://github.com/basilisk-labs/codex-swarm/commit/7b8445b4326e1d8c52e7f0e2718b9d88f75db502) — ✨ T-045 add GitHub Actions workflow to sync tasks.json with GitHub Issues
   - 💬 **Comments:**
     - **docs:** _Workflow file exists and ensures tasks.json is kept in sync via GitHub Actions._
+
+- ✅ **[T-046] Enhance sync_tasks.py to integrate ProjectV2 status updates and project number**
+  - **_Status:_** *Done*
+  - **Priority:** `high` • **Owner:** `🧠 HUMAN` • **Tags:** `automation`, `project`, `sync`
+  - **Description:** The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion.
+  - **_Commit:_** [`ef12528`](https://github.com/basilisk-labs/codex-swarm/commit/ef12528c6ce74b53ca93b8f83a872ede49b81e26) — ✨ T-046 enhance sync_tasks.py to integrate ProjectV2 status updates and update workflow with project number
+  - 💬 **Comments:**
+    - **docs:** _ProjectV2 integration is wired up, and the workflow now provides the project number._
