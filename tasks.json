@@ -877,8 +877,7 @@
         "hash": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
         "message": "✨ T-045 add GitHub Actions workflow to sync tasks.json with GitHub Issues"
       }
-    }
-    ,
+    },
     {
       "id": "T-046",
       "title": "Enhance sync_tasks.py to integrate ProjectV2 status updates and project number",
@@ -901,6 +900,19 @@
         "hash": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
         "message": "✨ T-046 enhance sync_tasks.py to integrate ProjectV2 status updates and update workflow with project number"
       }
+    },
+    {
+      "id": "T-047",
+      "title": "Create Code of Conduct",
+      "description": "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.",
+      "status": "DOING",
+      "priority": "med",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "policy"
+      ],
+      "comments": []
     }
   ]
 }

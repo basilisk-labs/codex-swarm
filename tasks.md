@@ -1,14 +1,14 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-28 16:48:58 UTC_
+_Last updated: 2025-11-28 18:07:45 UTC_
 
 ## **⭐ Summary**
 
 | Icon | Metric | Count |
 | --- | --- | --- |
-| 🧮 | **Total** | 46 |
+| 🧮 | **Total** | 47 |
 | 📋 | **Backlog** | 0 |
-| 🚧 | **In Progress** | 0 |
+| 🚧 | **In Progress** | 1 |
 | ⛔ | **Blocked** | 0 |
 | ✅ | **Done** | 46 |
 
@@ -19,7 +19,12 @@ _Last updated: 2025-11-28 16:48:58 UTC_
 _No open tasks._
 
 ## **🚧 In Progress**
-_No active tasks._
+- ⚙️ **[T-047] Create Code of Conduct**
+  - **_Status:_** *In Progress*
+  - **Priority:** `med` • **Owner:** `📚 DOCS` • **Tags:** `docs`, `policy`
+  - **Description:** Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.
+  - 💬 **Comments:**
+    - _No comments yet._
 
 ## **⛔ Blocked**
 _No blocked tasks._
