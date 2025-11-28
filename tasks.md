@@ -1,6 +1,6 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-28 18:07:45 UTC_
+_Last updated: 2025-11-28 18:08:26 UTC_
 
 ## **⭐ Summary**
 
@@ -8,9 +8,9 @@ _Last updated: 2025-11-28 18:07:45 UTC_
 | --- | --- | --- |
 | 🧮 | **Total** | 47 |
 | 📋 | **Backlog** | 0 |
-| 🚧 | **In Progress** | 1 |
+| 🚧 | **In Progress** | 0 |
 | ⛔ | **Blocked** | 0 |
-| ✅ | **Done** | 46 |
+| ✅ | **Done** | 47 |
 
 🌈 **Palette note:** Keep `python scripts/tasks.py` handy so the table stays in sync after every update.
 🎉 **Vibe check:** Emoji commits + clear summaries = joyful collaborators.
@@ -19,12 +19,7 @@ _Last updated: 2025-11-28 18:07:45 UTC_
 _No open tasks._
 
 ## **🚧 In Progress**
-- ⚙️ **[T-047] Create Code of Conduct**
-  - **_Status:_** *In Progress*
-  - **Priority:** `med` • **Owner:** `📚 DOCS` • **Tags:** `docs`, `policy`
-  - **Description:** Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.
-  - 💬 **Comments:**
-    - _No comments yet._
+_No active tasks._
 
 ## **⛔ Blocked**
 _No blocked tasks._
@@ -394,3 +389,11 @@ _No blocked tasks._
   - **_Commit:_** [`ef12528`](https://github.com/basilisk-labs/codex-swarm/commit/ef12528c6ce74b53ca93b8f83a872ede49b81e26) — ✨ T-046 enhance sync_tasks.py to integrate ProjectV2 status updates and update workflow with project number
   - 💬 **Comments:**
     - **docs:** _ProjectV2 integration is wired up, and the workflow now provides the project number._
+
+- ✅ **[T-047] Create Code of Conduct**
+  - **_Status:_** *Done*
+  - **Priority:** `med` • **Owner:** `📚 DOCS` • **Tags:** `docs`, `policy`
+  - **Description:** Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.
+  - **_Commit:_** [`113c748`](https://github.com/basilisk-labs/codex-swarm/commit/113c748a1f5c9bd56bc96ccb5616930310f7776d) — 📌 T-047 start Code of Conduct task
+  - 💬 **Comments:**
+    - **docs:** _Added CODE_OF_CONDUCT.md covering standards, unacceptable behaviors, and reporting guidance._
