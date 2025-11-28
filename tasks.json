@@ -734,6 +734,28 @@
       }
     },
     {
+      "id": "T-039",
+      "title": "Update cleanup script to remove CONTRIBUTING.md and itself",
+      "description": "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "human",
+      "tags": [
+        "automation",
+        "cleanup"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "clean.sh now removes CONTRIBUTING.md and deletes itself after repository cleanup."
+        }
+      ],
+      "commit": {
+        "hash": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
+        "message": "🛠️ T-039 update cleanup script to remove CONTRIBUTING.md and self"
+      }
+    },
+    {
       "id": "T-040",
       "title": "Add README onboarding sections",
       "description": "Add a focused Getting Started path, example session log, and limitations/non-goals to README with a simpler intro.",

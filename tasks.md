@@ -1,16 +1,16 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-28 16:41:10 UTC_
+_Last updated: 2025-11-28 16:48:41 UTC_
 
 ## **⭐ Summary**
 
 | Icon | Metric | Count |
 | --- | --- | --- |
-| 🧮 | **Total** | 44 |
+| 🧮 | **Total** | 45 |
 | 📋 | **Backlog** | 0 |
 | 🚧 | **In Progress** | 0 |
 | ⛔ | **Blocked** | 0 |
-| ✅ | **Done** | 44 |
+| ✅ | **Done** | 45 |
 
 🌈 **Palette note:** Keep `python scripts/tasks.py` handy so the table stays in sync after every update.
 🎉 **Vibe check:** Emoji commits + clear summaries = joyful collaborators.
@@ -325,6 +325,14 @@ _No blocked tasks._
   - **_Commit:_** [`bec7e7d`](https://github.com/basilisk-labs/codex-swarm/commit/bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc) — 📝 T-038 update README local dev
   - 💬 **Comments:**
     - **docs:** _Extended README with code breakdown and local dev steps (download zip, run clean.sh)._
+
+- ✅ **[T-039] Update cleanup script to remove CONTRIBUTING.md and itself**
+  - **_Status:_** *Done*
+  - **Priority:** `med` • **Owner:** `🧠 HUMAN` • **Tags:** `automation`, `cleanup`
+  - **Description:** Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo.
+  - **_Commit:_** [`25d2b91`](https://github.com/basilisk-labs/codex-swarm/commit/25d2b916ec4f2fbdf3caa0553c6271974acffdab) — 🛠️ T-039 update cleanup script to remove CONTRIBUTING.md and self
+  - 💬 **Comments:**
+    - **docs:** _clean.sh now removes CONTRIBUTING.md and deletes itself after repository cleanup._
 
 - ✅ **[T-040] Add README onboarding sections**
   - **_Status:_** *Done*
