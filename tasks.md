@@ -1,16 +1,16 @@
 # ✨ Project Tasks Board
 
-_Last updated: 2025-11-28 15:45:55 UTC_
+_Last updated: 2025-11-28 15:54:27 UTC_
 
 ## **⭐ Summary**
 
 | Icon | Metric | Count |
 | --- | --- | --- |
-| 🧮 | **Total** | 40 |
+| 🧮 | **Total** | 41 |
 | 📋 | **Backlog** | 0 |
 | 🚧 | **In Progress** | 0 |
 | ⛔ | **Blocked** | 0 |
-| ✅ | **Done** | 40 |
+| ✅ | **Done** | 41 |
 
 🌈 **Palette note:** Keep `python scripts/tasks.py` handy so the table stays in sync after every update.
 🎉 **Vibe check:** Emoji commits + clear summaries = joyful collaborators.
@@ -338,5 +338,13 @@ _No blocked tasks._
   - **_Status:_** *Done*
   - **Priority:** `med` • **Owner:** `📚 DOCS` • **Tags:** `docs`, `guideline`
   - **Description:** Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework.
+  - **_Commit:_** [`21ddede`](https://github.com/basilisk-labs/codex-swarm/commit/21ddede356590745546962fedebbead23b2edae2) — 📝 T-041 document framework guideline
+  - 💬 **Comments:**
+    - _No comments yet._
+
+- ✅ **[T-042] Expand framework guideline**
+  - **_Status:_** *Done*
+  - **Priority:** `med` • **Owner:** `📚 DOCS` • **Tags:** `docs`, `guideline`, `workflow`
+  - **Description:** Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear.
   - 💬 **Comments:**
     - _No comments yet._

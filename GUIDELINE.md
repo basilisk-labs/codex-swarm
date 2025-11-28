@@ -68,4 +68,20 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 - Never run commands or edit files outside the repository unless the environment says otherwise; the default context is local-only.
 - When in doubt about the workflow, consult `AGENTS.md` for the shared rules and `.AGENTS/<ID>.json` for the specific agent you need.
 
+## 8. Example session
+
+1. **State your goal to the Orchestrator.** The Orchestrator drafts a numbered plan, maps each step to the right agent (`PLANNER`, `CODER`, `DOCS`, etc.), and asks for your approval before anything mutates.
+2. **PLANNER gates the backlog.** Once you approve, PLANNER edits `tasks.json`, adds the task with `status: DOING`, and runs `python scripts/tasks.py` so `tasks.md` mirrors the new ticket.
+3. **Specialists deliver the work.** CODER or DOCS edit files, capture command output (tests, linters, or scripts), and keep every change focused on the assigned files. REVIEWER double-checks the diff, reruns commands if needed, and flips the task to `DONE`.
+4. **Commit per task.** Stage the edited files and `git commit -m "<emoji> T-<id> <short summary>"`—the message should mention the task ID so `scripts/tasks.py` can automatically link the commit back to the ticket.
+5. **Cleanup.** Run `git status --short` to ensure the tree is clean, rerun `python scripts/tasks.py` to refresh `tasks.md`, and let the Orchestrator know about the new commit hash so the plan can continue.
+
+## 9. Troubleshooting & best practices
+
+- `python scripts/tasks.py` crashes with a JSON error: the file was likely malformed. Open `tasks.json`, fix the highlighted entry (commas, quotes, or missing braces), then rerun the script. Use `rg -n '"T-042' tasks.json` to locate the entry quickly.
+- `tasks.md` is stale after editing `tasks.json`: rerun `python scripts/tasks.py` immediately—no manual edits should target `tasks.md`.
+- Your working tree is dirty before committing: run `git status --short`, stash or revert unrelated changes, and keep future commits scoped to the current task.
+- The Codex plugin stops responding: restart the IDE, reopen the repository, or re-execute your last command manually in a terminal before resuming.
+- Need a clean slate? `./clean.sh` removes the bundled docs and git history, then reinitializes the repo so you can reuse the framework without carrying over artifacts.
+
 By following these steps, you can install, use, and extend Codex Swarm predictably from your local IDE.

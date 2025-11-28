@@ -768,9 +768,23 @@
       ],
       "comments": [],
       "commit": {
-        "hash": "",
-        "message": ""
+        "hash": "21ddede356590745546962fedebbead23b2edae2",
+        "message": "📝 T-041 document framework guideline"
       }
+    },
+    {
+      "id": "T-042",
+      "title": "Expand framework guideline",
+      "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "guideline",
+        "workflow"
+      ],
+      "comments": []
     }
   ]
 }
