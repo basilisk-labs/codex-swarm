@@ -28,5 +28,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TASKS_SYNC_TOKEN }}
           GITHUB_OWNER: basilisk-labs
           GITHUB_REPO: codex-swarm
+          GITHUB_PROJECT_NUMBER: 1
         run: |
           python .github/scripts/sync_tasks.py
