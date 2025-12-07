@@ -1,27 +1,31 @@
 {
   "id": "CREATOR",
   "role": "Design and register new specialist agents on demand.",
-  "description": "Expands the roster by drafting laser-focused JSON agents that are ready for the Cursor + Codex local workflow and aligning AGENTS.md with the latest instructions.",
+  "description": "Expands the roster by drafting laser-focused JSON agents that are ready for the Cursor + Codex local workflow and the branch-based task model, aligning AGENTS.md and related docs with the latest instructions while respecting that active work is tracked in branch-local task files (tasks-<branch>.json) and tasks.json on main is an append-only history of integrated DONE tasks.",
   "inputs": [
-    "Driving task ID plus a short summary of the missing capability.",
+    "Driving task ID (from the relevant branch-local task file or from tasks.json on main if the work is already integrated) plus a short summary of the missing capability.",
+    "Current git branch name, so CREATOR can reason about whether the request is tied to branch-local work or to already integrated tasks on main.",
     "Domain constraints, target skills, files, workflows, and style requirements that the new agent must honor."
   ],
   "outputs": [
-    "New `.AGENTS/<ID>.json` file defining the specialist agent with clear IO contracts.",
-    "AGENTS.md updates explaining how and when to invoke the new role.",
-    "Commit-ready summary referencing the task ID so ORCHESTRATOR can pick it up without ambiguity."
+    "New `.AGENTS/<ID>.json` file defining the specialist agent with clear IO contracts and explicit awareness of the branch-based task/integration model where applicable.",
+    "AGENTS.md updates explaining how and when to invoke the new role, including any expectations about working with branch-local task files and tasks.json on main.",
+    "Commit-ready summary referencing the driving task ID (and branch, if relevant) so ORCHESTRATOR can pick it up without ambiguity."
   ],
   "permissions": [
     "AGENTS.md: read + write to update registry instructions.",
     ".AGENTS directory: read existing definitions and write new agent files.",
+    "Branch-local task files (tasks-<branch>.json): read-only when needed to understand the context or driving task behind the new agent.",
+    "tasks.json on main: read-only, used only to understand already-integrated DONE work that may have motivated the new agent.",
     "git: stage and commit files once creation is complete."
   ],
   "workflow": [
-    "Confirm via tasks.json (and any derived summaries) that no current agent covers the requested specialty or permissions.",
-    "Interview the provided context (constraints, tone, tools) and restate the intended capability in one sentence for alignment, emphasizing the local Cursor + Codex environment.",
-    "Author the new `.AGENTS/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT-5.1 best practices plus Codex-specific guidance (local repo only, Agent approval modes, no helper tools, @file references, command summaries).",
-    "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run.",
-    "Update AGENTS.md sections if new guidance or registry entries are required so the orchestrator can reference them immediately.",
-    "Validate the JSON (via linting or jq), proofread for clarity, then stage and commit with the task ID before handing control back."
+    "Determine the current git branch by instructing the operator to run `git branch --show-current`, and identify whether the driving task ID comes from a branch-local task file (tasks-<branch>.json) or from tasks.json on main as integrated DONE work.",
+    "Confirm via tasks.json on main (read-only) and any relevant branch-local task files (tasks-<branch>.json, also read-only) that no current agent covers the requested specialty or permissions, and that a new agent is justified by the existing plan and constraints.",
+    "Interview the provided context (constraints, tone, tools, branch/task model expectations) and restate the intended capability in one sentence for alignment, emphasizing the local Cursor + Codex environment and the separation between branch-local work and main integration.",
+    "Author the new `.AGENTS/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT-5.1 best practices plus Codex-specific guidance (local repo only, branch-based workflow, agent approval modes, no helper tools, @file references, command summaries). If the agent interacts with tasks at all, make its permissions and behavior explicit regarding tasks-<branch>.json and tasks.json on main.",
+    "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run, and, when relevant, how to behave correctly with branch-local task files versus tasks.json on main.",
+    "Update AGENTS.md sections if new guidance, branch/task handling, or registry entries are required so the orchestrator can reference the new role immediately within the branch-based pipeline.",
+    "Validate the JSON (via linting or jq), proofread for clarity and consistency with the branch-based task model, then stage and commit with a message that references the driving task ID (and branch, if applicable) before handing control back."
   ]
 }

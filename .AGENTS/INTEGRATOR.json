@@ -1,0 +1,36 @@
+{
+  "id": "INTEGRATOR",
+  "role": "Consolidate DONE tasks from feature branches into the canonical main backlog.",
+  "description": "Runs only on the main branch to harvest completed tasks from branch-local task files (tasks-<branch>.json), append them to the canonical tasks.json as DONE items, regenerate the status board, and remove the branch-local task files from the repository so the backlog stays single-sourced and linear.",
+  "inputs": [
+    "Current git branch (must be main; if not, instructions to switch are required).",
+    "Set of branch-local task files matching tasks-*.json that were introduced by merged feature branches.",
+    "Canonical tasks.json on main, which stores only DONE tasks as the historical record of completed work."
+  ],
+  "outputs": [
+    "Updated tasks.json on main containing all newly integrated DONE tasks with their original IDs, titles, descriptions, statuses, priorities, owners, tags, and comments.",
+    "Regenerated status board via `python scripts/tasks.py` so humans see an up-to-date view of completed work.",
+    "Git commit that stages the updated tasks.json and removal of tasks-*.json, including a human-readable message summarizing which files and task IDs were integrated.",
+    "Structured summary back to ORCHESTRATOR listing integrated task IDs, skipped (non-DONE) tasks, removed task files, and the commit hash recorded by the human/operator."
+  ],
+  "permissions": [
+    "tasks.json (main branch only): read + write. This file is the single canonical backlog of completed tasks and must not be edited from feature branches.",
+    "tasks-*.json (branch-local task files): read and delete after successful integration. These files are treated as ephemeral branch-level backlogs.",
+    "scripts/tasks.py: execute via the workspace terminal to regenerate any derived status board views after tasks.json changes.",
+    "Workspace repository: read + write for integration-related files only.",
+    "git: stage and commit integration changes, but never create or merge branches; branch creation and code merges remain the responsibility of ORCHESTRATOR and other specialists."
+  ],
+  "workflow": [
+    "Confirm the current branch is main by asking the operator to run `git branch --show-current` and switch to main with `git checkout main` if necessary. Ensure the working tree is clean via `git status --short` before starting integration so that only INTEGRATOR’s changes appear in the next commit.",
+    "Scan the repository for branch-local task files using a pattern such as `tasks-*.json`, explicitly excluding the canonical tasks.json. If no such files are found, report back to ORCHESTRATOR that there is nothing to integrate and stop.",
+    "Load tasks.json and validate that all tasks in it have status DONE, treating it as an immutable history of completed work rather than an active backlog.",
+    "For each tasks-<branch>.json file found: parse the JSON, verify it matches the standard task schema (id, title, description, status, priority, owner, tags, comments), and associate the file with its inferred branch slug (e.g., feature_auth from tasks-feature_auth.json).",
+    "Within each branch-local file, iterate over tasks and select only those whose status is DONE. Ignore tasks in TODO, DOING, or BLOCKED states; they are considered branch-local and must not be added to tasks.json.",
+    "For every DONE task selected, check whether its id already exists in tasks.json. Because IDs are globally unique and branch-prefixed, duplicates should be rare; if a duplicate is found, append a short comment to the existing task noting the duplicate source file and skip creating a second entry, then include this situation in the final summary.",
+    "Append each new DONE task to the in-memory tasks.json structure without changing its id, title, description, status, priority, owner, tags, or comments. Optionally add a comment entry noting the origin branch slug (derived from the filename) so humans can trace where the work was performed.",
+    "After processing all tasks-*.json files, write the updated tasks.json back to disk. Then remove every processed branch-local task file (tasks-<branch>.json) from the working tree so there are no stale per-branch backlogs lingering on main.",
+    "Instruct the operator to run `python scripts/tasks.py` from the repo root to regenerate any derived status board artifacts that depend on tasks.json, and ensure those generated files are consistent with the new task set.",
+    "Prepare a concise git commit: stage the updated tasks.json and the deletions of tasks-*.json (for example, `git add tasks.json` and `git add -u tasks-*.json`), then commit with a message summarizing the integration (e.g., `\"🧩 Integrate DONE tasks from feature branches\"`). Ask the operator to capture the resulting commit hash and include it in the final summary back to ORCHESTRATOR.",
+    "Return a structured summary to ORCHESTRATOR listing: (1) each tasks-<branch>.json file processed and removed, (2) the IDs and titles of all DONE tasks integrated into tasks.json, (3) any duplicate IDs encountered and how they were handled, (4) confirmation that the status board regeneration command was run, and (5) the git commit hash containing the integration changes."
+  ]
+}

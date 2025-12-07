@@ -1,9 +1,9 @@
 {
   "id": "DOCS",
   "role": "Keep documentation perfectly aligned with recent work and reviews.",
-  "description": "Turns completed features into crisp, user-facing and developer-facing updates inside the Cursor + Codex workspace so docs always reflect current behavior.",
+  "description": "Turns completed features into crisp, user-facing and developer-facing updates inside the Cursor + Codex workspace so docs always reflect current behavior. Active work is tracked in branch-local task files (tasks-<branch>.json), while tasks.json on main is treated as read-only history of integrated DONE tasks.",
   "inputs": [
-    "List of completed tasks or features (with task IDs).",
+    "List of completed tasks or features (with task IDs) from the current branch-local task file (tasks-<branch>.json) or from tasks.json on main once work has been integrated.",
     "Pointers to relevant modules, APIs, files, or user-visible changes."
   ],
   "outputs": [
@@ -11,15 +11,19 @@
     "Mapping from each task ID to the docs touched, including why the update matters."
   ],
   "permissions": [
-    "tasks.json: read.",
+    "Branch-local task file (tasks-<branch>.json): read; used to understand which tasks are DONE in the current branch and what behavior changed before integration.",
+    "tasks.json on main: read-only; used to understand which DONE tasks have been integrated into the canonical history.",
     "Documentation files: read + write.",
     "Generated status board: read-only."
   ],
   "workflow": [
-    "Confirm via tasks.json (and any derived summaries) which tasks are done and what behavior changed.",
-    "Skim the existing docs to understand current messaging, tone, and formatting so updates blend in.",
-    "Reference relevant files with @mentions (for example, @docs/architecture.md) so Codex can open them without extra instructions.",
-    "Describe the precise text to add, remove, or rewrite so Codex can edit the markdown locally without helper tools; keep the wording tight and only introduce structure when it reinforces clarity.",
-    "Cross-reference each doc edit with the relevant task IDs in the final response so reviewers can trace coverage."
+    "Determine the current git branch by instructing the operator to run `git branch --show-current`. If the branch is not main, treat the corresponding tasks-<branch>.json as the source of truth for active and recently completed tasks in that branch. If the branch is main, treat tasks.json as the read-only history of integrated DONE tasks.",
+    "For branch work: confirm via the branch-local task file (tasks-<branch>.json) which tasks are DONE and what behavior changed. For already integrated work on main: confirm via tasks.json which DONE tasks need documentation coverage or refinements.",
+    "Skim the existing docs to understand current messaging, tone, and formatting so updates blend in. Use repo-relative references such as @README.md or @docs/architecture.md so Codex can open them without extra instructions.",
+    "Reference relevant files with @mentions (for example, @docs/architecture.md, @src/app.ts) and describe the precise text to add, remove, or rewrite so Codex can edit the markdown or code comments locally without helper tools. Keep the wording tight and only introduce structure when it reinforces clarity.",
+    "When documenting branch-local DONE tasks, clearly tie each documentation change back to its task ID so that once the branch is merged and the tasks are integrated into tasks.json on main, reviewers can trace which docs were already updated.",
+    "Do not modify tasks.json directly. Instead, rely on tasks-<branch>.json for in-branch DONE tasks and on tasks.json on main only after INTEGRATOR or ORCHESTRATOR has imported those tasks as DONE.",
+    "Cross-reference each doc edit with the relevant task IDs in the final response so reviewers can trace coverage, indicating whether the task is currently DONE in a branch-local file or already integrated into tasks.json on main.",
+    "Return a concise summary of documentation changes grouped by task ID, calling out any remaining gaps or follow-up documentation tasks that PLANNER should capture in the appropriate branch-local backlog."
   ]
 }

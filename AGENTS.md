@@ -1,5 +1,5 @@
 <!--
-AGENTS_SPEC: v0.2
+AGENTS_SPEC: v0.3
 default_agent: ORCHESTRATOR
 shared_state:
   - tasks.json
@@ -20,8 +20,12 @@ shared_state:
   - Think step by step internally. DO NOT print full reasoning, only concise results, plans, and key checks.
   - Prefer structured outputs (lists, tables, JSON) when they help execution.
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
-- Never invent external facts. For tasks and project state, use the canonical `tasks.json` as the single source of truth.
-- The workspace is always a git repository. After completing each atomic task tracked in `tasks.json`, create a concise, human-readable commit before continuing.
+- Never invent external facts.
+- `tasks.json` on **main** is canonical but stores **only DONE tasks** integrated from feature branches.
+- Each non-main branch maintains its own task file: `tasks-<branch>.json`, where **all active tasks** for that branch live.
+- Agents MAY create and switch branches when needed; no work is allowed directly in `main` except integration.
+
+The workspace is always a git repository. After completing each atomic task tracked in a branch-local task file, create a concise, human-readable commit before continuing.
 
 ---
 
@@ -65,9 +69,13 @@ shared_state:
 
 ## Task Tracking
 
-### `tasks.json` (canonical)
+### `tasks.json` (canonical on main)
 
-Purpose: single machine-editable backlog that stores every task, including rich context.
+Purpose: **append-only list of DONE tasks integrated from branches**.
+
+- `tasks.json` no longer stores active tasks, only completed ones integrated after merges.
+- Agents MUST NOT modify `tasks.json` outside the integration step.
+- All active work happens in branch-local files.
 
 Schema (JSON):
 
@@ -75,10 +83,10 @@ Schema (JSON):
 {
   "tasks": [
     {
-      "id": "T-001",
+      "id": "T-<branch-slug>-0001",
       "title": "Add Normalizer Service",
       "description": "What the task accomplishes and why it matters.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "human",
       "tags": ["codextown", "normalizer"],
@@ -90,25 +98,47 @@ Schema (JSON):
 }
 ```
 
+### Branch-local task files
+
+Every non-main branch has its own file:
+
+```
+tasks-<branch>.json
+```
+
+It contains **all active tasks for that branch**.
+
+Rules:
+
+- PLANNER creates tasks ONLY in branch-local files.
+- IDs MUST be globally unique, derived from branch name:
+  `T-<branch-slug>-0001`.
 - Keep tasks atomic: PLANNER decomposes each request into single-owner items that map one-to-one with commits.
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
+- Status transitions (TODO/DOING/DONE/BLOCKED) occur only here.
 - `description` explains the business value or acceptance criteria.
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
+- These files are deleted on main after integration.
+
+---
 
 ### Status Transition Protocol
 
-- **Create / Reprioritize (PLANNER only).** PLANNER is the sole writer of new tasks and the only agent that may change priorities or mark work as `BLOCKED`; record the reasoning directly inside `tasks.json` (usually via `description` or a new `comments` entry).
-- **Start Work (specialist agent).** Whoever assumes ownership flips the task to `DOING` inside `tasks.json` before editing files so the backlog always reflects current work.
-- **Complete Work (review/doc specialist).** REVIEWER or DOCS marks tasks `DONE` only after validating the deliverable; add a `comments` entry summarizing the verification (this replaces the old indented `Review:` line in `PLAN.md`).
-- **Status Sync.** `tasks.json` is canonical. After editing it, immediately run `python scripts/tasks.py` at the repo root so the generated status board stays current before committing.
+- **Create / Reprioritize (PLANNER only).** PLANNER is the sole writer of new tasks and the only agent that may change priorities or mark work as `BLOCKED`; record the reasoning directly inside branch-local task file (usually via `description` or a new `comments` entry).
+- **Start Work (specialist agent).** Whoever assumes ownership flips the task to `DOING` inside branch-local task file before editing files so the backlog always reflects current work.
+- **Complete Work (review/doc specialist).** REVIEWER or DOCS marks tasks `DONE` inside branch-local file only after validating the deliverable; add a `comments` entry summarizing the verification (this replaces the old indented `Review:` line in `PLAN.md`).
+- **Status Sync** — applies only to branch-local files; `tasks.json` is not part of active lifecycle.
+- **Integration** — DONE tasks are moved from branch-local files into `tasks.json` by INTEGRATOR or ORCHESTRATOR. `tasks.json` is canonical. After editing it in main branch, immediately run `python scripts/tasks.py` at the repo root so the generated status board stays current before committing.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
 
 Protocol:
 
-- Before changing tasks: review the latest `tasks.json` so you understand the current state.
+- Before changing tasks: review the latest branch-local task file so you understand the current state.
 - When updating: edit the existing JSON entries; do NOT silently drop tasks.
 - In your reply: list every task ID you touched plus the new status or notes.
-- Only `tasks.json` stores task data. Regenerate the read-only status board with `python scripts/tasks.py` whenever you need a refreshed view.
+- Only branch-local task file stores task data. 
+
+---
 
 # AGENT REGISTRY
 
@@ -186,18 +216,36 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 
 ## Behaviour
 
-* Step 1: Interpret the user goal.
+### Branch Behavior Rules (Minimal Additions)
+
+* Step 1: If user initiates work while on `main`, ORCHESTRATOR must instruct creation of a new branch:
+  ```bash
+  git checkout -b feature/<slug> main
+  ```
+  * All work then proceeds in that branch, using its `tasks-<branch>.json`.
+  * If user indicates they are already in a branch, ORCHESTRATOR stays there.
+* Step 2: Interpret the user goal.
   * If the goal is trivial and fits a single agent, you may propose a very short plan (1–2 steps).
-* Step 2: Draft the plan.
+* Step 3: Draft the plan.
   * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
   * Be realistic about what can be done in one run; chunk larger work into multiple steps.
   * Record the plan inline (numbered list) so every agent can see the execution path.
-* Step 3: Ask for approval.
+* Step 4: Ask for approval.
   * Stop and wait for user input before executing steps.
-* Step 4: Execute.
+* Step 5: Execute.
   * For each step, follow the corresponding agent’s JSON workflow before taking action.
   * Update `tasks.json` through the owner specified in the Status Transition Protocol, then run `python scripts/tasks.py` so the generated status board stays in sync, calling out any status flips in the user-facing summary.
   * Enforce the COMMIT_WORKFLOW before moving to the next step and include the resulting commit hash in each progress summary.
   * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
-* Step 5: Finalize.
+* Step 6: Finalize.
   * Present a concise summary: what changed, which tasks were created/updated, and suggested next steps.
+  * After human merges the branch into main, ORCHESTRATOR may schedule INTEGRATOR.
+
+---
+
+# FINAL NOTES
+
+- `tasks.json` is historical truth of completed work.
+- Each branch has its own set of active tasks.
+- Agents may create/switch branches but never commit active-task changes to `main`.
+- Integration is the only moment `tasks.json` is mutated.
