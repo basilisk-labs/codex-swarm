@@ -61,6 +61,11 @@ Prerequisites:
 4. 🧰 **Plugin-agnostic operation.** Because the instructions are plain Markdown and JSON, any IDE that supports the Codex Plugin can execute the same flows without extra configuration.
 5. 🎯 **Optimization audits (optional):** When the user explicitly asks for agent improvements, the orchestrator triggers `@.AGENTS/UPDATER.json` so it can inspect `.AGENTS/*.json` and the rest of the repo before outlining targeted follow-up tasks.
 
+### Agent spotlight: INTEGRATOR
+- Runs only on `main` after a feature branch merges.
+- Reads branch-local `tasks-<branch>.json`, imports DONE tasks into `tasks.json`, removes the branch file, and runs `python scripts/tasks.py` to refresh `tasks.md`.
+- Ensures `tasks.json`/`tasks.md` stay DONE-only history; feature branches must not edit `tasks.json` directly.
+
 ## 🗂️ Repository Layout
 
 ```

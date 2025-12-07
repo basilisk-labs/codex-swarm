@@ -62,6 +62,8 @@ git checkout -b feature/short-description
 Implement your change, keeping commits logically separate and with clear
 messages.
 
+Keep task tracking branch-local: use `tasks-<branch>.json` during feature work, avoid editing `tasks.json` in branches, and rely on the INTEGRATOR agent on `main` to import DONE tasks and regenerate `tasks.md` after merges.
+
 Run the tests / linters relevant for your change.
 Check the project README for the current commands; if in doubt, at least run
 whatever is available for local validation.

@@ -17,6 +17,24 @@
           "body": "Updated README, GUIDELINE, and CONTRIBUTING to reflect branch-local task files and INTEGRATOR integration."
         }
       ]
+    },
+    {
+      "id": "T-feature-48-team-work-0002",
+      "title": "Document INTEGRATOR agent explicitly across docs",
+      "description": "Add clear references to the new INTEGRATOR agent (role, responsibilities, and when to run) in README and other guidance docs.",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Explicitly documented INTEGRATOR role and when to run it in README, GUIDELINE, and CONTRIBUTING."
+        }
+      ]
     }
   ]
 }

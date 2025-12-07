@@ -6,6 +6,8 @@ This document explains how to get the Codex Swarm framework ready and how to use
 
 Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work predictable by making the Orchestrator plan in advance, the Planner manage the task board, and the specialists (CODER, DOCS, REVIEWER, etc.) execute their focused responsibilities. Every action is traceable through branch-local `tasks-<branch>.json` (active work), the integrated `tasks.json`/`tasks.md` on `main`, and emoji-prefixed commits so collaborators know what happened, why, and who did it.
 
+**Agents at a glance:** PLANNER manages branch-local backlogs, CODER/DOCS/REVIEWER deliver work, UPDATER audits on request, and the new INTEGRATOR (on `main` only) imports DONE tasks from `tasks-<branch>.json` into `tasks.json` and regenerates `tasks.md` after merges.
+
 ## 2. Prerequisites
 
 - A git-savvy machine with Git installed (any recent version).
