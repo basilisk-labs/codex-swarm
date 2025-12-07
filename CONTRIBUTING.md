@@ -81,6 +81,8 @@ green, a maintainer will merge it.
 
 Direct commits to main are reserved for maintainers and automated tooling.
 
+Task tracking follows the agent workflow: keep active items in branch-local `tasks-<branch>.json` files, avoid editing `tasks.json` on feature branches, and rely on the INTEGRATOR agent (on `main`) to import DONE tasks into `tasks.json` and regenerate `tasks.md` after merges.
+
 4. Coding style
 Follow the existing style in the files you modify.
 

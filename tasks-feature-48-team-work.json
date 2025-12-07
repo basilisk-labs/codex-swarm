@@ -1,0 +1,22 @@
+{
+  "tasks": [
+    {
+      "id": "T-feature-48-team-work-0001",
+      "title": "Align docs with branch-local tasks and INTEGRATOR workflow",
+      "description": "Update repository docs to reflect branch-local task files (tasks-<branch>.json), DONE-only tasks.json on main, and the INTEGRATOR agent role in post-merge task integration.",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "workflow"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Updated README, GUIDELINE, and CONTRIBUTING to reflect branch-local task files and INTEGRATOR integration."
+        }
+      ]
+    }
+  ]
+}
