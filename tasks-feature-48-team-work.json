@@ -35,6 +35,28 @@
           "body": "Explicitly documented INTEGRATOR role and when to run it in README, GUIDELINE, and CONTRIBUTING."
         }
       ]
+    },
+    {
+      "id": "T-feature-48-team-work-0003",
+      "title": "Add INTEGRATOR.json to README layout",
+      "description": "Update the Repository Layout tree to list .AGENTS/INTEGRATOR.json so the agent registry is complete.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Started adding INTEGRATOR.json to the README layout for accuracy."
+        },
+        {
+          "author": "reviewer",
+          "body": "Verified README layout now lists .AGENTS/INTEGRATOR.json; no other changes required."
+        }
+      ]
     }
   ]
 }

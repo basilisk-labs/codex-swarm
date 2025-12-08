@@ -83,6 +83,7 @@ Prerequisites:
     ├── REVIEWER.json
     ├── DOCS.json
     ├── CREATOR.json
+    ├── INTEGRATOR.json
     └── UPDATER.json
 ```
 
