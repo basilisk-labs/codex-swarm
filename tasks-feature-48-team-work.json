@@ -57,6 +57,28 @@
           "body": "Verified README layout now lists .AGENTS/INTEGRATOR.json; no other changes required."
         }
       ]
+    },
+    {
+      "id": "T-feature-48-team-work-0004",
+      "title": "Skip tasks regeneration on non-main branches",
+      "description": "Prevent scripts/tasks.py from regenerating tasks.md or other outputs when run outside main; exit early in branch contexts.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "coder",
+      "tags": [
+        "tools",
+        "automation"
+      ],
+      "comments": [
+        {
+          "author": "coder",
+          "body": "Starting change to have scripts/tasks.py no-op on non-main branches."
+        },
+        {
+          "author": "reviewer",
+          "body": "Checked scripts/tasks.py now detects non-main branches and exits with a clear message; main-path unchanged."
+        }
+      ]
     }
   ]
 }

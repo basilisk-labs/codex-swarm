@@ -54,6 +54,22 @@ AGENT_ICONS = {
 DEFAULT_AGENT_ICON = "🧠"
 
 
+def get_current_branch() -> Optional[str]:
+    """Return the current git branch name, or None if it cannot be determined."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    branch = (result.stdout or "").strip()
+    return branch or None
+
+
 def normalize_remote_url(url: str) -> Optional[str]:
     raw = (url or "").strip()
     if not raw:
@@ -259,6 +275,14 @@ def build_section(tasks: List[Dict], status: str, heading: str, empty_text: str)
 
 
 def main() -> None:
+    branch = get_current_branch()
+    if branch is None:
+        print("Could not determine git branch; skipping tasks.md generation.")
+        return
+    if branch != "main":
+        print(f"Skipping tasks.md generation on non-main branch: {branch}")
+        return
+
     data = load_tasks_data()
     tasks = data["tasks"]
     if ensure_commit_metadata(tasks):
