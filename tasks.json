@@ -1171,12 +1171,29 @@
         "hash": "20b580ff017d997987112ec3bd46597cd7efe8db",
         "message": "🧭 T-055 Reduce commits with 3-phase workflow"
       }
+    },
+    {
+      "id": "T-056",
+      "title": "Add Mermaid agent workflow diagram to README",
+      "description": "Update @README.md to include a short description and a Mermaid diagram (flowchart) showing the default agent workflow and handoffs (ORCHESTRATOR, PLANNER, CODER, TESTER, DOCS, REVIEWER).\\n\\nAcceptance criteria:\\n- README includes a Mermaid flowchart block describing the typical flow (plan -> implement -> test -> docs -> review -> finish).\\n- Diagram matches current agent rules (3-phase commits, DOCS artifact before DONE, CODER -> TESTER for dev work).",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "workflow",
+        "mermaid"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "14afb5d65a302f7f36ec4aecce1cbd2f286da92cb2e2ae9a4c926ca84fabe4f9"
+    "checksum": "10fa6cda63c09de7c9c778d6e8a633cabd06b1f602eaaafee5d0f60f42ed0482"
   }
 }
