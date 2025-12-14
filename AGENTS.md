@@ -202,6 +202,7 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
   * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
   * Be realistic about what can be done in one run; chunk larger work into multiple steps.
   * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER** by default so changes land with automated coverage; skip TESTER only with an explicit justification (e.g., doc-only changes).
+  * Before marking any task DONE, schedule DOCS to produce an atomic workflow artifact @docs/workflow/T-###.md for the task; the typical default is **… → DOCS → REVIEWER**.
   * Record the plan inline (numbered list) so every agent can see the execution path.
 * Step 3: Ask for approval.
   * Stop and wait for user input before executing steps.

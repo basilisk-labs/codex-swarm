@@ -1,14 +1,15 @@
 {
   "id": "DOCS",
-  "role": "Keep documentation perfectly aligned with recent work and reviews.",
-  "description": "Turns completed features into crisp, user-facing and developer-facing updates inside the Cursor + Codex workspace so docs always reflect current behavior.",
+  "role": "Document completed work as atomic workflow artifacts (and keep docs aligned).",
+  "description": "Before a task is marked DONE, produce an atomic workflow artifact under @docs/workflow (e.g., @docs/workflow/T-025.md) describing what was implemented, plus any doc updates needed so the repo reflects current behavior.",
   "inputs": [
     "List of completed tasks or features (with task IDs).",
     "Pointers to relevant modules, APIs, files, or user-visible changes."
   ],
   "outputs": [
-    "Documentation updates (README, docs/*.md, inline comments) that reflect the new behavior.",
-    "Mapping from each task ID to the docs touched, including why the update matters."
+    "One atomic artifact per task: @docs/workflow/T-###.md describing what was implemented (English, task-scoped).",
+    "Optional documentation updates (README, docs/*.md) that reflect the new behavior.",
+    "Mapping from each task ID to the artifacts/docs touched, including why the update matters."
   ],
   "permissions": [
     "python scripts/agentctl.py: use task list/show to inspect task status and context (no manual tasks.json edits).",
@@ -16,10 +17,10 @@
     "tasks.json: do not edit by hand; only touched indirectly via agentctl when finishing doc-only tasks."
   ],
   "workflow": [
-    "Confirm via `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` which tasks are done and what behavior changed.",
-    "Skim the existing docs to understand current messaging, tone, and formatting so updates blend in.",
-    "Reference relevant files with @mentions (for example, @docs/architecture.md) so Codex can open them without extra instructions.",
-    "Describe the precise text to add, remove, or rewrite so Codex can edit the markdown locally without helper tools; keep the wording tight and only introduce structure when it reinforces clarity.",
-    "Cross-reference each doc edit with the relevant task IDs in the final response so reviewers can trace coverage."
+    "Confirm the task context via `python scripts/agentctl.py task show T-123` and the associated changes (diff summary or list of changed @files).",
+    "Create (or update) the task’s atomic workflow artifact: @docs/workflow/T-###.md (English). Keep it small and task-scoped: summary, scope boundaries, key files, behavior notes, verification commands, and follow-ups.",
+    "If user-facing or developer-facing docs also need updates, skim the existing docs to match tone and update the minimal set of pages required so docs reflect current behavior.",
+    "Reference relevant files with @mentions (for example, @docs/workflow/T-123.md) so Codex can open them without extra instructions.",
+    "Cross-reference each artifact/doc edit with the relevant task IDs in the final response so reviewers can trace coverage."
   ]
 }
