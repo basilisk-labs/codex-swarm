@@ -1241,12 +1241,28 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py --help"
       ]
+    },
+    {
+      "id": "T-059",
+      "title": "Add agentctl git/task ergonomics",
+      "description": "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit).",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "git"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py guard --help"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "ec1c731ca46ec418c15115d6df1015c5b78a6e0743168f217579dc9b19cf7296"
+    "checksum": "3bd505651580ed4bc3ce81a91911824abb373ad67180c5f6819c482caed650f2"
   }
 }
