@@ -1230,7 +1230,7 @@
       "id": "T-058",
       "title": "Agentctl quickstart + docs pointer",
       "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "tags": [
@@ -1240,6 +1240,20 @@
       "verify": [
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py --help"
+      ],
+      "commit": {
+        "hash": "9bf8bdf414163bd3818b8d29075e19a4a87539ff",
+        "message": "✨ T-058 Add agentctl quickstart + docs"
+      },
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Ran agentctl lint and confirmed  prints ;  includes the new command; clean.sh preserves  while removing other docs."
+        },
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Ran python scripts/agentctl.py task lint; checked python scripts/agentctl.py quickstart output; checked python scripts/agentctl.py --help; confirmed clean.sh preserves docs/agentctl.md while removing other docs."
+        }
       ]
     },
     {
@@ -1263,6 +1277,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "3bd505651580ed4bc3ce81a91911824abb373ad67180c5f6819c482caed650f2"
+    "checksum": "8c438d9905e81a6c514e98bfc44174ed4caeba3883bb132d46f37125ef574709"
   }
 }
