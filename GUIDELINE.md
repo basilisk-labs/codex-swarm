@@ -9,7 +9,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 ## 2. Prerequisites
 
 - A git-savvy machine with Git installed (any recent version).
-- Python 3.10+ for `scripts/tasks.py` and any helper scripts.
+- Python 3.10+ for `scripts/agentctl.py` and any helper scripts.
 - The OpenAI Codex plugin (Cursor, VS Code, JetBrains, or another supported editor) attached to this repository so the plugin can send files back and forth.
 - Optional: a clean terminal (zsh/bash) that lets you run git, python, and shell scripts locally.
 
@@ -22,7 +22,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
    ```
 2. Open the project in your IDE with the Codex plugin enabled.
 3. (Optional) Run `./clean.sh` if you want to remove the bundled assets, README copies, and git history before you begin; this script reinitializes the repository and gives you a blank slate.
-4. Run `python scripts/tasks.py` whenever `tasks.json` changes to validate it and print a human-readable summary.
+4. Use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to inspect tasks, and run `python scripts/agentctl.py task lint` after changes to keep `tasks.json` checksum-valid.
 5. Keep `.AGENTS/*.json` open so you can see each agent’s permissions and workflow before you touch files.
 
 ## 4. Environment setup / “Installation” steps
@@ -41,22 +41,29 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 
 1. **Ask the Orchestrator for a goal.** Describe what you want to accomplish (e.g., “Document how to use the framework” or “Add a safety check”). The Orchestrator drafts a numbered plan with agents assigned to each step and waits for your approval before anything changes.
 2. **PLANNER owns queue updates.** Once the plan is approved:
-   - The PLANNER edits `tasks.json`, adds the new task (or tasks), and sets their `status` to `DOING` before work begins.
-   - After editing `tasks.json`, run `python scripts/tasks.py` to validate and review a readable summary.
+   - The PLANNER uses `python scripts/agentctl.py task add` / `python scripts/agentctl.py task update` to create or reprioritize tasks (no manual edits).
+   - Run `python scripts/agentctl.py task lint` after task changes to keep the schema/deps/checksum valid.
 3. **Specialist agents execute.** Work follows the JSON workflows:
    - *CODER* handles implementation, edits the relevant files, runs any commands (tests, linters), and documents the key command outputs.
    - *DOCS* updates documentation files (README, GUIDELINE.md, etc.) and ties each change back to the task ID.
-   - *REVIEWER* inspects diffs, reruns commands if needed, and marks the task `DONE` in `tasks.json` once the work passes review. Every status update should be followed by `python scripts/tasks.py` to validate and confirm the latest state.
+   - *REVIEWER* inspects diffs, reruns commands if needed, runs `python scripts/agentctl.py verify T-123` when configured, and marks the task `DONE` via `python scripts/agentctl.py finish T-123` (which runs lint + optional verify gates).
 4. **Committing.** Each task must end with a dedicated commit:
    - Stage the relevant files and run `git commit -m "<emoji> T-<id> <short summary>"`.
    - Example: `git commit -m "📝 T-041 write framework guideline"`.
    - Mention the finished task ID and keep the message concise.
+   - Before committing, validate the staged allowlist and message quality with `python scripts/agentctl.py guard commit T-123 -m "…" --allow <path>`.
+   - After the work commit, `finish` updates `tasks.json` (DONE + commit metadata), which should be committed as a small follow-up commit that also mentions the task ID.
 5. **Final verification.** After the commit, `git status --short` must be clean. The agent who performed the task provides a summary referencing the files edited, commands run, and the new commit hash so the Orchestrator can track progress.
-6. **Status sync.** After status changes, rerun `python scripts/tasks.py` to validate `tasks.json` and confirm the latest state.
+6. **Status sync.** Use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to confirm the latest state (there is no separate status board file).
 
 ## 6. Common commands and expectations
 
-- `python scripts/tasks.py`: Validates `tasks.json`, syncs commit metadata, and prints a human-readable summary. Run this after changes to the JSON file (additions, status flips, comments, etc.).
+- `python scripts/agentctl.py agents`: List registered agents under `.AGENTS/`.
+- `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123`: Inspect the backlog.
+- `python scripts/agentctl.py task add/update/comment/set-status`: Modify tasks without breaking the checksum.
+- `python scripts/agentctl.py ready/start/block/verify/finish`: Enforced task lifecycle with readiness + verify gates.
+- `python scripts/agentctl.py task lint`: Validate schema/deps/checksum for `tasks.json`.
+- `python scripts/agentctl.py guard clean/commit`: Git hygiene + staging allowlist checks.
 - `./clean.sh`: Optional reset tool that deletes the bundled assets and reinitializes the git history; use it when you want to reuse this repo as a fresh project.
 - `git status --short`: Verify the tree is clean before handing control back.
 - Use emoji-prefixed commit messages that mention the task ID.
@@ -71,15 +78,15 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 ## 8. Example session
 
 1. **State your goal to the Orchestrator.** The Orchestrator drafts a numbered plan, maps each step to the right agent (`PLANNER`, `CODER`, `DOCS`, etc.), and asks for your approval before anything mutates.
-2. **PLANNER gates the backlog.** Once you approve, PLANNER edits `tasks.json`, adds the task with `status: DOING`, and runs `python scripts/tasks.py` to validate and review the latest state.
-3. **Specialists deliver the work.** CODER or DOCS edit files, capture command output (tests, linters, or scripts), and keep every change focused on the assigned files. REVIEWER double-checks the diff, reruns commands if needed, and flips the task to `DONE`.
-4. **Commit per task.** Stage the edited files and `git commit -m "<emoji> T-<id> <short summary>"`—the message should mention the task ID so `scripts/tasks.py` can automatically link the commit back to the ticket.
-5. **Cleanup.** Run `git status --short` to ensure the tree is clean, rerun `python scripts/tasks.py` to validate `tasks.json`, and let the Orchestrator know about the new commit hash so the plan can continue.
+2. **PLANNER gates the backlog.** Once you approve, PLANNER adds/updates tasks via `python scripts/agentctl.py task add/update`, then runs `python scripts/agentctl.py task lint`.
+3. **Specialists deliver the work.** CODER or DOCS run `python scripts/agentctl.py ready T-123`, start via `python scripts/agentctl.py start T-123 --author CODER --body "Start: …"`, then edit files and capture command output (tests, linters, scripts).
+4. **Commit per task.** Stage the edited files, run `python scripts/agentctl.py guard commit T-123 -m "…" --allow <path>`, then commit with `git commit -m "<emoji> T-<id> <short summary>"`.
+5. **Finish + cleanup.** REVIEWER runs verification (or lets `finish` run it), then marks DONE via `python scripts/agentctl.py finish T-123 --author REVIEWER --body "Verified: …"`, commits the resulting `tasks.json` change, and confirms the tree is clean.
 
 ## 9. Troubleshooting & best practices
 
-- `python scripts/tasks.py` crashes with a JSON error: the file was likely malformed. Open `tasks.json`, fix the highlighted entry (commas, quotes, or missing braces), then rerun the script. Use `rg -n '"T-042' tasks.json` to locate the entry quickly.
-- You’re looking at outdated task info: rerun `python scripts/tasks.py` (or reopen `tasks.json`) to confirm the latest state.
+- `python scripts/agentctl.py task lint` fails with a checksum error: `tasks.json` was likely edited by hand. Undo the manual edit (e.g., `git checkout -- tasks.json`) and reapply the change via `python scripts/agentctl.py task update/comment/set-status` so the checksum stays valid.
+- You’re looking at outdated task info: rerun `python scripts/agentctl.py task list` (or `task show T-123`) to confirm the latest state.
 - Your working tree is dirty before committing: run `git status --short`, stash or revert unrelated changes, and keep future commits scoped to the current task.
 - The Codex plugin stops responding: restart the IDE, reopen the repository, or re-execute your last command manually in a terminal before resuming.
 - Need a clean slate? `./clean.sh` removes the bundled docs and git history, then reinitializes the repo so you can reuse the framework without carrying over artifacts.
