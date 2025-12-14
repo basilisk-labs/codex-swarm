@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Render tasks.md from the canonical tasks.json file."""
+"""Render a human-readable tasks summary from the canonical tasks.json file."""
 from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 import subprocess
+import sys
 from typing import Dict, List, Optional
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 TASKS_PATH = ROOT / "tasks.json"
-OUTPUT_PATH = ROOT / "tasks.md"
 
 STATUS_SECTIONS = [
     ("TODO", "📋 Backlog", "_No open tasks._"),
@@ -263,7 +263,7 @@ def main() -> None:
     tasks = data["tasks"]
     if ensure_commit_metadata(tasks):
         persist_tasks_data(data)
-        print("Updated tasks.json with commit metadata.")
+        print("Updated tasks.json with commit metadata.", file=sys.stderr)
     tasks = sorted_tasks(tasks)
     counts: Dict[str, int] = {status: 0 for status, *_ in STATUS_SECTIONS}
     for task in tasks:
@@ -294,8 +294,8 @@ def main() -> None:
         lines.pop()
     lines.append("")
 
-    OUTPUT_PATH.write_text("\n".join(lines), encoding="utf-8")
-    print(f"Wrote {OUTPUT_PATH.relative_to(ROOT)} with {total_tasks} tasks.")
+    sys.stdout.write("\n".join(lines) + "\n")
+    print(f"Rendered {total_tasks} tasks.", file=sys.stderr)
 
 
 if __name__ == "__main__":

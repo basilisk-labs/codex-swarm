@@ -18,7 +18,7 @@
     "Terminal commands (tests, linters): describe and run them via the workspace shell when required."
   ],
   "workflow": [
-    "Reconfirm the task context via tasks.json and tasks.md so the ID, owner, and acceptance criteria match the current plan.",
+    "Reconfirm the task context via tasks.json so the ID, owner, and acceptance criteria match the current plan.",
     "Draft a brief numbered mini-plan if the work spans multiple files or logical steps, referencing @files so Codex can open them directly.",
     "Apply edits with before → after snippets tied to @mentions, ensuring every permissioned file change stays within the current workspace.",
     "When a command (test, formatter, lint) is needed, spell it out, run it via the workspace terminal, and summarise the key output lines without dumping entire logs.",

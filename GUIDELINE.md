@@ -4,7 +4,7 @@ This document explains how to get the Codex Swarm framework ready and how to use
 
 ## 1. Overview
 
-Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work predictable by making the Orchestrator plan in advance, the Planner manage the task board, and the specialists (CODER, DOCS, REVIEWER, etc.) execute their focused responsibilities. Every action is traceable through `tasks.json`, `tasks.md`, and emoji-prefixed commits so collaborators know what happened, why, and who did it.
+Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work predictable by making the Orchestrator plan in advance, the Planner manage the task backlog, and the specialists (CODER, DOCS, REVIEWER, etc.) execute their focused responsibilities. Every action is traceable through `tasks.json` and emoji-prefixed commits so collaborators know what happened, why, and who did it.
 
 ## 2. Prerequisites
 
@@ -22,7 +22,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
    ```
 2. Open the project in your IDE with the Codex plugin enabled.
 3. (Optional) Run `./clean.sh` if you want to remove the bundled assets, README copies, and git history before you begin; this script reinitializes the repository and gives you a blank slate.
-4. Run `python scripts/tasks.py` whenever `tasks.json` changes so `tasks.md` regenerates automatically; the board is read-only, so you must edit the JSON file and rerun the script.
+4. Run `python scripts/tasks.py` whenever `tasks.json` changes to validate it and print a human-readable summary.
 5. Keep `.AGENTS/*.json` open so you can see each agent’s permissions and workflow before you touch files.
 
 ## 4. Environment setup / “Installation” steps
@@ -34,7 +34,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
    pip install <needed-package>
    ```
    Always install dependencies inside the venv to avoid polluting the global site-packages.
-2. Count `tasks.json` as the single source of truth for every task. Do not edit `tasks.md` manually.
+2. Count `tasks.json` as the single source of truth for every task.
 3. Keep `assets/` and `AGENTS.md` untouched unless your task explicitly calls for change.
 
 ## 5. Step-by-step usage flow
@@ -42,21 +42,21 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 1. **Ask the Orchestrator for a goal.** Describe what you want to accomplish (e.g., “Document how to use the framework” or “Add a safety check”). The Orchestrator drafts a numbered plan with agents assigned to each step and waits for your approval before anything changes.
 2. **PLANNER owns queue updates.** Once the plan is approved:
    - The PLANNER edits `tasks.json`, adds the new task (or tasks), and sets their `status` to `DOING` before work begins.
-   - After editing `tasks.json`, run `python scripts/tasks.py` to rewrite `tasks.md` so the board matches the JSON.
+   - After editing `tasks.json`, run `python scripts/tasks.py` to validate and review a readable summary.
 3. **Specialist agents execute.** Work follows the JSON workflows:
    - *CODER* handles implementation, edits the relevant files, runs any commands (tests, linters), and documents the key command outputs.
    - *DOCS* updates documentation files (README, GUIDELINE.md, etc.) and ties each change back to the task ID.
-   - *REVIEWER* inspects diffs, reruns commands if needed, and marks the task `DONE` in `tasks.json` once the work passes review. Every status update must be followed by `python scripts/tasks.py`.
+   - *REVIEWER* inspects diffs, reruns commands if needed, and marks the task `DONE` in `tasks.json` once the work passes review. Every status update should be followed by `python scripts/tasks.py` to validate and confirm the latest state.
 4. **Committing.** Each task must end with a dedicated commit:
    - Stage the relevant files and run `git commit -m "<emoji> T-<id> <short summary>"`.
    - Example: `git commit -m "📝 T-041 write framework guideline"`.
    - Mention the finished task ID and keep the message concise.
 5. **Final verification.** After the commit, `git status --short` must be clean. The agent who performed the task provides a summary referencing the files edited, commands run, and the new commit hash so the Orchestrator can track progress.
-6. **Task board sync.** After status changes, rerun `python scripts/tasks.py`. The generated `tasks.md` now reflects the new `Status`, priority, owner, and `_Commit` metadata for done tasks.
+6. **Status sync.** After status changes, rerun `python scripts/tasks.py` to validate `tasks.json` and confirm the latest state.
 
 ## 6. Common commands and expectations
 
-- `python scripts/tasks.py`: Regenerates `tasks.md` from `tasks.json`. Run this after every change to the JSON file (additions, status flips, comments, etc.).
+- `python scripts/tasks.py`: Validates `tasks.json`, syncs commit metadata, and prints a human-readable summary. Run this after changes to the JSON file (additions, status flips, comments, etc.).
 - `./clean.sh`: Optional reset tool that deletes the bundled assets and reinitializes the git history; use it when you want to reuse this repo as a fresh project.
 - `git status --short`: Verify the tree is clean before handing control back.
 - Use emoji-prefixed commit messages that mention the task ID.
@@ -71,15 +71,15 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 ## 8. Example session
 
 1. **State your goal to the Orchestrator.** The Orchestrator drafts a numbered plan, maps each step to the right agent (`PLANNER`, `CODER`, `DOCS`, etc.), and asks for your approval before anything mutates.
-2. **PLANNER gates the backlog.** Once you approve, PLANNER edits `tasks.json`, adds the task with `status: DOING`, and runs `python scripts/tasks.py` so `tasks.md` mirrors the new ticket.
+2. **PLANNER gates the backlog.** Once you approve, PLANNER edits `tasks.json`, adds the task with `status: DOING`, and runs `python scripts/tasks.py` to validate and review the latest state.
 3. **Specialists deliver the work.** CODER or DOCS edit files, capture command output (tests, linters, or scripts), and keep every change focused on the assigned files. REVIEWER double-checks the diff, reruns commands if needed, and flips the task to `DONE`.
 4. **Commit per task.** Stage the edited files and `git commit -m "<emoji> T-<id> <short summary>"`—the message should mention the task ID so `scripts/tasks.py` can automatically link the commit back to the ticket.
-5. **Cleanup.** Run `git status --short` to ensure the tree is clean, rerun `python scripts/tasks.py` to refresh `tasks.md`, and let the Orchestrator know about the new commit hash so the plan can continue.
+5. **Cleanup.** Run `git status --short` to ensure the tree is clean, rerun `python scripts/tasks.py` to validate `tasks.json`, and let the Orchestrator know about the new commit hash so the plan can continue.
 
 ## 9. Troubleshooting & best practices
 
 - `python scripts/tasks.py` crashes with a JSON error: the file was likely malformed. Open `tasks.json`, fix the highlighted entry (commas, quotes, or missing braces), then rerun the script. Use `rg -n '"T-042' tasks.json` to locate the entry quickly.
-- `tasks.md` is stale after editing `tasks.json`: rerun `python scripts/tasks.py` immediately—no manual edits should target `tasks.md`.
+- You’re looking at outdated task info: rerun `python scripts/tasks.py` (or reopen `tasks.json`) to confirm the latest state.
 - Your working tree is dirty before committing: run `git status --short`, stash or revert unrelated changes, and keep future commits scoped to the current task.
 - The Codex plugin stops responding: restart the IDE, reopen the repository, or re-execute your last command manually in a terminal before resuming.
 - Need a clean slate? `./clean.sh` removes the bundled docs and git history, then reinitializes the repo so you can reuse the framework without carrying over artifacts.

@@ -922,6 +922,25 @@
         "hash": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
         "message": "📌 T-047 start Code of Conduct task"
       }
+    },
+    {
+      "id": "T-048",
+      "title": "Remove markdown task board references",
+      "description": "Remove references to the markdown task board and stop generating it; tasks.json remains the single source of truth.",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "docs",
+      "tags": [
+        "docs",
+        "workflow",
+        "tasks"
+      ],
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Removed the markdown task board and updated docs/scripts; verified the repo contains no remaining references to it."
+        }
+      ]
     }
   ]
 }
