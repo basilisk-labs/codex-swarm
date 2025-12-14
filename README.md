@@ -182,7 +182,7 @@ If the OpenAI Codex Plugin can access the repository from your IDE, it can orche
 
 ## 🛠️ Local development
 
-1. Download a fresh snapshot from GitHub (e.g., `curl -L https://github.com/densmirnov/codex-swarm/archive/refs/heads/main.zip -o codex-swarm.zip`), unzip it, and `cd` into the extracted folder.
+1. Install a fresh snapshot from GitHub via shell command (e.g., `curl -fsSL https://codexswarm.xyz/install.sh | bash`), and `cd` into the extracted folder.
 2. Run `./clean.sh` to delete the bundled assets, documentation, and git metadata and to reinitialize the repository; this step makes the workspace yours without lingering ties to the original repo.
 3. After `clean.sh` finishes, add back the files you plan to edit (e.g., copy `AGENTS.md`, `.AGENTS`, etc.) and use `python scripts/agentctl.py task lint` after any task changes to keep `tasks.json` checksum-valid.
 4. Use the ORCHESTRATOR workflow described above to plan work, update tasks via `python scripts/agentctl.py`, and commit each atomic task with an emoji-prefixed message.
