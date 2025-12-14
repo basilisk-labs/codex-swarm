@@ -1049,12 +1049,28 @@
         "hash": "d6517d61191b4d80e80acc63117b6e55ba02c557",
         "message": "🧹 T-051 Remove tasks.py; migrate docs to agentctl"
       }
+    },
+    {
+      "id": "T-052",
+      "title": "Add TESTER agent + enforce post-CODER testing",
+      "description": "Add a new TESTER specialist agent responsible for adding automated test coverage for code changes. Wire the workflow so development-oriented plans always schedule TESTER after CODER before REVIEWER, and update CODER instructions to explicitly hand off to TESTER after implementation/self-check.\\n\\nAcceptance criteria:\\n- New @.AGENTS/TESTER.json exists (id=TESTER) with clear inputs/outputs/permissions/workflow for adding/maintaining tests.\\n- @.AGENTS/CODER.json explicitly hands off to TESTER for test coverage after implementation and local checks.\\n- @AGENTS.md updates ORCHESTRATOR rules so dev tasks plan CODER -> TESTER -> REVIEWER by default (unless justified).\\n- @README.md reflects the new agent in the lineup and repository layout.\\n\\nNotes:\\n- Prefer existing test framework; if none, propose a dedicated task to introduce test infrastructure rather than inventing one ad-hoc.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CREATOR",
+      "tags": [
+        "agents",
+        "testing"
+      ],
+      "verify": [
+        "python scripts/agentctl.py agents",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7b92f17c65a338bec8fe226321b7bb3611dd45e550dd51b174f923019d1ae192"
+    "checksum": "5e64cf219ff50855394974264b903032a656bf4feacf3f7528a1be12554a8cab"
   }
 }
