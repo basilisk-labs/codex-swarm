@@ -1225,12 +1225,28 @@
           "body": "Verified: Mermaid flowchart + sequence diagram use GitHub-safe labels (no ###), diagram still reflects CODER->TESTER and DOCS pre-finish, and lint/agents checks pass."
         }
       ]
+    },
+    {
+      "id": "T-058",
+      "title": "Agentctl quickstart + docs pointer",
+      "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "docs"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py --help"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5a824cbbb506239a5a6843a2c8497405d87aec9f4eb3ae9f1ad1d1541d7c9600"
+    "checksum": "ec1c731ca46ec418c15115d6df1015c5b78a6e0743168f217579dc9b19cf7296"
   }
 }
