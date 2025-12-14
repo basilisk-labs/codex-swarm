@@ -1203,7 +1203,7 @@
       "id": "T-057",
       "title": "Fix Mermaid workflow diagram for GitHub rendering",
       "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\n\\nAcceptance criteria:\\n- Mermaid block renders on GitHub README view.\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits).",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
@@ -1214,6 +1214,16 @@
       "verify": [
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
+      ],
+      "commit": {
+        "hash": "c7391edebc5a0ed392178ee311dba25cee93bf78",
+        "message": "🧬 T-057 Add detailed Mermaid sequence diagram"
+      },
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Mermaid flowchart + sequence diagram use GitHub-safe labels (no ###), diagram still reflects CODER->TESTER and DOCS pre-finish, and lint/agents checks pass."
+        }
       ]
     }
   ],
@@ -1221,6 +1231,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9255c7d5f845d1cc9b8588fc19441ac9771f94fb71f7c0766b84d2fc5bd6ad8f"
+    "checksum": "5a824cbbb506239a5a6843a2c8497405d87aec9f4eb3ae9f1ad1d1541d7c9600"
   }
 }
