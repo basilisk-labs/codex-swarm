@@ -1198,12 +1198,29 @@
           "body": "Verified: README now includes a Mermaid flowchart of the default agent workflow, reflecting current handoffs (CODER->TESTER, DOCS before finish) and the 3-phase commit cadence; agent registry and tasks lint pass."
         }
       ]
+    },
+    {
+      "id": "T-057",
+      "title": "Fix Mermaid workflow diagram for GitHub rendering",
+      "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\n\\nAcceptance criteria:\\n- Mermaid block renders on GitHub README view.\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits).",
+      "status": "DOING",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "mermaid",
+        "workflow"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "80aef105f60f45ede99b15ec7fc2b4eaf5da9d0046b4a89ce58e87fce5cfc4d3"
+    "checksum": "9255c7d5f845d1cc9b8588fc19441ac9771f94fb71f7c0766b84d2fc5bd6ad8f"
   }
 }
