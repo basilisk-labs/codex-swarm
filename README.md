@@ -90,7 +90,7 @@ Prerequisites:
 | `.AGENTS/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
 | `.AGENTS/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
 | `.AGENTS/REVIEWER.json` | 👀 Performs reviews, runs `verify` commands, and finishes tasks via `python scripts/agentctl.py finish`. |
-| `.AGENTS/DOCS.json` | 🧾 Keeps README and other docs synchronized with recently completed work. |
+| `.AGENTS/DOCS.json` | 🧾 Writes per-task workflow artifacts under `docs/workflow/` and keeps docs synchronized. |
 | `.AGENTS/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
 | `.AGENTS/UPDATER.json` | 🔍 Audits the repo and `.AGENTS` prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
 | `tasks.json` | 📊 Canonical backlog (checksum-backed). Do not edit by hand; use `python scripts/agentctl.py`. |
@@ -109,6 +109,31 @@ Prerequisites:
 5. 🎯 **Optimization audits (optional):** When the user explicitly asks for agent improvements, the orchestrator triggers `@.AGENTS/UPDATER.json` so it can inspect `.AGENTS/*.json` and propose targeted follow-up tasks.
 
 This structure lets you string together arbitrary workflows such as code implementation, documentation refreshes, research digests, or task triage—all from the same IDE session.
+
+## 🔁 Default Agent Flow (Mermaid)
+
+The typical development workflow is: plan the task, implement it, add test coverage, document the outcome, then verify + close.
+
+```mermaid
+flowchart TD
+  U[User] --> O[ORCHESTRATOR]
+
+  O -->|Backlog + task breakdown| P[PLANNER]
+  P --> TJ[tasks.json]
+  P -->|Planning artifact| D0[DOCS]
+  D0 --> A0[docs/workflow/T-###.md]
+
+  O -->|Implementation| C[CODER]
+  C -->|Test coverage handoff| T[TESTER]
+  T -->|Tests/coverage suggestions| C
+  C --> WC[Work commit (implementation + tests)]
+
+  O -->|Pre-finish documentation| D1[DOCS]
+  D1 -->|Update artifact| A1[docs/workflow/T-###.md]
+
+  O -->|Verification + closure| R[REVIEWER]
+  R -->|agentctl verify/finish| DONE[Task marked DONE (tasks.json)]
+```
 
 ## 🧾 Commit Workflow
 
