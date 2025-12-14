@@ -1054,7 +1054,7 @@
       "id": "T-052",
       "title": "Add TESTER agent + enforce post-CODER testing",
       "description": "Add a new TESTER specialist agent responsible for adding automated test coverage for code changes. Wire the workflow so development-oriented plans always schedule TESTER after CODER before REVIEWER, and update CODER instructions to explicitly hand off to TESTER after implementation/self-check.\\n\\nAcceptance criteria:\\n- New @.AGENTS/TESTER.json exists (id=TESTER) with clear inputs/outputs/permissions/workflow for adding/maintaining tests.\\n- @.AGENTS/CODER.json explicitly hands off to TESTER for test coverage after implementation and local checks.\\n- @AGENTS.md updates ORCHESTRATOR rules so dev tasks plan CODER -> TESTER -> REVIEWER by default (unless justified).\\n- @README.md reflects the new agent in the lineup and repository layout.\\n\\nNotes:\\n- Prefer existing test framework; if none, propose a dedicated task to introduce test infrastructure rather than inventing one ad-hoc.",
-      "status": "TODO",
+      "status": "DOING",
       "priority": "med",
       "owner": "CREATOR",
       "tags": [
@@ -1064,6 +1064,12 @@
       "verify": [
         "python scripts/agentctl.py agents",
         "python scripts/agentctl.py task lint"
+      ],
+      "comments": [
+        {
+          "author": "CREATOR",
+          "body": "Start: add TESTER agent JSON + update CODER/AGENTS/README to enforce post-CODER test coverage."
+        }
       ]
     }
   ],
@@ -1071,6 +1077,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5e64cf219ff50855394974264b903032a656bf4feacf3f7528a1be12554a8cab"
+    "checksum": "976069b71c92e7b60eab5cb498c61b9735441a74300d31cf95dbce13ece0e8ad"
   }
 }
