@@ -1365,12 +1365,28 @@
         "hash": "c4d8084771dabcdb57353f5e7792322010f648ed",
         "message": "📝 T-062 Refresh docs and cleanup"
       }
+    },
+    {
+      "id": "T-063",
+      "title": "Redesign tasks.html (Codex Swarm) + dependency visualization",
+      "description": "Refresh @tasks.html to be simpler/lighter and clearly show task dependencies.\n\nScope:\n- Update UI styling to a minimal, airy Codex Swarm-branded layout.\n- Add a dependency inspector that makes it easy to see \"depends_on\" and reverse dependencies (tasks that depend on the selected task).\n- Include a small visual graph (SVG) for the selected task to make upstream/downstream relationships obvious.\n\nAcceptance criteria:\n- @tasks.html header is branded as Codex Swarm.\n- Dependencies are visible both as lists and as a small graph for the selected task.\n- Clicking a dependency navigates/updates the selection.\n- No server required: keep file picker + drag/drop fallback for file://.\n",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "ui",
+        "tasks",
+        "deps"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "76468d1102c609457e6e3ef35c923d7e6faa38a9c61f3bf2bdc6dd47276c716f"
+    "checksum": "e168e676784aaf5d0685e1978e5564b23aea71cf5c02d58ce465856d991a205d"
   }
 }
