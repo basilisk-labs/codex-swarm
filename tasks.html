@@ -3,40 +3,40 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>tasks.json viewer</title>
+    <title>Codex Swarm • tasks</title>
     <style>
       :root {
         color-scheme: light dark;
-        --bg: #0b0d12;
-        --panel: #101522;
-        --panel-2: #0d1220;
-        --text: #e9eefc;
-        --muted: #aab4d0;
-        --border: rgba(255, 255, 255, 0.12);
-        --shadow: rgba(0, 0, 0, 0.35);
-        --accent: #7c5cff;
-        --accent-2: #46d3ff;
-        --good: #2bd576;
-        --warn: #f7b84b;
-        --bad: #ff4d5d;
-        --chip-bg: rgba(255, 255, 255, 0.06);
-        --chip-border: rgba(255, 255, 255, 0.12);
+        --bg: #f6f7fb;
+        --panel: #ffffff;
+        --panel-2: #f1f3f9;
+        --text: #0f172a;
+        --muted: #52607c;
+        --border: rgba(15, 23, 42, 0.12);
+        --shadow: rgba(15, 23, 42, 0.06);
+        --accent: #4f46e5;
+        --accent-2: #06b6d4;
+        --good: #16a34a;
+        --warn: #f59e0b;
+        --bad: #ef4444;
+        --chip-bg: rgba(15, 23, 42, 0.04);
+        --chip-border: rgba(15, 23, 42, 0.1);
         --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
           "Segoe UI Emoji";
       }
 
-      @media (prefers-color-scheme: light) {
+      @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #f7f8fc;
-          --panel: #ffffff;
-          --panel-2: #fbfbff;
-          --text: #111629;
-          --muted: #52607c;
-          --border: rgba(17, 22, 41, 0.12);
-          --shadow: rgba(10, 14, 26, 0.08);
-          --chip-bg: rgba(17, 22, 41, 0.05);
-          --chip-border: rgba(17, 22, 41, 0.1);
+          --bg: #0b0d12;
+          --panel: #0f1422;
+          --panel-2: #0c1220;
+          --text: #e9eefc;
+          --muted: #aab4d0;
+          --border: rgba(255, 255, 255, 0.12);
+          --shadow: rgba(0, 0, 0, 0.35);
+          --chip-bg: rgba(255, 255, 255, 0.06);
+          --chip-border: rgba(255, 255, 255, 0.12);
         }
       }
 
@@ -52,9 +52,7 @@
       body {
         margin: 0;
         font-family: var(--sans);
-        background: radial-gradient(1100px 700px at 12% 6%, rgba(124, 92, 255, 0.23), transparent 60%),
-          radial-gradient(900px 600px at 82% 10%, rgba(70, 211, 255, 0.18), transparent 62%),
-          radial-gradient(1000px 700px at 50% 110%, rgba(43, 213, 118, 0.11), transparent 60%), var(--bg);
+        background: var(--bg);
         color: var(--text);
       }
 
@@ -83,9 +81,29 @@
       }
 
       h1 {
-        font-size: 22px;
+        font-size: 18px;
         margin: 0;
         letter-spacing: 0.2px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brandMark {
+        width: 12px;
+        height: 12px;
+        border-radius: 5px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.16);
+      }
+
+      .brandSubtle {
+        color: var(--muted);
+        font-weight: 550;
+        font-size: 13px;
       }
 
       .subtle {
@@ -94,10 +112,10 @@
       }
 
       .panel {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 90%), var(--panel);
+        background: var(--panel);
         border: 1px solid var(--border);
         border-radius: 14px;
-        box-shadow: 0 18px 45px var(--shadow);
+        box-shadow: 0 8px 20px var(--shadow);
       }
 
       .controls {
@@ -342,6 +360,9 @@
       }
 
       .depLink {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         font-family: var(--mono);
         font-size: 12px;
         padding: 5px 9px;
@@ -351,8 +372,74 @@
         text-decoration: none;
       }
 
+      .depLink.missing {
+        border-style: dashed;
+        opacity: 0.9;
+      }
+
       .depLink:hover {
-        border-color: rgba(124, 92, 255, 0.55);
+        border-color: rgba(79, 70, 229, 0.55);
+      }
+
+      .depMore {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border-radius: 999px;
+        border: 1px dashed var(--chip-border);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .inspector {
+        margin-top: 16px;
+        padding: 14px;
+      }
+
+      .inspectorHeader {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .inspectorTitle {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .inspectorBody {
+        margin-top: 12px;
+      }
+
+      .inspectorGrid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 14px;
+        align-items: start;
+      }
+
+      @media (max-width: 980px) {
+        .inspectorGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .depGraph {
+        width: 100%;
+        height: auto;
+        min-height: 160px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--panel-2);
+      }
+
+      .task.selected {
+        border-color: rgba(79, 70, 229, 0.45);
+        box-shadow: 0 10px 22px rgba(79, 70, 229, 0.08);
       }
 
       .comments {
@@ -431,7 +518,11 @@
     <div class="wrap">
       <header>
         <div class="titleRow">
-          <h1>tasks.json viewer</h1>
+          <h1 class="brand">
+            <span class="brandMark" aria-hidden="true"></span>
+            <span>Codex Swarm</span>
+            <span class="brandSubtle">tasks</span>
+          </h1>
           <div class="subtle" id="loadMeta">Loading…</div>
         </div>
         <div class="panel controls">
@@ -519,6 +610,43 @@
       </header>
 
       <main>
+        <section class="panel inspector" id="inspector">
+          <div class="inspectorHeader">
+            <div style="display: grid; gap: 6px">
+              <div class="inspectorTitle">Dependencies</div>
+              <div class="subtle" id="inspectorHint">Select a task to see its dependency map.</div>
+            </div>
+            <div class="chips">
+              <button class="btn" id="clearSelection" type="button">Clear</button>
+            </div>
+          </div>
+          <div class="inspectorBody" id="inspectorBody" style="display: none">
+            <div class="inspectorGrid">
+              <div style="display: grid; gap: 10px">
+                <div class="kv">
+                  <div class="k">selected</div>
+                  <div class="v" id="inspectorSelected"></div>
+                </div>
+                <div class="kv">
+                  <div class="k">blocked_by</div>
+                  <div class="v" id="inspectorBlockedBy" style="font-family: var(--sans)"></div>
+                </div>
+                <div class="kv">
+                  <div class="k">depends_on</div>
+                  <div class="v" id="inspectorUpstream" style="font-family: var(--sans)"></div>
+                </div>
+                <div class="kv">
+                  <div class="k">dependents</div>
+                  <div class="v" id="inspectorDownstream" style="font-family: var(--sans)"></div>
+                </div>
+              </div>
+              <div style="display: grid; gap: 8px">
+                <svg class="depGraph" id="depGraph" role="img" aria-label="Dependency graph"></svg>
+                <div class="subtle" id="graphMeta"></div>
+              </div>
+            </div>
+          </div>
+        </section>
         <div class="tasks" id="tasks"></div>
         <div class="footerNote">
           If served over HTTP, this page auto-loads <code>./tasks.json</code>. If opened as <code>file://</code>, use the
@@ -553,6 +681,7 @@
       ]);
 
       let lastLoaded = { source: "unknown", file: null };
+      let STATE = { tasks: [], taskById: new Map(), dependentsById: new Map() };
 
       function escapeHtml(input) {
         return String(input)
@@ -565,6 +694,36 @@
 
       function safeUpper(value) {
         return String(value || "").trim().toUpperCase();
+      }
+
+      function parseSelectedTaskIdFromHash() {
+        const raw = String(window.location.hash || "");
+        if (!raw || raw === "#") return null;
+        const decoded = decodeURIComponent(raw);
+        if (decoded.startsWith("#task-")) return decoded.slice("#task-".length);
+        if (decoded.startsWith("#T-")) return decoded.slice(1);
+        return null;
+      }
+
+      function clearSelection() {
+        history.pushState(null, document.title, window.location.pathname + window.location.search);
+      }
+
+      function buildIndex(tasks) {
+        const taskById = new Map();
+        for (const t of tasks) {
+          if (!t.id) continue;
+          taskById.set(t.id, t);
+        }
+        const dependentsById = new Map();
+        for (const t of tasks) {
+          for (const depId of t.dependsOn || []) {
+            if (!dependentsById.has(depId)) dependentsById.set(depId, []);
+            dependentsById.get(depId).push(t.id);
+          }
+        }
+        for (const [k, v] of dependentsById) v.sort((a, b) => a.localeCompare(b));
+        return { taskById, dependentsById };
       }
 
       function normalizeTask(task) {
@@ -581,6 +740,30 @@
         const comments = Array.isArray(task?.comments) ? task.comments.filter((c) => c && typeof c === "object") : [];
         const commit = task?.commit && typeof task.commit === "object" ? task.commit : null;
         return { raw: task, id, title, description, status, priority, owner, tags, dependsOn, comments, commit };
+      }
+
+      function isDone(taskId) {
+        const t = STATE.taskById.get(taskId);
+        return !!t && t.status === "DONE";
+      }
+
+      function renderTaskPills(taskIds, { max = 12 } = {}) {
+        const ids = Array.isArray(taskIds) ? taskIds.filter((x) => String(x || "").trim()) : [];
+        if (!ids.length) return `<span class="subtle">-</span>`;
+        const shown = ids.slice(0, max);
+        const extra = ids.length - shown.length;
+        const pills = shown
+          .map((id) => {
+            const t = STATE.taskById.get(id) || null;
+            const dot = t ? statusDotClass(t.status) : "bad";
+            const cls = `depLink${t ? "" : " missing"}`;
+            const title = escapeHtml(t ? t.title : "Missing task");
+            return `<a class="${cls}" href="#task-${encodeURIComponent(id)}" title="${title}"><span class="dot ${dot}"></span><span>${escapeHtml(
+              id,
+            )}</span></a>`;
+          })
+          .join("");
+        return `<div class="deps">${pills}${extra > 0 ? `<span class=\"depMore\">+${extra} more</span>` : ""}</div>`;
       }
 
       function statusDotClass(status) {
@@ -667,6 +850,9 @@
 
         const ownerText = task.owner ? escapeHtml(task.owner) : "-";
         const priorityText = task.priority ? escapeHtml(task.priority) : "-";
+        const depsCount = task.dependsOn.length;
+        const dependentsCount = (STATE.dependentsById.get(task.id) || []).length;
+        const blockersCount = task.dependsOn.filter((depId) => !isDone(depId)).length;
 
         const tagsHtml = task.tags.length
           ? task.tags
@@ -674,11 +860,7 @@
               .join(" ")
           : `<span class="pill"><span class="dot neutral"></span><span>-</span></span>`;
 
-        const depsHtml = task.dependsOn.length
-          ? `<div class="deps">${task.dependsOn
-              .map((dep) => `<a class="depLink" href="#task-${encodeURIComponent(dep)}">${escapeHtml(dep)}</a>`)
-              .join("")}</div>`
-          : `<span class="subtle">-</span>`;
+        const depsHtml = renderTaskPills(task.dependsOn);
 
         const commentsHtml = task.comments.length
           ? `<div class="comments">${task.comments
@@ -717,6 +899,13 @@
                 )}</span></span>
                 <span class="pill"><span class="dot neutral"></span><strong>Priority</strong><span>${priorityText}</span></span>
                 <span class="pill"><span class="dot neutral"></span><strong>Owner</strong><span>${ownerText}</span></span>
+                <span class="pill"><span class="dot neutral"></span><strong>Deps</strong><span>${depsCount}</span></span>
+                <span class="pill"><span class="dot neutral"></span><strong>Used by</strong><span>${dependentsCount}</span></span>
+                ${
+                  blockersCount
+                    ? `<span class="pill"><span class="dot bad"></span><strong>Blockers</strong><span>${blockersCount}</span></span>`
+                    : ""
+                }
               </div>
             </div>
             <div class="chips" style="justify-content: flex-end; max-width: 520px">${tagsHtml}</div>
@@ -767,6 +956,191 @@
         `;
 
         return el;
+      }
+
+      function svgEl(name, attrs = {}) {
+        const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+        for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+        return el;
+      }
+
+      function renderDependencyGraph(selectedId, upstreamIds, downstreamIds) {
+        const svg = document.getElementById("depGraph");
+        svg.innerHTML = "";
+
+        const upstream = Array.isArray(upstreamIds) ? upstreamIds : [];
+        const downstream = Array.isArray(downstreamIds) ? downstreamIds : [];
+        const limit = 8;
+        const uShown = upstream.slice(0, limit);
+        const dShown = downstream.slice(0, limit);
+        const uExtra = upstream.length - uShown.length;
+        const dExtra = downstream.length - dShown.length;
+
+        const boxW = 180;
+        const boxH = 28;
+        const gapY = 12;
+        const gapX = 38;
+        const padX = 18;
+        const padY = 18;
+
+        const rows = Math.max(uShown.length + (uExtra > 0 ? 1 : 0), dShown.length + (dExtra > 0 ? 1 : 0), 1);
+        const innerH = rows * boxH + Math.max(rows - 1, 0) * gapY;
+        const width = padX * 2 + boxW * 3 + gapX * 2;
+        const height = padY * 2 + innerH;
+
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+
+        const defs = svgEl("defs");
+        const marker = svgEl("marker", {
+          id: "arrow",
+          viewBox: "0 0 10 10",
+          refX: "9",
+          refY: "5",
+          markerWidth: "8",
+          markerHeight: "8",
+          orient: "auto-start-reverse",
+        });
+        marker.appendChild(svgEl("path", { d: "M 0 0 L 10 5 L 0 10 z", fill: "var(--accent)" }));
+        defs.appendChild(marker);
+        svg.appendChild(defs);
+
+        function colStartY(count) {
+          if (!count) return padY + innerH / 2 - boxH / 2;
+          const colH = count * boxH + (count - 1) * gapY;
+          return padY + innerH / 2 - colH / 2;
+        }
+
+        const xU = padX;
+        const xS = padX + boxW + gapX;
+        const xD = padX + (boxW + gapX) * 2;
+
+        const upstreamAll = [...uShown, ...(uExtra > 0 ? [`+${uExtra}`] : [])];
+        const downstreamAll = [...dShown, ...(dExtra > 0 ? [`+${dExtra}`] : [])];
+
+        const yU0 = colStartY(upstreamAll.length);
+        const yD0 = colStartY(downstreamAll.length);
+        const yS = padY + innerH / 2 - boxH / 2;
+
+        function drawNode({ id, x, y, selected = false, missing = false }) {
+          const g = svgEl("g", { transform: `translate(${x} ${y})`, "data-task-id": id || "" });
+          const rect = svgEl("rect", {
+            x: 0,
+            y: 0,
+            width: boxW,
+            height: boxH,
+            rx: 10,
+            fill: "var(--panel)",
+            stroke: selected ? "var(--accent)" : "var(--border)",
+            "stroke-width": selected ? 2 : 1,
+          });
+          if (missing) rect.setAttribute("stroke-dasharray", "4 3");
+          const text = svgEl("text", {
+            x: 12,
+            y: 18,
+            "font-size": "12",
+            "font-family": "var(--mono)",
+            fill: "var(--text)",
+          });
+          text.textContent = id;
+          const title = svgEl("title");
+          const taskTitle = STATE.taskById.get(id)?.title || (missing ? "Missing task" : "");
+          title.textContent = taskTitle ? `${id} — ${taskTitle}` : id;
+          g.appendChild(title);
+          g.appendChild(rect);
+          g.appendChild(text);
+          if (!STATE.taskById.has(id)) g.removeAttribute("data-task-id");
+          return g;
+        }
+
+        function drawEdge(x1, y1, x2, y2) {
+          const dx = Math.max(16, Math.abs(x2 - x1) * 0.4);
+          const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+          return svgEl("path", {
+            d,
+            fill: "none",
+            stroke: "var(--accent)",
+            "stroke-width": 1.6,
+            opacity: 0.55,
+            "marker-end": "url(#arrow)",
+          });
+        }
+
+        const gEdges = svgEl("g");
+        const gNodes = svgEl("g");
+        svg.appendChild(gEdges);
+        svg.appendChild(gNodes);
+
+        const selectedNode = drawNode({ id: selectedId, x: xS, y: yS, selected: true, missing: false });
+        gNodes.appendChild(selectedNode);
+
+        upstreamAll.forEach((id, i) => {
+          const y = yU0 + i * (boxH + gapY);
+          const isMore = id.startsWith("+");
+          gNodes.appendChild(drawNode({ id, x: xU, y, selected: false, missing: !STATE.taskById.has(id) && !isMore }));
+          if (!isMore) gEdges.appendChild(drawEdge(xU + boxW, y + boxH / 2, xS, yS + boxH / 2));
+        });
+
+        downstreamAll.forEach((id, i) => {
+          const y = yD0 + i * (boxH + gapY);
+          const isMore = id.startsWith("+");
+          gNodes.appendChild(drawNode({ id, x: xD, y, selected: false, missing: !STATE.taskById.has(id) && !isMore }));
+          if (!isMore) gEdges.appendChild(drawEdge(xS + boxW, yS + boxH / 2, xD, y + boxH / 2));
+        });
+
+        svg.onclick = (ev) => {
+          const target = ev.target?.closest?.("[data-task-id]");
+          const tid = target?.getAttribute?.("data-task-id") || "";
+          if (!tid) return;
+          window.location.hash = `task-${encodeURIComponent(tid)}`;
+        };
+      }
+
+      function renderInspector() {
+        const hint = document.getElementById("inspectorHint");
+        const body = document.getElementById("inspectorBody");
+        const selectedEl = document.getElementById("inspectorSelected");
+        const blockedByEl = document.getElementById("inspectorBlockedBy");
+        const upstreamEl = document.getElementById("inspectorUpstream");
+        const downstreamEl = document.getElementById("inspectorDownstream");
+        const graphMeta = document.getElementById("graphMeta");
+
+        const selectedId = parseSelectedTaskIdFromHash();
+        const selected = selectedId ? STATE.taskById.get(selectedId) : null;
+
+        document.querySelectorAll(".task.selected").forEach((n) => n.classList.remove("selected"));
+        if (selectedId) {
+          const selectedCard = document.getElementById(`task-${selectedId}`);
+          if (selectedCard) selectedCard.classList.add("selected");
+        }
+
+        if (!selectedId || !selected) {
+          hint.textContent = "Select a task to see its dependency map.";
+          body.style.display = "none";
+          selectedEl.textContent = "";
+          blockedByEl.innerHTML = `<span class="subtle">-</span>`;
+          upstreamEl.innerHTML = `<span class="subtle">-</span>`;
+          downstreamEl.innerHTML = `<span class="subtle">-</span>`;
+          document.getElementById("depGraph").innerHTML = "";
+          graphMeta.textContent = "";
+          return;
+        }
+
+        hint.textContent = `${selected.id} • ${selected.title || "(untitled)"}`;
+        body.style.display = "";
+
+        selectedEl.textContent = `${selected.id} — ${selected.title || "(untitled)"}`;
+
+        const upstreamIds = selected.dependsOn || [];
+        const downstreamIds = STATE.dependentsById.get(selected.id) || [];
+        const blockers = upstreamIds.filter((id) => !isDone(id));
+
+        blockedByEl.innerHTML = blockers.length ? renderTaskPills(blockers, { max: 12 }) : `<span class="subtle">-</span>`;
+        upstreamEl.innerHTML = renderTaskPills(upstreamIds, { max: 12 });
+        downstreamEl.innerHTML = renderTaskPills(downstreamIds, { max: 12 });
+
+        renderDependencyGraph(selected.id, upstreamIds, downstreamIds);
+        graphMeta.textContent = `Upstream: ${upstreamIds.length} • Downstream: ${downstreamIds.length}`;
       }
 
       function renderTasks(tasks) {
@@ -896,6 +1270,8 @@
         const meta = data?.meta && typeof data.meta === "object" ? data.meta : null;
         const rawTasks = Array.isArray(data?.tasks) ? data.tasks : [];
         const tasks = rawTasks.filter((t) => t && typeof t === "object").map(normalizeTask);
+        const { taskById, dependentsById } = buildIndex(tasks);
+        STATE = { tasks, taskById, dependentsById };
 
         const owners = optionify(tasks.map((t) => t.owner).filter(Boolean));
         const priorities = optionify(tasks.map((t) => t.priority).filter(Boolean));
@@ -924,9 +1300,10 @@
         );
 
         function rerender() {
-          const filtered = applyFilters(tasks);
+          const filtered = applyFilters(STATE.tasks);
           renderSummary(filtered);
           renderTasks(applySort(filtered));
+          renderInspector();
         }
 
         wireControls(rerender);
@@ -972,7 +1349,7 @@
       const dz = document.getElementById("dropZone");
       dz.addEventListener("dragover", (ev) => {
         ev.preventDefault();
-        dz.style.borderColor = "rgba(124, 92, 255, 0.55)";
+        dz.style.borderColor = "rgba(79, 70, 229, 0.55)";
       });
       dz.addEventListener("dragleave", () => {
         dz.style.borderColor = "";
@@ -1006,6 +1383,15 @@
           return;
         }
         window.location.reload();
+      });
+
+      document.getElementById("clearSelection").addEventListener("click", () => {
+        clearSelection();
+        renderInspector();
+      });
+
+      window.addEventListener("hashchange", () => {
+        renderInspector();
       });
       main();
     </script>
