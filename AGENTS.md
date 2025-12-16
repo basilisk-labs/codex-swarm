@@ -76,28 +76,30 @@ shared_state:
 ## Core rules
 
 - **1 task = 1 branch** (branch is per `T-###`, not per agent).
-- **Branch naming**: `task/T-123-<slug>` (slug = short, lowercase, dash-separated).
-- **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/<T-123-slug>/` (ignored by git).
+- **Branch naming**: `task/T-123/<slug>` (slug = short, lowercase, dash-separated).
+- **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/T-123-<slug>/` (ignored by git).
 - **Single-writer `tasks.json`**:
   - Never modify or commit `tasks.json` on a task branch.
   - In branching workflow, `tasks.json` updates happen only on `main` via `python scripts/agentctl.py` (agentctl guardrails enforce this).
   - Task closure (`finish`) is performed on `main` by **INTEGRATOR** after integration + verify.
 - **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `docs/workflow/prs/T-###/`.
+- **Mode toggle**: `agentctl` reads `.codex-swarm/swarm.config.json` and enforces these rules when `workflow_mode` is `branch_pr`.
+- **Handoff notes**: agents do not write to `tasks.json` during branch work; instead they leave short notes in `docs/workflow/prs/T-###/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `tasks.json` at task closure.
 
 ## PR artifact structure (tracked)
 
 For each task `T-123`:
 
 - `docs/workflow/prs/T-123/meta.json`
-- `docs/workflow/prs/T-123/description.md` (must include: Summary / Scope / Risks / Verify / Rollback)
+- `docs/workflow/prs/T-123/description.md` (must include: Summary / Scope / Risks / Verify Steps / Rollback Plan)
 - `docs/workflow/prs/T-123/diffstat.txt`
 - `docs/workflow/prs/T-123/verify.log`
 - `docs/workflow/prs/T-123/review.md` (optional notes; typically filled by REVIEWER/INTEGRATOR)
 
 ## Executor cheat sheet (CODER/TESTER/DOCS)
 
-1. Create a task branch + worktree: `python scripts/agentctl.py branch create T-123 --slug <slug> --worktree`.
-2. Work only inside `.codex-swarm/worktrees/<T-123-slug>/` on the task branch.
+1. Create a task branch + worktree: `python scripts/agentctl.py branch create T-123 --agent CODER --slug <slug> --worktree`.
+2. Work only inside `.codex-swarm/worktrees/T-123-<slug>/` on the task branch (`task/T-123/<slug>`).
 3. Commit only via `python scripts/agentctl.py guard commit …` (or `python scripts/agentctl.py commit …`).
 4. Open/update PR artifacts: `python scripts/agentctl.py pr open …` and `python scripts/agentctl.py pr update …`.
 5. Hard bans: do not touch `tasks.json`, do not run `finish`, do not merge into `main`.
@@ -106,9 +108,8 @@ For each task `T-123`:
 
 1. Work from the repo root checkout on `main` (never from `.codex-swarm/worktrees/*`).
 2. Validate: `python scripts/agentctl.py pr check T-123`.
-3. Integrate: `python scripts/agentctl.py integrate T-123 --branch task/T-123-<slug> --merge-strategy squash --run-verify`.
-4. Close on `main`: `python scripts/agentctl.py finish T-123 --commit <integrated_hash> --author INTEGRATOR --body "Verified: …"`.
-5. Run `python scripts/agentctl.py task lint` before considering the task closed.
+3. Integrate (includes verify + finish + task lint): `python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify`.
+4. Commit closure on `main`: stage `tasks.json` (+ docs/artifacts) and commit `✅ T-123 close ...`.
 
 # SHARED_STATE
 

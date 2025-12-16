@@ -36,15 +36,22 @@ python scripts/agentctl.py finish T-123 --commit <git-rev> --author INTEGRATOR -
 
 ```bash
 # create a task branch + worktree (inside this repo only)
-python scripts/agentctl.py branch create T-123 --slug <slug> --worktree
+# - branch: task/T-123/<slug>
+# - worktree: .codex-swarm/worktrees/T-123-<slug>/
+python scripts/agentctl.py branch create T-123 --agent CODER --slug <slug> --worktree
+
+# show quick status (ahead/behind, worktree path)
+python scripts/agentctl.py branch status --branch task/T-123/<slug> --base main
 
 # open/update/check the tracked PR artifact (local PR simulation)
-python scripts/agentctl.py pr open T-123 --branch task/T-123-<slug> --author CODER
+python scripts/agentctl.py pr open T-123 --branch task/T-123/<slug> --author CODER
 python scripts/agentctl.py pr update T-123
 python scripts/agentctl.py pr check T-123
 
 # integrate into main (INTEGRATOR only; run from repo root on main)
-python scripts/agentctl.py integrate T-123 --branch task/T-123-<slug> --merge-strategy squash --run-verify
+# includes: pr check → verify (if configured/--run-verify) → merge → finish → task lint
+python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify
+python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --dry-run
 ```
 
 ## Ergonomics helpers
@@ -71,3 +78,12 @@ python scripts/agentctl.py guard suggest-allow --format args
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
 - Keep allowlists tight: pass only the path prefixes you intend to commit.
+
+## Workflow mode
+
+`agentctl` behavior is controlled by `.codex-swarm/swarm.config.json`:
+
+- `workflow_mode: "direct"`: legacy mode (minimal branch guardrails)
+- `workflow_mode: "branch_pr"`: task branches + worktrees + PR artifacts + single-writer `tasks.json`
+
+In `branch_pr`, executors leave handoff notes in `docs/workflow/prs/T-###/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `tasks.json` at closure.

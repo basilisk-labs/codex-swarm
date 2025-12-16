@@ -21,7 +21,10 @@ from typing import Dict, Iterable, List, Optional, Set, Tuple
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 SWARM_DIR = ROOT / ".codex-swarm"
-SWARM_CONFIG_PATH = SWARM_DIR / "swarm-config.json"
+SWARM_CONFIG_PATH = SWARM_DIR / "swarm.config.json"
+
+ALLOWED_WORKFLOW_MODES: Set[str] = {"direct", "branch_pr"}
+DEFAULT_WORKFLOW_MODE = "direct"
 
 ALLOWED_STATUSES: Set[str] = {"TODO", "DOING", "BLOCKED", "DONE"}
 TASKS_SCHEMA_VERSION = 1
@@ -76,9 +79,9 @@ def git_current_branch(*, cwd: Path = ROOT) -> str:
 
 def is_task_worktree_checkout(*, cwd: Path = ROOT) -> bool:
     top = git_toplevel(cwd=cwd)
-    parts = list(top.parts)
-    for idx, part in enumerate(parts):
-        if part == ".codex-swarm" and idx + 1 < len(parts) and parts[idx + 1] == WORKTREES_DIRNAME:
+    parts = top.parts
+    for idx in range(len(parts) - 1):
+        if parts[idx] == ".codex-swarm" and parts[idx + 1] == "worktrees":
             return True
     return False
 
@@ -89,25 +92,125 @@ def ensure_git_clean(*, cwd: Path = ROOT, action: str) -> None:
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to read git status")
     if (result.stdout or "").strip():
-        die(f"Refusing {action}: working tree is dirty (commit/stash changes first)", code=2)
+        dirty = (result.stdout or "").strip()
+        die(
+            "\n".join(
+                [
+                    f"Refusing {action}: working tree is dirty (commit/stash changes first)",
+                    "Fix:",
+                    "  1) `git status --porcelain` (review changes)",
+                    "  2) Commit/stash/reset until clean",
+                    "  3) Re-run the command",
+                    "Dirty paths:",
+                    *[f"  {line}" for line in dirty.splitlines()],
+                    f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+                ]
+            ),
+            code=2,
+        )
+
+
+def git_status_porcelain(*, cwd: Path) -> str:
+    try:
+        result = run(["git", "status", "--porcelain"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to read git status")
+    return (result.stdout or "").strip()
+
+
+def ensure_path_ignored(path: str, *, cwd: Path = ROOT) -> None:
+    target = str(path).strip()
+    if not target:
+        die("Missing ignore target", code=2)
+    try:
+        proc = run(["git", "check-ignore", "-q", target], cwd=cwd, check=False)
+    except subprocess.CalledProcessError:
+        proc = subprocess.CompletedProcess(args=[], returncode=1, stdout="", stderr="")
+    if proc.returncode != 0:
+        die(
+            "\n".join(
+                [
+                    f"Refusing operation: {target!r} is not ignored by git",
+                    "Fix:",
+                    f"  1) Add `{target}` to `.gitignore`",
+                    "  2) Re-run the command",
+                    f"Context: branch={git_current_branch(cwd=cwd)!r} cwd={Path.cwd().resolve()}",
+                ]
+            ),
+            code=2,
+        )
+
+
+def format_command_context(*, cwd: Path) -> str:
+    repo_root = git_toplevel(cwd=cwd)
+    cwd_resolved = cwd.resolve()
+    rel = str(cwd_resolved.relative_to(repo_root)) if cwd_resolved != repo_root else "."
+    return f"repo_root={repo_root} cwd={rel} branch={git_current_branch(cwd=cwd)!r} workflow_mode={workflow_mode()!r}"
+
+
+def print_block(label: str, text: str) -> None:
+    print(f"{label}: {text}".rstrip())
+
+
+def ensure_invoked_from_repo_root(*, action: str) -> None:
+    cwd = Path.cwd().resolve()
+    if cwd != ROOT.resolve():
+        die(
+            "\n".join(
+                [
+                    f"Refusing {action}: command must be run from the repo root directory",
+                    "Fix:",
+                    f"  1) `cd {ROOT}`",
+                    "  2) Re-run the command",
+                    f"Context: {format_command_context(cwd=cwd)}",
+                ]
+            ),
+            code=2,
+        )
 
 
 def require_not_task_worktree(*, cwd: Path = ROOT, action: str) -> None:
     if is_task_worktree_checkout(cwd=cwd):
-        die(f"Refusing {action}: run from the repo root checkout (not from .codex-swarm/worktrees/*)", code=2)
+        die(
+            "\n".join(
+                [
+                    f"Refusing {action}: run from the repo root checkout (not from .codex-swarm/worktrees/*)",
+                    "Fix:",
+                    f"  1) `cd {ROOT}`",
+                    "  2) Ensure you're on `main` (if required)",
+                    "  3) Re-run the command",
+                    f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+                ]
+            ),
+            code=2,
+        )
 
 
 def require_branch(name: str, *, cwd: Path = ROOT, action: str) -> None:
     current = git_current_branch(cwd=cwd)
     if current != name:
-        die(f"Refusing {action}: must be on {name!r} (current: {current!r})", code=2)
+        die(
+            "\n".join(
+                [
+                    f"Refusing {action}: must be on {name!r} (current: {current!r})",
+                    "Fix:",
+                    f"  1) `git checkout {name}`",
+                    "  2) Ensure working tree is clean",
+                    "  3) Re-run the command",
+                    f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+                ]
+            ),
+            code=2,
+        )
 
 
 def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -> None:
     if force:
         return
-    require_not_task_worktree(cwd=cwd, action="tasks.json write")
-    require_branch(DEFAULT_MAIN_BRANCH, cwd=cwd, action="tasks.json write")
+    if is_task_worktree_checkout(cwd=cwd):
+        require_not_task_worktree(cwd=cwd, action="tasks.json write")
+    if is_branch_pr_mode():
+        require_branch(DEFAULT_MAIN_BRANCH, cwd=cwd, action="tasks.json write")
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
@@ -146,6 +249,7 @@ def load_json(path: Path) -> Dict:
         die(f"Invalid JSON in {path}: {exc}")
 
 
+
 def _resolve_repo_relative_path(value: str, *, label: str) -> Path:
     raw = str(value or "").strip()
     if not raw:
@@ -182,9 +286,24 @@ AGENTS_DIR = _resolve_repo_relative_path(_PATHS.get("agents_dir"), label="agents
 AGENTCTL_DOCS_PATH = _resolve_repo_relative_path(_PATHS.get("agentctl_docs_path"), label="agentctl_docs_path")
 WORKFLOW_DIR = _resolve_repo_relative_path(_PATHS.get("workflow_dir"), label="workflow_dir")
 
+
+def workflow_mode() -> str:
+    raw = str(_SWARM_CONFIG.get("workflow_mode") or "").strip() or DEFAULT_WORKFLOW_MODE
+    if raw not in ALLOWED_WORKFLOW_MODES:
+        die(
+            f"Invalid workflow_mode in {SWARM_CONFIG_PATH}: {raw!r} "
+            f"(allowed: {', '.join(sorted(ALLOWED_WORKFLOW_MODES))})",
+            code=2,
+        )
+    return raw
+
+
+def is_branch_pr_mode() -> bool:
+    return workflow_mode() == "branch_pr"
+
 DEFAULT_MAIN_BRANCH = "main"
-WORKTREES_DIRNAME = "worktrees"
-WORKTREES_DIR = SWARM_DIR / WORKTREES_DIRNAME
+WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
+WORKTREES_DIR = SWARM_DIR / "worktrees"
 PRS_DIR = WORKFLOW_DIR / "prs"
 
 
@@ -584,9 +703,9 @@ def readiness(task_id: str) -> Tuple[bool, List[str]]:
     return (not missing and not incomplete), warnings
 
 
-def get_commit_info(rev: str) -> Dict[str, str]:
+def get_commit_info(rev: str, *, cwd: Path = ROOT) -> Dict[str, str]:
     try:
-        result = run(["git", "show", "-s", "--pretty=format:%H\x1f%s", rev], check=True)
+        result = run(["git", "show", "-s", "--pretty=format:%H\x1f%s", rev], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or f"Failed to resolve git revision: {rev}")
     raw = (result.stdout or "").strip()
@@ -596,17 +715,17 @@ def get_commit_info(rev: str) -> Dict[str, str]:
     return {"hash": commit_hash.strip(), "message": subject.strip()}
 
 
-def git_staged_files() -> List[str]:
+def git_staged_files(*, cwd: Path) -> List[str]:
     try:
-        result = run(["git", "diff", "--name-only", "--cached"], check=True)
+        result = run(["git", "diff", "--name-only", "--cached"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to read staged files")
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
-def git_unstaged_files() -> List[str]:
+def git_unstaged_files(*, cwd: Path) -> List[str]:
     try:
-        result = run(["git", "diff", "--name-only"], check=True)
+        result = run(["git", "diff", "--name-only"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to read unstaged files")
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
@@ -633,6 +752,17 @@ def path_is_under(path: str, prefix: str) -> bool:
     return p == root or p.startswith(root + "/")
 
 
+_TASK_BRANCH_RE = re.compile(r"^task/(T-[0-9]{3,})/[^/]+$")
+
+
+def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
+    raw = (branch or "").strip()
+    match = _TASK_BRANCH_RE.match(raw)
+    if not match:
+        return None
+    return match.group(1)
+
+
 def guard_commit_check(
     *,
     task_id: str,
@@ -641,6 +771,7 @@ def guard_commit_check(
     allow_tasks: bool,
     require_clean: bool,
     quiet: bool,
+    cwd: Path,
 ) -> None:
     if task_id not in message:
         die(f"Commit message must include {task_id}", code=2)
@@ -651,21 +782,59 @@ def guard_commit_check(
             code=2,
         )
 
-    staged = git_staged_files()
+    staged = git_staged_files(cwd=cwd)
     if not staged:
         die("No staged files", code=2)
 
-    if "tasks.json" in staged:
-        if is_task_worktree_checkout(cwd=ROOT):
-            die("Refusing to commit tasks.json from a task worktree checkout (.codex-swarm/worktrees/*)", code=2)
-        current_branch = git_current_branch(cwd=ROOT)
-        if current_branch != DEFAULT_MAIN_BRANCH:
-            die(f"Refusing to commit tasks.json outside {DEFAULT_MAIN_BRANCH!r} (current: {current_branch!r})", code=2)
+    current_branch = git_current_branch(cwd=cwd)
+    if is_branch_pr_mode():
+        if "tasks.json" in staged and not allow_tasks:
+            die(
+                "\n".join(
+                    [
+                        "Refusing commit: tasks.json is forbidden in workflow_mode='branch_pr'",
+                        "Fix:",
+                        "  1) Remove tasks.json from the index (`git restore --staged tasks.json`)",
+                        "  2) Commit code/docs/PR artifacts on the task branch",
+                        "  3) Close the task on main via INTEGRATOR (tasks.json only in closure commit)",
+                        f"Context: {format_command_context(cwd=cwd)}",
+                    ]
+                ),
+                code=2,
+            )
+        if "tasks.json" in staged and allow_tasks:
+            if is_task_worktree_checkout(cwd=cwd):
+                die(
+                    f"Refusing commit: tasks.json from a worktree checkout (.codex-swarm/worktrees/*)\nContext: {format_command_context(cwd=cwd)}",
+                    code=2,
+                )
+            if current_branch != DEFAULT_MAIN_BRANCH:
+                die(
+                    f"Refusing commit: tasks.json allowed only on {DEFAULT_MAIN_BRANCH!r} in branch_pr mode\n"
+                    f"Context: {format_command_context(cwd=cwd)}",
+                    code=2,
+                )
+        if not allow_tasks:
+            if current_branch != DEFAULT_MAIN_BRANCH:
+                parsed = parse_task_id_from_task_branch(current_branch)
+                if parsed != task_id:
+                    die(
+                        "\n".join(
+                            [
+                                f"Refusing commit: branch {current_branch!r} does not match task {task_id}",
+                                "Fix:",
+                                f"  1) Switch to `task/{task_id}/<slug>`",
+                                f"  2) Re-run `python scripts/agentctl.py guard commit {task_id} ...`",
+                                f"Context: {format_command_context(cwd=cwd)}",
+                            ]
+                        ),
+                        code=2,
+                    )
 
     if not allow:
         die("Provide at least one --allow <path> prefix", code=2)
 
-    unstaged = git_unstaged_files()
+    unstaged = git_unstaged_files(cwd=cwd)
     if require_clean and unstaged:
         for path in unstaged:
             print(f"❌ unstaged: {path}", file=sys.stderr)
@@ -881,7 +1050,7 @@ def cmd_ready(args: argparse.Namespace) -> None:
 
 
 def cmd_guard_clean(args: argparse.Namespace) -> None:
-    staged = git_staged_files()
+    staged = git_staged_files(cwd=Path.cwd().resolve())
     if staged:
         for path in staged:
             print(f"❌ staged: {path}", file=sys.stderr)
@@ -891,7 +1060,7 @@ def cmd_guard_clean(args: argparse.Namespace) -> None:
 
 
 def cmd_guard_suggest_allow(args: argparse.Namespace) -> None:
-    staged = git_staged_files()
+    staged = git_staged_files(cwd=Path.cwd().resolve())
     if not staged:
         die("No staged files", code=2)
     prefixes = suggest_allow_prefixes(staged)
@@ -910,6 +1079,7 @@ def cmd_guard_commit(args: argparse.Namespace) -> None:
         allow_tasks=bool(args.allow_tasks),
         require_clean=bool(args.require_clean),
         quiet=bool(args.quiet),
+        cwd=Path.cwd().resolve(),
     )
 
 
@@ -917,8 +1087,9 @@ def cmd_commit(args: argparse.Namespace) -> None:
     task_id = args.task_id.strip()
     message = args.message
     allow = list(args.allow or [])
+    cwd = Path.cwd().resolve()
     if args.auto_allow:
-        allow = suggest_allow_prefixes(git_staged_files())
+        allow = suggest_allow_prefixes(git_staged_files(cwd=cwd))
         if not allow:
             die("No staged files", code=2)
 
@@ -929,18 +1100,19 @@ def cmd_commit(args: argparse.Namespace) -> None:
         allow_tasks=bool(args.allow_tasks),
         require_clean=bool(args.require_clean),
         quiet=bool(args.quiet),
+        cwd=cwd,
     )
 
     try:
         subprocess.run(
             ["git", "commit", "-m", message],
-            cwd=str(ROOT),
+            cwd=str(cwd),
             text=True,
             check=True,
         )
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "git commit failed")
-    commit_info = get_commit_info("HEAD")
+    commit_info = get_commit_info("HEAD", cwd=cwd)
     if not args.quiet:
         print(f"✅ committed {commit_info['hash'][:12]} {commit_info['message']}")
 
@@ -1152,11 +1324,11 @@ def cmd_task_scrub(args: argparse.Namespace) -> None:
         print(f"Updated {len(set(changed_task_ids))} task(s).")
 
 
-def run_verify_commands(task_id: str, commands: List[str], *, quiet: bool) -> None:
+def run_verify_commands(task_id: str, commands: List[str], *, cwd: Path, quiet: bool) -> None:
     for command in commands:
         if not quiet:
             print(f"$ {command}")
-        result = subprocess.run(command, cwd=str(ROOT), shell=True, text=True)
+        result = subprocess.run(command, cwd=str(cwd), shell=True, text=True)
         if result.returncode != 0:
             raise SystemExit(result.returncode)
     if not quiet:
@@ -1181,7 +1353,10 @@ def cmd_verify(args: argparse.Namespace) -> None:
             print(f"ℹ️ {args.task_id}: no verify commands configured")
         return
 
-    run_verify_commands(args.task_id, commands, quiet=args.quiet)
+    cwd = Path(args.cwd).resolve() if args.cwd else ROOT
+    if ROOT.resolve() not in cwd.parents and cwd.resolve() != ROOT.resolve():
+        die(f"--cwd must stay under repo root: {cwd}", code=2)
+    run_verify_commands(args.task_id, commands, cwd=cwd, quiet=args.quiet)
 
 
 def is_transition_allowed(current: str, nxt: str) -> bool:
@@ -1249,9 +1424,29 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
 
 
 def cmd_finish(args: argparse.Namespace) -> None:
+    task_id = args.task_id.strip()
+    if not task_id:
+        die("task_id must be non-empty", code=2)
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)
     require_tasks_json_write_context(force=bool(args.force))
+    pr_path: Optional[Path] = None
+    pr_branch: str = ""
+    pr_base: str = ""
+    pr_meta: Dict = {}
+    if is_branch_pr_mode() and not args.force:
+        ensure_git_clean(action="finish")
+        if not args.author or not args.body:
+            die("--author and --body are required in workflow_mode='branch_pr'", code=2)
+        if str(args.author).strip().upper() != "INTEGRATOR":
+            die("--author must be INTEGRATOR in workflow_mode='branch_pr'", code=2)
+        pr_path = pr_dir(task_id)
+        if not pr_path.exists():
+            die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
+        pr_meta = pr_load_meta(pr_path / "meta.json")
+        pr_branch = str(pr_meta.get("branch") or "").strip()
+        pr_base = str(pr_meta.get("base_branch") or DEFAULT_MAIN_BRANCH).strip()
+        pr_check(task_id, branch=pr_branch or None, base=pr_base or None, quiet=True)
     if args.author and args.body and not args.force:
         require_structured_comment(args.body, prefix="Verified:", min_chars=60)
 
@@ -1264,16 +1459,16 @@ def cmd_finish(args: argparse.Namespace) -> None:
             print(f"❌ {message}", file=sys.stderr)
         die("tasks.json failed lint (use --force to override)", code=2)
 
-    ok, warnings = readiness(args.task_id)
+    ok, warnings = readiness(task_id)
     if not ok and not args.force:
         for warning in warnings:
             print(f"⚠️ {warning}")
-        die(f"Task is not ready: {args.task_id} (use --force to override)", code=2)
+        die(f"Task is not ready: {task_id} (use --force to override)", code=2)
 
     commit_info = get_commit_info(args.commit)
-    if args.require_task_id_in_commit and args.task_id not in commit_info.get("message", "") and not args.force:
+    if args.require_task_id_in_commit and task_id not in commit_info.get("message", "") and not args.force:
         die(
-            f"Commit subject does not mention {args.task_id}: {commit_info.get('message')!r} "
+            f"Commit subject does not mention {task_id}: {commit_info.get('message')!r} "
             "(use --force or --no-require-task-id-in-commit)"
         )
 
@@ -1282,7 +1477,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
     if not isinstance(tasks, list):
         die("tasks.json must contain a top-level 'tasks' list")
 
-    target = _ensure_task_object(data, args.task_id)
+    target = _ensure_task_object(data, task_id)
 
     verify = target.get("verify")
     if verify is None:
@@ -1291,13 +1486,33 @@ def cmd_finish(args: argparse.Namespace) -> None:
         commands = [cmd.strip() for cmd in verify if isinstance(cmd, str) and cmd.strip()]
     else:
         if not args.force:
-            die(f"{args.task_id}: verify must be a list of strings (use --force to override)", code=2)
+            die(f"{task_id}: verify must be a list of strings (use --force to override)", code=2)
         commands = []
     if commands and not args.skip_verify and not args.force:
-        run_verify_commands(args.task_id, commands, quiet=args.quiet)
+        run_verify_commands(task_id, commands, cwd=ROOT, quiet=args.quiet)
 
     target["status"] = "DONE"
     target["commit"] = commit_info
+
+    if pr_path and is_branch_pr_mode() and not args.force:
+        review_path = pr_path / "review.md"
+        if review_path.exists():
+            notes = parse_handoff_notes(review_path.read_text(encoding="utf-8", errors="replace"))
+            if notes:
+                digest = hashlib.sha256(
+                    ("\n".join(f"{n['author']}:{n['body']}" for n in notes)).encode("utf-8")
+                ).hexdigest()
+                applied = str(pr_meta.get("handoff_applied_digest") or "").strip()
+                if digest != applied:
+                    comments = target.get("comments")
+                    if not isinstance(comments, list):
+                        comments = []
+                    for note in notes:
+                        comments.append({"author": note["author"], "body": note["body"]})
+                    target["comments"] = comments
+                    pr_meta["handoff_applied_digest"] = digest
+                    pr_meta["handoff_applied_at"] = now_iso_utc()
+                    pr_write_meta(pr_path / "meta.json", pr_meta)
 
     if args.author and args.body:
         comments = target.get("comments")
@@ -1353,6 +1568,91 @@ def git_log_subjects(base: str, head: str, *, cwd: Path = ROOT, limit: int = 50)
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
+def git_show_text(rev: str, relpath: str, *, cwd: Path = ROOT) -> Optional[str]:
+    rel = str(relpath or "").strip().lstrip("/")
+    if not rel:
+        return None
+    try:
+        proc = run(["git", "show", f"{rev}:{rel}"], cwd=cwd, check=False)
+    except subprocess.CalledProcessError:
+        return None
+    if proc.returncode != 0:
+        return None
+    return proc.stdout
+
+
+def git_worktree_list_porcelain(*, cwd: Path = ROOT) -> str:
+    try:
+        result = run(["git", "worktree", "list", "--porcelain"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to list git worktrees")
+    return (result.stdout or "")
+
+
+def parse_git_worktrees_porcelain(text: str) -> List[Dict[str, str]]:
+    entries: List[Dict[str, str]] = []
+    current: Dict[str, str] = {}
+    for raw_line in (text or "").splitlines():
+        line = raw_line.rstrip()
+        if not line.strip():
+            if current:
+                entries.append(current)
+                current = {}
+            continue
+        if " " not in line:
+            continue
+        key, value = line.split(" ", 1)
+        current[key.strip()] = value.strip()
+    if current:
+        entries.append(current)
+    return entries
+
+
+def detect_worktree_path_for_branch(branch: str, *, cwd: Path = ROOT) -> Optional[Path]:
+    want = (branch or "").strip()
+    if not want:
+        return None
+    entries = parse_git_worktrees_porcelain(git_worktree_list_porcelain(cwd=cwd))
+    for entry in entries:
+        wt_path = entry.get("worktree")
+        ref = entry.get("branch")  # refs/heads/<branch>
+        if not wt_path or not ref:
+            continue
+        if ref == f"refs/heads/{want}":
+            return Path(wt_path).resolve()
+    return None
+
+
+def detect_branch_for_worktree_path(path: Path, *, cwd: Path = ROOT) -> Optional[str]:
+    entries = parse_git_worktrees_porcelain(git_worktree_list_porcelain(cwd=cwd))
+    want = path.resolve()
+    for entry in entries:
+        wt_path = entry.get("worktree")
+        ref = entry.get("branch")
+        if not wt_path or not ref:
+            continue
+        if Path(wt_path).resolve() == want and ref.startswith("refs/heads/"):
+            return ref[len("refs/heads/") :]
+    return None
+
+
+def assert_no_diff_paths(*, base: str, branch: str, forbidden: List[str], cwd: Path = ROOT) -> None:
+    changed = set(git_diff_names(base, branch, cwd=cwd))
+    bad = [p for p in forbidden if p in changed]
+    if bad:
+        die(
+            "\n".join(
+                [
+                    f"Refusing operation: branch {branch!r} modifies forbidden path(s): {', '.join(bad)}",
+                    "Fix:",
+                    "  1) Revert the forbidden change(s) in the task branch",
+                    "  2) Re-run the command",
+                    f"Context: branch={git_current_branch(cwd=cwd)!r} cwd={Path.cwd().resolve()}",
+                ]
+            ),
+            code=2,
+        )
+
 def task_title(task_id: str) -> str:
     tasks = load_tasks()
     tasks_by_id, _ = index_tasks_by_id(tasks)
@@ -1362,37 +1662,69 @@ def task_title(task_id: str) -> str:
 
 def default_task_branch(task_id: str, slug: str) -> str:
     slug_norm = normalize_slug(slug)
-    return f"task/{task_id}-{slug_norm}"
+    return f"task/{task_id}/{slug_norm}"
 
 
 def cmd_branch_create(args: argparse.Namespace) -> None:
     require_not_task_worktree(action="branch create")
     ensure_git_clean(action="branch create")
+    ensure_path_ignored(WORKTREES_DIRNAME, cwd=ROOT)
 
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
 
+    if is_branch_pr_mode() and not args.agent:
+        die("--agent is required in workflow_mode='branch_pr' (e.g., --agent CODER)", code=2)
+
     slug = normalize_slug(args.slug or task_title(task_id) or "work")
     base = (args.base or DEFAULT_MAIN_BRANCH).strip()
-    branch = (args.branch or default_task_branch(task_id, slug)).strip()
+    branch = default_task_branch(task_id, slug)
 
     if not git_branch_exists(base):
         die(f"Base branch does not exist: {base}", code=2)
-    if git_branch_exists(branch):
-        die(f"Branch already exists: {branch}", code=2)
+
+    expected_worktree_path = WORKTREES_DIR / f"{task_id}-{slug}"
+
+    attached = detect_worktree_path_for_branch(branch, cwd=ROOT)
+    if attached and attached != expected_worktree_path.resolve():
+        die(f"Branch is already checked out in another worktree: {attached}", code=2)
+    if attached and not args.reuse:
+        die(f"Branch is already checked out in an existing worktree: {attached} (use --reuse)", code=2)
+
+    if git_branch_exists(branch) and not args.reuse:
+        die(f"Branch already exists: {branch} (use --reuse to reuse an existing worktree)", code=2)
 
     if args.worktree:
         WORKTREES_DIR.mkdir(parents=True, exist_ok=True)
-        worktree_path = WORKTREES_DIR / f"{task_id}-{slug}"
+        worktree_path = expected_worktree_path
         if worktree_path.exists():
-            die(f"Worktree path already exists: {worktree_path}", code=2)
+            if not args.reuse:
+                die(f"Worktree path already exists: {worktree_path} (use --reuse if it's a registered worktree)", code=2)
+            registered_branch = detect_branch_for_worktree_path(worktree_path, cwd=ROOT)
+            if registered_branch != branch:
+                die(
+                    f"Worktree path exists but is not registered for {branch!r}: {worktree_path}\n"
+                    f"Registered: {registered_branch!r}",
+                    code=2,
+                )
+            print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+            print_block("ACTION", f"Reuse existing worktree for {branch}")
+            print_block("RESULT", f"branch={branch} worktree={worktree_path}")
+            print_block("NEXT", "Open the worktree in your IDE and continue work there.")
+            return
         try:
-            run(["git", "worktree", "add", "-b", branch, str(worktree_path), base], check=True)
+            if git_branch_exists(branch):
+                run(["git", "worktree", "add", str(worktree_path), branch], check=True)
+            else:
+                run(["git", "worktree", "add", "-b", branch, str(worktree_path), base], check=True)
         except subprocess.CalledProcessError as exc:
             die(exc.stderr.strip() or exc.stdout.strip() or "git worktree add failed")
         if not args.quiet:
-            print(f"✅ created {branch} at {worktree_path.relative_to(ROOT)}")
+            print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+            print_block("ACTION", f"Create task branch + worktree for {task_id} (agent={args.agent or '-'})")
+            print_block("RESULT", f"branch={branch} worktree={worktree_path}")
+            print_block("NEXT", f"Open `{worktree_path}` in your IDE and run `python scripts/agentctl.py pr open {task_id} --branch {branch} --author {args.agent or 'CODER'}`.")
         return
 
     try:
@@ -1400,7 +1732,46 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or exc.stdout.strip() or "git switch failed")
     if not args.quiet:
-        print(f"✅ created and switched to {branch}")
+        print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+        print_block("ACTION", f"Create and switch to task branch for {task_id} (agent={args.agent or '-'})")
+        print_block("RESULT", f"branch={branch}")
+        print_block("NEXT", f"Run `python scripts/agentctl.py pr open {task_id} --branch {branch} --author {args.agent or 'CODER'}`.")
+
+
+def _git_ahead_behind(branch: str, base: str, *, cwd: Path) -> Tuple[int, int]:
+    try:
+        result = run(["git", "rev-list", "--left-right", "--count", f"{base}...{branch}"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to compute ahead/behind")
+    raw = (result.stdout or "").strip()
+    if not raw:
+        return 0, 0
+    parts = raw.split()
+    if len(parts) != 2:
+        return 0, 0
+    behind = int(parts[0])
+    ahead = int(parts[1])
+    return ahead, behind
+
+
+def cmd_branch_status(args: argparse.Namespace) -> None:
+    cwd = Path.cwd().resolve()
+    branch = (args.branch or git_current_branch(cwd=cwd)).strip()
+    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    if not git_branch_exists(branch, cwd=cwd):
+        die(f"Unknown branch: {branch}", code=2)
+    if not git_branch_exists(base, cwd=cwd):
+        die(f"Unknown base branch: {base}", code=2)
+
+    task_id = parse_task_id_from_task_branch(branch)
+    worktree = detect_worktree_path_for_branch(branch, cwd=cwd)
+    ahead, behind = _git_ahead_behind(branch, base, cwd=cwd)
+
+    print_block("CONTEXT", format_command_context(cwd=cwd))
+    print_block("RESULT", f"branch={branch} base={base} ahead={ahead} behind={behind} task_id={task_id or '-'}")
+    if worktree:
+        print_block("RESULT", f"worktree={worktree}")
+    print_block("NEXT", "If you are ready, update PR artifacts via `python scripts/agentctl.py pr update <T-###>`.")
 
 
 def cmd_branch_remove(args: argparse.Namespace) -> None:
@@ -1442,7 +1813,13 @@ def pr_dir(task_id: str) -> Path:
     return PRS_DIR / task_id
 
 
-PR_DESCRIPTION_REQUIRED_SECTIONS: Tuple[str, ...] = ("Summary", "Scope", "Risks", "Verify", "Rollback")
+PR_DESCRIPTION_REQUIRED_SECTIONS: Tuple[str, ...] = (
+    "Summary",
+    "Scope",
+    "Risks",
+    "Verify Steps",
+    "Rollback Plan",
+)
 
 
 def pr_description_template(task_id: str) -> str:
@@ -1464,13 +1841,18 @@ def pr_description_template(task_id: str) -> str:
             "",
             "- ...",
             "",
-            "## Verify",
+            "## Verify Steps",
             "",
             "- ...",
             "",
-            "## Rollback",
+            "## Rollback Plan",
             "",
             "- ...",
+            "",
+            "## Changes Summary (auto)",
+            "",
+            "<!-- BEGIN AUTO SUMMARY -->",
+            "<!-- END AUTO SUMMARY -->",
             "",
         ]
     )
@@ -1488,6 +1870,15 @@ def pr_review_template(task_id: str) -> str:
             "- [ ] Verify commands ran (or justified)",
             "- [ ] Scope matches task goal; risks understood",
             "",
+            "## Handoff Notes",
+            "",
+            "Add short handoff notes here as list items so INTEGRATOR can append them to tasks.json on close.",
+            "",
+            "- CODER: ...",
+            "- TESTER: ...",
+            "- DOCS: ...",
+            "- REVIEWER: ...",
+            "",
             "## Notes",
             "",
             "- ...",
@@ -1496,12 +1887,73 @@ def pr_review_template(task_id: str) -> str:
     )
 
 
-def pr_validate_description(text: str) -> List[str]:
-    missing: List[str] = []
+def parse_handoff_notes(text: str) -> List[Dict[str, str]]:
+    sections = extract_markdown_sections(text)
+    lines = sections.get("Handoff Notes") or []
+    notes: List[Dict[str, str]] = []
+    for raw in lines:
+        line = raw.strip()
+        if not line.startswith("-"):
+            continue
+        payload = line.lstrip("-").strip()
+        if not payload:
+            continue
+        if _is_placeholder_content(payload):
+            continue
+        if ":" not in payload:
+            continue
+        author, body = payload.split(":", 1)
+        author = author.strip()
+        body = body.strip()
+        if not author or not body:
+            continue
+        if _is_placeholder_content(body):
+            continue
+        notes.append({"author": author, "body": body})
+    return notes
+
+
+def _is_placeholder_content(line: str) -> bool:
+    stripped = (line or "").strip()
+    if not stripped:
+        return True
+    lowered = stripped.lower()
+    if lowered in {"...", "tbd", "todo", "- ...", "* ..."}:
+        return True
+    if re.fullmatch(r"[-*]\s*\.\.\.\s*", stripped):
+        return True
+    if re.fullmatch(r"\.+", stripped):
+        return True
+    return False
+
+
+def extract_markdown_sections(text: str) -> Dict[str, List[str]]:
+    sections: Dict[str, List[str]] = {}
+    current: Optional[str] = None
+    for raw in (text or "").splitlines():
+        line = raw.rstrip()
+        if line.startswith("## "):
+            current = line[3:].strip()
+            sections.setdefault(current, [])
+            continue
+        if current is not None:
+            sections[current].append(line)
+    return sections
+
+
+def pr_validate_description(text: str) -> Tuple[List[str], List[str]]:
+    missing_sections: List[str] = []
+    empty_sections: List[str] = []
+    sections = extract_markdown_sections(text)
     for section in PR_DESCRIPTION_REQUIRED_SECTIONS:
-        if f"## {section}" not in text:
-            missing.append(section)
-    return missing
+        if section not in sections:
+            missing_sections.append(section)
+            continue
+        lines = [ln for ln in sections.get(section, []) if ln.strip()]
+        meaningful = [ln for ln in lines if not _is_placeholder_content(ln)]
+        if not meaningful:
+            empty_sections.append(section)
+    return missing_sections, empty_sections
 
 
 def pr_load_meta(meta_path: Path) -> Dict:
@@ -1509,6 +1961,58 @@ def pr_load_meta(meta_path: Path) -> Dict:
         return {}
     data = load_json(meta_path)
     return data if isinstance(data, dict) else {}
+
+
+def pr_load_meta_text(text: str, *, source: str) -> Dict:
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        die(f"Invalid JSON in {source}: {exc}", code=2)
+    return data if isinstance(data, dict) else {}
+
+
+def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> Optional[str]:
+    path = pr_dir(task_id) / filename
+    if path.exists():
+        return path.read_text(encoding="utf-8", errors="replace")
+    if not branch:
+        return None
+    rel = path.relative_to(ROOT).as_posix()
+    return git_show_text(branch, rel, cwd=ROOT)
+
+
+def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> str:
+    text = pr_try_read_file_text(task_id, filename, branch=branch)
+    if text is not None:
+        return text
+    target = pr_dir(task_id)
+    if not branch:
+        die(
+            "\n".join(
+                [
+                    f"Missing PR artifact dir in this checkout: {target}",
+                    "Fix:",
+                    f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR artifacts from that branch",
+                    "  2) Or check out the task branch that contains the PR artifact files",
+                    f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+                ]
+            ),
+            code=2,
+        )
+    rel = (target / filename).relative_to(ROOT).as_posix()
+    die(
+        "\n".join(
+            [
+                f"Missing PR artifact file in {branch!r}: {rel}",
+                "Fix:",
+                f"  1) Ensure the task branch contains `{rel}` (run `python scripts/agentctl.py pr open {task_id}` in the branch)",
+                "  2) Commit the PR artifact files to the task branch",
+                "  3) Re-run the command",
+                f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+            ]
+        ),
+        code=2,
+    )
 
 
 def pr_write_meta(meta_path: Path, meta: Dict) -> None:
@@ -1534,6 +2038,7 @@ def pr_ensure_skeleton(*, task_id: str, branch: str, author: str, base_branch: s
             "created_at": created_at,
             "updated_at": now_iso_utc(),
             "head_sha": git_rev_parse(branch),
+            "merge_strategy": meta.get("merge_strategy") or "squash",
             "status": meta.get("status") or "OPEN",
         }
     )
@@ -1549,7 +2054,7 @@ def pr_ensure_skeleton(*, task_id: str, branch: str, author: str, base_branch: s
 
     verify_path = target / "verify.log"
     if not verify_path.exists():
-        verify_path.write_text("", encoding="utf-8")
+        verify_path.write_text("# Verify log\n\n", encoding="utf-8")
 
     review_path = target / "review.md"
     if not review_path.exists():
@@ -1563,20 +2068,29 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
     if not task_id:
         die("task_id must be non-empty", code=2)
     author = (args.author or "").strip()
+    if is_branch_pr_mode() and not author:
+        die("--author is required in workflow_mode='branch_pr' (e.g., --author CODER)", code=2)
     if not author:
-        die("--author is required", code=2)
+        author = "unknown"
 
     branch = (args.branch or git_current_branch()).strip()
     base = (args.base or DEFAULT_MAIN_BRANCH).strip()
-    if branch == base and not args.force:
-        die(f"Refusing to open PR on base branch {base!r} (use --force to override)", code=2)
+    if branch == base:
+        die(f"Refusing to open PR on base branch {base!r}", code=2)
     if not git_branch_exists(branch):
         die(f"Unknown branch: {branch}", code=2)
 
+    target = pr_dir(task_id)
+    if target.exists():
+        die(f"PR artifact dir already exists: {target} (use `pr update`)", code=2)
+
     target = pr_ensure_skeleton(task_id=task_id, branch=branch, author=author, base_branch=base)
-    cmd_pr_update(argparse.Namespace(task_id=task_id, branch=branch, quiet=True))
+    cmd_pr_update(argparse.Namespace(task_id=task_id, branch=branch, base=base, quiet=True))
     if not args.quiet:
-        print(f"✅ opened PR artifact at {target.relative_to(ROOT)}")
+        print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+        print_block("ACTION", f"Open PR artifact for {task_id}")
+        print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={branch} base={base} author={author}")
+        print_block("NEXT", f"Fill out `{(target / 'description.md').relative_to(ROOT)}` then run `python scripts/agentctl.py pr check {task_id}`.")
 
 
 def cmd_pr_update(args: argparse.Namespace) -> None:
@@ -1591,65 +2105,111 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     meta_path = target / "meta.json"
     meta = pr_load_meta(meta_path)
     branch = (args.branch or str(meta.get("branch") or "")).strip() or git_current_branch()
-    base = str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH).strip()
+    base = (args.base or str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH)).strip()
     if not git_branch_exists(branch):
         die(f"Unknown branch: {branch}", code=2)
 
     diffstat = git_diff_stat(base, branch)
     (target / "diffstat.txt").write_text(diffstat, encoding="utf-8")
 
-    meta.update({"updated_at": now_iso_utc(), "head_sha": git_rev_parse(branch), "branch": branch, "base_branch": base})
+    meta.update(
+        {
+            "updated_at": now_iso_utc(),
+            "head_sha": git_rev_parse(branch),
+            "branch": branch,
+            "base_branch": base,
+        }
+    )
     pr_write_meta(meta_path, meta)
 
+    description_path = target / "description.md"
+    if description_path.exists():
+        text = description_path.read_text(encoding="utf-8", errors="replace")
+        if "<!-- BEGIN AUTO SUMMARY -->" in text and "<!-- END AUTO SUMMARY -->" in text:
+            changed = git_diff_names(base, branch)
+            summary_lines = []
+            for name in changed[:20]:
+                summary_lines.append(f"- `{name}`")
+            summary = "\n".join(summary_lines) if summary_lines else "- (no file changes)"
+            before, rest = text.split("<!-- BEGIN AUTO SUMMARY -->", 1)
+            _, after = rest.split("<!-- END AUTO SUMMARY -->", 1)
+            new_text = before + "<!-- BEGIN AUTO SUMMARY -->\n" + summary + "\n<!-- END AUTO SUMMARY -->" + after
+            if new_text != text:
+                description_path.write_text(new_text, encoding="utf-8")
+
     if not args.quiet:
-        print(f"✅ updated PR artifact {target.relative_to(ROOT)}")
+        print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+        print_block("ACTION", f"Update PR artifact for {task_id}")
+        print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={branch} base={base}")
+        print_block("NEXT", f"Run `python scripts/agentctl.py pr check {task_id} --branch {branch} --base {base}`.")
 
 
-def pr_check(task_id: str, *, branch: Optional[str] = None, quiet: bool = False) -> None:
+def pr_check(
+    task_id: str,
+    *,
+    branch: Optional[str] = None,
+    base: Optional[str] = None,
+    quiet: bool = False,
+) -> None:
     target = pr_dir(task_id)
-    if not target.exists():
-        die(f"Missing PR artifact dir: {target}", code=2)
-
-    meta_path = target / "meta.json"
-    meta = pr_load_meta(meta_path)
+    meta_rel = (target / "meta.json").relative_to(ROOT).as_posix()
+    meta_text = pr_read_file_text(task_id, "meta.json", branch=branch)
+    meta_source = meta_rel if (target / "meta.json").exists() else f"{branch}:{meta_rel}"
+    meta = pr_load_meta_text(meta_text, source=meta_source)
     meta_task_id = str(meta.get("task_id") or "").strip()
     if meta_task_id and meta_task_id != task_id:
         die(f"PR meta.json task_id mismatch: expected {task_id}, got {meta_task_id}", code=2)
 
-    base = str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH).strip()
-    pr_branch = (branch or str(meta.get("branch") or "").strip()) or git_current_branch()
+    base_branch = (base or str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH)).strip()
+    meta_branch = str(meta.get("branch") or "").strip()
+    if branch and meta_branch and meta_branch != branch:
+        die(f"PR meta.json branch mismatch: expected {branch}, got {meta_branch}", code=2)
+    pr_branch = (branch or meta_branch) or git_current_branch()
+    if git_status_porcelain(cwd=Path.cwd().resolve()):
+        die(f"Working tree is dirty (pr check requires clean state)\nContext: {format_command_context(cwd=Path.cwd().resolve())}", code=2)
     if not git_branch_exists(pr_branch):
         die(f"Unknown branch: {pr_branch}", code=2)
+    if not git_branch_exists(base_branch):
+        die(f"Unknown base branch: {base_branch}", code=2)
+    parsed_task_id = parse_task_id_from_task_branch(pr_branch)
+    if is_branch_pr_mode() and parsed_task_id != task_id:
+        die(f"Branch {pr_branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)", code=2)
 
     required_files = ["meta.json", "description.md", "diffstat.txt", "verify.log"]
-    missing_files = [name for name in required_files if not (target / name).exists()]
+    artifact_branch = pr_branch if not target.exists() else None
+    missing_files = [name for name in required_files if pr_try_read_file_text(task_id, name, branch=artifact_branch) is None]
     if missing_files:
         die(f"Missing PR artifact file(s): {', '.join(missing_files)}", code=2)
 
-    description = (target / "description.md").read_text(encoding="utf-8", errors="replace")
-    missing_sections = pr_validate_description(description)
+    description = pr_read_file_text(task_id, "description.md", branch=artifact_branch)
+    missing_sections, empty_sections = pr_validate_description(description)
     if missing_sections:
         die(f"description.md missing required section(s): {', '.join(missing_sections)}", code=2)
+    if empty_sections:
+        die(f"description.md has empty section(s): {', '.join(empty_sections)}", code=2)
 
-    subjects = git_log_subjects(base, pr_branch, limit=200)
+    subjects = git_log_subjects(base_branch, pr_branch, limit=200)
     if not subjects:
-        die(f"No commits found on {pr_branch!r} compared to {base!r}", code=2)
+        die(f"No commits found on {pr_branch!r} compared to {base_branch!r}", code=2)
     if not any(task_id in subject for subject in subjects):
         die(f"Branch {pr_branch!r} has no commit subject mentioning {task_id}", code=2)
 
-    changed = git_diff_names(base, pr_branch)
+    changed = git_diff_names(base_branch, pr_branch)
     if "tasks.json" in changed:
         die(f"Branch {pr_branch!r} modifies tasks.json (single-writer violation)", code=2)
 
     if not quiet:
-        print("✅ pr check passed")
+        print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+        print_block("ACTION", f"Validate PR for {task_id}")
+        print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={pr_branch} base={base_branch}")
+        print_block("NEXT", "If green, INTEGRATOR can run `python scripts/agentctl.py integrate ...`.")
 
 
 def cmd_pr_check(args: argparse.Namespace) -> None:
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
-    pr_check(task_id, branch=args.branch, quiet=bool(args.quiet))
+    pr_check(task_id, branch=args.branch, base=args.base, quiet=bool(args.quiet))
 
 
 def get_task_verify_commands_for(task_id: str) -> List[str]:
@@ -1673,99 +2233,180 @@ def append_verify_log(path: Path, *, header: str, content: str) -> None:
         handle.write("\n")
 
 
-def run_verify_with_capture(task_id: str, *, quiet: bool) -> None:
+def run_verify_with_capture(
+    task_id: str,
+    *,
+    cwd: Path,
+    quiet: bool,
+    log_path: Optional[Path] = None,
+) -> List[Tuple[str, str]]:
     commands = get_task_verify_commands_for(task_id)
-    verify_path = pr_dir(task_id) / "verify.log"
     timestamp = now_iso_utc()
+    entries: List[Tuple[str, str]] = []
     if not commands:
-        append_verify_log(verify_path, header=f"[{timestamp}] ℹ️ no verify commands configured", content="")
+        header = f"[{timestamp}] ℹ️ no verify commands configured"
+        entries.append((header, ""))
+        if log_path:
+            append_verify_log(log_path, header=header, content="")
         if not quiet:
             print(f"ℹ️ {task_id}: no verify commands configured")
-        return
+        return entries
 
     for command in commands:
         if not quiet:
             print(f"$ {command}")
-        proc = subprocess.run(command, cwd=str(ROOT), shell=True, text=True, capture_output=True)
+        proc = subprocess.run(command, cwd=str(cwd), shell=True, text=True, capture_output=True)
         output = ""
         if proc.stdout:
             output += proc.stdout
         if proc.stderr:
             output += ("\n" if output and not output.endswith("\n") else "") + proc.stderr
-        append_verify_log(verify_path, header=f"[{timestamp}] $ {command}", content=output)
+        header = f"[{timestamp}] $ {command}"
+        entries.append((header, output))
+        if log_path:
+            append_verify_log(log_path, header=header, content=output)
         if proc.returncode != 0:
             raise SystemExit(proc.returncode)
     if not quiet:
         print(f"✅ verify passed for {task_id}")
+    return entries
 
 
 def cmd_integrate(args: argparse.Namespace) -> None:
     require_not_task_worktree(action="integrate")
+    ensure_invoked_from_repo_root(action="integrate")
     require_branch(DEFAULT_MAIN_BRANCH, action="integrate")
     ensure_git_clean(action="integrate")
+    ensure_path_ignored(WORKTREES_DIRNAME, cwd=ROOT)
 
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
 
-    meta = pr_load_meta(pr_dir(task_id) / "meta.json")
-    branch = (args.branch or str(meta.get("branch") or "")).strip()
+    pr_path = pr_dir(task_id)
+    branch = (args.branch or "").strip()
     if not branch:
-        die("Missing --branch (and PR meta.json has no branch)", code=2)
-    strategy = (args.merge_strategy or "squash").strip().lower()
-    if strategy not in {"squash", "merge"}:
-        die("--merge-strategy must be squash|merge", code=2)
+        existing_meta = pr_load_meta(pr_path / "meta.json")
+        branch = str(existing_meta.get("branch") or "").strip()
+    if not branch:
+        die("Missing --branch (and PR meta.json is not available in this checkout)", code=2)
 
-    pr_check(task_id, branch=branch, quiet=True)
+    meta_rel = (pr_path / "meta.json").relative_to(ROOT).as_posix()
+    meta_text = pr_read_file_text(task_id, "meta.json", branch=branch)
+    meta_source = meta_rel if (pr_path / "meta.json").exists() else f"{branch}:{meta_rel}"
+    meta = pr_load_meta_text(meta_text, source=meta_source)
 
-    base = DEFAULT_MAIN_BRANCH
-    if strategy == "squash":
-        try:
-            run(["git", "merge", "--squash", branch], check=True)
-        except subprocess.CalledProcessError as exc:
-            die(exc.stderr.strip() or exc.stdout.strip() or "git merge --squash failed")
-        if args.run_verify:
-            try:
-                run_verify_with_capture(task_id, quiet=bool(args.quiet))
-            except SystemExit as exc:
-                subprocess.run(["git", "reset", "--hard", "HEAD"], cwd=str(ROOT), text=True, check=False)
-                raise
-        subject = ""
-        try:
-            subject = run(["git", "log", "-1", "--pretty=format:%s", branch], cwd=ROOT, check=True).stdout.strip()
-        except subprocess.CalledProcessError:
-            subject = ""
-        if not subject or task_id not in subject:
-            subject = f"🧩 {task_id} integrate {branch}"
-        try:
-            run(["git", "commit", "-m", subject], check=True)
-        except subprocess.CalledProcessError as exc:
-            die(exc.stderr.strip() or exc.stdout.strip() or "git commit failed")
-        commit_hash = git_rev_parse("HEAD")
-        if not args.quiet:
-            print(f"✅ integrated {branch} via squash: {commit_hash}")
+    base = (args.base or str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH)).strip()
+    strategy = (args.merge_strategy or str(meta.get("merge_strategy") or "squash")).strip().lower()
+    if strategy not in {"squash", "merge", "rebase"}:
+        die("--merge-strategy must be squash|merge|rebase", code=2)
+
+    print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+    print_block("ACTION", f"Integrate {branch} into {base} for {task_id} (strategy={strategy})")
+
+    pr_check(task_id, branch=branch, base=base, quiet=True)
+    assert_no_diff_paths(base=base, branch=branch, forbidden=["tasks.json"], cwd=ROOT)
+
+    verify_commands = get_task_verify_commands_for(task_id)
+    should_run_verify = bool(args.run_verify) or bool(verify_commands)
+
+    worktree_path = detect_worktree_path_for_branch(branch, cwd=ROOT)
+    created_temp = False
+    temp_path = WORKTREES_DIR / f"_integrate_tmp_{task_id}"
+    if should_run_verify and not worktree_path:
+        if args.dry_run:
+            print_block("RESULT", f"verify_worktree=(would create {temp_path})")
+        else:
+            if temp_path.exists():
+                registered = detect_branch_for_worktree_path(temp_path, cwd=ROOT)
+                if not registered:
+                    die(f"Temp worktree path exists but is not registered: {temp_path}", code=2)
+            else:
+                WORKTREES_DIR.mkdir(parents=True, exist_ok=True)
+                try:
+                    run(["git", "worktree", "add", str(temp_path), branch], check=True)
+                except subprocess.CalledProcessError as exc:
+                    die(exc.stderr.strip() or exc.stdout.strip() or "git worktree add failed")
+                created_temp = True
+            worktree_path = temp_path
+
+    if args.dry_run:
+        print_block("RESULT", f"pr_check=OK base={base} branch={branch} verify={'yes' if should_run_verify else 'no'}")
+        print_block("NEXT", "Re-run without --dry-run to perform merge+finish.")
         return
 
-    # merge (no-ff, verify before committing)
     try:
-        run(["git", "merge", "--no-ff", "--no-commit", branch], check=True)
-    except subprocess.CalledProcessError as exc:
-        subprocess.run(["git", "merge", "--abort"], cwd=str(ROOT), text=True, check=False)
-        die(exc.stderr.strip() or exc.stdout.strip() or "git merge failed")
-    if args.run_verify:
-        try:
-            run_verify_with_capture(task_id, quiet=bool(args.quiet))
-        except SystemExit:
-            subprocess.run(["git", "merge", "--abort"], cwd=str(ROOT), text=True, check=False)
-            raise
-    merge_message = f"🔀 {task_id} merge {branch}"
-    try:
-        run(["git", "commit", "-m", merge_message], check=True)
-    except subprocess.CalledProcessError as exc:
-        die(exc.stderr.strip() or exc.stdout.strip() or "git commit failed")
-    commit_hash = git_rev_parse("HEAD")
-    if not args.quiet:
-        print(f"✅ integrated {branch} via merge: {commit_hash}")
+        verify_entries: List[Tuple[str, str]] = []
+        if should_run_verify:
+            if not worktree_path:
+                die("Unable to locate/create a worktree for verify execution", code=2)
+            verify_entries = run_verify_with_capture(task_id, cwd=worktree_path, quiet=bool(args.quiet), log_path=None)
+
+        merge_hash = ""
+        if strategy == "squash":
+            run(["git", "merge", "--squash", branch], check=True)
+            subject = run(["git", "log", "-1", "--pretty=format:%s", branch], cwd=ROOT, check=True).stdout.strip()
+            if not subject or task_id not in subject:
+                subject = f"🧩 {task_id} integrate {branch}"
+            run(["git", "commit", "-m", subject], check=True)
+            merge_hash = git_rev_parse("HEAD")
+        elif strategy == "merge":
+            run(["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"], check=True)
+            merge_hash = git_rev_parse("HEAD")
+        else:
+            if not worktree_path:
+                worktree_path = detect_worktree_path_for_branch(branch, cwd=ROOT)
+            if not worktree_path:
+                die("Rebase strategy requires an existing worktree for the task branch", code=2)
+            proc = run(["git", "rebase", base], cwd=worktree_path, check=False)
+            if proc.returncode != 0:
+                run(["git", "rebase", "--abort"], cwd=worktree_path, check=False)
+                die(proc.stderr.strip() or proc.stdout.strip() or "git rebase failed", code=2)
+            run(["git", "merge", "--ff-only", branch], check=True)
+            merge_hash = git_rev_parse("HEAD")
+
+        finish_body = f"Verified: Integrated via {strategy}; verify={'ran' if should_run_verify else 'skipped'}; pr={pr_path.relative_to(ROOT)}."
+        cmd_finish(
+            argparse.Namespace(
+                task_id=task_id,
+                commit=merge_hash,
+                author="INTEGRATOR",
+                body=finish_body,
+                skip_verify=True,
+                quiet=bool(args.quiet),
+                force=False,
+                require_task_id_in_commit=True,
+            )
+        )
+        cmd_task_lint(argparse.Namespace(quiet=bool(args.quiet)))
+
+        if not pr_path.exists():
+            die(f"Missing PR artifact dir after merge: {pr_path}", code=2)
+        if should_run_verify and verify_entries:
+            verify_log = pr_path / "verify.log"
+            for header, content in verify_entries:
+                append_verify_log(verify_log, header=header, content=content)
+        meta_path = pr_path / "meta.json"
+        meta_main = pr_load_meta(meta_path)
+        meta_main.update(
+            {
+                "merge_strategy": strategy,
+                "status": "MERGED",
+                "merged_at": meta_main.get("merged_at") or now_iso_utc(),
+                "merge_commit": merge_hash,
+                "updated_at": now_iso_utc(),
+            }
+        )
+        pr_write_meta(meta_path, meta_main)
+
+        print_block("RESULT", f"merge_commit={merge_hash} finish=OK")
+        print_block(
+            "NEXT",
+            f"Commit closure on main: stage `tasks.json` + `{(pr_path / 'meta.json').relative_to(ROOT)}` (and any docs), then commit `✅ {task_id} close ...`.",
+        )
+    finally:
+        if created_temp:
+            run(["git", "worktree", "remove", "--force", str(temp_path)], check=False)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1784,6 +2425,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_verify = sub.add_parser("verify", help="Run verify commands declared on a task (tasks.json)")
     p_verify.add_argument("task_id")
+    p_verify.add_argument("--cwd", help="Run verify commands in this repo subdirectory/worktree (must be under repo root)")
     p_verify.add_argument("--quiet", action="store_true", help="Minimal output")
     p_verify.add_argument("--require", action="store_true", help="Fail if no verify commands exist")
     p_verify.set_defaults(func=cmd_verify)
@@ -1793,12 +2435,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_branch_create = branch_sub.add_parser("create", help="Create task branch (optionally with a git worktree)")
     p_branch_create.add_argument("task_id")
-    p_branch_create.add_argument("--slug", help="Short slug for the branch/worktree name (default: derived from title)")
+    p_branch_create.add_argument("--agent", help="Agent creating the branch (e.g., CODER)")
+    p_branch_create.add_argument("--slug", required=True, help="Short slug for the branch/worktree name (e.g., auth-cache)")
     p_branch_create.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
-    p_branch_create.add_argument("--branch", help="Override branch name (default: task/T-###-<slug>)")
-    p_branch_create.add_argument("--worktree", action="store_true", help="Create a worktree under .codex-swarm/worktrees/")
+    p_branch_create.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
+    p_branch_create.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
     p_branch_create.add_argument("--quiet", action="store_true", help="Minimal output")
     p_branch_create.set_defaults(func=cmd_branch_create)
+
+    p_branch_status = branch_sub.add_parser("status", help="Show quick branch/task status (ahead/behind, worktree path)")
+    p_branch_status.add_argument("--branch", help="Branch name (default: current branch)")
+    p_branch_status.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_branch_status.set_defaults(func=cmd_branch_status)
 
     p_branch_remove = branch_sub.add_parser("remove", help="Remove a task worktree and/or branch (manual confirmation recommended)")
     p_branch_remove.add_argument("--branch", help="Branch name to delete")
@@ -1814,28 +2462,31 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr_open.add_argument("task_id")
     p_pr_open.add_argument("--branch", help="Task branch name (default: current branch)")
     p_pr_open.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
-    p_pr_open.add_argument("--author", required=True, help="Agent/author creating the PR artifact (e.g., CODER)")
-    p_pr_open.add_argument("--force", action="store_true", help="Allow opening on base branch")
+    p_pr_open.add_argument("--author", help="Agent/author creating the PR artifact (e.g., CODER)")
     p_pr_open.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_open.set_defaults(func=cmd_pr_open)
 
     p_pr_update = pr_sub.add_parser("update", help="Refresh PR meta + diffstat from git")
     p_pr_update.add_argument("task_id")
     p_pr_update.add_argument("--branch", help="Override branch name (default: from meta.json)")
+    p_pr_update.add_argument("--base", help="Override base branch (default: from meta.json)")
     p_pr_update.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_update.set_defaults(func=cmd_pr_update)
 
     p_pr_check = pr_sub.add_parser("check", help="Validate PR artifact completeness + branch invariants")
     p_pr_check.add_argument("task_id")
     p_pr_check.add_argument("--branch", help="Override branch name (default: from meta.json)")
+    p_pr_check.add_argument("--base", help="Override base branch (default: from meta.json)")
     p_pr_check.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_check.set_defaults(func=cmd_pr_check)
 
     p_integrate = sub.add_parser("integrate", help="Merge a task branch into main (gated by PR artifact + verify)")
     p_integrate.add_argument("task_id")
     p_integrate.add_argument("--branch", help="Task branch to integrate (default: from PR meta.json)")
-    p_integrate.add_argument("--merge-strategy", dest="merge_strategy", default="squash", help="squash|merge (default: squash)")
-    p_integrate.add_argument("--run-verify", action="store_true", help="Run task verify commands and append output to PR verify.log")
+    p_integrate.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_integrate.add_argument("--merge-strategy", dest="merge_strategy", default="squash", help="squash|merge|rebase (default: squash)")
+    p_integrate.add_argument("--run-verify", action="store_true", help="Run task verify commands (or always when configured) and append output to PR verify.log")
+    p_integrate.add_argument("--dry-run", action="store_true", help="Print plan + preflight checks without making changes")
     p_integrate.add_argument("--quiet", action="store_true", help="Minimal output")
     p_integrate.set_defaults(func=cmd_integrate)
 

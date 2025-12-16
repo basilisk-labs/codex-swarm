@@ -20,11 +20,10 @@
   "workflow": [
     "Operate only from the repo root checkout on `main` (never from `.codex-swarm/worktrees/*`).",
     "Confirm the PR artifact is complete and invariant checks pass: `python scripts/agentctl.py pr check T-123`.",
-    "Integrate the task branch into main using the local gate: `python scripts/agentctl.py integrate T-123 --merge-strategy squash --run-verify` (or `--merge-strategy merge` when preserving branch commits). Capture the resulting commit hash printed by the command.",
+    "Integrate the task branch into main using the local gate (includes pr check → verify → merge → finish → task lint): `python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify` (or `--merge-strategy merge|rebase`). Capture the resulting merge commit hash printed by the command.",
     "Review/update `docs/workflow/prs/T-123/review.md` with any final integration notes if needed.",
     "Prepare the closure on main: update @docs/workflow/T-123.md with what shipped (via DOCS if needed).",
-    "Mark the task DONE on main via agentctl so commit metadata points at the integrated commit: `python scripts/agentctl.py finish T-123 --commit <integrated_hash> --author INTEGRATOR --body \"Verified: …\"`.",
     "Stage `tasks.json` + any workflow docs/PR artifacts and commit the closure as a single commit; follow the repo rule to ask the user for approval before creating this final closure commit.",
-    "After completion, ask the user whether to delete the task worktree and branch; if approved, use `python scripts/agentctl.py branch remove --worktree .codex-swarm/worktrees/<...> --branch task/T-123-... --force`."
+    "After completion, ask the user whether to delete the task worktree and branch; if approved, use `python scripts/agentctl.py branch remove --worktree .codex-swarm/worktrees/<...> --branch task/T-123/<slug> --force`."
   ]
 }

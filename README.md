@@ -62,7 +62,7 @@ Prerequisites:
 ├── AGENTS.md
 ├── .codex-swarm
 │   ├── agentctl.md
-│   ├── swarm-config.json
+│   ├── swarm.config.json
 │   └── agents
 │       ├── PLANNER.json
 │       ├── CODER.json
@@ -70,6 +70,7 @@ Prerequisites:
 │       ├── REVIEWER.json
 │       ├── DOCS.json
 │       ├── CREATOR.json
+│       ├── INTEGRATOR.json
 │       └── UPDATER.json
 ├── clean.sh
 ├── LICENSE
@@ -88,11 +89,12 @@ Prerequisites:
 | --- | --- |
 | `AGENTS.md` | 🌐 Global rules, commit workflow, and the ORCHESTRATOR specification (plus the JSON template for new agents). |
 | `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python scripts/agentctl.py` commands + commit guardrails. |
-| `.codex-swarm/swarm-config.json` | ⚙️ Framework config (paths for agents/docs/workflow/tasks). |
+| `.codex-swarm/swarm.config.json` | ⚙️ Framework config (paths + workflow_mode). |
 | `.codex-swarm/agents/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python scripts/agentctl.py` and kept aligned with each plan. |
 | `.codex-swarm/agents/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
 | `.codex-swarm/agents/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
-| `.codex-swarm/agents/REVIEWER.json` | 👀 Performs reviews, runs `verify` commands, and finishes tasks via `python scripts/agentctl.py finish`. |
+| `.codex-swarm/agents/REVIEWER.json` | 👀 Performs reviews and leaves handoff notes for INTEGRATOR. |
+| `.codex-swarm/agents/INTEGRATOR.json` | 🧩 Integrates task branches into `main` (check → verify → merge → finish) and is the only closer in `workflow_mode=branch_pr`. |
 | `.codex-swarm/agents/DOCS.json` | 🧾 Writes per-task workflow artifacts under `docs/workflow/` and keeps docs synchronized. |
 | `.codex-swarm/agents/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
 | `.codex-swarm/agents/UPDATER.json` | 🔍 Audits the repo and agent prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
