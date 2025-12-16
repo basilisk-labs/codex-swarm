@@ -1903,12 +1903,32 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-080/pr."
         }
       ]
+    },
+    {
+      "id": "T-081",
+      "title": "agentctl integrate: skip verify if already verified",
+      "description": "Speed up branch_pr integration by skipping redundant verify runs when the task branch HEAD SHA is already recorded as verified (via PR meta last_verified_sha or pr/verify.log). Keep --run-verify as a force-rerun escape hatch. Also ensure rebase strategy runs rebase before verify so the verified SHA matches what gets merged.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "PLANNER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "speed"
+      ],
+      "depends_on": [
+        "T-074"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "3ced2e13a36d763db44a85e814b9fbf16f7c5a5bc0560abce85b0973c9317a37"
+    "checksum": "a884fd11bb5a5ec28144d987b3534139fb0df6c8b9ea2a54597af4a6a0f07a53"
   }
 }
