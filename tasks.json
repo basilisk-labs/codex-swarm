@@ -1738,7 +1738,9 @@
         "workflow",
         "ergonomics"
       ],
-      "depends_on": [],
+      "depends_on": [
+        "T-074"
+      ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
@@ -1756,7 +1758,9 @@
         "workflow",
         "ergonomics"
       ],
-      "depends_on": [],
+      "depends_on": [
+        "T-074"
+      ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
@@ -1774,7 +1778,9 @@
         "workflow",
         "cleanup"
       ],
-      "depends_on": [],
+      "depends_on": [
+        "T-074"
+      ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
@@ -1792,7 +1798,9 @@
         "workflow",
         "quality"
       ],
-      "depends_on": [],
+      "depends_on": [
+        "T-074"
+      ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
@@ -1809,7 +1817,9 @@
         "docs",
         "workflow"
       ],
-      "depends_on": [],
+      "depends_on": [
+        "T-074"
+      ],
       "verify": [
         "python scripts/agentctl.py task lint"
       ]
@@ -1819,6 +1829,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "82bf5b04d2b3d9f409357ba015fee5b1c52b6c0e42bd2534f8dc73f944de1088"
+    "checksum": "b57f4c7b975ac96ce1231daf8bcbd3faf9cd7ef5f784cb99fd2b6dfeb75ff320"
   }
 }
