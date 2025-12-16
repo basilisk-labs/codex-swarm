@@ -1,0 +1,12 @@
+{
+  "task_id": "T-071",
+  "task_title": "Require explicit depends_on on task add",
+  "branch": "task/T-071/depends-on",
+  "base_branch": "main",
+  "author": "CODER",
+  "created_at": "2025-12-16T11:48:41+00:00",
+  "updated_at": "2025-12-16T11:49:42+00:00",
+  "head_sha": "1b91c35c1886371914b9bbaac31d5d33d1521da5",
+  "merge_strategy": "squash",
+  "status": "OPEN"
+}

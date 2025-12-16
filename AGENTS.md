@@ -147,7 +147,7 @@ Schema (JSON):
 - Keep tasks atomic: PLANNER decomposes each request into single-owner items that map one-to-one with commits.
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
 - `description` explains the business value or acceptance criteria.
-- `depends_on` (optional) lists parent task IDs that must be `DONE` before starting this task.
+- `depends_on` (required) lists parent task IDs that must be `DONE` before starting this task (use `[]` when there are no dependencies).
 - `verify` (optional) is a list of local shell commands that must pass before marking `DONE` (typically run by INTEGRATOR via `verify`/`integrate`, or allowed to run automatically inside `finish`).
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
 - `commit` is required when a task is `DONE`.
@@ -164,6 +164,7 @@ Schema (JSON):
 Protocol:
 
 - Before changing tasks: review the latest `tasks.json` so you understand the current state.
+- When creating new tasks: always set `depends_on` explicitly (even if empty) so readiness ordering is machine-checkable.
 - When updating: do not edit `tasks.json` by hand; use `python scripts/agentctl.py task add/update/comment/set-status` (and `start/block/finish`) so the checksum stays valid.
 - In your reply: list every task ID you touched plus the new status or notes.
 - Only `tasks.json` stores task data. Use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to inspect tasks during execution.

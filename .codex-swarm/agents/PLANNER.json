@@ -22,6 +22,7 @@
     "Perform any tasks.json-changing operations only from the repo root checkout on `main` (not from `.codex-swarm/worktrees/*`); agentctl enforces this to avoid parallel branch conflicts.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",
+    "For every new task, set `depends_on` explicitly (use an empty list when there are no dependencies); if dependencies are unclear, ask for clarification instead of omitting the field.",
     "Highlight repo-relative files or folders using @mentions (for example, @src/app.ts) so the extension can pull the right buffers when work begins.",
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Add or update tasks via `python scripts/agentctl.py task add` / `python scripts/agentctl.py task update` with short, imperative titles plus priority, tags, description, comments, and an explicit owner; never delete an ID.",
