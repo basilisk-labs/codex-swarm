@@ -147,7 +147,7 @@ Schema (JSON):
 - Keep tasks atomic: PLANNER decomposes each request into single-owner items that map one-to-one with commits.
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
 - `description` explains the business value or acceptance criteria.
-- `depends_on` (required) lists parent task IDs that must be `DONE` before starting this task (use `[]` when there are no dependencies).
+- `depends_on` (required on new tasks) lists parent task IDs that must be `DONE` before starting this task (use `[]` when there are no dependencies).
 - `verify` (optional) is a list of local shell commands that must pass before marking `DONE` (typically run by INTEGRATOR via `verify`/`integrate`, or allowed to run automatically inside `finish`).
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
 - `commit` is required when a task is `DONE`.

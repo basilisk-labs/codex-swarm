@@ -1232,9 +1232,8 @@ def cmd_task_add(args: argparse.Namespace) -> None:
         "priority": args.priority,
         "owner": args.owner,
         "tags": list(dict.fromkeys((args.tag or []))),
+        "depends_on": list(dict.fromkeys((args.depends_on or []))),
     }
-    if args.depends_on:
-        task["depends_on"] = list(dict.fromkeys(args.depends_on))
     if args.verify:
         task["verify"] = list(dict.fromkeys(args.verify))
     if args.comment_author and args.comment_body:
