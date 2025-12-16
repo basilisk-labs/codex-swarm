@@ -1578,7 +1578,7 @@
       "id": "T-071",
       "title": "Require explicit depends_on on task add",
       "description": "Update the agent pipeline instructions so every task added to tasks.json includes an explicit depends_on list (use [] when there are no dependencies). Update AGENTS.md schema/docs and PLANNER workflow to require setting dependencies (and to ask for clarification when dependencies are unknown).",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "tags": [
@@ -1589,6 +1589,16 @@
       "verify": [
         "python scripts/agentctl.py agents",
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "dea6792a39f57fd3f842a06efa198525afc7271d",
+        "message": "📝 T-071 require explicit depends_on"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-071."
+        }
       ]
     }
   ],
@@ -1596,6 +1606,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "639a0780b169aea7c0af91455998578610ad12def1f5a49d4379a7a246e1974f"
+    "checksum": "0b0d790e539c319f0bae6c2549d7896e1f41a609e240bd871146744152ad6578"
   }
 }
