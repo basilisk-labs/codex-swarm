@@ -1725,12 +1725,100 @@
           "body": "Artifacts moved to docs/workflow/T-074/pr/ (legacy docs/workflow/prs/ is deprecated)."
         }
       ]
+    },
+    {
+      "id": "T-075",
+      "title": "agentctl: add work start (branch+pr+scaffold)",
+      "description": "Add a single command to reduce startup friction for a task branch in workflow_mode=branch_pr.\n\nAcceptance:\n- New command: `python scripts/agentctl.py work start T-123 --agent CODER --slug x --worktree`.\n- Performs the equivalent of:\n  - `python scripts/agentctl.py branch create T-123 --agent CODER --slug x --worktree`\n  - `python scripts/agentctl.py pr open T-123 --author CODER --branch task/T-123/x`\n  - `python scripts/agentctl.py task scaffold T-123` (writes `docs/workflow/T-123/README.md`)\n- Creates PR artifacts at `docs/workflow/T-123/pr/` (meta/diffstat/verify.log/review.md).\n- Idempotent with `--reuse`; does not clobber existing artifacts unless `--overwrite` is passed through to scaffold.\n- Prints clear NEXT steps.\n- Never writes `tasks.json`.\n- Update `.codex-swarm/agentctl.md` to document the new command.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "ergonomics"
+      ],
+      "depends_on": [],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
+    },
+    {
+      "id": "T-076",
+      "title": "agentctl: verify auto-log to per-task pr/verify.log",
+      "description": "Make `agentctl verify` faster by defaulting the log file when a PR artifact exists.\n\nAcceptance:\n- `python scripts/agentctl.py verify T-123` appends to `docs/workflow/T-123/pr/verify.log` when that PR dir exists.\n- `--log` still overrides.\n- Supports legacy `docs/workflow/prs/T-123/verify.log` during migration.\n- `--skip-if-unchanged` continues to work and uses PR `meta.json:head_sha` when the effective log path is under the PR directory.\n- Update `.codex-swarm/agentctl.md` to document the new default.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "ergonomics"
+      ],
+      "depends_on": [],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
+    },
+    {
+      "id": "T-077",
+      "title": "agentctl: cleanup merged task branches/worktrees",
+      "description": "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\n\nAcceptance:\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\n- Deletes only when:\n  - task is `DONE` in `tasks.json`, AND\n  - `git diff --name-only main...<branch>` is empty.\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\n- Never writes `tasks.json`.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "cleanup"
+      ],
+      "depends_on": [],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
+    },
+    {
+      "id": "T-078",
+      "title": "agentctl: pr check validates README completeness",
+      "description": "Reduce review ping-pong by making `pr check` fail fast on placeholder docs.\n\nAcceptance:\n- `python scripts/agentctl.py pr check T-123` validates `docs/workflow/T-123/README.md` exists and required sections are present and non-placeholder.\n- Error message points to missing/empty section names.\n- Supports legacy `docs/workflow/prs/T-123/description.md` during migration.\n- Update `.codex-swarm/agentctl.md` to reflect the README-based PR doc.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "quality"
+      ],
+      "depends_on": [],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
+    },
+    {
+      "id": "T-079",
+      "title": "Docs: remove remaining legacy prs/ mentions",
+      "description": "Finish migration documentation cleanup.\n\nAcceptance:\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only.",
+      "status": "TODO",
+      "priority": "low",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "workflow"
+      ],
+      "depends_on": [],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "42109bd30440f3fc35c69fe27e5d8d2e00f4d25b344b064f73678c38fa51b813"
+    "checksum": "82bf5b04d2b3d9f409357ba015fee5b1c52b6c0e42bd2534f8dc73f944de1088"
   }
 }
