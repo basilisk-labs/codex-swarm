@@ -1760,7 +1760,7 @@
       "id": "T-076",
       "title": "agentctl: verify auto-log to per-task pr/verify.log",
       "description": "Make `agentctl verify` faster by defaulting the log file when a PR artifact exists.\n\nAcceptance:\n- `python scripts/agentctl.py verify T-123` appends to `docs/workflow/T-123/pr/verify.log` when that PR dir exists.\n- `--log` still overrides.\n- Supports legacy `docs/workflow/prs/T-123/verify.log` during migration.\n- `--skip-if-unchanged` continues to work and uses PR `meta.json:head_sha` when the effective log path is under the PR directory.\n- Update `.codex-swarm/agentctl.md` to document the new default.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "CODER",
       "tags": [
@@ -1774,6 +1774,16 @@
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "5ad82c70456333dacda8ff88d5daf15060253536",
+        "message": "🧪 T-076 default verify log to per-task PR"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-076/pr."
+        }
       ]
     },
     {
@@ -1839,6 +1849,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "bb2b6c2c832489807f1725c42a2a2005d72839d3d1fe43c4a7a35410aa811b6f"
+    "checksum": "af1138727b7fb6dac1c0c8bcf5109128cc1650cf514b61e3b6e5f8b8be4affa2"
   }
 }

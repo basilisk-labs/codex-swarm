@@ -5,10 +5,14 @@
   "base_branch": "main",
   "author": "CODER",
   "created_at": "2025-12-16T13:51:18+00:00",
-  "updated_at": "2025-12-16T13:53:02+00:00",
-  "head_sha": "64c48735814f2fe9eb4cd9ba967bd7a2aaa6b548",
+  "updated_at": "2025-12-16T13:53:16+00:00",
+  "head_sha": "dbadc094855575e94c2123a66884e8df71dd8586",
   "merge_strategy": "squash",
-  "status": "OPEN",
-  "last_verified_sha": "64c48735814f2fe9eb4cd9ba967bd7a2aaa6b548",
-  "last_verified_at": "2025-12-16T13:52:51+00:00"
+  "status": "MERGED",
+  "last_verified_sha": "dbadc094855575e94c2123a66884e8df71dd8586",
+  "last_verified_at": "2025-12-16T13:53:16+00:00",
+  "merged_at": "2025-12-16T13:53:16+00:00",
+  "merge_commit": "5ad82c70456333dacda8ff88d5daf15060253536",
+  "closed_at": "2025-12-16T13:53:16+00:00",
+  "close_commit": "5ad82c70456333dacda8ff88d5daf15060253536"
 }
