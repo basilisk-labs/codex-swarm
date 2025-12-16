@@ -28,8 +28,23 @@ python scripts/agentctl.py guard commit T-123 -m "✨ T-123 Short meaningful sum
 # if you want a safe wrapper that also runs `git commit`
 python scripts/agentctl.py commit T-123 -m "✨ T-123 Short meaningful summary" --allow <path-prefix>
 
-# when closing a task: mark DONE + attach commit metadata (typically after implementation commit)
-python scripts/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body "Verified: ... (what ran, results, caveats)"
+# when closing a task in the branching workflow (INTEGRATOR on main)
+python scripts/agentctl.py finish T-123 --commit <git-rev> --author INTEGRATOR --body "Verified: ... (what ran, results, caveats)"
+```
+
+## Branching workflow helpers
+
+```bash
+# create a task branch + worktree (inside this repo only)
+python scripts/agentctl.py branch create T-123 --slug <slug> --worktree
+
+# open/update/check the tracked PR artifact (local PR simulation)
+python scripts/agentctl.py pr open T-123 --branch task/T-123-<slug> --author CODER
+python scripts/agentctl.py pr update T-123
+python scripts/agentctl.py pr check T-123
+
+# integrate into main (INTEGRATOR only; run from repo root on main)
+python scripts/agentctl.py integrate T-123 --branch task/T-123-<slug> --merge-strategy squash --run-verify
 ```
 
 ## Ergonomics helpers
@@ -52,6 +67,7 @@ python scripts/agentctl.py guard suggest-allow --format args
 ## Workflow reminders
 
 - `tasks.json` is canonical; do not edit it by hand.
+- In branching workflow, `agentctl` rejects tasks.json writes outside the repo root checkout on `main` (and guardrails reject committing tasks.json from task branches).
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
 - Keep allowlists tight: pass only the path prefixes you intend to commit.

@@ -2,6 +2,8 @@
 
 Each completed task should have an atomic documentation artifact under this folder.
 
+For local PR-like review and integration artifacts, see `docs/workflow/prs/README.md`.
+
 ## Naming
 
 - `T-###.md` (example: `T-025.md`)
@@ -18,4 +20,3 @@ Capture what was implemented for the task in a small, reviewable, and durable ar
 - Behavior / UX notes (if user-visible)
 - Verification (commands that were run, or how to validate locally)
 - Follow-ups / known gaps (if any)
-

@@ -21,8 +21,8 @@
     "Inspect the diff plus command outputs, using repo-relative @paths so Codex can pull up the exact files while you review the requirements.",
     "Request any verification commands or tests inside the workspace terminal (since no helper tools run them automatically) and capture the key pass/fail details.",
     "Record findings in order of severity, citing files + line numbers (or @paths) and referencing any missing tests.",
-    "Before creating the final verification/closure commit, explicitly ask the user to approve the closure (this commit typically includes `tasks.json` + `docs/workflow/T-###.md`).",
-    "When satisfied, close the task in one final verification/closure commit: update @docs/workflow/T-###.md (via DOCS if needed), then run `python scripts/agentctl.py finish T-123 --commit <implementation_commit> --author REVIEWER --body \"Verified: …\"` so commit metadata points to the implementation commit, and commit `tasks.json` + any docs artifact changes together.",
+    "Prefer reviewing the tracked PR artifact for the task (docs/workflow/prs/T-###/): ensure description completeness, scan diffstat, and leave actionable notes in `docs/workflow/prs/T-###/review.md`.",
+    "Do not run `finish` or merge into `main` in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
     "Recommend follow-up tasks (via PLANNER) for anything outside the current scope."
   ]
 }

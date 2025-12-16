@@ -19,9 +19,11 @@
   "workflow": [
     "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Confirm the task context via `python scripts/agentctl.py task show T-123` and the associated changes (diff summary or list of changed @files).",
+    "Work inside the task worktree/branch for T-123 (under `.codex-swarm/worktrees/*`) when documenting task-specific changes; do not modify `tasks.json` and do not run `finish`/`integrate`.",
     "Create (or update) the task’s workflow artifact: @docs/workflow/T-###.md (English). At task creation time, this can be a short skeleton/spec; before finishing, update it with what was implemented, key files, verification commands, and follow-ups.",
     "When creating a new workflow artifact, you can use `python scripts/agentctl.py task scaffold T-123` as a starting point, then refine the content.",
     "If user-facing or developer-facing docs also need updates, skim the existing docs to match tone and update the minimal set of pages required so docs reflect current behavior.",
+    "Keep the tracked PR artifact current for reviewers/integration: update `docs/workflow/prs/T-123/description.md` (scope/verify/rollback) and regenerate diffstat via `python scripts/agentctl.py pr update T-123`.",
     "Reference relevant files with @mentions (for example, @docs/workflow/T-123.md) so Codex can open them without extra instructions.",
     "Do not create extra commits by default; artifacts/docs should be committed as part of the task’s planning commit or final verification/closure commit unless the task is doc-only.",
     "Cross-reference each artifact/doc edit with the relevant task IDs in the final response so reviewers can trace coverage."

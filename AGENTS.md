@@ -52,10 +52,11 @@ shared_state:
 # COMMIT_WORKFLOW
 
 - Treat each plan task (`T-###`) as an atomic unit of work and keep commits minimal.
-- Default to a 3-commit cadence per task:
-  1) **Planning**: add/update the task in `tasks.json` + create the initial workflow artifact `docs/workflow/T-###.md` (skeleton/spec) and commit them together.
-  2) **Implementation**: ship the actual change set in a single work commit (preferably including any required tests).
-  3) **Verification/closure**: run tests + review, update `docs/workflow/T-###.md` with what was implemented, and mark the task `DONE` (update `tasks.json`) in one final commit.
+- Default to a task-branch cadence (planning on `main`, execution on a task branch, closure on `main`):
+  1) **Planning (main)**: add/update the task in `tasks.json` + create/update `docs/workflow/T-###.md` (skeleton/spec) and commit them together.
+  2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `docs/workflow/prs/T-###/`.
+  3) **Integration (main, INTEGRATOR)**: merge the task branch into `main` via `python scripts/agentctl.py integrate …` (optionally running verify and capturing output in `docs/workflow/prs/T-###/verify.log`).
+  4) **Verification/closure (main, INTEGRATOR)**: update `docs/workflow/T-###.md` with what shipped and mark the task `DONE` via `python scripts/agentctl.py finish …`, committing `tasks.json` + docs/artifacts together.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
 - Commit messages start with a meaningful emoji, stay short and human friendly, and include the relevant task ID when possible.
@@ -69,6 +70,45 @@ shared_state:
 > Role-specific commit conventions live in each agent’s JSON profile.
 
 ---
+
+# BRANCHING_WORKFLOW (required for parallel work)
+
+## Core rules
+
+- **1 task = 1 branch** (branch is per `T-###`, not per agent).
+- **Branch naming**: `task/T-123-<slug>` (slug = short, lowercase, dash-separated).
+- **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/<T-123-slug>/` (ignored by git).
+- **Single-writer `tasks.json`**:
+  - Never modify or commit `tasks.json` on a task branch.
+  - In branching workflow, `tasks.json` updates happen only on `main` via `python scripts/agentctl.py` (agentctl guardrails enforce this).
+  - Task closure (`finish`) is performed on `main` by **INTEGRATOR** after integration + verify.
+- **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `docs/workflow/prs/T-###/`.
+
+## PR artifact structure (tracked)
+
+For each task `T-123`:
+
+- `docs/workflow/prs/T-123/meta.json`
+- `docs/workflow/prs/T-123/description.md` (must include: Summary / Scope / Risks / Verify / Rollback)
+- `docs/workflow/prs/T-123/diffstat.txt`
+- `docs/workflow/prs/T-123/verify.log`
+- `docs/workflow/prs/T-123/review.md` (optional notes; typically filled by REVIEWER/INTEGRATOR)
+
+## Executor cheat sheet (CODER/TESTER/DOCS)
+
+1. Create a task branch + worktree: `python scripts/agentctl.py branch create T-123 --slug <slug> --worktree`.
+2. Work only inside `.codex-swarm/worktrees/<T-123-slug>/` on the task branch.
+3. Commit only via `python scripts/agentctl.py guard commit …` (or `python scripts/agentctl.py commit …`).
+4. Open/update PR artifacts: `python scripts/agentctl.py pr open …` and `python scripts/agentctl.py pr update …`.
+5. Hard bans: do not touch `tasks.json`, do not run `finish`, do not merge into `main`.
+
+## INTEGRATOR cheat sheet
+
+1. Work from the repo root checkout on `main` (never from `.codex-swarm/worktrees/*`).
+2. Validate: `python scripts/agentctl.py pr check T-123`.
+3. Integrate: `python scripts/agentctl.py integrate T-123 --branch task/T-123-<slug> --merge-strategy squash --run-verify`.
+4. Close on `main`: `python scripts/agentctl.py finish T-123 --commit <integrated_hash> --author INTEGRATOR --body "Verified: …"`.
+5. Run `python scripts/agentctl.py task lint` before considering the task closed.
 
 # SHARED_STATE
 
@@ -114,9 +154,9 @@ Schema (JSON):
 
 ### Status Transition Protocol
 
-- **Create / Reprioritize (PLANNER only).** PLANNER is the sole writer of new tasks and the only agent that may change priorities or mark work as `BLOCKED`; record the reasoning directly inside `tasks.json` (usually via `description` or a new `comments` entry).
-- **Start Work (specialist agent).** Before starting, confirm every `depends_on` task is `DONE`. Marking `DOING` is optional, but do not create extra commits just to record `DOING`.
-- **Complete Work (review/doc specialist).** REVIEWER or DOCS marks tasks `DONE` only after validating the deliverable; add a `comments` entry summarizing the verification (this replaces the old indented `Review:` line in `PLAN.md`).
+- **Create / Reprioritize (PLANNER only, on main).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python scripts/agentctl.py`).
+- **Work in branches.** During implementation, do not update `tasks.json`; record progress and verification notes in `docs/workflow/T-###.md` and `docs/workflow/prs/T-###/`.
+- **Integrate + close (INTEGRATOR, on main).** INTEGRATOR merges the task branch into `main`, runs verify, and marks tasks `DONE` via `python scripts/agentctl.py finish` (the only tasks.json write required for closure).
 - **Status Sync.** `tasks.json` is canonical. There is no derived status board file; use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123`.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
 
@@ -208,14 +248,15 @@ All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/a
 * Step 2: Draft the plan.
   * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
   * Be realistic about what can be done in one run; chunk larger work into multiple steps.
-  * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER** by default so changes land with automated coverage; skip TESTER only with an explicit justification (e.g., doc-only changes).
-  * Before marking any task DONE, schedule DOCS to produce an atomic workflow artifact @docs/workflow/T-###.md for the task; the typical default is **… → DOCS → REVIEWER**.
+  * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER → INTEGRATOR** by default (work happens on a task branch; INTEGRATOR is the only merge+finish gate on `main`).
+  * Ensure every task branch maintains a tracked PR artifact under `docs/workflow/prs/T-###/` so REVIEWER/INTEGRATOR can review and integrate without external PR tooling.
+  * Before task closure, schedule DOCS to update @docs/workflow/T-###.md with what shipped and verification notes; INTEGRATOR then performs `finish` on `main`.
   * Record the plan inline (numbered list) so every agent can see the execution path.
 * Step 3: Ask for approval.
   * Stop and wait for user input before executing steps.
 * Step 4: Execute.
   * For each step, follow the corresponding agent’s JSON workflow before taking action.
-  * Use `python scripts/agentctl.py` for all task operations (ready/start/block/task/verify/finish) so `tasks.json` stays checksum-valid, calling out any status flips in the user-facing summary.
+  * Use `python scripts/agentctl.py` for all task operations so `tasks.json` stays checksum-valid; in branching workflow, executors do not modify `tasks.json` and INTEGRATOR performs `integrate` + `finish` on `main`.
   * Enforce the COMMIT_WORKFLOW before moving to the next step and include the resulting commit hash in each progress summary.
   * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
   * Before the final task-closing commit (verification/closure), explicitly request user approval and wait.
