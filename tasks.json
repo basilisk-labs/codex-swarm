@@ -1850,7 +1850,7 @@
       "id": "T-079",
       "title": "Docs: remove remaining legacy prs/ mentions",
       "description": "Finish migration documentation cleanup.\n\nAcceptance:\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "low",
       "owner": "DOCS",
       "tags": [
@@ -1862,6 +1862,16 @@
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "6b04b9b75b7c783b4beb33fac5d6a2fc3a95ce36",
+        "message": "🧾 T-079 remove legacy prs path mentions"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-079/pr."
+        }
       ]
     }
   ],
@@ -1869,6 +1879,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "08009ec4eab292a8f52fb35d0529320242a76ed4181eb117c64000c0c9e45070"
+    "checksum": "fffebcc5a7f4f8c1b0299799a2bfc39c8f594ee791c988a7fca4fef48856593d"
   }
 }
