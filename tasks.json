@@ -1878,7 +1878,7 @@
       "id": "T-080",
       "title": "agentctl: integrate auto-updates PR diffstat + README auto-summary",
       "description": "Reduce manual PR bookkeeping by having `agentctl integrate` refresh the tracked PR artifacts on main.\n\nAcceptance:\n- During `python scripts/agentctl.py integrate T-123 ...` (workflow_mode=branch_pr), after merge it updates:\n  - `docs/workflow/T-123/pr/diffstat.txt` (recomputed for the task branch vs base), and\n  - `docs/workflow/T-123/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->` / `<!-- END AUTO SUMMARY -->`) using the changed files list.\n- No writes happen to the task branch; updates are only in the main checkout after merge.\n- Works with `--merge-strategy squash|merge|rebase`.\n- Update `.codex-swarm/agentctl.md` to state `integrate` refreshes these artifacts automatically.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "CODER",
       "tags": [
@@ -1892,6 +1892,16 @@
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "62171a9bb6b56469b6209f2d5b29f053096a1d6f",
+        "message": "🔧 T-080 fix auto-summary block selection"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-080/pr."
+        }
       ]
     }
   ],
@@ -1899,6 +1909,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "24447b07c6ceebcad70af259248c9e926e1fc54065a8723efcc49635fca74092"
+    "checksum": "3ced2e13a36d763db44a85e814b9fbf16f7c5a5bc0560abce85b0973c9317a37"
   }
 }
