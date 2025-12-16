@@ -1081,14 +1081,20 @@ def cmd_guard_suggest_allow(args: argparse.Namespace) -> None:
 
 
 def cmd_guard_commit(args: argparse.Namespace) -> None:
+    cwd = Path.cwd().resolve()
+    allow = list(args.allow or [])
+    if args.auto_allow and not allow:
+        allow = suggest_allow_prefixes(git_staged_files(cwd=cwd))
+        if not allow:
+            die("No staged files", code=2)
     guard_commit_check(
         task_id=args.task_id.strip(),
         message=args.message,
-        allow=list(args.allow or []),
+        allow=allow,
         allow_tasks=bool(args.allow_tasks),
         require_clean=bool(args.require_clean),
         quiet=bool(args.quiet),
-        cwd=Path.cwd().resolve(),
+        cwd=cwd,
     )
 
 
@@ -2585,6 +2591,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_guard_commit.add_argument("task_id", help="Active task id (must appear in --message)")
     p_guard_commit.add_argument("--message", "-m", required=True, help="Planned commit message")
     p_guard_commit.add_argument("--allow", action="append", help="Allowed path prefix (repeatable)")
+    p_guard_commit.add_argument(
+        "--auto-allow",
+        action="store_true",
+        help="Derive --allow prefixes from staged files (useful when you don't know the minimal allowlist yet)",
+    )
     p_guard_commit.add_argument("--allow-tasks", action="store_true", help="Allow staging tasks.json")
     p_guard_commit.add_argument("--allow-dirty", action="store_true", help="Deprecated (unstaged changes are allowed by default)")
     p_guard_commit.add_argument("--require-clean", action="store_true", help="Fail if there are unstaged changes")
