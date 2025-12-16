@@ -2473,20 +2473,17 @@ def cmd_integrate(args: argparse.Namespace) -> None:
         return
 
     try:
+        branch_head_sha = git_rev_parse(branch)
         verify_entries: List[Tuple[str, str]] = []
         if should_run_verify:
             if not worktree_path:
                 die("Unable to locate/create a worktree for verify execution", code=2)
-            verify_sha = git_rev_parse(branch)
-            meta_head = str(meta.get("head_sha") or "").strip()
-            if meta_head and meta_head != verify_sha and not args.quiet:
-                print(f"⚠️ {task_id}: PR meta head_sha differs from branch HEAD; run `python scripts/agentctl.py pr update {task_id}`")
             verify_entries = run_verify_with_capture(
                 task_id,
                 cwd=worktree_path,
                 quiet=bool(args.quiet),
                 log_path=None,
-                current_sha=verify_sha,
+                current_sha=branch_head_sha,
             )
 
         merge_hash = ""
@@ -2509,6 +2506,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             if proc.returncode != 0:
                 run(["git", "rebase", "--abort"], cwd=worktree_path, check=False)
                 die(proc.stderr.strip() or proc.stdout.strip() or "git rebase failed", code=2)
+            branch_head_sha = git_rev_parse(branch)
             run(["git", "merge", "--ff-only", branch], check=True)
             merge_hash = git_rev_parse("HEAD")
 
@@ -2542,12 +2540,13 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                 "status": "MERGED",
                 "merged_at": meta_main.get("merged_at") or now,
                 "merge_commit": merge_hash,
+                "head_sha": branch_head_sha,
                 "updated_at": now,
             }
         )
         if should_run_verify and verify_entries:
-            if verify_sha:
-                meta_main["last_verified_sha"] = verify_sha
+            if branch_head_sha:
+                meta_main["last_verified_sha"] = branch_head_sha
                 meta_main["last_verified_at"] = now
         pr_write_meta(meta_path, meta_main)
 
