@@ -1507,7 +1507,7 @@
       "id": "T-068",
       "title": "agentctl verify: log output + skip if unchanged",
       "description": "Add flags to python scripts/agentctl.py verify to reduce manual PR bookkeeping and redundant runs. Acceptance: (1) verify T-### --log PATH appends a timestamped entry per verify command with combined stdout+stderr; (2) --skip-if-unchanged skips when current SHA (prefer PR meta.json head_sha when log path is under docs/workflow/prs/T-###, else git rev-parse HEAD in --cwd) matches last recorded verified SHA; (3) after success, record last_verified_sha and last_verified_at in PR meta.json when available; (4) document the new flow in .codex-swarm/agentctl.md.",
-      "status": "TODO",
+      "status": "DOING",
       "priority": "med",
       "owner": "CODER",
       "tags": [
@@ -1518,6 +1518,12 @@
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: Implement agentctl verify --log + --skip-if-unchanged; update PR meta.json with last_verified_sha/at and refresh .codex-swarm/agentctl.md. Plan: implement flags, add smoke steps, ensure branch_pr behavior. Risks: PR meta may be missing; keep safe fallbacks."
+        }
       ]
     },
     {
@@ -1565,6 +1571,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7ef06e08fda38221d8e34925b6ec956e8e6ce2aa483bac03437948c4a0b6f61e"
+    "checksum": "0675d8d82f742257ed1920fa81d23a8a823c5e7af417014ef784eba23d37e2fb"
   }
 }
