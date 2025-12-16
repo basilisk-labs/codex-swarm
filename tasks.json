@@ -1519,12 +1519,32 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ]
+    },
+    {
+      "id": "T-069",
+      "title": "agentctl pr note: append handoff notes",
+      "description": "Add a convenience command to append correctly formatted bullets under the '## Handoff Notes' section in docs/workflow/prs/T-###/review.md. Acceptance: (1) python scripts/agentctl.py pr note T-### --author ROLE --body TEXT adds a '- ROLE: TEXT' entry under Handoff Notes; (2) preserves existing content and keeps formatting stable; (3) emits clear errors/fixes when the PR artifact is missing; (4) update .codex-swarm/agentctl.md with the new command.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "pipeline"
+      ],
+      "depends_on": [
+        "T-068"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9d4bd56b2f8ad20c2187d0d79a5c1386d61c9c58590b61e7ba2497c523728685"
+    "checksum": "a4c4f31d01c5b8fdcb6bae7f4090b80dc9a4d3d8bbea90031b6514f4d05d0087"
   }
 }
