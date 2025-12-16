@@ -2462,10 +2462,11 @@ def pr_check(
         legacy_rel = (legacy_pr_dir(task_id) / "description.md").relative_to(ROOT).as_posix()
         die(f"Missing PR doc: {readme_rel} (or legacy {legacy_rel})", code=2)
     missing_sections, empty_sections = pr_validate_description(pr_doc)
+    doc_hint = workflow_task_readme_path(task_id).relative_to(ROOT).as_posix()
     if missing_sections:
-        die(f"PR doc missing required section(s): {', '.join(missing_sections)}", code=2)
+        die(f"PR doc {doc_hint} missing required section(s): {', '.join(missing_sections)}", code=2)
     if empty_sections:
-        die(f"PR doc has empty section(s): {', '.join(empty_sections)}", code=2)
+        die(f"PR doc {doc_hint} has empty section(s): {', '.join(empty_sections)}", code=2)
 
     subjects = git_log_subjects(base_branch, pr_branch, limit=200)
     if not subjects:

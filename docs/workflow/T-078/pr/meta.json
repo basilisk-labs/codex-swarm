@@ -1,0 +1,12 @@
+{
+  "task_id": "T-078",
+  "task_title": "agentctl: pr check validates README completeness",
+  "branch": "task/T-078/pr-check-readme",
+  "base_branch": "main",
+  "author": "CODER",
+  "created_at": "2025-12-16T13:58:44+00:00",
+  "updated_at": "2025-12-16T13:59:26+00:00",
+  "head_sha": "1ceb952f8d457521b0050eade1f237787451b107",
+  "merge_strategy": "squash",
+  "status": "OPEN"
+}
