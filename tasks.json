@@ -1573,12 +1573,29 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ]
+    },
+    {
+      "id": "T-071",
+      "title": "Require explicit depends_on on task add",
+      "description": "Update the agent pipeline instructions so every task added to tasks.json includes an explicit depends_on list (use [] when there are no dependencies). Update AGENTS.md schema/docs and PLANNER workflow to require setting dependencies (and to ask for clarification when dependencies are unknown).",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "tags": [
+        "workflow",
+        "tasks",
+        "dependencies"
+      ],
+      "verify": [
+        "python scripts/agentctl.py agents",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "1a20e6def540709a673f5810fd1a7744762bd32c94cb8b524dee9d96208e7544"
+    "checksum": "639a0780b169aea7c0af91455998578610ad12def1f5a49d4379a7a246e1974f"
   }
 }
