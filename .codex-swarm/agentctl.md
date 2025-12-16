@@ -57,6 +57,10 @@ python scripts/agentctl.py pr note T-123 --author CODER --body "Handoff: ..."
 # includes: pr check → verify (if configured/--run-verify) → merge → finish → task lint
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --dry-run
+
+# cleanup merged branches/worktrees (dry-run by default)
+python scripts/agentctl.py cleanup merged
+python scripts/agentctl.py cleanup merged --yes
 ```
 
 ## Ergonomics helpers

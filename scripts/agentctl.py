@@ -1950,6 +1950,71 @@ def cmd_work_start(args: argparse.Namespace) -> None:
         )
 
 
+def git_list_task_branches(*, cwd: Path = ROOT) -> List[str]:
+    try:
+        result = run(["git", "for-each-ref", "--format=%(refname:short)", "refs/heads/task"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to list task branches")
+    return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
+
+
+def cmd_cleanup_merged(args: argparse.Namespace) -> None:
+    require_not_task_worktree(action="cleanup merged")
+    ensure_invoked_from_repo_root(action="cleanup merged")
+    require_branch(DEFAULT_MAIN_BRANCH, action="cleanup merged")
+    ensure_git_clean(action="cleanup merged")
+
+    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    if not git_branch_exists(base):
+        die(f"Unknown base branch: {base}", code=2)
+
+    tasks = load_tasks()
+    tasks_by_id, _ = index_tasks_by_id(tasks)
+
+    candidates: List[Dict[str, str]] = []
+    for branch in git_list_task_branches(cwd=ROOT):
+        task_id = parse_task_id_from_task_branch(branch)
+        if not task_id:
+            continue
+        task = tasks_by_id.get(task_id) or {}
+        if str(task.get("status") or "").strip().upper() != "DONE":
+            continue
+        if git_diff_names(base, branch):
+            continue
+        worktree_path = detect_worktree_path_for_branch(branch, cwd=ROOT) or ""
+        candidates.append({"task_id": task_id, "branch": branch, "worktree": worktree_path})
+
+    print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+    print_block("ACTION", f"Cleanup merged task branches/worktrees (base={base})")
+
+    if not candidates:
+        print_block("RESULT", "no candidates")
+        return
+
+    lines = []
+    for item in candidates:
+        wt = item["worktree"] or "-"
+        lines.append(f"- {item['task_id']}: branch={item['branch']} worktree={wt}")
+    print_block("RESULT", "\n".join(lines))
+
+    if not getattr(args, "yes", False):
+        print_block("NEXT", "Re-run with `--yes` to delete these branches/worktrees.")
+        return
+
+    for item in candidates:
+        wt = item["worktree"]
+        cmd_branch_remove(
+            argparse.Namespace(
+                branch=item["branch"],
+                worktree=wt or None,
+                force=True,
+                quiet=bool(args.quiet),
+            )
+        )
+    if not args.quiet:
+        print_block("RESULT", f"deleted={len(candidates)}")
+
+
 def workflow_task_dir(task_id: str) -> Path:
     return WORKFLOW_DIR / task_id
 
@@ -2758,6 +2823,15 @@ def build_parser() -> argparse.ArgumentParser:
     p_work_start.add_argument("--overwrite", action="store_true", help="Overwrite docs/workflow/T-###/README.md when scaffolding")
     p_work_start.add_argument("--quiet", action="store_true", help="Minimal output")
     p_work_start.set_defaults(func=cmd_work_start)
+
+    p_cleanup = sub.add_parser("cleanup", help="Cleanup helpers (dry-run by default)")
+    cleanup_sub = p_cleanup.add_subparsers(dest="cleanup_cmd", required=True)
+
+    p_cleanup_merged = cleanup_sub.add_parser("merged", help="Remove merged task branches and their worktrees")
+    p_cleanup_merged.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_cleanup_merged.add_argument("--yes", action="store_true", help="Actually delete; without this flag, prints a dry-run plan")
+    p_cleanup_merged.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_cleanup_merged.set_defaults(func=cmd_cleanup_merged)
 
     p_branch = sub.add_parser("branch", help="Task branch + worktree helpers (single task per branch)")
     branch_sub = p_branch.add_subparsers(dest="branch_cmd", required=True)
