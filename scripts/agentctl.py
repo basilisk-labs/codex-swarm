@@ -2683,11 +2683,25 @@ def cmd_integrate(args: argparse.Namespace) -> None:
     base_sha_before_merge = git_rev_parse(base)
 
     verify_commands = get_task_verify_commands_for(task_id)
-    should_run_verify = bool(args.run_verify) or bool(verify_commands)
+    branch_head_sha = git_rev_parse(branch)
+    already_verified_sha: Optional[str] = None
+    if verify_commands and not args.run_verify:
+        meta_verified = str(meta.get("last_verified_sha") or "").strip()
+        if meta_verified and meta_verified == branch_head_sha:
+            already_verified_sha = branch_head_sha
+        else:
+            log_text = pr_try_read_file_text(task_id, "verify.log", branch=branch)
+            if log_text:
+                log_verified = extract_last_verified_sha_from_log(log_text)
+                if log_verified and log_verified == branch_head_sha:
+                    already_verified_sha = branch_head_sha
+    should_run_verify = bool(args.run_verify) or (bool(verify_commands) and not already_verified_sha)
 
     worktree_path = detect_worktree_path_for_branch(branch, cwd=ROOT)
     created_temp = False
     temp_path = WORKTREES_DIR / f"_integrate_tmp_{task_id}"
+    if strategy == "rebase" and not worktree_path:
+        die("Rebase strategy requires an existing worktree for the task branch", code=2)
     if should_run_verify and not worktree_path:
         if args.dry_run:
             print_block("RESULT", f"verify_worktree=(would create {temp_path})")
@@ -2706,26 +2720,28 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             worktree_path = temp_path
 
     if args.dry_run:
-        print_block("RESULT", f"pr_check=OK base={base} branch={branch} verify={'yes' if should_run_verify else 'no'}")
+        verify_label = "yes" if should_run_verify else "no"
+        if verify_commands and not should_run_verify and already_verified_sha:
+            verify_label = f"no (already verified_sha={already_verified_sha})"
+        print_block("RESULT", f"pr_check=OK base={base} branch={branch} verify={verify_label}")
         print_block("NEXT", "Re-run without --dry-run to perform merge+finish.")
         return
 
     try:
-        branch_head_sha = git_rev_parse(branch)
         verify_entries: List[Tuple[str, str]] = []
-        if should_run_verify:
-            if not worktree_path:
-                die("Unable to locate/create a worktree for verify execution", code=2)
-            verify_entries = run_verify_with_capture(
-                task_id,
-                cwd=worktree_path,
-                quiet=bool(args.quiet),
-                log_path=None,
-                current_sha=branch_head_sha,
-            )
 
         merge_hash = ""
         if strategy == "squash":
+            if should_run_verify:
+                if not worktree_path:
+                    die("Unable to locate/create a worktree for verify execution", code=2)
+                verify_entries = run_verify_with_capture(
+                    task_id,
+                    cwd=worktree_path,
+                    quiet=bool(args.quiet),
+                    log_path=None,
+                    current_sha=branch_head_sha,
+                )
             run(["git", "merge", "--squash", branch], check=True)
             subject = run(["git", "log", "-1", "--pretty=format:%s", branch], cwd=ROOT, check=True).stdout.strip()
             if not subject or task_id not in subject:
@@ -2733,22 +2749,56 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             run(["git", "commit", "-m", subject], check=True)
             merge_hash = git_rev_parse("HEAD")
         elif strategy == "merge":
+            if should_run_verify:
+                if not worktree_path:
+                    die("Unable to locate/create a worktree for verify execution", code=2)
+                verify_entries = run_verify_with_capture(
+                    task_id,
+                    cwd=worktree_path,
+                    quiet=bool(args.quiet),
+                    log_path=None,
+                    current_sha=branch_head_sha,
+                )
             run(["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"], check=True)
             merge_hash = git_rev_parse("HEAD")
         else:
-            if not worktree_path:
-                worktree_path = detect_worktree_path_for_branch(branch, cwd=ROOT)
-            if not worktree_path:
-                die("Rebase strategy requires an existing worktree for the task branch", code=2)
             proc = run(["git", "rebase", base], cwd=worktree_path, check=False)
             if proc.returncode != 0:
                 run(["git", "rebase", "--abort"], cwd=worktree_path, check=False)
                 die(proc.stderr.strip() or proc.stdout.strip() or "git rebase failed", code=2)
             branch_head_sha = git_rev_parse(branch)
+            if verify_commands and not args.run_verify:
+                already_verified_sha = None
+                meta_verified = str(meta.get("last_verified_sha") or "").strip()
+                if meta_verified and meta_verified == branch_head_sha:
+                    already_verified_sha = branch_head_sha
+                else:
+                    log_text = pr_try_read_file_text(task_id, "verify.log", branch=branch)
+                    if log_text:
+                        log_verified = extract_last_verified_sha_from_log(log_text)
+                        if log_verified and log_verified == branch_head_sha:
+                            already_verified_sha = branch_head_sha
+                should_run_verify = bool(verify_commands) and not already_verified_sha
+            if should_run_verify:
+                verify_entries = run_verify_with_capture(
+                    task_id,
+                    cwd=worktree_path,
+                    quiet=bool(args.quiet),
+                    log_path=None,
+                    current_sha=branch_head_sha,
+                )
             run(["git", "merge", "--ff-only", branch], check=True)
             merge_hash = git_rev_parse("HEAD")
 
-        finish_body = f"Verified: Integrated via {strategy}; verify={'ran' if should_run_verify else 'skipped'}; pr={pr_path.relative_to(ROOT)}."
+        if not verify_commands:
+            verify_desc = "skipped(no commands)"
+        elif should_run_verify:
+            verify_desc = "ran"
+        elif already_verified_sha:
+            verify_desc = f"skipped(already verified_sha={already_verified_sha})"
+        else:
+            verify_desc = "skipped"
+        finish_body = f"Verified: Integrated via {strategy}; verify={verify_desc}; pr={pr_path.relative_to(ROOT)}."
         cmd_finish(
             argparse.Namespace(
                 task_id=task_id,

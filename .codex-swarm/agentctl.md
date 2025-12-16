@@ -54,7 +54,7 @@ python scripts/agentctl.py pr check T-123
 python scripts/agentctl.py pr note T-123 --author CODER --body "Handoff: ..."
 
 # integrate into main (INTEGRATOR only; run from repo root on main)
-# includes: pr check → verify (if configured/--run-verify) → merge → refresh diffstat/README auto-summary → finish → task lint
+# includes: pr check → verify (skips if already verified for the same SHA unless --run-verify) → merge → refresh diffstat/README auto-summary → finish → task lint
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --dry-run
 

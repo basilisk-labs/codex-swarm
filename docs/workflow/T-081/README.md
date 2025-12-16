@@ -30,5 +30,10 @@
 ## Changes Summary (auto)
 
 <!-- BEGIN AUTO SUMMARY -->
-- (no file changes)
+- `.codex-swarm/agentctl.md`
+- `docs/workflow/T-081/pr/diffstat.txt`
+- `docs/workflow/T-081/pr/meta.json`
+- `docs/workflow/T-081/pr/review.md`
+- `docs/workflow/T-081/pr/verify.log`
+- `scripts/agentctl.py`
 <!-- END AUTO SUMMARY -->

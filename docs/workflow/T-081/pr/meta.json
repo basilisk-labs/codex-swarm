@@ -1,0 +1,14 @@
+{
+  "task_id": "T-081",
+  "task_title": "agentctl integrate: skip verify if already verified",
+  "branch": "task/T-081/integrate-skip-verified",
+  "base_branch": "main",
+  "author": "CODER",
+  "created_at": "2025-12-16T14:38:36+00:00",
+  "updated_at": "2025-12-16T14:49:05+00:00",
+  "head_sha": "d05965fe58a86d85fd72eedf4659f3edcd0fbd93",
+  "merge_strategy": "squash",
+  "status": "OPEN",
+  "last_verified_sha": "d05965fe58a86d85fd72eedf4659f3edcd0fbd93",
+  "last_verified_at": "2025-12-16T14:49:05+00:00"
+}
