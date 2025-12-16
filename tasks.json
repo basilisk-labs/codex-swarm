@@ -1449,7 +1449,7 @@
       "id": "T-066",
       "title": "Branch workflow: task branches + worktrees + local PR artifacts",
       "description": "Introduce a branching workflow to enable parallel agent work without tasks.json conflicts: task branch per T-###, required git worktree under .codex-swarm/worktrees, PR-like artifacts under docs/workflow/prs, and an INTEGRATOR role responsible for merge + finish on main.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "tags": [
@@ -1460,6 +1460,16 @@
       "verify": [
         "python scripts/agentctl.py task lint",
         "python -m compileall scripts/agentctl.py"
+      ],
+      "commit": {
+        "hash": "9fd7273c23ae3490637588e158ff485627d93e4a",
+        "message": "🧩 T-066 add task-branch + worktree workflow"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Ran python scripts/agentctl.py task lint; python -m compileall scripts/agentctl.py; checked agentctl branch/pr/integrate help output."
+        }
       ]
     }
   ],
@@ -1467,6 +1477,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9fc7b811c933a31d03b601e8d9e63654aa918240056a17926182f719b3a5b9b2"
+    "checksum": "7e71f4b6ab9b5133e8263319863c94a153e89db22f39e97b29a80632f15b173e"
   }
 }
