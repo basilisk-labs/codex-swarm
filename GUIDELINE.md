@@ -46,20 +46,22 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 3. **Specialist agents execute.** Work follows the JSON workflows:
    - *CODER* handles implementation, edits the relevant files, runs any commands (tests, linters), and documents the key command outputs.
    - *DOCS* updates documentation files (README, GUIDELINE.md, etc.) and ties each change back to the task ID.
-   - *REVIEWER* inspects diffs, reruns commands if needed, runs `python scripts/agentctl.py verify T-123` when configured, and marks the task `DONE` via `python scripts/agentctl.py finish T-123` (which runs lint + optional verify gates).
+   - *REVIEWER* reviews diffs and PR artifacts, and leaves short handoff notes in `docs/workflow/prs/T-123/review.md` under `## Handoff Notes`.
+   - *INTEGRATOR* is the only closer in `workflow_mode=branch_pr`: runs `pr check`, optionally `verify`, merges to `main`, then closes via `finish` (updates `tasks.json`).
 4. **Committing.** Each task must end with a dedicated commit:
-   - Stage the relevant files and run `git commit -m "<emoji> T-<id> <short summary>"`.
+   - In `workflow_mode=branch_pr`, the implementation commit happens on the task branch (`task/T-123/<slug>`), and the closure commit happens on `main` (INTEGRATOR only).
+   - Stage the relevant files and run `git commit -m "<emoji> T-<id> <short summary>"` (or use `python scripts/agentctl.py commit ...`).
    - Example: `git commit -m "📝 T-041 write framework guideline"`.
    - Mention the finished task ID and keep the message concise.
    - Before committing, validate the staged allowlist and message quality with `python scripts/agentctl.py guard commit T-123 -m "…" --allow <path>`.
-   - After the work commit, `finish` updates `tasks.json` (DONE + commit metadata), which should be committed as a small follow-up commit that also mentions the task ID.
+   - In `branch_pr`, `finish` updates `tasks.json` (DONE + commit metadata + handoff notes), which must be committed on `main` with `--allow-tasks`.
 5. **Final verification.** After the commit, `git status --short` must be clean. The agent who performed the task provides a summary referencing the files edited, commands run, and the new commit hash so the Orchestrator can track progress.
 6. **Status sync.** Use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to confirm the latest state (there is no separate status board file).
 
 ## 6. Common commands and expectations
 
 - `.codex-swarm/agentctl.md`: Quick reference for the supported `agentctl` commands.
-- `docs/architecture.md`: Background on how the swarm fits together (concepts + diagrams).
+- `docs/architecture.md`: Pointer to the architecture/workflow section in `README.md` (concepts + Mermaid diagrams).
 - `python scripts/agentctl.py agents`: List registered agents under `.codex-swarm/agents/`.
 - `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123`: Inspect the backlog.
 - `python scripts/agentctl.py task add/update/comment/set-status`: Modify tasks without breaking the checksum.
@@ -84,7 +86,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 2. **PLANNER gates the backlog.** Once you approve, PLANNER adds/updates tasks via `python scripts/agentctl.py task add/update`, then runs `python scripts/agentctl.py task lint`.
 3. **Specialists deliver the work.** CODER or DOCS run `python scripts/agentctl.py ready T-123`, start via `python scripts/agentctl.py start T-123 --author CODER --body "Start: …"`, then edit files and capture command output (tests, linters, scripts).
 4. **Commit per task.** Stage the edited files, run `python scripts/agentctl.py guard commit T-123 -m "…" --allow <path>`, then commit with `git commit -m "<emoji> T-<id> <short summary>"`.
-5. **Finish + cleanup.** REVIEWER runs verification (or lets `finish` run it), then marks DONE via `python scripts/agentctl.py finish T-123 --author REVIEWER --body "Verified: …"`, commits the resulting `tasks.json` change, and confirms the tree is clean.
+5. **Finish + cleanup (branch_pr).** INTEGRATOR (on clean `main`) runs `python scripts/agentctl.py pr check T-123`, then `python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --run-verify`, and commits the resulting `tasks.json` change (plus docs updates) as the closure commit.
 
 ## 9. Troubleshooting & best practices
 

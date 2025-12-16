@@ -148,7 +148,7 @@ Schema (JSON):
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
 - `description` explains the business value or acceptance criteria.
 - `depends_on` (optional) lists parent task IDs that must be `DONE` before starting this task.
-- `verify` (optional) is a list of local shell commands the REVIEWER must run (or allow `finish` to run automatically) before marking `DONE`.
+- `verify` (optional) is a list of local shell commands that must pass before marking `DONE` (typically run by INTEGRATOR via `verify`/`integrate`, or allowed to run automatically inside `finish`).
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
 - `commit` is required when a task is `DONE`.
 - `meta` is maintained by `agentctl`; manual edits to `tasks.json` will break the checksum and fail `agentctl task lint`.

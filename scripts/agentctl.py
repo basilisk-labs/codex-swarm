@@ -1513,6 +1513,16 @@ def cmd_finish(args: argparse.Namespace) -> None:
                     pr_meta["handoff_applied_digest"] = digest
                     pr_meta["handoff_applied_at"] = now_iso_utc()
                     pr_write_meta(pr_path / "meta.json", pr_meta)
+        now = now_iso_utc()
+        pr_meta.setdefault("merged_at", now)
+        pr_meta.setdefault("merge_commit", commit_info.get("hash"))
+        pr_meta.setdefault("closed_at", now)
+        pr_meta["close_commit"] = commit_info.get("hash")
+        pr_meta["status"] = pr_meta.get("status") or "CLOSED"
+        if str(pr_meta.get("status")).strip().upper() != "CLOSED":
+            pr_meta["status"] = "CLOSED"
+        pr_meta["updated_at"] = now
+        pr_write_meta(pr_path / "meta.json", pr_meta)
 
     if args.author and args.body:
         comments = target.get("comments")

@@ -21,7 +21,7 @@ Prerequisites:
 
 2. Start with the ORCHESTRATOR:
    - Describe a goal (e.g. “Add a new agent that keeps CHANGELOG.md in sync”).
-   - The ORCHESTRATOR will propose a plan, map steps to agents (PLANNER/CODER/TESTER/DOCS/REVIEWER), and ask for approval.
+   - The ORCHESTRATOR will propose a plan, map steps to agents (PLANNER/CODER/TESTER/DOCS/REVIEWER/INTEGRATOR), and ask for approval.
 
 3. Task tracking:
    - `tasks.json` is the single source of truth.
@@ -34,11 +34,11 @@ Prerequisites:
 ## Example: auto-doc for a tiny refactor
 
 1. User: “Refactor utils/date.ts and update the README accordingly.”
-2. ORCHESTRATOR: proposes a 2-step plan (PLANNER creates tasks; CODER implements and commits).
-3. PLANNER: creates T-041 (refactor) and T-042 (docs) and sets them to DOING.
-4. CODER: edits `utils/date.ts`, updates `README.md`, runs any checks, and commits with an emoji message like “🔧 T-041 refactor date utils”.
-5. REVIEWER: verifies the diff, adds a short review comment, and marks T-041 done.
-6. DOCS (optional): updates docs for T-042 and marks it done.
+2. ORCHESTRATOR: proposes a 2-step plan (PLANNER creates tasks; CODER implements on a task branch).
+3. PLANNER: creates T-041 (refactor) and T-042 (docs) and scaffolds `docs/workflow/T-041.md`.
+4. CODER: creates `task/T-041/<slug>` + `.codex-swarm/worktrees/T-041-<slug>/`, implements the change, and opens/updates `docs/workflow/prs/T-041/`.
+5. REVIEWER: reviews the PR artifact and leaves handoff notes in `docs/workflow/prs/T-041/review.md`.
+6. INTEGRATOR: runs `pr check`, merges to `main`, then closes via `finish` (updates `tasks.json`).
 
 ## ✨ Highlights
 
@@ -139,27 +139,25 @@ This section expands on the concepts referenced above and shows how the swarm fi
 
 ### Default agent flow (Mermaid)
 
-The typical development workflow is: plan the task, implement it, add test coverage, document the outcome, then verify + close.
+In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main`, implement in a task branch + worktree, capture a tracked PR artifact, then INTEGRATOR verifies + merges + closes on `main`.
 
 ```mermaid
 flowchart TD
   U[User] --> O[ORCHESTRATOR]
 
-  O -->|Backlog + task breakdown| P[PLANNER]
-  P --> TJ["tasks.json"]
-  P -->|Planning artifact| D0[DOCS]
-  D0 --> A0["docs/workflow/T-123.md"]
+  O -->|Backlog + task breakdown| P[PLANNER (main)]
+  P --> TJ["tasks.json (main only)"]
+  P -->|Planning artifact| WF["docs/workflow/T-123.md"]
 
-  O -->|Implementation| C[CODER]
-  C -->|Test coverage handoff| T[TESTER]
-  T -->|Tests/coverage suggestions| C
-  C --> WC["Work commit: implementation + tests"]
+  O -->|Task branch + worktree| E["CODER/TESTER/DOCS\n(task/T-123/<slug> in .codex-swarm/worktrees/)"]
+  E -->|Work commits| B["task/T-123/<slug> commits"]
+  E --> PR["docs/workflow/prs/T-123/* (tracked PR artifact)"]
 
-  O -->|Pre-finish documentation| D1[DOCS]
-  D1 -->|Update artifact| A1["docs/workflow/T-123.md"]
+  O -->|Review| R[REVIEWER]
+  R -->|Handoff notes| PR
 
-  O -->|Verification + closure| R[REVIEWER]
-  R -->|agentctl verify/finish| DONE["Task marked DONE (tasks.json)"]
+  O -->|Verify + merge + close| I[INTEGRATOR (main)]
+  I -->|pr check / verify / merge / finish| DONE["Task marked DONE (tasks.json)"]
 ```
 
 ### Detailed agent sequence (Mermaid)
@@ -174,9 +172,11 @@ sequenceDiagram
   participant T as TESTER
   participant D as DOCS
   participant R as REVIEWER
+  participant I as INTEGRATOR
   participant A as "scripts/agentctl.py"
   participant TJ as "tasks.json"
   participant WF as "docs/workflow/T-123.md"
+  participant PR as "docs/workflow/prs/T-123/"
   participant CR as CREATOR
   participant UP as UPDATER
 
@@ -191,25 +191,29 @@ sequenceDiagram
   O-->>U: Plan + request Approval (Approve / Edit / Cancel)
 
   alt Approve plan
-    O->>C: Implement T-123 (code/config) + prepare work commit
-    C->>A: (optional) ready/start T-123 / check deps
+    O->>C: Implement T-123 in task branch + worktree
+    C->>A: branch create T-123 --slug <slug> --worktree
     C->>A: guard commit T-123 -m "..." --allow PATHS
-    C-->>O: Work commit ready (hash + message)
+    C->>A: pr open/update T-123 (tracked local PR artifact)
+    C->>PR: Update description/diffstat/verify.log as needed
 
     opt Testing handoff (when appropriate)
       O->>T: Add/extend tests for affected behavior
       T-->>C: Patches/suggestions for coverage
       C->>A: guard commit T-123 -m "..." --allow PATHS
-      C-->>O: Test commit (hash + message)
+      C->>A: pr update T-123
     end
 
     O->>D: Pre-finish docs update for T-123
     D->>WF: Append: what changed, how to verify, links to commits
 
-    O->>R: Verification + closure
-    R->>A: verify T-123 (commands from verify / local checks)
-    R->>A: finish T-123 (mark DONE + store commit ref)
-    A->>TJ: Set DONE, persist commit hash/message
+    O->>R: Review task PR artifact
+    R->>PR: Leave handoff notes in review.md
+
+    O->>I: Verify + merge + close (main only)
+    I->>A: pr check T-123
+    I->>A: integrate T-123 (verify → merge → finish → task lint)
+    A->>TJ: Set DONE, persist commit hash/message (+ append handoff notes)
 
     O-->>U: Summary + commit link(s)
   else Edit plan
