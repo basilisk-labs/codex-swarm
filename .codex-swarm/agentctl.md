@@ -47,6 +47,7 @@ python scripts/agentctl.py branch status --branch task/T-123/<slug> --base main
 python scripts/agentctl.py pr open T-123 --branch task/T-123/<slug> --author CODER
 python scripts/agentctl.py pr update T-123
 python scripts/agentctl.py pr check T-123
+python scripts/agentctl.py pr note T-123 --author CODER --body "Handoff: ..."
 
 # integrate into main (INTEGRATOR only; run from repo root on main)
 # includes: pr check → verify (if configured/--run-verify) → merge → finish → task lint

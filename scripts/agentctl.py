@@ -2268,6 +2268,78 @@ def cmd_pr_check(args: argparse.Namespace) -> None:
     pr_check(task_id, branch=args.branch, base=args.base, quiet=bool(args.quiet))
 
 
+def append_pr_handoff_note(review_path: Path, *, author: str, body: str) -> None:
+    author_clean = (author or "").strip()
+    body_clean = (body or "").strip()
+    if not author_clean:
+        die("--author must be non-empty", code=2)
+    if not body_clean:
+        die("--body must be non-empty", code=2)
+
+    note_line = f"- {author_clean}: {body_clean}"
+    text = review_path.read_text(encoding="utf-8", errors="replace")
+    lines = text.splitlines()
+
+    header = "## Handoff Notes"
+    try:
+        header_idx = next(i for i, line in enumerate(lines) if line.strip() == header)
+    except StopIteration:
+        die(f"Missing section {header!r} in {review_path.relative_to(ROOT)}", code=2)
+
+    next_header_idx = None
+    for idx in range(header_idx + 1, len(lines)):
+        if lines[idx].strip().startswith("## "):
+            next_header_idx = idx
+            break
+    section_end = next_header_idx if next_header_idx is not None else len(lines)
+
+    if note_line in [ln.rstrip() for ln in lines[header_idx + 1 : section_end]]:
+        return
+
+    insert_at = section_end
+    while insert_at > header_idx + 1 and not lines[insert_at - 1].strip():
+        insert_at -= 1
+
+    new_lines = list(lines)
+    new_lines.insert(insert_at, note_line)
+    review_path.write_text("\n".join(new_lines).rstrip() + "\n", encoding="utf-8")
+
+
+def cmd_pr_note(args: argparse.Namespace) -> None:
+    task_id = args.task_id.strip()
+    if not task_id:
+        die("task_id must be non-empty", code=2)
+    author = (args.author or "").strip()
+    body = (args.body or "").strip()
+    if not author:
+        die("--author is required (e.g., --author CODER)", code=2)
+    if not body:
+        die("--body is required", code=2)
+
+    target = pr_dir(task_id)
+    review_path = target / "review.md"
+    if not review_path.exists():
+        die(
+            "\n".join(
+                [
+                    f"Missing PR artifact file: {review_path.relative_to(ROOT)}",
+                    "Fix:",
+                    f"  1) Run `python scripts/agentctl.py pr open {task_id} --author {author} --branch task/{task_id}/<slug>`",
+                    "  2) Commit the PR artifact files on the task branch",
+                    f"  3) Re-run `python scripts/agentctl.py pr note {task_id} --author {author} --body \"...\"`",
+                    f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+                ]
+            ),
+            code=2,
+        )
+
+    append_pr_handoff_note(review_path, author=author, body=body)
+    if not args.quiet:
+        print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+        print_block("ACTION", f"Append handoff note for {task_id}")
+        print_block("RESULT", f"path={review_path.relative_to(ROOT)} author={author}")
+
+
 def get_task_verify_commands_for(task_id: str) -> List[str]:
     data = load_json(TASKS_PATH)
     task = _ensure_task_object(data, task_id)
@@ -2565,6 +2637,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr_check.add_argument("--base", help="Override base branch (default: from meta.json)")
     p_pr_check.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_check.set_defaults(func=cmd_pr_check)
+
+    p_pr_note = pr_sub.add_parser("note", help="Append a handoff note bullet to docs/workflow/prs/T-###/review.md")
+    p_pr_note.add_argument("task_id")
+    p_pr_note.add_argument("--author", required=True, help="Note author/role (e.g., CODER)")
+    p_pr_note.add_argument("--body", required=True, help="Note body text")
+    p_pr_note.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_pr_note.set_defaults(func=cmd_pr_note)
 
     p_integrate = sub.add_parser("integrate", help="Merge a task branch into main (gated by PR artifact + verify)")
     p_integrate.add_argument("task_id")

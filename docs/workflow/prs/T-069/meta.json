@@ -1,0 +1,12 @@
+{
+  "task_id": "T-069",
+  "task_title": "agentctl pr note: append handoff notes",
+  "branch": "task/T-069/pr-note",
+  "base_branch": "main",
+  "author": "CODER",
+  "created_at": "2025-12-16T12:23:39+00:00",
+  "updated_at": "2025-12-16T12:27:46+00:00",
+  "head_sha": "6e48da064904ca1fd63a865130e8a5fe5735bbf8",
+  "merge_strategy": "squash",
+  "status": "OPEN"
+}
