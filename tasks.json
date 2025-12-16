@@ -1820,7 +1820,7 @@
       "id": "T-078",
       "title": "agentctl: pr check validates README completeness",
       "description": "Reduce review ping-pong by making `pr check` fail fast on placeholder docs.\n\nAcceptance:\n- `python scripts/agentctl.py pr check T-123` validates `docs/workflow/T-123/README.md` exists and required sections are present and non-placeholder.\n- Error message points to missing/empty section names.\n- Supports legacy `docs/workflow/prs/T-123/description.md` during migration.\n- Update `.codex-swarm/agentctl.md` to reflect the README-based PR doc.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "tags": [
@@ -1834,6 +1834,16 @@
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "1d665885edb4a478f1e627e75e0cceb8d34b569e",
+        "message": "🧾 T-078 pr check points to README"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-078/pr."
+        }
       ]
     },
     {
@@ -1859,6 +1869,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "87f361161720051ca6678ff1f7c174840fd09dfe8f8ed25ff490bec04e11cb37"
+    "checksum": "08009ec4eab292a8f52fb35d0529320242a76ed4181eb117c64000c0c9e45070"
   }
 }
