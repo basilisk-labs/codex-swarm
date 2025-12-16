@@ -20,7 +20,7 @@ python scripts/agentctl.py start T-123 --author CODER --body "Start: ... (why, s
 python scripts/agentctl.py block T-123 --author CODER --body "Blocked: ... (what blocks, next step, owner)"
 
 # run per-task verify commands (declared on the task)
-python scripts/agentctl.py verify T-123
+python scripts/agentctl.py verify T-123 --log docs/workflow/prs/T-123/verify.log --skip-if-unchanged
 
 # before committing, validate staged allowlist + message quality
 python scripts/agentctl.py guard commit T-123 -m "✨ T-123 Short meaningful summary" --allow <path-prefix>

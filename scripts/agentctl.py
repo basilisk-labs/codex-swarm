@@ -753,6 +753,7 @@ def path_is_under(path: str, prefix: str) -> bool:
 
 
 _TASK_BRANCH_RE = re.compile(r"^task/(T-[0-9]{3,})/[^/]+$")
+_VERIFIED_SHA_RE = re.compile(r"verified_sha=([0-9a-f]{7,40})", re.IGNORECASE)
 
 
 def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
@@ -761,6 +762,14 @@ def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
     if not match:
         return None
     return match.group(1)
+
+
+def extract_last_verified_sha_from_log(text: str) -> Optional[str]:
+    for raw_line in reversed((text or "").splitlines()):
+        match = _VERIFIED_SHA_RE.search(raw_line)
+        if match:
+            return match.group(1)
+    return None
 
 
 def guard_commit_check(
@@ -1324,39 +1333,71 @@ def cmd_task_scrub(args: argparse.Namespace) -> None:
         print(f"Updated {len(set(changed_task_ids))} task(s).")
 
 
-def run_verify_commands(task_id: str, commands: List[str], *, cwd: Path, quiet: bool) -> None:
-    for command in commands:
-        if not quiet:
-            print(f"$ {command}")
-        result = subprocess.run(command, cwd=str(cwd), shell=True, text=True)
-        if result.returncode != 0:
-            raise SystemExit(result.returncode)
-    if not quiet:
-        print(f"✅ verify passed for {task_id}")
-
-
 def cmd_verify(args: argparse.Namespace) -> None:
-    data = load_json(TASKS_PATH)
-    task = _ensure_task_object(data, args.task_id)
-    verify = task.get("verify")
-    if verify is None:
-        commands: List[str] = []
-    elif isinstance(verify, list):
-        commands = [cmd.strip() for cmd in verify if isinstance(cmd, str) and cmd.strip()]
-    else:
-        die(f"{args.task_id}: verify must be a list of strings", code=2)
+    task_id = args.task_id.strip()
+    commands = get_task_verify_commands_for(task_id)
 
     if not commands:
         if args.require:
-            die(f"{args.task_id}: no verify commands configured", code=2)
+            die(f"{task_id}: no verify commands configured", code=2)
         if not args.quiet:
-            print(f"ℹ️ {args.task_id}: no verify commands configured")
+            print(f"ℹ️ {task_id}: no verify commands configured")
         return
 
     cwd = Path(args.cwd).resolve() if args.cwd else ROOT
     if ROOT.resolve() not in cwd.parents and cwd.resolve() != ROOT.resolve():
         die(f"--cwd must stay under repo root: {cwd}", code=2)
-    run_verify_commands(args.task_id, commands, cwd=cwd, quiet=args.quiet)
+
+    log_path: Optional[Path] = None
+    if getattr(args, "log", None):
+        log_path = Path(str(args.log)).resolve()
+        if ROOT.resolve() not in log_path.parents and log_path.resolve() != ROOT.resolve():
+            die(f"--log must stay under repo root: {log_path}", code=2)
+
+    pr_meta_path = pr_dir(task_id) / "meta.json"
+    pr_meta: Optional[Dict] = pr_load_meta(pr_meta_path) if pr_meta_path.exists() else None
+
+    head_sha = git_rev_parse("HEAD", cwd=cwd)
+    current_sha = head_sha
+    if log_path and pr_meta:
+        pr_root = pr_dir(task_id).resolve()
+        if pr_root in log_path.resolve().parents:
+            meta_head = str(pr_meta.get("head_sha") or "").strip()
+            if meta_head:
+                current_sha = meta_head
+                if meta_head != head_sha and not args.quiet:
+                    print(
+                        f"⚠️ {task_id}: PR meta head_sha differs from HEAD; run `python scripts/agentctl.py pr update {task_id}` if needed"
+                    )
+
+    if getattr(args, "skip_if_unchanged", False):
+        if git_status_porcelain(cwd=cwd):
+            if not args.quiet:
+                print(f"⚠️ {task_id}: working tree is dirty; ignoring --skip-if-unchanged")
+        else:
+            last_verified_sha: Optional[str] = None
+            if pr_meta:
+                last_verified_sha = str(pr_meta.get("last_verified_sha") or "").strip() or None
+            if not last_verified_sha and log_path and log_path.exists():
+                last_verified_sha = extract_last_verified_sha_from_log(
+                    log_path.read_text(encoding="utf-8", errors="replace")
+                )
+            if last_verified_sha and last_verified_sha == current_sha:
+                timestamp = now_iso_utc()
+                header = f"[{timestamp}] ℹ️ skipped (unchanged verified_sha={current_sha})"
+                if log_path:
+                    append_verify_log(log_path, header=header, content="")
+                if not args.quiet:
+                    print(f"ℹ️ {task_id}: verify skipped (unchanged sha {current_sha[:12]})")
+                return
+
+    run_verify_with_capture(task_id, cwd=cwd, quiet=bool(args.quiet), log_path=log_path, current_sha=current_sha)
+
+    if pr_meta_path.exists():
+        pr_meta_write = pr_load_meta(pr_meta_path)
+        pr_meta_write["last_verified_sha"] = current_sha
+        pr_meta_write["last_verified_at"] = now_iso_utc()
+        pr_write_meta(pr_meta_path, pr_meta_write)
 
 
 def is_transition_allowed(current: str, nxt: str) -> bool:
@@ -2249,11 +2290,12 @@ def run_verify_with_capture(
     cwd: Path,
     quiet: bool,
     log_path: Optional[Path] = None,
+    current_sha: Optional[str] = None,
 ) -> List[Tuple[str, str]]:
     commands = get_task_verify_commands_for(task_id)
-    timestamp = now_iso_utc()
     entries: List[Tuple[str, str]] = []
     if not commands:
+        timestamp = now_iso_utc()
         header = f"[{timestamp}] ℹ️ no verify commands configured"
         entries.append((header, ""))
         if log_path:
@@ -2265,18 +2307,26 @@ def run_verify_with_capture(
     for command in commands:
         if not quiet:
             print(f"$ {command}")
+        timestamp = now_iso_utc()
         proc = subprocess.run(command, cwd=str(cwd), shell=True, text=True, capture_output=True)
         output = ""
         if proc.stdout:
             output += proc.stdout
         if proc.stderr:
             output += ("\n" if output and not output.endswith("\n") else "") + proc.stderr
-        header = f"[{timestamp}] $ {command}"
+        sha_prefix = f"sha={current_sha} " if current_sha else ""
+        header = f"[{timestamp}] {sha_prefix}$ {command}".rstrip()
         entries.append((header, output))
         if log_path:
             append_verify_log(log_path, header=header, content=output)
         if proc.returncode != 0:
             raise SystemExit(proc.returncode)
+    if current_sha:
+        timestamp = now_iso_utc()
+        header = f"[{timestamp}] ✅ verified_sha={current_sha}"
+        entries.append((header, ""))
+        if log_path:
+            append_verify_log(log_path, header=header, content="")
     if not quiet:
         print(f"✅ verify passed for {task_id}")
     return entries
@@ -2350,7 +2400,17 @@ def cmd_integrate(args: argparse.Namespace) -> None:
         if should_run_verify:
             if not worktree_path:
                 die("Unable to locate/create a worktree for verify execution", code=2)
-            verify_entries = run_verify_with_capture(task_id, cwd=worktree_path, quiet=bool(args.quiet), log_path=None)
+            verify_sha = git_rev_parse(branch)
+            meta_head = str(meta.get("head_sha") or "").strip()
+            if meta_head and meta_head != verify_sha and not args.quiet:
+                print(f"⚠️ {task_id}: PR meta head_sha differs from branch HEAD; run `python scripts/agentctl.py pr update {task_id}`")
+            verify_entries = run_verify_with_capture(
+                task_id,
+                cwd=worktree_path,
+                quiet=bool(args.quiet),
+                log_path=None,
+                current_sha=verify_sha,
+            )
 
         merge_hash = ""
         if strategy == "squash":
@@ -2398,15 +2458,20 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                 append_verify_log(verify_log, header=header, content=content)
         meta_path = pr_path / "meta.json"
         meta_main = pr_load_meta(meta_path)
+        now = now_iso_utc()
         meta_main.update(
             {
                 "merge_strategy": strategy,
                 "status": "MERGED",
-                "merged_at": meta_main.get("merged_at") or now_iso_utc(),
+                "merged_at": meta_main.get("merged_at") or now,
                 "merge_commit": merge_hash,
-                "updated_at": now_iso_utc(),
+                "updated_at": now,
             }
         )
+        if should_run_verify and verify_entries:
+            if verify_sha:
+                meta_main["last_verified_sha"] = verify_sha
+                meta_main["last_verified_at"] = now
         pr_write_meta(meta_path, meta_main)
 
         print_block("RESULT", f"merge_commit={merge_hash} finish=OK")
@@ -2436,6 +2501,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify = sub.add_parser("verify", help="Run verify commands declared on a task (tasks.json)")
     p_verify.add_argument("task_id")
     p_verify.add_argument("--cwd", help="Run verify commands in this repo subdirectory/worktree (must be under repo root)")
+    p_verify.add_argument("--log", help="Append output to a log file (e.g., docs/workflow/prs/T-123/verify.log)")
+    p_verify.add_argument(
+        "--skip-if-unchanged",
+        action="store_true",
+        help="Skip verify when the current SHA matches the last verified SHA (when available via PR meta/log).",
+    )
     p_verify.add_argument("--quiet", action="store_true", help="Minimal output")
     p_verify.add_argument("--require", action="store_true", help="Fail if no verify commands exist")
     p_verify.set_defaults(func=cmd_verify)
