@@ -18,7 +18,7 @@
     "Terminal commands (tests, linters): describe and run them via the workspace shell when required."
   ],
   "workflow": [
-    "Start by running `python scripts/agentctl.py quickstart` and follow `docs/agentctl.md` for the current CLI conventions.",
+    "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Reconfirm the task context via `python scripts/agentctl.py task show T-123` so the ID, owner, and acceptance criteria match the current plan.",
     "Before starting work, run `python scripts/agentctl.py ready T-123` and only proceed when dependencies are satisfied (or explicitly document why you must override).",
     "Avoid extra status-only commits; if you need to record WIP state, prefer doing so without adding commits beyond the 3-phase workflow.",

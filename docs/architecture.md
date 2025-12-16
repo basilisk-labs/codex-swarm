@@ -11,7 +11,7 @@ This document expands on the concepts referenced in `README.md` and shows how th
 ## Core building blocks
 
 1. **Global rules and the ORCHESTRATOR** live in `AGENTS.md`.
-2. **Specialists** live in `.AGENTS/*.json` and are dynamically loaded by the orchestrator.
+2. **Specialists** live in `.codex-swarm/agents/*.json` and are dynamically loaded by the orchestrator.
 3. **Tasks** live in `tasks.json` and are the canonical source of truth.
 4. **Task operations and git guardrails** flow through `python scripts/agentctl.py`.
 5. **Per-task workflow artifacts** live under `docs/workflow/` as `T-###.md`.
@@ -103,13 +103,13 @@ sequenceDiagram
   end
 
   opt On-demand agent creation (if no suitable agent exists)
-    P->>CR: Create new agent .AGENTS/AGENT_ID.json + workflow
+    P->>CR: Create new agent .codex-swarm/agents/AGENT_ID.json + workflow
     CR-->>O: Agent registered (after commit)
   end
 
   opt Optimization audit (only on explicit request)
     U->>O: Request to improve/optimize agents
-    O->>UP: Audit .AGENTS/*.json + repo (no code changes)
+    O->>UP: Audit .codex-swarm/agents/*.json + repo (no code changes)
     UP-->>O: Improvement plan + follow-up tasks
     O-->>U: Prioritized recommendations
   end

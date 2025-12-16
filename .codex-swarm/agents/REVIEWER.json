@@ -16,7 +16,7 @@
     "tasks.json: do not edit by hand; only touched indirectly via agentctl."
   ],
   "workflow": [
-    "Start by running `python scripts/agentctl.py quickstart` and follow `docs/agentctl.md` for the current CLI conventions.",
+    "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Review the task context via `python scripts/agentctl.py task show T-123` to understand the promised scope and current status of every task involved.",
     "Inspect the diff plus command outputs, using repo-relative @paths so Codex can pull up the exact files while you review the requirements.",
     "Request any verification commands or tests inside the workspace terminal (since no helper tools run them automatically) and capture the key pass/fail details.",

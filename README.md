@@ -42,7 +42,7 @@ Prerequisites:
 
 ## ✨ Highlights
 
-- 🧠 **Orchestrated specialists:** Every agent prompt lives in `.AGENTS/*.json` so the orchestrator can load roles, permissions, and workflows dynamically.
+- 🧠 **Orchestrated specialists:** Every agent prompt lives in `.codex-swarm/agents/*.json` so the orchestrator can load roles, permissions, and workflows dynamically.
 - 🧭 **Workflow guardrails:** The global instructions in `AGENTS.md` enforce approvals, planning, and emoji-prefixed commits so collaboration stays predictable.
 - 📝 **Docs-first cadence:** `tasks.json` drives the backlog, and `python scripts/agentctl.py` provides a safe CLI for inspecting/updating tasks (checksum-backed, no manual edits).
 - 🧪 **Post-change test coverage:** Development work can hand off to TESTER so relevant behavior is protected by automated tests before moving on.
@@ -50,7 +50,7 @@ Prerequisites:
 ## 📚 Docs index
 
 - `GUIDELINE.md`: Framework usage guidelines (day-to-day workflow).
-- `docs/agentctl.md`: `agentctl` quick reference (task ops + git guardrails).
+- `.codex-swarm/agentctl.md`: `agentctl` quick reference (task ops + git guardrails).
 - `docs/architecture.md`: How the swarm works (concepts + Mermaid diagrams).
 - `CONTRIBUTING.md`: How to propose changes and work with maintainers.
 - `CODE_OF_CONDUCT.md`: Community expectations and reporting.
@@ -60,37 +60,42 @@ Prerequisites:
 ```
 .
 ├── AGENTS.md
+├── .codex-swarm
+│   ├── agentctl.md
+│   ├── swarm-config.json
+│   └── agents
+│       ├── PLANNER.json
+│       ├── CODER.json
+│       ├── TESTER.json
+│       ├── REVIEWER.json
+│       ├── DOCS.json
+│       ├── CREATOR.json
+│       └── UPDATER.json
 ├── clean.sh
 ├── LICENSE
 ├── README.md
 ├── tasks.json
 ├── tasks.html
 ├── docs
-│   ├── agentctl.md
+│   ├── architecture.md
 │   └── workflow
 │       └── T-123.md
 ├── scripts
 │   └── agentctl.py
-└── .AGENTS/
-    ├── PLANNER.json
-    ├── CODER.json
-    ├── TESTER.json
-    ├── REVIEWER.json
-    ├── DOCS.json
-    ├── CREATOR.json
-    └── UPDATER.json
 ```
 
 | Path | Purpose |
 | --- | --- |
 | `AGENTS.md` | 🌐 Global rules, commit workflow, and the ORCHESTRATOR specification (plus the JSON template for new agents). |
-| `.AGENTS/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python scripts/agentctl.py` and kept aligned with each plan. |
-| `.AGENTS/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
-| `.AGENTS/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
-| `.AGENTS/REVIEWER.json` | 👀 Performs reviews, runs `verify` commands, and finishes tasks via `python scripts/agentctl.py finish`. |
-| `.AGENTS/DOCS.json` | 🧾 Writes per-task workflow artifacts under `docs/workflow/` and keeps docs synchronized. |
-| `.AGENTS/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
-| `.AGENTS/UPDATER.json` | 🔍 Audits the repo and `.AGENTS` prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
+| `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python scripts/agentctl.py` commands + commit guardrails. |
+| `.codex-swarm/swarm-config.json` | ⚙️ Framework config (paths for agents/docs/workflow/tasks). |
+| `.codex-swarm/agents/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python scripts/agentctl.py` and kept aligned with each plan. |
+| `.codex-swarm/agents/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
+| `.codex-swarm/agents/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
+| `.codex-swarm/agents/REVIEWER.json` | 👀 Performs reviews, runs `verify` commands, and finishes tasks via `python scripts/agentctl.py finish`. |
+| `.codex-swarm/agents/DOCS.json` | 🧾 Writes per-task workflow artifacts under `docs/workflow/` and keeps docs synchronized. |
+| `.codex-swarm/agents/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
+| `.codex-swarm/agents/UPDATER.json` | 🔍 Audits the repo and agent prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
 | `tasks.json` | 📊 Canonical backlog (checksum-backed). Do not edit by hand; use `python scripts/agentctl.py`. |
 | `scripts/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + tasks.json lint/checksum enforcement. |
 | `README.md` | 📚 High-level overview and onboarding material for the repository. |

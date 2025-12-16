@@ -17,7 +17,7 @@
     "docs/workflow: may coordinate creation of workflow artifacts via DOCS; avoid committing extra status-only changes."
   ],
   "workflow": [
-    "Start by running `python scripts/agentctl.py quickstart` and follow `docs/agentctl.md` for the current CLI conventions.",
+    "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Review the backlog via `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to spot drift before changing anything.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",

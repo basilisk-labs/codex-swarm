@@ -19,10 +19,8 @@ from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
-TASKS_PATH = ROOT / "tasks.json"
-AGENTS_DIR = ROOT / ".AGENTS"
-AGENTCTL_DOCS_PATH = ROOT / "docs" / "agentctl.md"
-WORKFLOW_DIR = ROOT / "docs" / "workflow"
+SWARM_DIR = ROOT / ".codex-swarm"
+SWARM_CONFIG_PATH = SWARM_DIR / "swarm-config.json"
 
 ALLOWED_STATUSES: Set[str] = {"TODO", "DOING", "BLOCKED", "DONE"}
 TASKS_SCHEMA_VERSION = 1
@@ -80,6 +78,43 @@ def load_json(path: Path) -> Dict:
         die(f"Missing file: {path}")
     except json.JSONDecodeError as exc:
         die(f"Invalid JSON in {path}: {exc}")
+
+
+def _resolve_repo_relative_path(value: str, *, label: str) -> Path:
+    raw = str(value or "").strip()
+    if not raw:
+        die(f"Missing config path for {label!r} in {SWARM_CONFIG_PATH}")
+    path = Path(raw)
+    if path.is_absolute():
+        die(f"Config path for {label!r} must be repo-relative (got absolute path: {raw})")
+    resolved = (ROOT / path).resolve()
+    root_resolved = ROOT.resolve()
+    if root_resolved not in resolved.parents and resolved != root_resolved:
+        die(f"Config path for {label!r} must stay under repo root (got: {raw})")
+    return resolved
+
+
+def load_swarm_config() -> Dict:
+    if not SWARM_CONFIG_PATH.exists():
+        die(f"Missing swarm config: {SWARM_CONFIG_PATH}", code=2)
+    data = load_json(SWARM_CONFIG_PATH)
+    if not isinstance(data, dict):
+        die(f"{SWARM_CONFIG_PATH} must contain a JSON object", code=2)
+    schema_version = data.get("schema_version")
+    if schema_version != 1:
+        die(f"Unsupported swarm config schema_version: {schema_version!r} (expected 1)", code=2)
+    paths = data.get("paths")
+    if not isinstance(paths, dict):
+        die(f"{SWARM_CONFIG_PATH} must contain a top-level 'paths' object", code=2)
+    return data
+
+
+_SWARM_CONFIG = load_swarm_config()
+_PATHS = _SWARM_CONFIG.get("paths") or {}
+TASKS_PATH = _resolve_repo_relative_path(_PATHS.get("tasks_path"), label="tasks_path")
+AGENTS_DIR = _resolve_repo_relative_path(_PATHS.get("agents_dir"), label="agents_dir")
+AGENTCTL_DOCS_PATH = _resolve_repo_relative_path(_PATHS.get("agentctl_docs_path"), label="agentctl_docs_path")
+WORKFLOW_DIR = _resolve_repo_relative_path(_PATHS.get("workflow_dir"), label="workflow_dir")
 
 
 def write_json(path: Path, data: Dict) -> None:
@@ -623,7 +658,7 @@ def cmd_quickstart(_: argparse.Namespace) -> None:
                 "  python scripts/agentctl.py guard commit T-123 -m \"✨ T-123 ...\" --allow <path-prefix>",
                 "  python scripts/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body \"Verified: ...\"",
                 "",
-                "Tip: create docs/agentctl.md to override this output.",
+                f"Tip: create {AGENTCTL_DOCS_PATH.as_posix()} to override this output.",
             ]
         )
     )
@@ -1188,10 +1223,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="agentctl", description="TokenSpot agent workflow helper")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
-    p_quickstart = sub.add_parser("quickstart", help="Print agentctl usage quick reference (docs/agentctl.md)")
+    p_quickstart = sub.add_parser("quickstart", help="Print agentctl usage quick reference (.codex-swarm/agentctl.md)")
     p_quickstart.set_defaults(func=cmd_quickstart)
 
-    p_agents = sub.add_parser("agents", help="List registered agents under .AGENTS/")
+    p_agents = sub.add_parser("agents", help="List registered agents under .codex-swarm/agents/")
     p_agents.set_defaults(func=cmd_agents)
 
     p_ready = sub.add_parser("ready", help="Check if a task is ready to start (dependencies DONE)")

@@ -9,13 +9,13 @@ shared_state:
 
 - The entire workflow runs inside the local repository opened in VS Code, Cursor, or Windsurf; there are no remote runtimes, so pause for approval before touching files outside the repo or using the network.
 - Use `python scripts/agentctl.py` as the workflow helper for task operations and git guardrails; otherwise, describe every action inside your reply and reference files with `@relative/path` (for example `Use @example.tsx as a reference...`).
-- Quick reference: run `python scripts/agentctl.py quickstart` (source: `docs/agentctl.md`).
+- Quick reference: run `python scripts/agentctl.py quickstart` (source: `.codex-swarm/agentctl.md`).
 - Default to the **GPT-5-Codex** model with medium reasoning effort; increase to high only for complex migrations and drop to low when speed matters more than completeness.
 - For setup tips review https://developers.openai.com/codex/ide/; for advanced CLI usage see https://github.com/openai/codex/.
 
 # GLOBAL_RULES
 
-- Treat this file plus every JSON spec under `.AGENTS/` as the single source of truth for how agents behave during a run.
+- Treat this file plus every JSON spec under `.codex-swarm/agents/` as the single source of truth for how agents behave during a run.
 - Model: GPT-5.1 (or compatible). Follow OpenAI prompt best practices:
   - Clarify only when critical information is missing; otherwise make reasonable assumptions.
   - Think step by step internally. DO NOT print full reasoning, only concise results, plans, and key checks.
@@ -129,24 +129,24 @@ Protocol:
 
 # AGENT REGISTRY
 
-All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` directory. On startup, dynamically import every `.AGENTS/*.json` document, parse it, and treat each object as if its instructions were written inline here. Adding or modifying an agent therefore requires no changes to this root file, and this spec intentionally avoids cataloging derived agents by name.
+All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/agents/` directory. On startup, dynamically import every `.codex-swarm/agents/*.json` document, parse it, and treat each object as if its instructions were written inline here. Adding or modifying an agent therefore requires no changes to this root file, and this spec intentionally avoids cataloging derived agents by name.
 
 ## External Agent Loading
 
-- Iterate through `.AGENTS/*.json`, sorted by filename for determinism.
+- Iterate through `.codex-swarm/agents/*.json`, sorted by filename for determinism.
 - Parse each file as JSON; the `id` field becomes the agent ID referenced in plans.
 - Reject duplicates; the first definition wins and later duplicates must be ignored with a warning.
 - Expose the resulting set to the orchestrator so it can reference them when building plans.
 
 ## Current JSON Agents
 
-- The orchestrator regenerates this list at startup by scanning `.AGENTS/*.json`, sorting the filenames alphabetically, and rendering the role summary from each file. Manual edits are discouraged because the list is derived data.
+- The orchestrator regenerates this list at startup by scanning `.codex-swarm/agents/*.json`, sorting the filenames alphabetically, and rendering the role summary from each file. Manual edits are discouraged because the list is derived data.
 - Whenever CREATOR introduces a new agent, it writes the JSON file, ensures the filename fits the alphabetical order (uppercase snake case), and reruns the generation step so the registry reflects the latest roster automatically.
 - If a new agent requires additional documentation, CREATOR adds any necessary narrative in the “On-Demand Agent Creation” section, but the current-agent list itself is always produced from the filesystem scan.
 
 ## JSON Template for New Agents
 
-1. Copy the template below into a new file named `.AGENTS/<ID>.json` (use uppercase snake case for the ID).
+1. Copy the template below into a new file named `.codex-swarm/agents/<ID>.json` (use uppercase snake case for the ID).
 2. Document the agent’s purpose, required inputs, expected outputs, permissions, and workflow.
 3. Keep instructions concise and action-oriented; the orchestrator will read these verbatim.
 4. Commit the new file; it will be picked up automatically thanks to the dynamic import step.
@@ -174,11 +174,11 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 ## On-Demand Agent Creation
 
 - When the PLANNER determines that no existing agent can fulfill a plan step, it must schedule the `CREATOR` agent and provide the desired skill set, constraints, and target deliverables.
-- `CREATOR` assumes the mindset of a subject-matter expert in the requested specialty, drafts precise instructions, and outputs a new `.AGENTS/<ID>.json` following the template above.
+- `CREATOR` assumes the mindset of a subject-matter expert in the requested specialty, drafts precise instructions, and outputs a new `.codex-swarm/agents/<ID>.json` following the template above.
 - After writing the file, CREATOR triggers the automatic registry refresh (filesystem scan) so the “Current JSON Agents” list immediately includes the new entry without any manual editing.
 - CREATOR stages and commits the new agent plus any supporting docs with the relevant task ID, enabling the orchestrator to reuse the updated roster in the next planning cycle.
 
-**UPDATER usage.** Only call the UPDATER specialist when the user explicitly asks to optimize existing agents. In that case UPDATER audits the entire repository, inspects `.AGENTS/*.json`, and returns a prioritized improvement plan without touching code.
+**UPDATER usage.** Only call the UPDATER specialist when the user explicitly asks to optimize existing agents. In that case UPDATER audits the entire repository, inspects `.codex-swarm/agents/*.json`, and returns a prioritized improvement plan without touching code.
 
 ---
 
@@ -194,7 +194,7 @@ All non-orchestrator agents are defined as JSON files inside the `.AGENTS/` dire
 ## Output
 
 1. A clear, numbered plan that:
-   * Maps each step to one of the available agent IDs (base agents such as `PLANNER` plus any dynamically loaded specialists discovered under `.AGENTS/*.json`).
+   * Maps each step to one of the available agent IDs (base agents such as `PLANNER` plus any dynamically loaded specialists discovered under `.codex-swarm/agents/*.json`).
    * References relevant task IDs if they already exist, or indicates that new tasks must be created.
 2. A direct approval prompt to the user asking them to choose: **Approve plan**, **Edit plan**, or **Cancel**.
 3. After approval:

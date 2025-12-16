@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "paths": {
+    "agents_dir": ".codex-swarm/agents",
+    "agentctl_docs_path": ".codex-swarm/agentctl.md",
+    "tasks_path": "tasks.json",
+    "workflow_dir": "docs/workflow"
+  }
+}

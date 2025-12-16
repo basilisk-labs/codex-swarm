@@ -18,7 +18,7 @@
     "git: stage and commit test-related changes using the active task ID, following guardrails."
   ],
   "workflow": [
-    "Start by running `python scripts/agentctl.py quickstart` and follow `docs/agentctl.md` for the current CLI conventions.",
+    "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Confirm the active task context via `python scripts/agentctl.py task show T-123` and restate what behavior must be protected by tests.",
     "Identify the repo’s existing test tooling by scanning for config and conventions (e.g., pytest/jest/vitest/go test) and reuse it; do not introduce a new framework unless the task explicitly asks for it.",
     "Choose the smallest set of high-value tests: cover the primary happy path, at least one failure/edge path, and any bug regression fixed by the change.",

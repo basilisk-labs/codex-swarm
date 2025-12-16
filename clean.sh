@@ -5,13 +5,7 @@ set -euo pipefail
 # It removes leftover assets, metadata, and git state that would tie the copy to the original repo.
 # It also removes framework-development artifacts that aren't needed for a reusable snapshot.
 #
-# Note: we preserve docs/agentctl.md (if present) as a quick reference for the workflow helper.
-AGENTCTL_DOC="docs/agentctl.md"
-AGENTCTL_DOC_TMP=""
-if [ -f "$AGENTCTL_DOC" ]; then
-  AGENTCTL_DOC_TMP="$(mktemp -t agentctl-doc.XXXXXX)"
-  cp "$AGENTCTL_DOC" "$AGENTCTL_DOC_TMP"
-fi
+# Note: .codex-swarm/agentctl.md stays as part of the framework snapshot.
 
 rm -rf \
   .DS_Store \
@@ -31,11 +25,6 @@ rm -rf \
   CONTRIBUTING.md \
   CODE_OF_CONDUCT.md \
   GUIDELINE.md
-
-if [ -n "$AGENTCTL_DOC_TMP" ]; then
-  mkdir -p docs
-  mv "$AGENTCTL_DOC_TMP" "$AGENTCTL_DOC"
-fi
 
 # Recreate an empty tasks.json so the framework is usable after cleanup.
 python - <<'PY' > tasks.json
@@ -61,10 +50,7 @@ PY
 
 # Initialize a fresh repository after the cleanup so the folder can be reused independently.
 git init
-git add .AGENTS scripts .gitignore AGENTS.md tasks.json
-if [ -f "$AGENTCTL_DOC" ]; then
-  git add "$AGENTCTL_DOC"
-fi
+git add .codex-swarm scripts .gitignore AGENTS.md tasks.json
 git commit -m "Initial commit"
 
 rm -rf clean.sh

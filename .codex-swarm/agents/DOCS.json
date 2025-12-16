@@ -17,7 +17,7 @@
     "tasks.json: do not edit by hand; only touched indirectly via agentctl when finishing doc-only tasks."
   ],
   "workflow": [
-    "Start by running `python scripts/agentctl.py quickstart` and follow `docs/agentctl.md` for the current CLI conventions.",
+    "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Confirm the task context via `python scripts/agentctl.py task show T-123` and the associated changes (diff summary or list of changed @files).",
     "Create (or update) the task’s workflow artifact: @docs/workflow/T-###.md (English). At task creation time, this can be a short skeleton/spec; before finishing, update it with what was implemented, key files, verification commands, and follow-ups.",
     "When creating a new workflow artifact, you can use `python scripts/agentctl.py task scaffold T-123` as a starting point, then refine the content.",

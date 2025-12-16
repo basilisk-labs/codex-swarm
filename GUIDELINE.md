@@ -23,7 +23,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 2. Open the project in your IDE with the Codex plugin enabled.
 3. (Optional) Run `./clean.sh` if you want a clean slate; it removes framework-development artifacts and reinitializes git, leaving only the minimal files needed to reuse the framework as your own project.
 4. Use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to inspect tasks, and run `python scripts/agentctl.py task lint` after changes to keep `tasks.json` checksum-valid.
-5. Keep `.AGENTS/*.json` open so you can see each agent’s permissions and workflow before you touch files.
+5. Keep `.codex-swarm/agents/*.json` open so you can see each agent’s permissions and workflow before you touch files.
 
 ## 4. Environment setup / “Installation” steps
 
@@ -58,9 +58,9 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 
 ## 6. Common commands and expectations
 
-- `docs/agentctl.md`: Quick reference for the supported `agentctl` commands.
+- `.codex-swarm/agentctl.md`: Quick reference for the supported `agentctl` commands.
 - `docs/architecture.md`: Background on how the swarm fits together (concepts + diagrams).
-- `python scripts/agentctl.py agents`: List registered agents under `.AGENTS/`.
+- `python scripts/agentctl.py agents`: List registered agents under `.codex-swarm/agents/`.
 - `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123`: Inspect the backlog.
 - `python scripts/agentctl.py task add/update/comment/set-status`: Modify tasks without breaking the checksum.
 - `python scripts/agentctl.py ready/start/block/verify/finish`: Enforced task lifecycle with readiness + verify gates.
@@ -76,7 +76,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 - Keep edits incremental and explain the “why” behind complex hunks with brief comments only when necessary.
 - If work spans multiple agents (e.g., code + docs), make sure each agent’s workflow is respected and each associated task gets its own commit.
 - Never run commands or edit files outside the repository unless the environment says otherwise; the default context is local-only.
-- When in doubt about the workflow, consult `AGENTS.md` for the shared rules and `.AGENTS/<ID>.json` for the specific agent you need.
+- When in doubt about the workflow, consult `AGENTS.md` for the shared rules and `.codex-swarm/agents/<ID>.json` for the specific agent you need.
 
 ## 8. Example session
 
