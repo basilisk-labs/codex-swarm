@@ -2368,6 +2368,32 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         print_block("NEXT", f"Fill out `{readme_rel}` then run `python scripts/agentctl.py pr check {task_id}`.")
 
 
+def update_task_readme_auto_summary(task_id: str, *, changed: List[str]) -> None:
+    readme_path = workflow_task_readme_path(task_id)
+    if not readme_path.exists():
+        readme_path.parent.mkdir(parents=True, exist_ok=True)
+        readme_path.write_text(task_readme_template(task_id), encoding="utf-8")
+    text = readme_path.read_text(encoding="utf-8", errors="replace")
+    lines = text.splitlines()
+    begin_marker = "<!-- BEGIN AUTO SUMMARY -->"
+    end_marker = "<!-- END AUTO SUMMARY -->"
+    begins = [i for i, line in enumerate(lines) if line.strip() == begin_marker]
+    if not begins:
+        return
+    begin = max(begins)
+    ends_after = [i for i, line in enumerate(lines) if i > begin and line.strip() == end_marker]
+    if not ends_after:
+        return
+    end = min(ends_after)
+    summary_lines = [f"- `{name}`" for name in (changed or [])[:20]]
+    if not summary_lines:
+        summary_lines = ["- (no file changes)"]
+    new_lines = lines[: begin + 1] + summary_lines + lines[end:]
+    new_text = "\n".join(new_lines) + ("\n" if text.endswith("\n") else "")
+    if new_text != text:
+        readme_path.write_text(new_text, encoding="utf-8")
+
+
 def cmd_pr_update(args: argparse.Namespace) -> None:
     task_id = args.task_id.strip()
     if not task_id:
@@ -2397,20 +2423,7 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     )
     pr_write_meta(meta_path, meta)
 
-    readme_path = workflow_task_readme_path(task_id)
-    if not readme_path.exists():
-        readme_path.parent.mkdir(parents=True, exist_ok=True)
-        readme_path.write_text(task_readme_template(task_id), encoding="utf-8")
-    text = readme_path.read_text(encoding="utf-8", errors="replace")
-    if "<!-- BEGIN AUTO SUMMARY -->" in text and "<!-- END AUTO SUMMARY -->" in text:
-        changed = git_diff_names(base, branch)
-        summary_lines = [f"- `{name}`" for name in changed[:20]]
-        summary = "\n".join(summary_lines) if summary_lines else "- (no file changes)"
-        before, rest = text.split("<!-- BEGIN AUTO SUMMARY -->", 1)
-        _, after = rest.split("<!-- END AUTO SUMMARY -->", 1)
-        new_text = before + "<!-- BEGIN AUTO SUMMARY -->\n" + summary + "\n<!-- END AUTO SUMMARY -->" + after
-        if new_text != text:
-            readme_path.write_text(new_text, encoding="utf-8")
+    update_task_readme_auto_summary(task_id, changed=git_diff_names(base, branch))
 
     if not args.quiet:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
@@ -2667,6 +2680,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
 
     pr_check(task_id, branch=branch, base=base, quiet=True)
     assert_no_diff_paths(base=base, branch=branch, forbidden=["tasks.json"], cwd=ROOT)
+    base_sha_before_merge = git_rev_parse(base)
 
     verify_commands = get_task_verify_commands_for(task_id)
     should_run_verify = bool(args.run_verify) or bool(verify_commands)
@@ -2773,6 +2787,9 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                 meta_main["last_verified_sha"] = branch_head_sha
                 meta_main["last_verified_at"] = now
         pr_write_meta(meta_path, meta_main)
+
+        (pr_path / "diffstat.txt").write_text(git_diff_stat(base_sha_before_merge, branch), encoding="utf-8")
+        update_task_readme_auto_summary(task_id, changed=git_diff_names(base_sha_before_merge, branch))
 
         print_block("RESULT", f"merge_commit={merge_hash} finish=OK")
         print_block(

@@ -49,12 +49,12 @@ python scripts/agentctl.py branch status --branch task/T-123/<slug> --base main
 
 # open/update/check the tracked PR artifact (local PR simulation)
 python scripts/agentctl.py pr open T-123 --branch task/T-123/<slug> --author CODER
-python scripts/agentctl.py pr update T-123
+python scripts/agentctl.py pr update T-123  # optional; integrate refreshes diffstat + README auto-summary on main
 python scripts/agentctl.py pr check T-123
 python scripts/agentctl.py pr note T-123 --author CODER --body "Handoff: ..."
 
 # integrate into main (INTEGRATOR only; run from repo root on main)
-# includes: pr check → verify (if configured/--run-verify) → merge → finish → task lint
+# includes: pr check → verify (if configured/--run-verify) → merge → refresh diffstat/README auto-summary → finish → task lint
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --dry-run
 

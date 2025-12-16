@@ -12,7 +12,9 @@
 
 - `scripts/agentctl.py`:
   - After merge, regenerate `docs/workflow/T-###/pr/diffstat.txt`.
-  - After merge, update `docs/workflow/T-###/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->` / `<!-- END AUTO SUMMARY -->`) when present.
+  - After merge, update `docs/workflow/T-###/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->
+- (no file changes)
+<!-- END AUTO SUMMARY -->`) when present.
 - `.codex-swarm/agentctl.md`: document the automatic refresh.
 
 ## Risks
@@ -32,5 +34,11 @@
 ## Changes Summary (auto)
 
 <!-- BEGIN AUTO SUMMARY -->
-- (no file changes)
+- `.codex-swarm/agentctl.md`
+- `docs/workflow/T-080/README.md`
+- `docs/workflow/T-080/pr/diffstat.txt`
+- `docs/workflow/T-080/pr/meta.json`
+- `docs/workflow/T-080/pr/review.md`
+- `docs/workflow/T-080/pr/verify.log`
+- `scripts/agentctl.py`
 <!-- END AUTO SUMMARY -->
