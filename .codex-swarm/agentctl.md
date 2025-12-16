@@ -35,6 +35,9 @@ python scripts/agentctl.py finish T-123 --commit <git-rev> --author INTEGRATOR -
 ## Branching workflow helpers
 
 ```bash
+# one-command task checkout (branch + worktree + PR artifact + docs skeleton)
+python scripts/agentctl.py work start T-123 --agent CODER --slug <slug> --worktree
+
 # create a task branch + worktree (inside this repo only)
 # - branch: task/T-123/<slug>
 # - worktree: .codex-swarm/worktrees/T-123-<slug>/

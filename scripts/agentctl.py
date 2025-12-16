@@ -1853,6 +1853,93 @@ def cmd_branch_remove(args: argparse.Namespace) -> None:
             print(f"✅ removed branch {branch}")
 
 
+def _run_agentctl_in_checkout(args: List[str], *, cwd: Path, quiet: bool) -> None:
+    proc = subprocess.run(
+        [sys.executable, "scripts/agentctl.py", *args],
+        cwd=str(cwd),
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        out = (proc.stdout or "").strip()
+        err = (proc.stderr or "").strip()
+        die(err or out or f"agentctl failed: {' '.join(args)}", code=proc.returncode or 2)
+    if not quiet:
+        out = (proc.stdout or "").strip()
+        if out:
+            print(out)
+
+
+def cmd_work_start(args: argparse.Namespace) -> None:
+    require_not_task_worktree(action="work start")
+    ensure_git_clean(action="work start")
+    ensure_path_ignored(WORKTREES_DIRNAME, cwd=ROOT)
+
+    task_id = args.task_id.strip()
+    if not task_id:
+        die("task_id must be non-empty", code=2)
+
+    agent = (args.agent or "").strip()
+    if is_branch_pr_mode() and not agent:
+        die("--agent is required in workflow_mode='branch_pr' (e.g., --agent CODER)", code=2)
+
+    if is_branch_pr_mode() and not getattr(args, "worktree", False):
+        die("--worktree is required in workflow_mode='branch_pr' for `work start`", code=2)
+
+    slug = normalize_slug(args.slug or task_title(task_id) or "work")
+    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    branch = default_task_branch(task_id, slug)
+    worktree_path = WORKTREES_DIR / f"{task_id}-{slug}"
+
+    print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+    print_block("ACTION", f"Initialize task checkout for {task_id} (branch+PR+README)")
+
+    cmd_branch_create(
+        argparse.Namespace(
+            task_id=task_id,
+            agent=agent,
+            slug=slug,
+            base=base,
+            worktree=bool(args.worktree),
+            reuse=bool(args.reuse),
+            quiet=True,
+        )
+    )
+
+    if not worktree_path.exists():
+        die(f"Expected worktree not found: {worktree_path}", code=2)
+
+    scaffold_args = ["task", "scaffold", task_id, "--quiet"]
+    if getattr(args, "overwrite", False):
+        scaffold_args.insert(-1, "--overwrite")
+    _run_agentctl_in_checkout(scaffold_args, cwd=worktree_path, quiet=True)
+
+    pr_path = worktree_path / "docs" / "workflow" / task_id / "pr"
+    if pr_path.exists():
+        _run_agentctl_in_checkout(["pr", "update", task_id, "--quiet"], cwd=worktree_path, quiet=True)
+        pr_action = "updated"
+    else:
+        _run_agentctl_in_checkout(
+            ["pr", "open", task_id, "--branch", branch, "--base", base, "--author", agent, "--quiet"],
+            cwd=worktree_path,
+            quiet=True,
+        )
+        pr_action = "opened"
+
+    if not args.quiet:
+        print_block("RESULT", f"branch={branch} worktree={worktree_path} pr={pr_action}")
+        print_block(
+            "NEXT",
+            "\n".join(
+                [
+                    f"Open `{worktree_path}` in your IDE",
+                    f"Edit `docs/workflow/{task_id}/README.md` and implement changes",
+                    f"Update PR artifacts: `python scripts/agentctl.py pr update {task_id}`",
+                ]
+            ),
+        )
+
+
 def workflow_task_dir(task_id: str) -> Path:
     return WORKFLOW_DIR / task_id
 
@@ -2070,13 +2157,13 @@ def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str
       - Legacy layout: docs/workflow/prs/T-###/description.md
     """
     readme = workflow_task_readme_path(task_id)
-    if readme.exists():
-        return readme.read_text(encoding="utf-8", errors="replace")
     if branch:
         rel = readme.relative_to(ROOT).as_posix()
         text = git_show_text(branch, rel, cwd=ROOT)
         if text is not None:
             return text
+    if readme.exists():
+        return readme.read_text(encoding="utf-8", errors="replace")
     legacy_description = legacy_pr_dir(task_id) / "description.md"
     if legacy_description.exists():
         return legacy_description.read_text(encoding="utf-8", errors="replace")
@@ -2647,6 +2734,20 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify.add_argument("--quiet", action="store_true", help="Minimal output")
     p_verify.add_argument("--require", action="store_true", help="Fail if no verify commands exist")
     p_verify.set_defaults(func=cmd_verify)
+
+    p_work = sub.add_parser("work", help="One-command helpers to start a task checkout")
+    work_sub = p_work.add_subparsers(dest="work_cmd", required=True)
+
+    p_work_start = work_sub.add_parser("start", help="Create branch+worktree and initialize per-task artifacts")
+    p_work_start.add_argument("task_id")
+    p_work_start.add_argument("--agent", help="Agent creating the checkout (e.g., CODER)")
+    p_work_start.add_argument("--slug", required=True, help="Short slug for the branch/worktree name (e.g., work-start)")
+    p_work_start.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_work_start.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
+    p_work_start.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
+    p_work_start.add_argument("--overwrite", action="store_true", help="Overwrite docs/workflow/T-###/README.md when scaffolding")
+    p_work_start.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_work_start.set_defaults(func=cmd_work_start)
 
     p_branch = sub.add_parser("branch", help="Task branch + worktree helpers (single task per branch)")
     branch_sub = p_branch.add_subparsers(dest="branch_cmd", required=True)
