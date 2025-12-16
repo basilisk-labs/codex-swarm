@@ -1667,7 +1667,7 @@
       "id": "T-073",
       "title": "Reduce integrate noise: auto-sync PR meta head_sha",
       "description": "Speed up the pipeline by removing the common integrate warning about stale PR meta head_sha. Acceptance: (1) python scripts/agentctl.py integrate no longer prints \"PR meta head_sha differs\" in normal usage; (2) integrate uses the actual task branch HEAD SHA for verify and writes it into docs/workflow/prs/T-###/meta.json on main (head_sha + last_verified_sha) so artifacts stay consistent; (3) safe in workflow_mode=branch_pr and never writes to the task branch; (4) meta.json ends up correct after integration.",
-      "status": "TODO",
+      "status": "DOING",
       "priority": "med",
       "owner": "CODER",
       "tags": [
@@ -1679,6 +1679,12 @@
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: remove noisy integrate warning about stale PR meta head_sha by syncing to branch HEAD and correcting meta.json on main after merge; keep branch_pr safety. Verify via compileall + task lint and an integrate smoke."
+        }
       ]
     }
   ],
@@ -1686,6 +1692,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "450593db1507e8d615dc14d3a6d472f258f228a19e2f3356deb4b9d2c94cda89"
+    "checksum": "489b87c76e2b4fe3cccdf0a29ddba77320bbf655465b917ce5cfc35ca4bc973b"
   }
 }
