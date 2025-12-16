@@ -1341,6 +1341,16 @@ def cmd_verify(args: argparse.Namespace) -> None:
     log_path: Optional[Path] = None
     if getattr(args, "log", None):
         log_path = Path(str(args.log)).resolve()
+    else:
+        # Convenience default: if a tracked PR artifact exists, write into its verify.log.
+        pr_root = pr_dir(task_id)
+        legacy_pr_root = legacy_pr_dir(task_id)
+        if pr_root.exists():
+            log_path = (pr_root / "verify.log").resolve()
+        elif legacy_pr_root.exists():
+            log_path = (legacy_pr_root / "verify.log").resolve()
+
+    if log_path:
         if ROOT.resolve() not in log_path.parents and log_path.resolve() != ROOT.resolve():
             die(f"--log must stay under repo root: {log_path}", code=2)
 
