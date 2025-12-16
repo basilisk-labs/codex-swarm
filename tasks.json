@@ -1419,12 +1419,27 @@
           "body": "Verified: Ran python scripts/agentctl.py verify T-064 (task lint, agents, quickstart, bash -n clean.sh); framework paths now live under .codex-swarm."
         }
       ]
+    },
+    {
+      "id": "T-065",
+      "title": "Move architecture.md content into README",
+      "description": "Move the full contents of docs/architecture.md into README.md for easier discovery; leave docs/architecture.md as a thin pointer to avoid duplication.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "refactor"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "cdd67267c9ed12db0829e4eb09a9902f3bd8ba7d1165707d83741156aeeac9e7"
+    "checksum": "280857597909bba51bba5166d74ae7b94e7787bf37861e2402998cf0b872e851"
   }
 }
