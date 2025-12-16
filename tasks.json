@@ -1391,12 +1391,30 @@
           "body": "Verified: python scripts/agentctl.py task lint; manual check of tasks.html dependency inspector (lists + SVG graph + navigation)"
         }
       ]
+    },
+    {
+      "id": "T-064",
+      "title": "Restructure framework folders into .codex-swarm",
+      "description": "Move all framework-specific artifacts under .codex-swarm (agents + agentctl docs + config), update references/docs, and update clean.sh accordingly.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "framework",
+        "refactor"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents",
+        "python scripts/agentctl.py quickstart > /dev/null",
+        "bash -n clean.sh"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a9fa90530a51ad3c348bf9c2c4fb76fb72ab3b8e62f1370a55b841d14ccbdafd"
+    "checksum": "d11d844237536ba6a09394d091c45d5b0c0fa46e21ae15f2321e7470f1cd0ed3"
   }
 }
