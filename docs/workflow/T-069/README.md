@@ -43,7 +43,7 @@
     - Appends a bullet under `## Handoff Notes` in `docs/workflow/T-###/pr/review.md` as `- ROLE: TEXT`.
     - Fails with a clear “Fix:” message when the PR artifact is missing (or optionally creates the skeleton if that matches the existing workflow rules).
 - Docs:
-  - Update `.codex-swarm/agentctl.md` (and optionally `docs/workflow/prs/README.md`) to recommend `pr note` for handoff notes.
+  - Update `.codex-swarm/agentctl.md` (and optionally `docs/workflow/README.md`) to recommend `pr note` for handoff notes.
 
 ## Verification
 

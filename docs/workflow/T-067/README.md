@@ -47,7 +47,7 @@
 - `README.md`
 - `docs/workflow/T-064/README.md`
 - `docs/workflow/T-067/README.md`
-- `docs/workflow/prs/README.md`
+- `docs/workflow/prs/README.md` (legacy)
 - `docs/workflow/T-067/pr/description.md`
 - `docs/workflow/T-067/pr/diffstat.txt`
 - `docs/workflow/T-067/pr/meta.json`

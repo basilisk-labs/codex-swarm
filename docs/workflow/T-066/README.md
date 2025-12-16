@@ -52,5 +52,5 @@
 - `.codex-swarm/agents/PLANNER.json`
 - `.codex-swarm/agents/REVIEWER.json`
 - `.gitignore`
-- `docs/workflow/prs/README.md`
+- `docs/workflow/prs/README.md` (legacy)
 - `docs/workflow/README.md`
