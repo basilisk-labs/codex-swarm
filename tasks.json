@@ -1471,12 +1471,29 @@
           "body": "Verified: Ran python scripts/agentctl.py task lint; python -m compileall scripts/agentctl.py; checked agentctl branch/pr/integrate help output."
         }
       ]
+    },
+    {
+      "id": "T-067",
+      "title": "Align agentctl with branch_pr spec (worktrees, PR checks, integrate)",
+      "description": "Implement the stricter branch_pr workflow spec: .swarm_worktrees root, branch naming task/T-###/<slug>, new branch status command, stricter pr open/update/check, integrate dry-run + verify in branch worktree, workflow_mode config, and stronger finish/guard/verify guardrails + standardized outputs.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "git"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python -m compileall scripts/agentctl.py"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7e71f4b6ab9b5133e8263319863c94a153e89db22f39e97b29a80632f15b173e"
+    "checksum": "336599d574485868e57562e6dd5e50e0c3f702047eeeee165558b592ed62a61b"
   }
 }
