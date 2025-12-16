@@ -304,6 +304,7 @@ def is_branch_pr_mode() -> bool:
 DEFAULT_MAIN_BRANCH = "main"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
 WORKTREES_DIR = SWARM_DIR / "worktrees"
+# Legacy PR artifacts directory (pre per-task layout).
 PRS_DIR = WORKFLOW_DIR / "prs"
 
 
@@ -510,31 +511,15 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
         task = _ensure_task_object(data, task_id)
         title = str(task.get("title") or "").strip()
 
-    WORKFLOW_DIR.mkdir(parents=True, exist_ok=True)
-    target = WORKFLOW_DIR / f"{task_id}.md"
+    target = workflow_task_readme_path(task_id)
+    legacy = legacy_workflow_task_doc_path(task_id)
+    if legacy.exists() and not args.overwrite:
+        die(f"Legacy task doc exists: {legacy} (migrate it to {target} or re-run with --overwrite)", code=2)
     if target.exists() and not args.overwrite:
         die(f"File already exists: {target}", code=2)
 
-    heading = f"# {task_id}: {title.strip()}" if title and title.strip() else f"# {task_id}"
-    content = "\n".join(
-        [
-            heading,
-            "",
-            "## Goal",
-            "",
-            "- ...",
-            "",
-            "## Scope",
-            "",
-            "- ...",
-            "",
-            "## Verification",
-            "",
-            "- ...",
-            "",
-        ]
-    )
-    target.write_text(content, encoding="utf-8")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(task_readme_template(task_id), encoding="utf-8")
     if not args.quiet:
         print(f"✅ wrote {target.relative_to(ROOT)}")
 
@@ -1359,14 +1344,17 @@ def cmd_verify(args: argparse.Namespace) -> None:
         if ROOT.resolve() not in log_path.parents and log_path.resolve() != ROOT.resolve():
             die(f"--log must stay under repo root: {log_path}", code=2)
 
-    pr_meta_path = pr_dir(task_id) / "meta.json"
+    pr_meta_path_new = pr_dir(task_id) / "meta.json"
+    pr_meta_path_legacy = legacy_pr_dir(task_id) / "meta.json"
+    pr_meta_path = pr_meta_path_new if pr_meta_path_new.exists() else pr_meta_path_legacy
     pr_meta: Optional[Dict] = pr_load_meta(pr_meta_path) if pr_meta_path.exists() else None
 
     head_sha = git_rev_parse("HEAD", cwd=cwd)
     current_sha = head_sha
     if log_path and pr_meta:
-        pr_root = pr_dir(task_id).resolve()
-        if pr_root in log_path.resolve().parents:
+        log_parent_chain = log_path.resolve().parents
+        pr_roots = [pr_dir(task_id).resolve(), legacy_pr_dir(task_id).resolve()]
+        if any(root in log_parent_chain for root in pr_roots):
             meta_head = str(pr_meta.get("head_sha") or "").strip()
             if meta_head:
                 current_sha = meta_head
@@ -1486,7 +1474,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             die("--author and --body are required in workflow_mode='branch_pr'", code=2)
         if str(args.author).strip().upper() != "INTEGRATOR":
             die("--author must be INTEGRATOR in workflow_mode='branch_pr'", code=2)
-        pr_path = pr_dir(task_id)
+        pr_path = pr_dir_any(task_id)
         if not pr_path.exists():
             die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
         pr_meta = pr_load_meta(pr_path / "meta.json")
@@ -1865,8 +1853,36 @@ def cmd_branch_remove(args: argparse.Namespace) -> None:
             print(f"✅ removed branch {branch}")
 
 
+def workflow_task_dir(task_id: str) -> Path:
+    return WORKFLOW_DIR / task_id
+
+
+def workflow_task_readme_path(task_id: str) -> Path:
+    # Canonical per-task documentation (replaces docs/workflow/T-###.md and PR description.md).
+    return workflow_task_dir(task_id) / "README.md"
+
+
+def legacy_workflow_task_doc_path(task_id: str) -> Path:
+    return WORKFLOW_DIR / f"{task_id}.md"
+
+
 def pr_dir(task_id: str) -> Path:
+    # New layout (T-074+): docs/workflow/T-###/pr/
+    return workflow_task_dir(task_id) / "pr"
+
+
+def legacy_pr_dir(task_id: str) -> Path:
     return PRS_DIR / task_id
+
+
+def pr_dir_any(task_id: str) -> Path:
+    new = pr_dir(task_id)
+    if new.exists():
+        return new
+    old = legacy_pr_dir(task_id)
+    if old.exists():
+        return old
+    return new
 
 
 PR_DESCRIPTION_REQUIRED_SECTIONS: Tuple[str, ...] = (
@@ -1878,7 +1894,7 @@ PR_DESCRIPTION_REQUIRED_SECTIONS: Tuple[str, ...] = (
 )
 
 
-def pr_description_template(task_id: str) -> str:
+def task_readme_template(task_id: str) -> str:
     title = task_title(task_id)
     header = f"# {task_id}: {title}" if title else f"# {task_id}"
     return "\n".join(
@@ -1886,6 +1902,10 @@ def pr_description_template(task_id: str) -> str:
             header,
             "",
             "## Summary",
+            "",
+            "- ...",
+            "",
+            "## Goal",
             "",
             "- ...",
             "",
@@ -1908,6 +1928,7 @@ def pr_description_template(task_id: str) -> str:
             "## Changes Summary (auto)",
             "",
             "<!-- BEGIN AUTO SUMMARY -->",
+            "- (no file changes)",
             "<!-- END AUTO SUMMARY -->",
             "",
         ]
@@ -1921,7 +1942,7 @@ def pr_review_template(task_id: str) -> str:
             "",
             "## Checklist",
             "",
-            "- [ ] PR artifact complete (description/diffstat/verify.log)",
+            "- [ ] PR artifact complete (README/diffstat/verify.log)",
             "- [ ] No `tasks.json` changes in the task branch",
             "- [ ] Verify commands ran (or justified)",
             "- [ ] Scope matches task goal; risks understood",
@@ -2028,13 +2049,41 @@ def pr_load_meta_text(text: str, *, source: str) -> Dict:
 
 
 def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> Optional[str]:
-    path = pr_dir(task_id) / filename
-    if path.exists():
-        return path.read_text(encoding="utf-8", errors="replace")
+    candidates = [pr_dir(task_id) / filename, legacy_pr_dir(task_id) / filename]
+    for path in candidates:
+        if path.exists():
+            return path.read_text(encoding="utf-8", errors="replace")
     if not branch:
         return None
-    rel = path.relative_to(ROOT).as_posix()
-    return git_show_text(branch, rel, cwd=ROOT)
+    for path in candidates:
+        rel = path.relative_to(ROOT).as_posix()
+        text = git_show_text(branch, rel, cwd=ROOT)
+        if text is not None:
+            return text
+    return None
+
+
+def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str]:
+    """
+    PR "description" doc:
+      - New layout: docs/workflow/T-###/README.md
+      - Legacy layout: docs/workflow/prs/T-###/description.md
+    """
+    readme = workflow_task_readme_path(task_id)
+    if readme.exists():
+        return readme.read_text(encoding="utf-8", errors="replace")
+    if branch:
+        rel = readme.relative_to(ROOT).as_posix()
+        text = git_show_text(branch, rel, cwd=ROOT)
+        if text is not None:
+            return text
+    legacy_description = legacy_pr_dir(task_id) / "description.md"
+    if legacy_description.exists():
+        return legacy_description.read_text(encoding="utf-8", errors="replace")
+    if branch:
+        rel = legacy_description.relative_to(ROOT).as_posix()
+        return git_show_text(branch, rel, cwd=ROOT)
+    return None
 
 
 def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> str:
@@ -2042,24 +2091,29 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
     if text is not None:
         return text
     target = pr_dir(task_id)
+    legacy = legacy_pr_dir(task_id)
     if not branch:
         die(
             "\n".join(
                 [
-                    f"Missing PR artifact dir in this checkout: {target}",
+                    "Missing PR artifact dir in this checkout.",
                     "Fix:",
                     f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR artifacts from that branch",
                     "  2) Or check out the task branch that contains the PR artifact files",
+                    f"Expected (new): {target.relative_to(ROOT)}",
+                    f"Fallback (legacy): {legacy.relative_to(ROOT)}",
                     f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
                 ]
             ),
             code=2,
         )
+
     rel = (target / filename).relative_to(ROOT).as_posix()
+    legacy_rel = (legacy / filename).relative_to(ROOT).as_posix()
     die(
         "\n".join(
             [
-                f"Missing PR artifact file in {branch!r}: {rel}",
+                f"Missing PR artifact file in {branch!r}: {rel} (or legacy {legacy_rel})",
                 "Fix:",
                 f"  1) Ensure the task branch contains `{rel}` (run `python scripts/agentctl.py pr open {task_id}` in the branch)",
                 "  2) Commit the PR artifact files to the task branch",
@@ -2076,9 +2130,13 @@ def pr_write_meta(meta_path: Path, meta: Dict) -> None:
 
 
 def pr_ensure_skeleton(*, task_id: str, branch: str, author: str, base_branch: str) -> Path:
-    PRS_DIR.mkdir(parents=True, exist_ok=True)
     target = pr_dir(task_id)
+    target.parent.mkdir(parents=True, exist_ok=True)
     target.mkdir(parents=True, exist_ok=True)
+
+    readme_path = workflow_task_readme_path(task_id)
+    if not readme_path.exists():
+        readme_path.write_text(task_readme_template(task_id), encoding="utf-8")
 
     meta_path = target / "meta.json"
     meta = pr_load_meta(meta_path)
@@ -2099,10 +2157,6 @@ def pr_ensure_skeleton(*, task_id: str, branch: str, author: str, base_branch: s
         }
     )
     pr_write_meta(meta_path, meta)
-
-    description_path = target / "description.md"
-    if not description_path.exists():
-        description_path.write_text(pr_description_template(task_id), encoding="utf-8")
 
     diffstat_path = target / "diffstat.txt"
     if not diffstat_path.exists():
@@ -2137,8 +2191,10 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         die(f"Unknown branch: {branch}", code=2)
 
     target = pr_dir(task_id)
-    if target.exists():
-        die(f"PR artifact dir already exists: {target} (use `pr update`)", code=2)
+    legacy_target = legacy_pr_dir(task_id)
+    if target.exists() or legacy_target.exists():
+        existing = target if target.exists() else legacy_target
+        die(f"PR artifact dir already exists: {existing} (use `pr update`)", code=2)
 
     target = pr_ensure_skeleton(task_id=task_id, branch=branch, author=author, base_branch=base)
     cmd_pr_update(argparse.Namespace(task_id=task_id, branch=branch, base=base, quiet=True))
@@ -2146,7 +2202,8 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
         print_block("ACTION", f"Open PR artifact for {task_id}")
         print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={branch} base={base} author={author}")
-        print_block("NEXT", f"Fill out `{(target / 'description.md').relative_to(ROOT)}` then run `python scripts/agentctl.py pr check {task_id}`.")
+        readme_rel = workflow_task_readme_path(task_id).relative_to(ROOT)
+        print_block("NEXT", f"Fill out `{readme_rel}` then run `python scripts/agentctl.py pr check {task_id}`.")
 
 
 def cmd_pr_update(args: argparse.Namespace) -> None:
@@ -2154,7 +2211,7 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     if not task_id:
         die("task_id must be non-empty", code=2)
 
-    target = pr_dir(task_id)
+    target = pr_dir_any(task_id)
     if not target.exists():
         die(f"Missing PR artifact dir: {target}", code=2)
 
@@ -2178,20 +2235,20 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     )
     pr_write_meta(meta_path, meta)
 
-    description_path = target / "description.md"
-    if description_path.exists():
-        text = description_path.read_text(encoding="utf-8", errors="replace")
-        if "<!-- BEGIN AUTO SUMMARY -->" in text and "<!-- END AUTO SUMMARY -->" in text:
-            changed = git_diff_names(base, branch)
-            summary_lines = []
-            for name in changed[:20]:
-                summary_lines.append(f"- `{name}`")
-            summary = "\n".join(summary_lines) if summary_lines else "- (no file changes)"
-            before, rest = text.split("<!-- BEGIN AUTO SUMMARY -->", 1)
-            _, after = rest.split("<!-- END AUTO SUMMARY -->", 1)
-            new_text = before + "<!-- BEGIN AUTO SUMMARY -->\n" + summary + "\n<!-- END AUTO SUMMARY -->" + after
-            if new_text != text:
-                description_path.write_text(new_text, encoding="utf-8")
+    readme_path = workflow_task_readme_path(task_id)
+    if not readme_path.exists():
+        readme_path.parent.mkdir(parents=True, exist_ok=True)
+        readme_path.write_text(task_readme_template(task_id), encoding="utf-8")
+    text = readme_path.read_text(encoding="utf-8", errors="replace")
+    if "<!-- BEGIN AUTO SUMMARY -->" in text and "<!-- END AUTO SUMMARY -->" in text:
+        changed = git_diff_names(base, branch)
+        summary_lines = [f"- `{name}`" for name in changed[:20]]
+        summary = "\n".join(summary_lines) if summary_lines else "- (no file changes)"
+        before, rest = text.split("<!-- BEGIN AUTO SUMMARY -->", 1)
+        _, after = rest.split("<!-- END AUTO SUMMARY -->", 1)
+        new_text = before + "<!-- BEGIN AUTO SUMMARY -->\n" + summary + "\n<!-- END AUTO SUMMARY -->" + after
+        if new_text != text:
+            readme_path.write_text(new_text, encoding="utf-8")
 
     if not args.quiet:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
@@ -2231,18 +2288,22 @@ def pr_check(
     if is_branch_pr_mode() and parsed_task_id != task_id:
         die(f"Branch {pr_branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)", code=2)
 
-    required_files = ["meta.json", "description.md", "diffstat.txt", "verify.log"]
+    required_files = ["meta.json", "diffstat.txt", "verify.log"]
     artifact_branch = pr_branch if not target.exists() else None
     missing_files = [name for name in required_files if pr_try_read_file_text(task_id, name, branch=artifact_branch) is None]
     if missing_files:
         die(f"Missing PR artifact file(s): {', '.join(missing_files)}", code=2)
 
-    description = pr_read_file_text(task_id, "description.md", branch=artifact_branch)
-    missing_sections, empty_sections = pr_validate_description(description)
+    pr_doc = pr_try_read_doc_text(task_id, branch=artifact_branch)
+    if pr_doc is None:
+        readme_rel = workflow_task_readme_path(task_id).relative_to(ROOT).as_posix()
+        legacy_rel = (legacy_pr_dir(task_id) / "description.md").relative_to(ROOT).as_posix()
+        die(f"Missing PR doc: {readme_rel} (or legacy {legacy_rel})", code=2)
+    missing_sections, empty_sections = pr_validate_description(pr_doc)
     if missing_sections:
-        die(f"description.md missing required section(s): {', '.join(missing_sections)}", code=2)
+        die(f"PR doc missing required section(s): {', '.join(missing_sections)}", code=2)
     if empty_sections:
-        die(f"description.md has empty section(s): {', '.join(empty_sections)}", code=2)
+        die(f"PR doc has empty section(s): {', '.join(empty_sections)}", code=2)
 
     subjects = git_log_subjects(base_branch, pr_branch, limit=200)
     if not subjects:
@@ -2316,7 +2377,7 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
     if not body:
         die("--body is required", code=2)
 
-    target = pr_dir(task_id)
+    target = pr_dir_any(task_id)
     review_path = target / "review.md"
     if not review_path.exists():
         die(
@@ -2577,7 +2638,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify = sub.add_parser("verify", help="Run verify commands declared on a task (tasks.json)")
     p_verify.add_argument("task_id")
     p_verify.add_argument("--cwd", help="Run verify commands in this repo subdirectory/worktree (must be under repo root)")
-    p_verify.add_argument("--log", help="Append output to a log file (e.g., docs/workflow/prs/T-123/verify.log)")
+    p_verify.add_argument("--log", help="Append output to a log file (e.g., docs/workflow/T-123/pr/verify.log)")
     p_verify.add_argument(
         "--skip-if-unchanged",
         action="store_true",
@@ -2612,7 +2673,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_branch_remove.add_argument("--quiet", action="store_true", help="Minimal output")
     p_branch_remove.set_defaults(func=cmd_branch_remove)
 
-    p_pr = sub.add_parser("pr", help="Local PR artifact helpers (docs/workflow/prs/T-###)")
+    p_pr = sub.add_parser("pr", help="Local PR artifact helpers (docs/workflow/T-###/pr)")
     pr_sub = p_pr.add_subparsers(dest="pr_cmd", required=True)
 
     p_pr_open = pr_sub.add_parser("open", help="Create PR artifact folder + templates")
@@ -2637,7 +2698,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr_check.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_check.set_defaults(func=cmd_pr_check)
 
-    p_pr_note = pr_sub.add_parser("note", help="Append a handoff note bullet to docs/workflow/prs/T-###/review.md")
+    p_pr_note = pr_sub.add_parser("note", help="Append a handoff note bullet to docs/workflow/T-###/pr/review.md")
     p_pr_note.add_argument("task_id")
     p_pr_note.add_argument("--author", required=True, help="Note author/role (e.g., CODER)")
     p_pr_note.add_argument("--body", required=True, help="Note body text")
@@ -2779,7 +2840,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument("--quiet", action="store_true", help="Suppress warnings")
     p_search.set_defaults(func=cmd_task_search)
 
-    p_scaffold = task_sub.add_parser("scaffold", help="Create docs/workflow/T-###.md skeleton for a task")
+    p_scaffold = task_sub.add_parser("scaffold", help="Create docs/workflow/T-###/README.md skeleton for a task")
     p_scaffold.add_argument("task_id")
     p_scaffold.add_argument("--title", help="Optional title override")
     p_scaffold.add_argument("--overwrite", action="store_true", help="Overwrite if the file exists")

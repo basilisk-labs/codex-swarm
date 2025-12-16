@@ -35,9 +35,9 @@ Prerequisites:
 
 1. User: “Refactor utils/date.ts and update the README accordingly.”
 2. ORCHESTRATOR: proposes a 2-step plan (PLANNER creates tasks; CODER implements on a task branch).
-3. PLANNER: creates T-041 (refactor) and T-042 (docs) and scaffolds `docs/workflow/T-041.md`.
-4. CODER: creates `task/T-041/<slug>` + `.codex-swarm/worktrees/T-041-<slug>/`, implements the change, and opens/updates `docs/workflow/prs/T-041/`.
-5. REVIEWER: reviews the PR artifact and leaves handoff notes in `docs/workflow/prs/T-041/review.md`.
+3. PLANNER: creates T-041 (refactor) and T-042 (docs) and scaffolds `docs/workflow/T-041/README.md`.
+4. CODER: creates `task/T-041/<slug>` + `.codex-swarm/worktrees/T-041-<slug>/`, implements the change, and opens/updates `docs/workflow/T-041/pr/`.
+5. REVIEWER: reviews the PR artifact and leaves handoff notes in `docs/workflow/T-041/pr/review.md`.
 6. INTEGRATOR: runs `pr check`, merges to `main`, then closes via `finish` (updates `tasks.json`).
 
 ## ✨ Highlights
@@ -105,15 +105,15 @@ Prerequisites:
 | `assets/` | 🖼️ Contains the header image shown on this README and any future static visuals. |
 | `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the snapshot as your own local project. |
 | `tasks.html` | 🖥️ A tiny local UI for browsing `tasks.json` in a browser (no server). |
-| `docs/workflow/` | 🧾 Per-task workflow artifacts (one file per task ID). |
+| `docs/workflow/` | 🧾 Per-task workflow artifacts (one folder per task ID). |
 
 ## 🧾 Commit Workflow
 
 - The workspace is always a git repository, so every meaningful change must land in version control.
 - Default to a minimal 3-phase commit cadence per task:
-  - Planning: `tasks.json` + initial `docs/workflow/T-###.md` artifact.
+  - Planning: `tasks.json` + initial `docs/workflow/T-###/README.md` artifact.
   - Implementation: the actual change set (preferably including tests) as a single work commit.
-  - Verification/closure: run checks, update `docs/workflow/T-###.md`, and mark the task `DONE` in `tasks.json`.
+  - Verification/closure: run checks, update `docs/workflow/T-###/README.md`, and mark the task `DONE` in `tasks.json`.
 - The agent that performs the work stages and commits before handing control back to the orchestrator, briefly describing the completed plan item so the summary is obvious, and the orchestrator pauses the plan until that commit exists.
 - Step summaries mention the new commit hash and confirm the working tree is clean so humans can audit progress directly from the conversation.
 - If a plan step produces no file changes, call that out explicitly; otherwise the swarm must not proceed without a commit.
@@ -135,7 +135,7 @@ This section expands on the concepts referenced above and shows how the swarm fi
 2. **Specialists** live in `.codex-swarm/agents/*.json` and are dynamically loaded by the orchestrator.
 3. **Tasks** live in `tasks.json` and are the canonical source of truth.
 4. **Task operations and git guardrails** flow through `python scripts/agentctl.py`.
-5. **Per-task workflow artifacts** live under `docs/workflow/` as `T-###.md`.
+5. **Per-task workflow artifacts** live under `docs/workflow/T-###/` (canonical doc: `README.md`, PR artifact: `pr/`).
 
 ### Default agent flow (Mermaid)
 
@@ -147,11 +147,11 @@ flowchart TD
 
   O -->|Backlog + task breakdown| P[PLANNER (main)]
   P --> TJ["tasks.json (main only)"]
-  P -->|Planning artifact| WF["docs/workflow/T-123.md"]
+  P -->|Planning artifact| WF["docs/workflow/T-123/README.md"]
 
   O -->|Task branch + worktree| E["CODER/TESTER/DOCS\n(task/T-123/<slug> in .codex-swarm/worktrees/)"]
   E -->|Work commits| B["task/T-123/<slug> commits"]
-  E --> PR["docs/workflow/prs/T-123/* (tracked PR artifact)"]
+  E --> PR["docs/workflow/T-123/pr/* (tracked PR artifact)"]
 
   O -->|Review| R[REVIEWER]
   R -->|Handoff notes| PR
@@ -175,8 +175,8 @@ sequenceDiagram
   participant I as INTEGRATOR
   participant A as "scripts/agentctl.py"
   participant TJ as "tasks.json"
-  participant WF as "docs/workflow/T-123.md"
-  participant PR as "docs/workflow/prs/T-123/"
+  participant WF as "docs/workflow/T-123/README.md"
+  participant PR as "docs/workflow/T-123/pr/"
   participant CR as CREATOR
   participant UP as UPDATER
 

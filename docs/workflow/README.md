@@ -2,11 +2,12 @@
 
 Each completed task should have an atomic documentation artifact under this folder.
 
-For local PR-like review and integration artifacts, see `docs/workflow/prs/README.md`.
+For local PR-like review and integration artifacts, see `docs/workflow/T-###/pr/`.
 
 ## Naming
 
-- `T-###.md` (example: `T-025.md`)
+- `T-###/README.md` (example: `docs/workflow/T-025/README.md`)
+- PR artifact (branch_pr): `docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}`
 
 ## Purpose
 

@@ -26,8 +26,8 @@
     "Highlight repo-relative files or folders using @mentions (for example, @src/app.ts) so the extension can pull the right buffers when work begins.",
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Add or update tasks via `python scripts/agentctl.py task add` / `python scripts/agentctl.py task update` with short, imperative titles plus priority, tags, description, comments, and an explicit owner; never delete an ID.",
-    "For new tasks, create the initial workflow artifact via `python scripts/agentctl.py task scaffold T-123` (or a manual @docs/workflow/T-###.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
-    "In branching workflow, avoid frequent status churn in tasks.json while work happens on branches; track progress in `docs/workflow/T-###.md` and the PR artifact under `docs/workflow/prs/T-###/` instead.",
+    "For new tasks, create the initial workflow artifact via `python scripts/agentctl.py task scaffold T-123` (or a manual @docs/workflow/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
+    "In branching workflow, avoid frequent status churn in tasks.json while work happens on branches; track progress in `docs/workflow/T-###/README.md` and the PR artifact under `docs/workflow/T-###/pr/` instead.",
     "Run `python scripts/agentctl.py task lint` after any task changes so checksum/schema/dependency rules stay enforced.",
     "Return a structured summary that names each updated ID, status, and the key reason for the change."
   ]

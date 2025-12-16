@@ -20,7 +20,7 @@ python scripts/agentctl.py start T-123 --author CODER --body "Start: ... (why, s
 python scripts/agentctl.py block T-123 --author CODER --body "Blocked: ... (what blocks, next step, owner)"
 
 # run per-task verify commands (declared on the task)
-python scripts/agentctl.py verify T-123 --log docs/workflow/prs/T-123/verify.log --skip-if-unchanged
+python scripts/agentctl.py verify T-123 --log docs/workflow/T-123/pr/verify.log --skip-if-unchanged
 
 # before committing, validate staged allowlist + message quality
 python scripts/agentctl.py guard commit T-123 -m "✨ T-123 Short meaningful summary" --auto-allow
@@ -64,7 +64,7 @@ python scripts/agentctl.py task next
 # search tasks by text (title/description/tags/comments)
 python scripts/agentctl.py task search agentctl
 
-# scaffold a workflow artifact (docs/workflow/T-###.md)
+# scaffold a workflow artifact (docs/workflow/T-###/README.md)
 python scripts/agentctl.py task scaffold T-123
 
 # suggest minimal --allow prefixes based on staged files
@@ -87,4 +87,4 @@ python scripts/agentctl.py guard suggest-allow --format args
 - `workflow_mode: "direct"`: legacy mode (minimal branch guardrails)
 - `workflow_mode: "branch_pr"`: task branches + worktrees + PR artifacts + single-writer `tasks.json`
 
-In `branch_pr`, executors leave handoff notes in `docs/workflow/prs/T-###/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `tasks.json` at closure.
+In `branch_pr`, executors leave handoff notes in `docs/workflow/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `tasks.json` at closure.

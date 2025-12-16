@@ -53,10 +53,10 @@ shared_state:
 
 - Treat each plan task (`T-###`) as an atomic unit of work and keep commits minimal.
 - Default to a task-branch cadence (planning on `main`, execution on a task branch, closure on `main`):
-  1) **Planning (main)**: add/update the task in `tasks.json` + create/update `docs/workflow/T-###.md` (skeleton/spec) and commit them together.
-  2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `docs/workflow/prs/T-###/`.
-  3) **Integration (main, INTEGRATOR)**: merge the task branch into `main` via `python scripts/agentctl.py integrate …` (optionally running verify and capturing output in `docs/workflow/prs/T-###/verify.log`).
-  4) **Verification/closure (main, INTEGRATOR)**: update `docs/workflow/T-###.md` with what shipped and mark the task `DONE` via `python scripts/agentctl.py finish …`, committing `tasks.json` + docs/artifacts together.
+  1) **Planning (main)**: add/update the task in `tasks.json` + create/update `docs/workflow/T-###/README.md` (skeleton/spec) and commit them together.
+  2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `docs/workflow/T-###/pr/`.
+  3) **Integration (main, INTEGRATOR)**: merge the task branch into `main` via `python scripts/agentctl.py integrate …` (optionally running verify and capturing output in `docs/workflow/T-###/pr/verify.log`).
+  4) **Verification/closure (main, INTEGRATOR)**: update `docs/workflow/T-###/README.md` with what shipped and mark the task `DONE` via `python scripts/agentctl.py finish …`, committing `tasks.json` + docs/artifacts together.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
 - Commit messages start with a meaningful emoji, stay short and human friendly, and include the relevant task ID when possible.
@@ -82,19 +82,19 @@ shared_state:
   - Never modify or commit `tasks.json` on a task branch.
   - In branching workflow, `tasks.json` updates happen only on `main` via `python scripts/agentctl.py` (agentctl guardrails enforce this).
   - Task closure (`finish`) is performed on `main` by **INTEGRATOR** after integration + verify.
-- **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `docs/workflow/prs/T-###/`.
+- **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `docs/workflow/T-###/pr/`.
 - **Mode toggle**: `agentctl` reads `.codex-swarm/swarm.config.json` and enforces these rules when `workflow_mode` is `branch_pr`.
-- **Handoff notes**: agents do not write to `tasks.json` during branch work; instead they leave short notes in `docs/workflow/prs/T-###/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `tasks.json` at task closure.
+- **Handoff notes**: agents do not write to `tasks.json` during branch work; instead they leave short notes in `docs/workflow/T-###/pr/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `tasks.json` at task closure.
 
 ## PR artifact structure (tracked)
 
 For each task `T-123`:
 
-- `docs/workflow/prs/T-123/meta.json`
-- `docs/workflow/prs/T-123/description.md` (must include: Summary / Scope / Risks / Verify Steps / Rollback Plan)
-- `docs/workflow/prs/T-123/diffstat.txt`
-- `docs/workflow/prs/T-123/verify.log`
-- `docs/workflow/prs/T-123/review.md` (optional notes; typically filled by REVIEWER/INTEGRATOR)
+- Canonical task/PR doc: `docs/workflow/T-123/README.md` (must include: Summary / Scope / Risks / Verify Steps / Rollback Plan)
+- `docs/workflow/T-123/pr/meta.json`
+- `docs/workflow/T-123/pr/diffstat.txt`
+- `docs/workflow/T-123/pr/verify.log`
+- `docs/workflow/T-123/pr/review.md` (optional notes; typically filled by REVIEWER/INTEGRATOR)
 
 ## Executor cheat sheet (CODER/TESTER/DOCS)
 
@@ -156,7 +156,7 @@ Schema (JSON):
 ### Status Transition Protocol
 
 - **Create / Reprioritize (PLANNER only, on main).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python scripts/agentctl.py`).
-- **Work in branches.** During implementation, do not update `tasks.json`; record progress and verification notes in `docs/workflow/T-###.md` and `docs/workflow/prs/T-###/`.
+- **Work in branches.** During implementation, do not update `tasks.json`; record progress and verification notes in `docs/workflow/T-###/README.md` and `docs/workflow/T-###/pr/`.
 - **Integrate + close (INTEGRATOR, on main).** INTEGRATOR merges the task branch into `main`, runs verify, and marks tasks `DONE` via `python scripts/agentctl.py finish` (the only tasks.json write required for closure).
 - **Status Sync.** `tasks.json` is canonical. There is no derived status board file; use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123`.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
@@ -251,8 +251,8 @@ All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/a
   * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
   * Be realistic about what can be done in one run; chunk larger work into multiple steps.
   * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER → INTEGRATOR** by default (work happens on a task branch; INTEGRATOR is the only merge+finish gate on `main`).
-  * Ensure every task branch maintains a tracked PR artifact under `docs/workflow/prs/T-###/` so REVIEWER/INTEGRATOR can review and integrate without external PR tooling.
-  * Before task closure, schedule DOCS to update @docs/workflow/T-###.md with what shipped and verification notes; INTEGRATOR then performs `finish` on `main`.
+  * Ensure every task branch maintains a tracked PR artifact under `docs/workflow/T-###/pr/` so REVIEWER/INTEGRATOR can review and integrate without external PR tooling.
+  * Before task closure, schedule DOCS to update @docs/workflow/T-###/README.md with what shipped and verification notes; INTEGRATOR then performs `finish` on `main`.
   * Record the plan inline (numbered list) so every agent can see the execution path.
 * Step 3: Ask for approval.
   * Stop and wait for user input before executing steps.

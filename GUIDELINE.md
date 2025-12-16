@@ -46,7 +46,7 @@ Codex Swarm is a local layering on top of the OpenAI Codex plugin. It keeps work
 3. **Specialist agents execute.** Work follows the JSON workflows:
    - *CODER* handles implementation, edits the relevant files, runs any commands (tests, linters), and documents the key command outputs.
    - *DOCS* updates documentation files (README, GUIDELINE.md, etc.) and ties each change back to the task ID.
-   - *REVIEWER* reviews diffs and PR artifacts, and leaves short handoff notes in `docs/workflow/prs/T-123/review.md` under `## Handoff Notes`.
+   - *REVIEWER* reviews diffs and PR artifacts, and leaves short handoff notes in `docs/workflow/T-123/pr/review.md` under `## Handoff Notes`.
    - *INTEGRATOR* is the only closer in `workflow_mode=branch_pr`: runs `pr check`, optionally `verify`, merges to `main`, then closes via `finish` (updates `tasks.json`).
 4. **Committing.** Each task must end with a dedicated commit:
    - In `workflow_mode=branch_pr`, the implementation commit happens on the task branch (`task/T-123/<slug>`), and the closure commit happens on `main` (INTEGRATOR only).

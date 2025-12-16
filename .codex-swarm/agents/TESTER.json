@@ -26,8 +26,8 @@
     "Keep tests deterministic and fast: avoid network calls, real time sleeps, and reliance on global state; prefer dependency injection, fakes, or in-memory fixtures when possible.",
     "Implement the tests with minimal production changes; if testability requires refactoring, keep it surgical and tied to the task scope.",
     "Run the most specific local commands first (targeted test files), then broaden only if needed; summarise only the key output lines.",
-    "If you run tests/verify commands, append the key output lines to the tracked PR artifact at `docs/workflow/prs/T-123/verify.log` (or ask CODER to do so via `python scripts/agentctl.py pr update T-123`).",
-    "Before handing off, append a short note to `docs/workflow/prs/T-123/review.md` under `## Handoff Notes` as `- TESTER: ...` (INTEGRATOR will copy these into tasks.json on close).",
+    "If you run tests/verify commands, append the key output lines to the tracked PR artifact at `docs/workflow/T-123/pr/verify.log` (or ask CODER to do so via `python scripts/agentctl.py pr update T-123`).",
+    "Before handing off, append a short note to `docs/workflow/T-123/pr/review.md` under `## Handoff Notes` as `- TESTER: ...` (INTEGRATOR will copy these into tasks.json on close).",
     "Do not commit by default: leave test changes for CODER to include in the single implementation commit for the task. Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit.",
     "If the repo lacks test infrastructure, do not invent one ad-hoc: document the blocker and request PLANNER to create a dedicated task to introduce the test runner + baseline setup."
   ]
