@@ -1605,7 +1605,7 @@
       "id": "T-072",
       "title": "agentctl task add: default depends_on to []",
       "description": "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated).",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "tags": [
@@ -1619,6 +1619,16 @@
       "verify": [
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
+      ],
+      "commit": {
+        "hash": "10b4ffcce3069a858b32580fe7247a1bb8a824a5",
+        "message": "🛠️ T-072 default depends_on on task add"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-072."
+        }
       ]
     }
   ],
@@ -1626,6 +1636,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7056743f952a95c9794c6b38a13762a2c204f3154894fa5bc48052a6a52ebed5"
+    "checksum": "ccfcf0e4dd1c9f6498eb43be05277eb38af39aa8a960ebf361a0e291479c3662"
   }
 }
