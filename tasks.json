@@ -1502,12 +1502,29 @@
           "body": "Verified: merged commit 91b3760 on main; pr check and verify T-067 passed; handoff notes captured from PR review."
         }
       ]
+    },
+    {
+      "id": "T-068",
+      "title": "agentctl verify: log output + skip if unchanged",
+      "description": "Add flags to python scripts/agentctl.py verify to reduce manual PR bookkeeping and redundant runs. Acceptance: (1) verify T-### --log PATH appends a timestamped entry per verify command with combined stdout+stderr; (2) --skip-if-unchanged skips when current SHA (prefer PR meta.json head_sha when log path is under docs/workflow/prs/T-###, else git rev-parse HEAD in --cwd) matches last recorded verified SHA; (3) after success, record last_verified_sha and last_verified_at in PR meta.json when available; (4) document the new flow in .codex-swarm/agentctl.md.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "pipeline"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "28f7891f594fcc8974a995edc4c2bdb87193a23d209552f57d30db60e9fff829"
+    "checksum": "9d4bd56b2f8ad20c2187d0d79a5c1386d61c9c58590b61e7ba2497c523728685"
   }
 }
