@@ -1539,12 +1539,32 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ]
+    },
+    {
+      "id": "T-070",
+      "title": "agentctl guard commit: add --auto-allow",
+      "description": "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "pipeline"
+      ],
+      "depends_on": [
+        "T-068"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a4c4f31d01c5b8fdcb6bae7f4090b80dc9a4d3d8bbea90031b6514f4d05d0087"
+    "checksum": "7ef06e08fda38221d8e34925b6ec956e8e6ce2aa483bac03437948c4a0b6f61e"
   }
 }
