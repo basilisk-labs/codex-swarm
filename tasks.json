@@ -2022,12 +2022,33 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-084/pr."
         }
       ]
+    },
+    {
+      "id": "T-085",
+      "title": "agentctl work start: idempotent scaffold",
+      "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \"File already exists\" errors now that agents default to work start.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "ergonomics"
+      ],
+      "depends_on": [
+        "T-075",
+        "T-084"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b35a9e53c7313431fd81375eb6e342022933a99f0cbf7d2050607148a6c82ea0"
+    "checksum": "ba5cb2fd6be95208309e626f3ed3314bd1441673c28e028a80191f9f817bf6f6"
   }
 }
