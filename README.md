@@ -151,17 +151,17 @@ In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main
 
 ```mermaid
 flowchart TD
-  U[User] --> O[ORCHESTRATOR];
-  O -->|Backlog + task breakdown| P[PLANNER main];
-  P --> TJ[tasks.json (main only)];
-  P -->|Planning artifact| WF[docs/workflow/T-123/README.md];
-  O -->|Task branch + worktree| E[CODER/TESTER/DOCS: task/T-123/{slug} in .codex-swarm/worktrees/];
-  E -->|Work commits| B[task/T-123/{slug} commits];
-  E --> PR[docs/workflow/T-123/pr/* (tracked PR artifact)];
-  O -->|Review| R[REVIEWER];
-  R -->|Handoff notes| PR;
-  O -->|Verify + merge + close| I[INTEGRATOR main];
-  I -->|pr check / verify (may skip if already verified) / merge / refresh artifacts / finish| DONE[Task marked DONE (tasks.json)];
+  U["User"] --> O["ORCHESTRATOR"]
+  O -->|Backlog + task breakdown| P["PLANNER (main)"]
+  P --> TJ["tasks.json (main only)"]
+  P -->|Planning artifact| WF["docs/workflow/T-123/README.md"]
+  O -->|Task branch + worktree| E["CODER/TESTER/DOCS (task/T-123/SLUG in .codex-swarm/worktrees/)"]
+  E -->|Work commits| B["task/T-123/SLUG commits"]
+  E --> PR["docs/workflow/T-123/pr/* (tracked PR artifact)"]
+  O -->|Review| R["REVIEWER"]
+  R -->|Handoff notes| PR
+  O -->|Verify + merge + close| I["INTEGRATOR (main)"]
+  I -->|pr check / verify / merge / refresh artifacts / finish| DONE["Task marked DONE (tasks.json)"]
 ```
 
 ### Detailed agent sequence (Mermaid)
@@ -177,10 +177,10 @@ sequenceDiagram
   participant D as DOCS
   participant R as REVIEWER
   participant I as INTEGRATOR
-  participant A as agentctl
-  participant TJ as tasks.json
-  participant WF as workflow_README
-  participant PR as pr_artifact
+  participant A as "agentctl"
+  participant TJ as "tasks.json"
+  participant WF as "docs/workflow/T-123/README.md"
+  participant PR as "docs/workflow/T-123/pr/"
   participant CR as CREATOR
   participant UP as UPDATER
 
@@ -196,7 +196,7 @@ sequenceDiagram
 
   alt Approve plan
     O->>C: Implement T-123 in task branch + worktree
-    C->>A: branch create T-123 --slug {slug} --worktree
+    C->>A: branch create T-123 --slug SLUG --worktree
     C->>A: guard commit T-123 -m "..." --allow PATHS
     C->>A: pr open T-123 (tracked local PR artifact)
     C->>A: pr update T-123 (as needed)
