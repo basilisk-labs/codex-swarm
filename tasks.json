@@ -1933,12 +1933,32 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-081/pr."
         }
       ]
+    },
+    {
+      "id": "T-082",
+      "title": "Docs: update README and fix Mermaid diagram",
+      "description": "Update root README.md to reflect latest branch_pr workflow and agentctl behavior (integrate auto-refresh artifacts; integrate may skip verify when SHA already verified). Fix Mermaid diagram so it renders correctly on GitHub.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "PLANNER",
+      "tags": [
+        "docs",
+        "workflow",
+        "mermaid"
+      ],
+      "depends_on": [
+        "T-074",
+        "T-081"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7d42263bc9f023157ee4acf2cf77bbe31f905741e6985f4c25bd232f245bafbb"
+    "checksum": "f9bbb1249796f123b79a16ba0d05a87441c3615439190d7eed09d2ce2608bec1"
   }
 }
