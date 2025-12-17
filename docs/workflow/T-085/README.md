@@ -29,6 +29,7 @@
 ## Changes Summary (auto)
 
 <!-- BEGIN AUTO SUMMARY -->
+- `docs/workflow/T-085/README.md`
 - `docs/workflow/T-085/pr/diffstat.txt`
 - `docs/workflow/T-085/pr/meta.json`
 - `docs/workflow/T-085/pr/review.md`

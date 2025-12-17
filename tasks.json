@@ -2027,7 +2027,7 @@
       "id": "T-085",
       "title": "agentctl work start: idempotent scaffold",
       "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \"File already exists\" errors now that agents default to work start.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "CODER",
       "tags": [
@@ -2042,6 +2042,16 @@
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "e6d312e0b441b0deedf3c89c159fca9d9b4c09cb",
+        "message": "🧾 T-085 refresh PR artifacts"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-085/pr."
+        }
       ]
     }
   ],
@@ -2049,6 +2059,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "ba5cb2fd6be95208309e626f3ed3314bd1441673c28e028a80191f9f817bf6f6"
+    "checksum": "3d5c1fbffa7816a7bd3526d2da2f42364e6e88be63d39ad45bac2371661e38c5"
   }
 }

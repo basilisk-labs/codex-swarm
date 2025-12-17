@@ -1,6 +1,7 @@
- docs/workflow/T-085/pr/diffstat.txt |  1 +
+ docs/workflow/T-085/README.md       |  6 +++++-
+ docs/workflow/T-085/pr/diffstat.txt |  6 ++++++
  docs/workflow/T-085/pr/meta.json    | 12 ++++++++++++
  docs/workflow/T-085/pr/review.md    | 21 +++++++++++++++++++++
  docs/workflow/T-085/pr/verify.log   |  2 ++
  scripts/agentctl.py                 | 12 ++++++++----
- 5 files changed, 44 insertions(+), 4 deletions(-)
+ 6 files changed, 54 insertions(+), 5 deletions(-)
