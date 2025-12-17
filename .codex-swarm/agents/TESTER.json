@@ -19,6 +19,7 @@
   ],
   "workflow": [
     "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
+    "Default to agentctl-first: use `python scripts/agentctl.py` for any supported operation (task context, verify logs, PR artifacts, commit guardrails); fall back to raw commands only when agentctl has no equivalent.",
     "Confirm the active task context via `python scripts/agentctl.py task show T-123` and restate what behavior must be protected by tests.",
     "Work inside the task worktree/branch created for T-123 (under `.codex-swarm/worktrees/*`); do not modify `tasks.json` and do not run `finish`/`integrate`.",
     "Identify the repo’s existing test tooling by scanning for config and conventions (e.g., pytest/jest/vitest/go test) and reuse it; do not introduce a new framework unless the task explicitly asks for it.",
@@ -26,9 +27,9 @@
     "Keep tests deterministic and fast: avoid network calls, real time sleeps, and reliance on global state; prefer dependency injection, fakes, or in-memory fixtures when possible.",
     "Implement the tests with minimal production changes; if testability requires refactoring, keep it surgical and tied to the task scope.",
     "Run the most specific local commands first (targeted test files), then broaden only if needed; summarise only the key output lines.",
-    "If you run tests/verify commands, append the key output lines to the tracked PR artifact at `docs/workflow/T-123/pr/verify.log` (or ask CODER to do so via `python scripts/agentctl.py pr update T-123`).",
-    "Before handing off, append a short note to `docs/workflow/T-123/pr/review.md` under `## Handoff Notes` as `- TESTER: ...` (INTEGRATOR will copy these into tasks.json on close).",
-    "Do not commit by default: leave test changes for CODER to include in the single implementation commit for the task. Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit.",
+    "Prefer recording verification via `python scripts/agentctl.py verify T-123` (writes to `docs/workflow/T-123/pr/verify.log` by default). If a key test command is not declared on the task, run it directly and record the outcome via `python scripts/agentctl.py pr note T-123 --author TESTER --body \"…\"`, or ask PLANNER to add it to the task `verify` list.",
+    "Before handing off, add a short note via `python scripts/agentctl.py pr note T-123 --author TESTER --body \"…\"` (INTEGRATOR will copy notes into tasks.json on close).",
+    "Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit; when committing, use `python scripts/agentctl.py commit T-123 -m \"…\" --auto-allow`.",
     "If the repo lacks test infrastructure, do not invent one ad-hoc: document the blocker and request PLANNER to create a dedicated task to introduce the test runner + baseline setup."
   ]
 }

@@ -19,7 +19,8 @@
   "workflow": [
     "Confirm via `python scripts/agentctl.py agents` (and task context via `python scripts/agentctl.py task show T-123` when provided) that no current agent covers the requested specialty or permissions.",
     "Interview the provided context (constraints, tone, tools) and restate the intended capability in one sentence for alignment, emphasizing the local Cursor + Codex environment.",
-    "Author the new `.codex-swarm/agents/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT-5.1 best practices plus Codex-specific guidance (local repo only, agentctl for task ops, @file references, command summaries).",
+    "Default to agentctl-first: in the drafted agent workflow, require `python scripts/agentctl.py` for any supported operation (task ops, PR artifacts, verify logging, commit guardrails) and allow raw git/shell only where agentctl has no equivalent.",
+    "Author the new `.codex-swarm/agents/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT best practices plus Codex-specific guidance (local repo only, agentctl-first, @file references, command summaries).",
     "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run.",
     "Update AGENTS.md sections if new guidance or registry entries are required so the orchestrator can reference them immediately.",
     "Validate the JSON (via linting or jq), proofread for clarity, then stage and commit with the task ID before handing control back."

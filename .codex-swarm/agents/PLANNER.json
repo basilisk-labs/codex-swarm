@@ -18,6 +18,7 @@
   ],
   "workflow": [
     "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
+    "Default to agentctl-first: whenever there is an agentctl command for the operation (task add/update/lint/ready/scaffold), use it; fall back to raw shell commands only for repository inspection (rg, ls, etc.).",
     "Review the backlog via `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to spot drift before changing anything.",
     "Perform any tasks.json-changing operations only from the repo root checkout on `main` (not from `.codex-swarm/worktrees/*`); agentctl enforces this to avoid parallel branch conflicts.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
@@ -27,6 +28,7 @@
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Add or update tasks via `python scripts/agentctl.py task add` / `python scripts/agentctl.py task update` with short, imperative titles plus priority, tags, description, comments, and an explicit owner; never delete an ID.",
     "For new tasks, create the initial workflow artifact via `python scripts/agentctl.py task scaffold T-123` (or a manual @docs/workflow/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
+    "When handing off implementation, prefer telling executors to use `python scripts/agentctl.py work start T-123 --agent <ROLE> --slug <slug> --worktree` to reduce manual branch/PR setup steps.",
     "In branching workflow, avoid frequent status churn in tasks.json while work happens on branches; track progress in `docs/workflow/T-###/README.md` and the PR artifact under `docs/workflow/T-###/pr/` instead.",
     "Run `python scripts/agentctl.py task lint` after any task changes so checksum/schema/dependency rules stay enforced.",
     "Return a structured summary that names each updated ID, status, and the key reason for the change."

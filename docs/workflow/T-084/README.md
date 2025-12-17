@@ -2,32 +2,48 @@
 
 ## Summary
 
-- Update agent prompt JSON so agents default to using `python scripts/agentctl.py` whenever it supports the operation (tasks/PR artifacts/verify/commit/integrate/cleanup), falling back to raw commands only when needed.
+- Make all agents “agentctl-first”: use `python scripts/agentctl.py` for any supported operation (tasks, branch/worktree, PR artifacts, verify logging, commit guardrails) and only fall back to raw commands when agentctl lacks the needed functionality.
 
 ## Goal
 
-- Reduce inconsistent manual command usage and make runs more predictable and faster (fewer mistakes around `tasks.json`, PR artifacts, and commits).
+- Reduce manual workflow variance (especially around `tasks.json`, PR artifacts, and commits) and make agent runs faster and more predictable.
 
 ## Scope
 
-- `.codex-swarm/agents/*.json`: update workflows and “how to operate” sections to prefer agentctl for supported actions.
-- May add short “fallback” guidance for cases where agentctl has no direct command.
+- Update the agent prompt JSON under `.codex-swarm/agents/*.json`:
+  - CODER: prefer `work start`, `pr update`, `pr note`, `verify`, and `commit` flows.
+  - TESTER: prefer `verify` + `pr note` (avoid editing `verify.log` by hand).
+  - REVIEWER: prefer `pr check` + `pr note` (avoid `finish`/`integrate`).
+  - DOCS: prefer `task scaffold`, `pr update`, and `pr note`.
+  - PLANNER/INTEGRATOR/CREATOR: explicitly state the agentctl-first rule and the fallback boundary.
 
 ## Risks
 
-- Low. Prompt changes can shift agent behavior; keep updates minimal, explicit, and consistent with current `branch_pr` rules.
+- Prompt-only change: may slightly shift agent behavior. Mitigation: keep instructions explicit and aligned with `.codex-swarm/agentctl.md`.
 
 ## Verify Steps
 
 - `python scripts/agentctl.py task lint`
-- Sanity: `python scripts/agentctl.py agents` still loads JSON and lists agents.
+- `python scripts/agentctl.py agents` (ensures JSON loads)
+- Manual spot-check: open any agent JSON and confirm it instructs agentctl-first + fallback guidance.
 
 ## Rollback Plan
 
-- Revert the prompt changes.
+- Revert the agent JSON changes.
 
 ## Changes Summary (auto)
 
 <!-- BEGIN AUTO SUMMARY -->
-- (no file changes)
+- `.codex-swarm/agents/CODER.json`
+- `.codex-swarm/agents/CREATOR.json`
+- `.codex-swarm/agents/DOCS.json`
+- `.codex-swarm/agents/INTEGRATOR.json`
+- `.codex-swarm/agents/PLANNER.json`
+- `.codex-swarm/agents/REVIEWER.json`
+- `.codex-swarm/agents/TESTER.json`
+- `docs/workflow/T-084/README.md`
+- `docs/workflow/T-084/pr/diffstat.txt`
+- `docs/workflow/T-084/pr/meta.json`
+- `docs/workflow/T-084/pr/review.md`
+- `docs/workflow/T-084/pr/verify.log`
 <!-- END AUTO SUMMARY -->

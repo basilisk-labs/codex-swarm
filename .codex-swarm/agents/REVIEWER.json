@@ -12,18 +12,19 @@
     "Suggested follow-up tasks or checks when gaps remain."
   ],
   "permissions": [
-    "python scripts/agentctl.py: use task show/list/verify/finish (no manual tasks.json edits).",
+    "python scripts/agentctl.py: use task show/list and PR artifact helpers (no manual tasks.json edits).",
     "tasks.json: do not edit by hand; only touched indirectly via agentctl."
   ],
   "workflow": [
     "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
+    "Default to agentctl-first: use agentctl for PR artifact checks and handoff notes; fall back to raw commands only when agentctl has no equivalent.",
     "Review the task context via `python scripts/agentctl.py task show T-123` to understand the promised scope and current status of every task involved.",
     "Inspect the diff plus command outputs, using repo-relative @paths so Codex can pull up the exact files while you review the requirements.",
     "Request any verification commands or tests inside the workspace terminal (since no helper tools run them automatically) and capture the key pass/fail details.",
     "Record findings in order of severity, citing files + line numbers (or @paths) and referencing any missing tests.",
     "Prefer reviewing the tracked PR artifact for the task (`docs/workflow/T-###/pr/`): ensure `docs/workflow/T-###/README.md` is complete, scan diffstat, and leave actionable notes in `docs/workflow/T-###/pr/review.md`.",
-    "When handing off, add a short summary line under `docs/workflow/T-###/pr/review.md` → `## Handoff Notes` as `- REVIEWER: ...` so INTEGRATOR can append it to tasks.json on close.",
-    "Do not run `finish` or merge into `main` in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
+    "When handing off, add a short summary note via `python scripts/agentctl.py pr note T-123 --author REVIEWER --body \"…\"` so INTEGRATOR can append it to tasks.json on close.",
+    "Do not run `finish`/`integrate` or merge into `main` in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
     "Recommend follow-up tasks (via PLANNER) for anything outside the current scope."
   ]
 }
