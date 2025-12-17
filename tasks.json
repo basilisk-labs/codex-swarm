@@ -1963,12 +1963,31 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-082/pr."
         }
       ]
+    },
+    {
+      "id": "T-083",
+      "title": "Docs: fix README Mermaid parse on GitHub",
+      "description": "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility).",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "PLANNER",
+      "tags": [
+        "docs",
+        "mermaid",
+        "workflow"
+      ],
+      "depends_on": [
+        "T-082"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "383b3ea71ab3480e4dff2d135ae1fbdb5377a82a6d8debaa928843dbccd2f54a"
+    "checksum": "1f09fefa9f875b5c21bc6ffac77beb21f5d774f46587bd11e6bc74989a3b3c28"
   }
 }
