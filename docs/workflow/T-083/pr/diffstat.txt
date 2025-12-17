@@ -1,6 +1,7 @@
  README.md                           | 32 ++++++++++++++++----------------
- docs/workflow/T-083/pr/diffstat.txt |  1 +
+ docs/workflow/T-083/README.md       |  6 +++++-
+ docs/workflow/T-083/pr/diffstat.txt |  6 ++++++
  docs/workflow/T-083/pr/meta.json    | 12 ++++++++++++
  docs/workflow/T-083/pr/review.md    | 21 +++++++++++++++++++++
  docs/workflow/T-083/pr/verify.log   |  2 ++
- 5 files changed, 52 insertions(+), 16 deletions(-)
+ 6 files changed, 62 insertions(+), 17 deletions(-)

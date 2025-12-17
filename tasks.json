@@ -1968,7 +1968,7 @@
       "id": "T-083",
       "title": "Docs: fix README Mermaid parse on GitHub",
       "description": "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility).",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
       "tags": [
@@ -1981,6 +1981,16 @@
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "8a70c8e2413945ec564c82f13766421adf15514f",
+        "message": "🧾 T-083 refresh PR artifacts"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-083/pr."
+        }
       ]
     }
   ],
@@ -1988,6 +1998,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "1f09fefa9f875b5c21bc6ffac77beb21f5d774f46587bd11e6bc74989a3b3c28"
+    "checksum": "fd29d31b5bf78fe5bb675dba0519f26d27aa781c0657ebc77400334c9976660f"
   }
 }

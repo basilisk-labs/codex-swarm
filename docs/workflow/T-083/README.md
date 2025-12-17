@@ -29,6 +29,7 @@
 
 <!-- BEGIN AUTO SUMMARY -->
 - `README.md`
+- `docs/workflow/T-083/README.md`
 - `docs/workflow/T-083/pr/diffstat.txt`
 - `docs/workflow/T-083/pr/meta.json`
 - `docs/workflow/T-083/pr/review.md`
