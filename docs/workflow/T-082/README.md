@@ -31,5 +31,9 @@
 ## Changes Summary (auto)
 
 <!-- BEGIN AUTO SUMMARY -->
-- (no file changes)
+- `README.md`
+- `docs/workflow/T-082/pr/diffstat.txt`
+- `docs/workflow/T-082/pr/meta.json`
+- `docs/workflow/T-082/pr/review.md`
+- `docs/workflow/T-082/pr/verify.log`
 <!-- END AUTO SUMMARY -->

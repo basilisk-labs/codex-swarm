@@ -36,7 +36,7 @@ Prerequisites:
 1. User: “Refactor utils/date.ts and update the README accordingly.”
 2. ORCHESTRATOR: proposes a 2-step plan (PLANNER creates tasks; CODER implements on a task branch).
 3. PLANNER: creates T-041 (refactor) and T-042 (docs) and scaffolds `docs/workflow/T-041/README.md`.
-4. CODER: creates `task/T-041/<slug>` + `.codex-swarm/worktrees/T-041-<slug>/`, implements the change, and opens/updates `docs/workflow/T-041/pr/`.
+4. CODER: creates `task/T-041/{slug}` + `.codex-swarm/worktrees/T-041-{slug}/`, implements the change, and opens/updates `docs/workflow/T-041/pr/`.
 5. REVIEWER: reviews the PR artifact and leaves handoff notes in `docs/workflow/T-041/pr/review.md`.
 6. INTEGRATOR: runs `pr check`, merges to `main`, then closes via `finish` (updates `tasks.json`).
 
@@ -80,7 +80,13 @@ Prerequisites:
 ├── docs
 │   ├── architecture.md
 │   └── workflow
-│       └── T-123.md
+│       └── T-123
+│           ├── README.md
+│           └── pr
+│               ├── meta.json
+│               ├── diffstat.txt
+│               ├── verify.log
+│               └── review.md
 ├── scripts
 │   └── agentctl.py
 ```
@@ -94,7 +100,7 @@ Prerequisites:
 | `.codex-swarm/agents/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
 | `.codex-swarm/agents/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
 | `.codex-swarm/agents/REVIEWER.json` | 👀 Performs reviews and leaves handoff notes for INTEGRATOR. |
-| `.codex-swarm/agents/INTEGRATOR.json` | 🧩 Integrates task branches into `main` (check → verify → merge → finish) and is the only closer in `workflow_mode=branch_pr`. |
+| `.codex-swarm/agents/INTEGRATOR.json` | 🧩 Integrates task branches into `main` (check → verify → merge → refresh artifacts → finish) and is the only closer in `workflow_mode=branch_pr`. |
 | `.codex-swarm/agents/DOCS.json` | 🧾 Writes per-task workflow artifacts under `docs/workflow/` and keeps docs synchronized. |
 | `.codex-swarm/agents/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
 | `.codex-swarm/agents/UPDATER.json` | 🔍 Audits the repo and agent prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
@@ -137,6 +143,8 @@ This section expands on the concepts referenced above and shows how the swarm fi
 4. **Task operations and git guardrails** flow through `python scripts/agentctl.py`.
 5. **Per-task workflow artifacts** live under `docs/workflow/T-###/` (canonical doc: `README.md`, PR artifact: `pr/`).
 
+`agentctl integrate` also auto-refreshes tracked PR artifacts on `main` (diffstat + README auto-summary) and can skip redundant verify when the task branch SHA is already verified (use `--run-verify` to force rerun).
+
 ### Default agent flow (Mermaid)
 
 In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main`, implement in a task branch + worktree, capture a tracked PR artifact, then INTEGRATOR verifies + merges + closes on `main`.
@@ -149,15 +157,15 @@ flowchart TD
   P --> TJ["tasks.json (main only)"]
   P -->|Planning artifact| WF["docs/workflow/T-123/README.md"]
 
-  O -->|Task branch + worktree| E["CODER/TESTER/DOCS\n(task/T-123/<slug> in .codex-swarm/worktrees/)"]
-  E -->|Work commits| B["task/T-123/<slug> commits"]
+  O -->|Task branch + worktree| E["CODER/TESTER/DOCS\n(task/T-123/{slug} in .codex-swarm/worktrees/)"]
+  E -->|Work commits| B["task/T-123/{slug} commits"]
   E --> PR["docs/workflow/T-123/pr/* (tracked PR artifact)"]
 
   O -->|Review| R[REVIEWER]
   R -->|Handoff notes| PR
 
   O -->|Verify + merge + close| I[INTEGRATOR (main)]
-  I -->|pr check / verify / merge / finish| DONE["Task marked DONE (tasks.json)"]
+  I -->|pr check / verify (may skip if already verified) / merge / refresh artifacts / finish| DONE["Task marked DONE (tasks.json)"]
 ```
 
 ### Detailed agent sequence (Mermaid)
@@ -173,10 +181,10 @@ sequenceDiagram
   participant D as DOCS
   participant R as REVIEWER
   participant I as INTEGRATOR
-  participant A as "scripts/agentctl.py"
-  participant TJ as "tasks.json"
-  participant WF as "docs/workflow/T-123/README.md"
-  participant PR as "docs/workflow/T-123/pr/"
+  participant A as agentctl
+  participant TJ as tasks.json
+  participant WF as workflow_README
+  participant PR as pr_artifact
   participant CR as CREATOR
   participant UP as UPDATER
 
@@ -192,10 +200,11 @@ sequenceDiagram
 
   alt Approve plan
     O->>C: Implement T-123 in task branch + worktree
-    C->>A: branch create T-123 --slug <slug> --worktree
+    C->>A: branch create T-123 --slug {slug} --worktree
     C->>A: guard commit T-123 -m "..." --allow PATHS
-    C->>A: pr open/update T-123 (tracked local PR artifact)
-    C->>PR: Update description/diffstat/verify.log as needed
+    C->>A: pr open T-123 (tracked local PR artifact)
+    C->>A: pr update T-123 (as needed)
+    C->>A: verify T-123 (writes docs/workflow/T-123/pr/verify.log by default)
 
     opt Testing handoff (when appropriate)
       O->>T: Add/extend tests for affected behavior
@@ -212,7 +221,7 @@ sequenceDiagram
 
     O->>I: Verify + merge + close (main only)
     I->>A: pr check T-123
-    I->>A: integrate T-123 (verify → merge → finish → task lint)
+    I->>A: integrate T-123 (verify → merge → refresh artifacts → finish → task lint)
     A->>TJ: Set DONE, persist commit hash/message (+ append handoff notes)
 
     O-->>U: Summary + commit link(s)
