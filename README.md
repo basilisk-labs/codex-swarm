@@ -151,21 +151,17 @@ In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main
 
 ```mermaid
 flowchart TD
-  U[User] --> O[ORCHESTRATOR]
-
-  O -->|Backlog + task breakdown| P[PLANNER (main)]
-  P --> TJ["tasks.json (main only)"]
-  P -->|Planning artifact| WF["docs/workflow/T-123/README.md"]
-
-  O -->|Task branch + worktree| E["CODER/TESTER/DOCS\n(task/T-123/{slug} in .codex-swarm/worktrees/)"]
-  E -->|Work commits| B["task/T-123/{slug} commits"]
-  E --> PR["docs/workflow/T-123/pr/* (tracked PR artifact)"]
-
-  O -->|Review| R[REVIEWER]
-  R -->|Handoff notes| PR
-
-  O -->|Verify + merge + close| I[INTEGRATOR (main)]
-  I -->|pr check / verify (may skip if already verified) / merge / refresh artifacts / finish| DONE["Task marked DONE (tasks.json)"]
+  U[User] --> O[ORCHESTRATOR];
+  O -->|Backlog + task breakdown| P[PLANNER main];
+  P --> TJ[tasks.json (main only)];
+  P -->|Planning artifact| WF[docs/workflow/T-123/README.md];
+  O -->|Task branch + worktree| E[CODER/TESTER/DOCS: task/T-123/{slug} in .codex-swarm/worktrees/];
+  E -->|Work commits| B[task/T-123/{slug} commits];
+  E --> PR[docs/workflow/T-123/pr/* (tracked PR artifact)];
+  O -->|Review| R[REVIEWER];
+  R -->|Handoff notes| PR;
+  O -->|Verify + merge + close| I[INTEGRATOR main];
+  I -->|pr check / verify (may skip if already verified) / merge / refresh artifacts / finish| DONE[Task marked DONE (tasks.json)];
 ```
 
 ### Detailed agent sequence (Mermaid)

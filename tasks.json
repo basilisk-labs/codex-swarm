@@ -1938,7 +1938,7 @@
       "id": "T-082",
       "title": "Docs: update README and fix Mermaid diagram",
       "description": "Update root README.md to reflect latest branch_pr workflow and agentctl behavior (integrate auto-refresh artifacts; integrate may skip verify when SHA already verified). Fix Mermaid diagram so it renders correctly on GitHub.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
       "tags": [
@@ -1952,6 +1952,16 @@
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "c881605fdfef8585816e845648c826acf0c0ee6f",
+        "message": "🧪 T-082 refresh PR artifacts"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-082/pr."
+        }
       ]
     }
   ],
@@ -1959,6 +1969,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f9bbb1249796f123b79a16ba0d05a87441c3615439190d7eed09d2ce2608bec1"
+    "checksum": "383b3ea71ab3480e4dff2d135ae1fbdb5377a82a6d8debaa928843dbccd2f54a"
   }
 }
