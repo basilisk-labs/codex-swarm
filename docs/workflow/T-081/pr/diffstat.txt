@@ -1,7 +1,8 @@
  .codex-swarm/agentctl.md            |  2 +-
- docs/workflow/T-081/pr/diffstat.txt |  1 +
+ docs/workflow/T-081/README.md       |  7 ++-
+ docs/workflow/T-081/pr/diffstat.txt |  7 +++
  docs/workflow/T-081/pr/meta.json    | 14 ++++++
  docs/workflow/T-081/pr/review.md    | 21 +++++++++
- docs/workflow/T-081/pr/verify.log   |  9 ++++
+ docs/workflow/T-081/pr/verify.log   | 16 +++++++
  scripts/agentctl.py                 | 86 +++++++++++++++++++++++++++++--------
- 6 files changed, 114 insertions(+), 19 deletions(-)
+ 7 files changed, 133 insertions(+), 20 deletions(-)

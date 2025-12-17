@@ -31,6 +31,7 @@
 
 <!-- BEGIN AUTO SUMMARY -->
 - `.codex-swarm/agentctl.md`
+- `docs/workflow/T-081/README.md`
 - `docs/workflow/T-081/pr/diffstat.txt`
 - `docs/workflow/T-081/pr/meta.json`
 - `docs/workflow/T-081/pr/review.md`
