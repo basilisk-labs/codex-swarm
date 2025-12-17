@@ -5,9 +5,9 @@
  .codex-swarm/agents/PLANNER.json    |  2 ++
  .codex-swarm/agents/REVIEWER.json   |  7 ++++---
  .codex-swarm/agents/TESTER.json     |  7 ++++---
- docs/workflow/T-084/README.md       | 14 ++++++--------
- docs/workflow/T-084/pr/diffstat.txt |  1 +
+ docs/workflow/T-084/README.md       | 32 ++++++++++++++++++++++++--------
+ docs/workflow/T-084/pr/diffstat.txt | 13 +++++++++++++
  docs/workflow/T-084/pr/meta.json    | 12 ++++++++++++
  docs/workflow/T-084/pr/review.md    | 21 +++++++++++++++++++++
  docs/workflow/T-084/pr/verify.log   |  2 ++
- 12 files changed, 64 insertions(+), 20 deletions(-)
+ 12 files changed, 94 insertions(+), 20 deletions(-)
