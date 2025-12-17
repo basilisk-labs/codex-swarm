@@ -1992,12 +1992,32 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-083/pr."
         }
       ]
+    },
+    {
+      "id": "T-084",
+      "title": "Agents: prefer agentctl CLI for supported operations",
+      "description": "Audit scripts/agentctl.py capabilities and update .codex-swarm/agents/*.json prompts so each agent uses agentctl for any supported operation (tasks.json ops, branch/worktree management, PR artifacts, verify logs, commit guardrails, integrate/cleanup). Only fall back to raw git/shell commands when agentctl has no equivalent.",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "PLANNER",
+      "tags": [
+        "agents",
+        "agentctl",
+        "workflow"
+      ],
+      "depends_on": [
+        "T-074",
+        "T-083"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "fd29d31b5bf78fe5bb675dba0519f26d27aa781c0657ebc77400334c9976660f"
+    "checksum": "745811def35903a3fc57459f6b2b29c1a0f140c4f8c68fdc441d17c83fc35536"
   }
 }
