@@ -29,5 +29,9 @@
 ## Changes Summary (auto)
 
 <!-- BEGIN AUTO SUMMARY -->
-- (no file changes)
+- `docs/workflow/T-085/pr/diffstat.txt`
+- `docs/workflow/T-085/pr/meta.json`
+- `docs/workflow/T-085/pr/review.md`
+- `docs/workflow/T-085/pr/verify.log`
+- `scripts/agentctl.py`
 <!-- END AUTO SUMMARY -->

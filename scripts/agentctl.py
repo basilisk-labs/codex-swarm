@@ -1919,10 +1919,14 @@ def cmd_work_start(args: argparse.Namespace) -> None:
     if not worktree_path.exists():
         die(f"Expected worktree not found: {worktree_path}", code=2)
 
-    scaffold_args = ["task", "scaffold", task_id, "--quiet"]
-    if getattr(args, "overwrite", False):
-        scaffold_args.insert(-1, "--overwrite")
-    _run_agentctl_in_checkout(scaffold_args, cwd=worktree_path, quiet=True)
+    readme_in_worktree = worktree_path / "docs" / "workflow" / task_id / "README.md"
+    if readme_in_worktree.exists() and not getattr(args, "overwrite", False):
+        pass
+    else:
+        scaffold_args = ["task", "scaffold", task_id, "--quiet"]
+        if getattr(args, "overwrite", False):
+            scaffold_args.insert(-1, "--overwrite")
+        _run_agentctl_in_checkout(scaffold_args, cwd=worktree_path, quiet=True)
 
     pr_path = worktree_path / "docs" / "workflow" / task_id / "pr"
     if pr_path.exists():
