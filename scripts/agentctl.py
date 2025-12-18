@@ -2717,6 +2717,12 @@ def cmd_integrate(args: argparse.Namespace) -> None:
     if not task_id:
         die("task_id must be non-empty", code=2)
 
+    ok, warnings = readiness(task_id)
+    if not ok:
+        for warning in warnings:
+            print(f"⚠️ {warning}")
+        die(f"Task is not ready: {task_id} (use --force to override)", code=2)
+
     pr_path = pr_dir(task_id)
     branch = (args.branch or "").strip()
     if not branch:
@@ -2790,6 +2796,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
     try:
         verify_entries: List[Tuple[str, str]] = []
 
+        head_before = git_rev_parse("HEAD")
         merge_hash = ""
         if strategy == "squash":
             if should_run_verify:
@@ -2802,11 +2809,21 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                     log_path=None,
                     current_sha=branch_head_sha,
                 )
-            run(["git", "merge", "--squash", branch], check=True)
+            proc = run(["git", "merge", "--squash", branch], check=False)
+            if proc.returncode != 0:
+                run(["git", "reset", "--hard", head_before], check=False)
+                die(proc.stderr.strip() or proc.stdout.strip() or "git merge --squash failed", code=2)
+            staged_after_squash = run(["git", "diff", "--cached", "--name-only"], check=True).stdout.strip()
+            if not staged_after_squash:
+                run(["git", "reset", "--hard", head_before], check=False)
+                die(f"Nothing to integrate: {branch!r} is already merged into {base!r}", code=2)
             subject = run(["git", "log", "-1", "--pretty=format:%s", branch], cwd=ROOT, check=True).stdout.strip()
             if not subject or task_id not in subject:
                 subject = f"🧩 {task_id} integrate {branch}"
-            run(["git", "commit", "-m", subject], check=True)
+            proc = run(["git", "commit", "-m", subject], check=False)
+            if proc.returncode != 0:
+                run(["git", "reset", "--hard", head_before], check=False)
+                die(proc.stderr.strip() or proc.stdout.strip() or "git commit failed", code=2)
             merge_hash = git_rev_parse("HEAD")
         elif strategy == "merge":
             if should_run_verify:
@@ -2819,7 +2836,10 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                     log_path=None,
                     current_sha=branch_head_sha,
                 )
-            run(["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"], check=True)
+            proc = run(["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"], check=False)
+            if proc.returncode != 0:
+                run(["git", "reset", "--hard", head_before], check=False)
+                die(proc.stderr.strip() or proc.stdout.strip() or "git merge failed", code=2)
             merge_hash = git_rev_parse("HEAD")
         else:
             proc = run(["git", "rebase", base], cwd=worktree_path, check=False)
@@ -2847,7 +2867,10 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                     log_path=None,
                     current_sha=branch_head_sha,
                 )
-            run(["git", "merge", "--ff-only", branch], check=True)
+            proc = run(["git", "merge", "--ff-only", branch], check=False)
+            if proc.returncode != 0:
+                run(["git", "reset", "--hard", head_before], check=False)
+                die(proc.stderr.strip() or proc.stdout.strip() or "git merge --ff-only failed", code=2)
             merge_hash = git_rev_parse("HEAD")
 
         if not verify_commands:
