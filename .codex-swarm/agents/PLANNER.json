@@ -20,7 +20,7 @@
     "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
     "Default to agentctl-first: whenever there is an agentctl command for the operation (task add/update/lint/ready/scaffold), use it; fall back to raw shell commands only for repository inspection (rg, ls, etc.).",
     "Review the backlog via `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123` to spot drift before changing anything.",
-    "Perform any tasks.json-changing operations only from the repo root checkout on `main` (not from `.codex-swarm/worktrees/*`); agentctl enforces this to avoid parallel branch conflicts.",
+    "Check `.codex-swarm/swarm.config.json` → `workflow_mode`: in `branch_pr`, perform any tasks.json-changing operations only from the repo root checkout on `main` (not from `.codex-swarm/worktrees/*`); in `direct`, this is still the default recommendation to keep history linear and avoid conflicts.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",
     "For every new task, set `depends_on` explicitly (use an empty list when there are no dependencies); if dependencies are unclear, ask for clarification instead of omitting the field.",

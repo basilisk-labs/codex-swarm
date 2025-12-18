@@ -1,0 +1,14 @@
+{
+  "task_id": "T-086",
+  "task_title": "Define workflow_mode variants (direct vs branch_pr)",
+  "branch": "task/T-086/workflow-mode-defs",
+  "base_branch": "main",
+  "author": "CODER",
+  "created_at": "2025-12-18T11:21:03+00:00",
+  "updated_at": "2025-12-18T11:31:45+00:00",
+  "head_sha": "7ed38727f38a1d7b65450d6a71b7c6126016faf3",
+  "merge_strategy": "squash",
+  "status": "OPEN",
+  "last_verified_sha": "7ed38727f38a1d7b65450d6a71b7c6126016faf3",
+  "last_verified_at": "2025-12-18T11:32:39+00:00"
+}

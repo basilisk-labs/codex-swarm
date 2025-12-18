@@ -145,6 +145,13 @@ This section expands on the concepts referenced above and shows how the swarm fi
 
 `agentctl integrate` also auto-refreshes tracked PR artifacts on `main` (diffstat + README auto-summary) and can skip redundant verify when the task branch SHA is already verified (use `--run-verify` to force rerun).
 
+### Workflow modes
+
+Codex Swarm supports two modes (configured via `.codex-swarm/swarm.config.json` → `workflow_mode`):
+
+- `direct`: low-ceremony, single-checkout workflow (task branches/worktrees and `docs/workflow/T-###/pr/` are optional).
+- `branch_pr`: strict branching workflow with per-task branches/worktrees, tracked PR artifacts, and a single-writer `tasks.json` (planning/closure on `main`, integration/closure by INTEGRATOR).
+
 ### Default agent flow (Mermaid)
 
 In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main`, implement in a task branch + worktree, capture a tracked PR artifact, then INTEGRATOR verifies + merges + closes on `main`.

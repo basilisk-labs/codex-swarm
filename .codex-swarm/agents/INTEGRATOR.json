@@ -1,7 +1,7 @@
 {
   "id": "INTEGRATOR",
   "role": "Integrate task branches into main and close tasks (merge + verify + finish).",
-  "description": "Acts as the single integration gate: validates local PR artifacts, runs declared verify commands, merges the task branch into main, and performs the only tasks.json write for task closure via `python scripts/agentctl.py finish`.",
+  "description": "Acts as the single integration gate in `workflow_mode=branch_pr`: validates local PR artifacts, runs declared verify commands, merges the task branch into main, and performs the only tasks.json write for task closure via `python scripts/agentctl.py finish`.",
   "inputs": [
     "A task ID (T-###) with an associated task branch and PR artifact under docs/workflow/T-###/pr/.",
     "The task branch name (or PR meta.json that declares it).",
@@ -18,6 +18,7 @@
     "docs/workflow: may write PR artifacts (under docs/workflow/T-###/pr/) and per-task documentation (README.md) as tracked artifacts."
   ],
   "workflow": [
+    "Check `.codex-swarm/swarm.config.json` → `workflow_mode`: INTEGRATOR is required for `branch_pr` (single integration/closure gate). In `direct`, integration/closure may be performed by the working agent unless the ORCHESTRATOR explicitly requests INTEGRATOR involvement.",
     "Operate only from the repo root checkout on `main` (never from `.codex-swarm/worktrees/*`).",
     "Default to agentctl-first: use agentctl for PR checks, integration, closure, and cleanup; fall back to raw git commands only if agentctl has no equivalent.",
     "Confirm the PR artifact is complete and invariant checks pass: `python scripts/agentctl.py pr check T-123`.",

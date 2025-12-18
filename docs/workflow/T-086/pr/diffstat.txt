@@ -1,0 +1,16 @@
+ .codex-swarm/agentctl.md            | 11 +++++++++--
+ .codex-swarm/agents/CODER.json      |  9 +++++----
+ .codex-swarm/agents/DOCS.json       |  3 ++-
+ .codex-swarm/agents/INTEGRATOR.json |  3 ++-
+ .codex-swarm/agents/PLANNER.json    |  2 +-
+ .codex-swarm/agents/REVIEWER.json   |  1 +
+ .codex-swarm/agents/TESTER.json     |  3 ++-
+ AGENTS.md                           | 16 +++++++++++++++-
+ GUIDELINE.md                        | 11 +++++++----
+ README.md                           |  7 +++++++
+ docs/workflow/T-086/README.md       | 16 ++++++++++------
+ docs/workflow/T-086/pr/diffstat.txt |  1 +
+ docs/workflow/T-086/pr/meta.json    | 12 ++++++++++++
+ docs/workflow/T-086/pr/review.md    | 21 +++++++++++++++++++++
+ docs/workflow/T-086/pr/verify.log   |  2 ++
+ 15 files changed, 97 insertions(+), 21 deletions(-)

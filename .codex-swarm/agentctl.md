@@ -92,7 +92,14 @@ python scripts/agentctl.py guard suggest-allow --format args
 
 `agentctl` behavior is controlled by `.codex-swarm/swarm.config.json`:
 
-- `workflow_mode: "direct"`: legacy mode (minimal branch guardrails)
-- `workflow_mode: "branch_pr"`: task branches + worktrees + PR artifacts + single-writer `tasks.json`
+- `workflow_mode: "direct"`: low-ceremony, single-checkout workflow.
+  - Task branches/worktrees are optional.
+  - PR artifacts under `docs/workflow/T-###/pr/` are optional.
+  - Tasks can be implemented and closed on the current branch; `tasks.json` is still updated only via `python scripts/agentctl.py` (no manual edits).
+- `workflow_mode: "branch_pr"`: strict branching workflow (task branches + worktrees + tracked PR artifacts + single-writer `tasks.json`).
+  - Planning and closure happen in the repo root checkout on `main`; `tasks.json` is never modified/committed on task branches.
+  - Executors work in `.codex-swarm/worktrees/T-###-<slug>/` on `task/T-###/<slug>`.
+  - Each task uses tracked PR artifacts under `docs/workflow/T-###/pr/`.
+  - Integration/closure is performed only by INTEGRATOR via `python scripts/agentctl.py integrate` / `python scripts/agentctl.py finish`.
 
 In `branch_pr`, executors leave handoff notes in `docs/workflow/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `tasks.json` at closure.

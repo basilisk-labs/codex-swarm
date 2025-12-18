@@ -73,6 +73,20 @@ shared_state:
 
 # BRANCHING_WORKFLOW (required for parallel work)
 
+## Workflow modes
+
+`workflow_mode` is configured in `.codex-swarm/swarm.config.json` and controls how strict the workflow guardrails are.
+
+- `direct`: low-ceremony, single-checkout workflow.
+  - Task branches/worktrees are optional (use them only when helpful).
+  - `docs/workflow/T-###/pr/` is optional (you may still use it for review notes and verification logs).
+  - Any agent may implement and close a task on the current branch, including committing `tasks.json` updates created via `python scripts/agentctl.py` (prefer doing planning/closure on `main` when possible).
+- `branch_pr`: strict branching workflow with local “PR artifacts”.
+  - Planning and closure happen only in the repo root checkout on `main`; `tasks.json` is a single-writer file and is never modified/committed on task branches.
+  - Implementation happens only on a per-task branch + worktree: `task/T-###/<slug>` in `.codex-swarm/worktrees/T-###-<slug>/`.
+  - Each task branch maintains tracked PR artifacts under `docs/workflow/T-###/pr/`.
+  - Only **INTEGRATOR** merges into `main` and runs `integrate`/`finish` to close the task.
+
 ## Core rules
 
 - **1 task = 1 branch** (branch is per `T-###`, not per agent).
@@ -83,7 +97,7 @@ shared_state:
   - In branching workflow, `tasks.json` updates happen only on `main` via `python scripts/agentctl.py` (agentctl guardrails enforce this).
   - Task closure (`finish`) is performed on `main` by **INTEGRATOR** after integration + verify.
 - **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `docs/workflow/T-###/pr/`.
-- **Mode toggle**: `agentctl` reads `.codex-swarm/swarm.config.json` and enforces these rules when `workflow_mode` is `branch_pr`.
+- **Mode toggle**: `agentctl` reads `.codex-swarm/swarm.config.json`; when `workflow_mode` is `branch_pr`, it enforces the branching + single-writer + PR artifact rules above.
 - **Handoff notes**: agents do not write to `tasks.json` during branch work; instead they leave short notes in `docs/workflow/T-###/pr/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `tasks.json` at task closure.
 
 ## PR artifact structure (tracked)
