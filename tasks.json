@@ -2070,12 +2070,28 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ]
+    },
+    {
+      "id": "T-087",
+      "title": "Pin current git branch as base branch",
+      "description": "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "human",
+      "tags": [
+        "workflow",
+        "git",
+        "branching"
+      ],
+      "depends_on": [
+        "[]"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "541c5d1a94476c5a1669da7671b78f916c5c61829e1fcd230db1909d58b866ef"
+    "checksum": "b2bd987c7286f72eed8a04c4458c805c8052b65b3171c6ecb03a37aa10cdaf1a"
   }
 }
