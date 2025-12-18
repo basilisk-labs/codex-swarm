@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "workflow_mode": "branch_pr",
+  "workflow_mode": "direct",
   "paths": {
     "agents_dir": ".codex-swarm/agents",
     "agentctl_docs_path": ".codex-swarm/agentctl.md",
