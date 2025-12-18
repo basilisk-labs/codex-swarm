@@ -78,7 +78,7 @@ shared_state:
 `workflow_mode` is configured in `.codex-swarm/swarm.config.json` and controls how strict the workflow guardrails are.
 
 - `direct`: low-ceremony, single-checkout workflow.
-  - Task branches/worktrees are optional (use them only when helpful).
+  - Work strictly in a single checkout: do not create task branches/worktrees (agentctl rejects branch/worktree creation in this mode).
   - `docs/workflow/T-###/pr/` is optional (you may still use it for review notes and verification logs).
   - Any agent may implement and close a task on the current branch, including committing `tasks.json` updates created via `python scripts/agentctl.py` (prefer doing planning/closure on the pinned base branch when possible).
 - `branch_pr`: strict branching workflow with local “PR artifacts”.

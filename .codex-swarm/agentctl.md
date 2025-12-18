@@ -93,7 +93,8 @@ python scripts/agentctl.py guard suggest-allow --format args
 `agentctl` behavior is controlled by `.codex-swarm/swarm.config.json`:
 
 - `workflow_mode: "direct"`: low-ceremony, single-checkout workflow.
-  - Task branches/worktrees are optional.
+  - Do all work in the current checkout; do not create task branches/worktrees (`agentctl branch create` is refused).
+  - `python scripts/agentctl.py work start T-123` only scaffolds `docs/workflow/T-###/README.md` (it does not create a branch/worktree).
   - PR artifacts under `docs/workflow/T-###/pr/` are optional.
   - Tasks can be implemented and closed on the current branch; `tasks.json` is still updated only via `python scripts/agentctl.py` (no manual edits).
 - `workflow_mode: "branch_pr"`: strict branching workflow (task branches + worktrees + tracked PR artifacts + single-writer `tasks.json`).

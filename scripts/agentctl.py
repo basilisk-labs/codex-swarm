@@ -327,6 +327,10 @@ def workflow_mode() -> str:
 def is_branch_pr_mode() -> bool:
     return workflow_mode() == "branch_pr"
 
+
+def is_direct_mode() -> bool:
+    return workflow_mode() == "direct"
+
 DEFAULT_BASE_BRANCH = "main"
 GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
@@ -838,6 +842,19 @@ def guard_commit_check(
     current_branch = git_current_branch(cwd=cwd)
     integration_branch = base_branch(cwd=cwd)
     if is_branch_pr_mode():
+        if not allow_tasks and current_branch == integration_branch:
+            die(
+                "\n".join(
+                    [
+                        f"Refusing commit: code/docs commits are forbidden on base branch {integration_branch!r} in workflow_mode='branch_pr'",
+                        "Fix:",
+                        f"  1) Create a task branch + worktree: `python scripts/agentctl.py work start {task_id} --agent <AGENT> --slug <slug> --worktree`",
+                        f"  2) Commit from `task/{task_id}/<slug>`",
+                        f"Context: {format_command_context(cwd=cwd)}",
+                    ]
+                ),
+                code=2,
+            )
         if "tasks.json" in staged and not allow_tasks:
             die(
                 "\n".join(
@@ -865,21 +882,20 @@ def guard_commit_check(
                     code=2,
                 )
         if not allow_tasks:
-            if current_branch != integration_branch:
-                parsed = parse_task_id_from_task_branch(current_branch)
-                if parsed != task_id:
-                    die(
-                        "\n".join(
-                            [
-                                f"Refusing commit: branch {current_branch!r} does not match task {task_id}",
-                                "Fix:",
-                                f"  1) Switch to `task/{task_id}/<slug>`",
-                                f"  2) Re-run `python scripts/agentctl.py guard commit {task_id} ...`",
-                                f"Context: {format_command_context(cwd=cwd)}",
-                            ]
-                        ),
-                        code=2,
-                    )
+            parsed = parse_task_id_from_task_branch(current_branch)
+            if parsed != task_id:
+                die(
+                    "\n".join(
+                        [
+                            f"Refusing commit: branch {current_branch!r} does not match task {task_id}",
+                            "Fix:",
+                            f"  1) Switch to `task/{task_id}/<slug>`",
+                            f"  2) Re-run `python scripts/agentctl.py guard commit {task_id} ...`",
+                            f"Context: {format_command_context(cwd=cwd)}",
+                        ]
+                    ),
+                    code=2,
+                )
 
     if not allow:
         die("Provide at least one --allow <path> prefix", code=2)
@@ -1780,12 +1796,28 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
     ensure_git_clean(action="branch create")
     ensure_path_ignored(WORKTREES_DIRNAME, cwd=ROOT)
 
+    if is_direct_mode():
+        die(
+            "\n".join(
+                [
+                    "Refusing branch/worktree creation in workflow_mode='direct'",
+                    "Fix:",
+                    "  - Work directly in the current checkout (no task branches/worktrees), or",
+                    "  - Switch to workflow_mode='branch_pr' to use task branches/worktrees.",
+                    f"Config: {SWARM_CONFIG_PATH}",
+                ]
+            ),
+            code=2,
+        )
+
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
 
     if is_branch_pr_mode() and not args.agent:
         die("--agent is required in workflow_mode='branch_pr' (e.g., --agent CODER)", code=2)
+    if is_branch_pr_mode() and not args.worktree:
+        die("--worktree is required in workflow_mode='branch_pr' for `branch create`", code=2)
 
     slug = normalize_slug(args.slug or task_title(task_id) or "work")
     base = (args.base or base_branch()).strip()
@@ -1944,6 +1976,35 @@ def cmd_work_start(args: argparse.Namespace) -> None:
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
+
+    if is_direct_mode():
+        readme_path = workflow_task_readme_path(task_id)
+        if not readme_path.exists() or bool(getattr(args, "overwrite", False)):
+            cmd_task_scaffold(
+                argparse.Namespace(
+                    task_id=task_id,
+                    title=None,
+                    force=True,
+                    overwrite=bool(getattr(args, "overwrite", False)),
+                    quiet=bool(getattr(args, "quiet", False)),
+                )
+            )
+        if not args.quiet:
+            readme_rel = readme_path.relative_to(ROOT)
+            print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
+            print_block("ACTION", f"Initialize direct-mode task docs for {task_id} (no branch/worktree)")
+            print_block("RESULT", f"readme={readme_rel}")
+            print_block(
+                "NEXT",
+                "\n".join(
+                    [
+                        "Implement changes in this checkout (no task branches/worktrees).",
+                        f"Edit `{readme_rel}` to capture scope/risks/verify steps.",
+                        f"Commit via `python scripts/agentctl.py commit {task_id} -m \"…\" --auto-allow` when ready.",
+                    ]
+                ),
+            )
+        return
 
     agent = (args.agent or "").strip()
     if is_branch_pr_mode() and not agent:
@@ -2409,6 +2470,10 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
     base = (args.base or base_branch()).strip()
     if branch == base:
         die(f"Refusing to open PR on base branch {base!r}", code=2)
+    if is_branch_pr_mode():
+        parsed = parse_task_id_from_task_branch(branch)
+        if parsed != task_id:
+            die(f"Branch {branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)", code=2)
     if not git_branch_exists(branch):
         die(f"Unknown branch: {branch}", code=2)
 

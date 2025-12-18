@@ -22,7 +22,7 @@
     "Default to agentctl-first: if `python scripts/agentctl.py` has a command for what you need (task/branch/worktree/PR artifacts/verify/commit), use it; fall back to raw git/shell only when agentctl has no equivalent.",
     "Reconfirm the task context via `python scripts/agentctl.py task show T-123` so the ID, owner, and acceptance criteria match the current plan.",
     "Before starting work, run `python scripts/agentctl.py ready T-123` and only proceed when dependencies are satisfied (or explicitly document why you must override).",
-    "Check `.codex-swarm/swarm.config.json` → `workflow_mode` and follow the matching rules: in `branch_pr`, use a task branch + worktree + tracked PR artifacts; in `direct`, you may work in the current checkout and use branches/PR artifacts only when helpful or explicitly requested by the plan.",
+    "Check `.codex-swarm/swarm.config.json` → `workflow_mode` and follow the matching rules: in `branch_pr`, use a task branch + worktree + tracked PR artifacts; in `direct`, work only in the current checkout (no task branches/worktrees).",
     "If `workflow_mode=branch_pr`, create a task branch + worktree + PR artifact in one command: `python scripts/agentctl.py work start T-123 --agent CODER --slug <slug> --worktree` (use `branch create` + `pr open` only if you need the lower-level primitives).",
     "If `workflow_mode=branch_pr`, work only inside `.codex-swarm/worktrees/T-123-<slug>/` (never in the main checkout while implementing).",
     "If `workflow_mode=branch_pr`, keep the tracked PR artifact current: `python scripts/agentctl.py pr update T-123` after meaningful changes land (meta/diffstat/README auto-summary).",
