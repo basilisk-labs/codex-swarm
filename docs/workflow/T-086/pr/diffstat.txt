@@ -8,9 +8,9 @@
  AGENTS.md                           | 16 +++++++++++++++-
  GUIDELINE.md                        | 11 +++++++----
  README.md                           |  7 +++++++
- docs/workflow/T-086/README.md       | 16 ++++++++++------
- docs/workflow/T-086/pr/diffstat.txt |  1 +
- docs/workflow/T-086/pr/meta.json    | 12 ++++++++++++
+ docs/workflow/T-086/README.md       | 32 +++++++++++++++++++++++++-------
+ docs/workflow/T-086/pr/diffstat.txt | 16 ++++++++++++++++
+ docs/workflow/T-086/pr/meta.json    | 14 ++++++++++++++
  docs/workflow/T-086/pr/review.md    | 21 +++++++++++++++++++++
- docs/workflow/T-086/pr/verify.log   |  2 ++
- 15 files changed, 97 insertions(+), 21 deletions(-)
+ docs/workflow/T-086/pr/verify.log   |  7 +++++++
+ 15 files changed, 134 insertions(+), 22 deletions(-)

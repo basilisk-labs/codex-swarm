@@ -2058,7 +2058,7 @@
       "id": "T-086",
       "title": "Define workflow_mode variants (direct vs branch_pr)",
       "description": "Add a clear, unambiguous definition of workflow_mode values \"direct\" and \"branch_pr\" across agent instructions and documentation. Document the operational differences (where work happens, whether task branches/worktrees are required, who can write tasks.json, required PR artifacts under docs/workflow/T-###/pr, and which agent is allowed to integrate/finish). Update AGENTS.md and .codex-swarm/agentctl.md accordingly.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "tags": [
@@ -2069,6 +2069,16 @@
       "depends_on": [],
       "verify": [
         "python scripts/agentctl.py task lint"
+      ],
+      "commit": {
+        "hash": "2b93d6297c22494b1cbc0805952a6f81b3461153",
+        "message": "🧾 T-086 update PR artifacts"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-086/pr."
+        }
       ]
     },
     {
@@ -2092,6 +2102,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b2bd987c7286f72eed8a04c4458c805c8052b65b3171c6ecb03a37aa10cdaf1a"
+    "checksum": "f064a3906b6d6559094c54dc52a6e90c2171d6ea9c737e6c50fcf57c5654c5b5"
   }
 }
