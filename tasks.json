@@ -2107,9 +2107,9 @@
     },
     {
       "id": "T-088",
-      "title": "clean.sh: interactive workflow_mode + prompt scrubbing",
-      "description": "Add interactive workflow_mode selection (direct vs branch_pr) to clean.sh, update .codex-swarm/swarm.config.json accordingly, and remove agent prompt instructions for the unused workflow mode when generating a reusable snapshot.",
-      "status": "TODO",
+      "title": "Backfill task tracking for clean.sh interactive workflow_mode",
+      "description": "Record the clean.sh interactive workflow_mode selection + prompt scrubbing feature in tasks.json and add the per-task workflow README artifact.",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "tags": [
@@ -2117,13 +2117,23 @@
         "workflow",
         "agents"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "780f1d05339296b8840b004e866e35fc74c67e32",
+        "message": "✨ T-088 clean.sh interactive workflow_mode + prompt scrubbing"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: tasks/workflow artifact added; clean.sh already includes interactive mode selection + prompt scrubbing."
+        }
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "639f6fb3f0774f32ea96efb35490ebbd3758c3f0da285573f97e6d7e64cf38d9"
+    "checksum": "5ba32fe2821d38d63d52cb3d42a868c604863524bd97ba7fb1475c9a03e1e46f"
   }
 }
