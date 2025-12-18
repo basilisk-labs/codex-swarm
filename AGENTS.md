@@ -52,11 +52,11 @@ shared_state:
 # COMMIT_WORKFLOW
 
 - Treat each plan task (`T-###`) as an atomic unit of work and keep commits minimal.
-- Default to a task-branch cadence (planning on `main`, execution on a task branch, closure on `main`):
-  1) **Planning (main)**: add/update the task in `tasks.json` + create/update `docs/workflow/T-###/README.md` (skeleton/spec) and commit them together.
+- Default to a task-branch cadence (planning on the pinned base branch, execution on a task branch, closure on the pinned base branch):
+  1) **Planning (base branch)**: add/update the task in `tasks.json` + create/update `docs/workflow/T-###/README.md` (skeleton/spec) and commit them together.
   2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `docs/workflow/T-###/pr/`.
-  3) **Integration (main, INTEGRATOR)**: merge the task branch into `main` via `python scripts/agentctl.py integrate …` (optionally running verify and capturing output in `docs/workflow/T-###/pr/verify.log`).
-  4) **Verification/closure (main, INTEGRATOR)**: update `docs/workflow/T-###/README.md` with what shipped and mark the task `DONE` via `python scripts/agentctl.py finish …`, committing `tasks.json` + docs/artifacts together.
+  3) **Integration (base branch, INTEGRATOR)**: merge the task branch into the base branch via `python scripts/agentctl.py integrate …` (optionally running verify and capturing output in `docs/workflow/T-###/pr/verify.log`).
+  4) **Verification/closure (base branch, INTEGRATOR)**: update `docs/workflow/T-###/README.md` with what shipped and mark the task `DONE` via `python scripts/agentctl.py finish …`, committing `tasks.json` + docs/artifacts together.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
 - Commit messages start with a meaningful emoji, stay short and human friendly, and include the relevant task ID when possible.
@@ -80,12 +80,17 @@ shared_state:
 - `direct`: low-ceremony, single-checkout workflow.
   - Task branches/worktrees are optional (use them only when helpful).
   - `docs/workflow/T-###/pr/` is optional (you may still use it for review notes and verification logs).
-  - Any agent may implement and close a task on the current branch, including committing `tasks.json` updates created via `python scripts/agentctl.py` (prefer doing planning/closure on `main` when possible).
+  - Any agent may implement and close a task on the current branch, including committing `tasks.json` updates created via `python scripts/agentctl.py` (prefer doing planning/closure on the pinned base branch when possible).
 - `branch_pr`: strict branching workflow with local “PR artifacts”.
-  - Planning and closure happen only in the repo root checkout on `main`; `tasks.json` is a single-writer file and is never modified/committed on task branches.
+  - Planning and closure happen only in the repo root checkout on the pinned base branch; `tasks.json` is a single-writer file and is never modified/committed on task branches.
   - Implementation happens only on a per-task branch + worktree: `task/T-###/<slug>` in `.codex-swarm/worktrees/T-###-<slug>/`.
   - Each task branch maintains tracked PR artifacts under `docs/workflow/T-###/pr/`.
-  - Only **INTEGRATOR** merges into `main` and runs `integrate`/`finish` to close the task.
+  - Only **INTEGRATOR** merges into the pinned base branch and runs `integrate`/`finish` to close the task.
+
+## Base branch
+
+- The workflow has a pinned “base branch” that acts as the mainline for creating task branches/worktrees and for integration/closure.
+- `agentctl` pins it automatically on first run via `git config --local codexswarm.baseBranch <current-branch>` (unless already pinned); you can override it per command via `--base`.
 
 ## Core rules
 
@@ -94,8 +99,8 @@ shared_state:
 - **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/T-123-<slug>/` (ignored by git).
 - **Single-writer `tasks.json`**:
   - Never modify or commit `tasks.json` on a task branch.
-  - In branching workflow, `tasks.json` updates happen only on `main` via `python scripts/agentctl.py` (agentctl guardrails enforce this).
-  - Task closure (`finish`) is performed on `main` by **INTEGRATOR** after integration + verify.
+  - In branching workflow, `tasks.json` updates happen only on the pinned base branch via `python scripts/agentctl.py` (agentctl guardrails enforce this).
+  - Task closure (`finish`) is performed on the pinned base branch by **INTEGRATOR** after integration + verify.
 - **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `docs/workflow/T-###/pr/`.
 - **Mode toggle**: `agentctl` reads `.codex-swarm/swarm.config.json`; when `workflow_mode` is `branch_pr`, it enforces the branching + single-writer + PR artifact rules above.
 - **Handoff notes**: agents do not write to `tasks.json` during branch work; instead they leave short notes in `docs/workflow/T-###/pr/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `tasks.json` at task closure.
@@ -116,14 +121,14 @@ For each task `T-123`:
 2. Work only inside `.codex-swarm/worktrees/T-123-<slug>/` on the task branch (`task/T-123/<slug>`).
 3. Commit only via `python scripts/agentctl.py guard commit …` (or `python scripts/agentctl.py commit …`).
 4. Open/update PR artifacts: `python scripts/agentctl.py pr open …` and `python scripts/agentctl.py pr update …`.
-5. Hard bans: do not touch `tasks.json`, do not run `finish`, do not merge into `main`.
+5. Hard bans: do not touch `tasks.json`, do not run `finish`, do not merge into the base branch (INTEGRATOR owns integration + closure).
 
 ## INTEGRATOR cheat sheet
 
-1. Work from the repo root checkout on `main` (never from `.codex-swarm/worktrees/*`).
+1. Work from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).
 2. Validate: `python scripts/agentctl.py pr check T-123`.
 3. Integrate (includes verify + finish + task lint): `python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify`.
-4. Commit closure on `main`: stage `tasks.json` (+ docs/artifacts) and commit `✅ T-123 close ...`.
+4. Commit closure on the pinned base branch: stage `tasks.json` (+ docs/artifacts) and commit `✅ T-123 close ...`.
 
 # SHARED_STATE
 
@@ -169,9 +174,9 @@ Schema (JSON):
 
 ### Status Transition Protocol
 
-- **Create / Reprioritize (PLANNER only, on main).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python scripts/agentctl.py`).
+- **Create / Reprioritize (PLANNER only, on the base branch).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python scripts/agentctl.py`).
 - **Work in branches.** During implementation, do not update `tasks.json`; record progress and verification notes in `docs/workflow/T-###/README.md` and `docs/workflow/T-###/pr/`.
-- **Integrate + close (INTEGRATOR, on main).** INTEGRATOR merges the task branch into `main`, runs verify, and marks tasks `DONE` via `python scripts/agentctl.py finish` (the only tasks.json write required for closure).
+- **Integrate + close (INTEGRATOR, on the base branch).** INTEGRATOR merges the task branch into the base branch, runs verify, and marks tasks `DONE` via `python scripts/agentctl.py finish` (the only tasks.json write required for closure).
 - **Status Sync.** `tasks.json` is canonical. There is no derived status board file; use `python scripts/agentctl.py task list` / `python scripts/agentctl.py task show T-123`.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
 
@@ -264,7 +269,7 @@ All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/a
 * Step 2: Draft the plan.
   * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
   * Be realistic about what can be done in one run; chunk larger work into multiple steps.
-  * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER → INTEGRATOR** by default (work happens on a task branch; INTEGRATOR is the only merge+finish gate on `main`).
+  * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER → INTEGRATOR** by default (work happens on a task branch; INTEGRATOR is the only merge+finish gate on the base branch).
   * Ensure every task branch maintains a tracked PR artifact under `docs/workflow/T-###/pr/` so REVIEWER/INTEGRATOR can review and integrate without external PR tooling.
   * Before task closure, schedule DOCS to update @docs/workflow/T-###/README.md with what shipped and verification notes; INTEGRATOR then performs `finish` on `main`.
   * Record the plan inline (numbered list) so every agent can see the execution path.

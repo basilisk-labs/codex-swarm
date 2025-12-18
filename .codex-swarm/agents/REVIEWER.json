@@ -25,7 +25,7 @@
     "Record findings in order of severity, citing files + line numbers (or @paths) and referencing any missing tests.",
     "Prefer reviewing the tracked PR artifact for the task (`docs/workflow/T-###/pr/`): ensure `docs/workflow/T-###/README.md` is complete, scan diffstat, and leave actionable notes in `docs/workflow/T-###/pr/review.md`.",
     "When handing off, add a short summary note via `python scripts/agentctl.py pr note T-123 --author REVIEWER --body \"…\"` so INTEGRATOR can append it to tasks.json on close.",
-    "Do not run `finish`/`integrate` or merge into `main` in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
+    "Do not run `finish`/`integrate` or merge into the base branch in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
     "Recommend follow-up tasks (via PLANNER) for anything outside the current scope."
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "task_id": "T-087",
+  "task_title": "Pin current git branch as base branch",
+  "branch": "task/T-087/base-branch",
+  "base_branch": "main",
+  "author": "CODER",
+  "created_at": "2025-12-18T11:27:02+00:00",
+  "updated_at": "2025-12-18T12:01:04+00:00",
+  "head_sha": "57837c71c1a0cea4392203f288a55c849bb2b67d",
+  "merge_strategy": "squash",
+  "status": "OPEN"
+}

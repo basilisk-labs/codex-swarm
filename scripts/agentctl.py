@@ -77,6 +77,32 @@ def git_current_branch(*, cwd: Path = ROOT) -> str:
     return (result.stdout or "").strip()
 
 
+def git_config_get(key: str, *, cwd: Path = ROOT) -> str:
+    raw = str(key or "").strip()
+    if not raw:
+        return ""
+    try:
+        proc = run(["git", "config", "--get", raw], cwd=cwd, check=False)
+    except subprocess.CalledProcessError:
+        return ""
+    if proc.returncode != 0:
+        return ""
+    return (proc.stdout or "").strip()
+
+
+def git_config_set(key: str, value: str, *, cwd: Path = ROOT) -> None:
+    raw_key = str(key or "").strip()
+    raw_value = str(value or "").strip()
+    if not raw_key:
+        die("Missing git config key", code=2)
+    if not raw_value:
+        die(f"Missing git config value for {raw_key!r}", code=2)
+    try:
+        run(["git", "config", "--local", raw_key, raw_value], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or f"Failed to set git config: {raw_key}")
+
+
 def is_task_worktree_checkout(*, cwd: Path = ROOT) -> bool:
     top = git_toplevel(cwd=cwd)
     parts = top.parts
@@ -210,7 +236,7 @@ def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -
     if is_task_worktree_checkout(cwd=cwd):
         require_not_task_worktree(cwd=cwd, action="tasks.json write")
     if is_branch_pr_mode():
-        require_branch(DEFAULT_MAIN_BRANCH, cwd=cwd, action="tasks.json write")
+        require_branch(base_branch(cwd=cwd), cwd=cwd, action="tasks.json write")
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
@@ -301,11 +327,40 @@ def workflow_mode() -> str:
 def is_branch_pr_mode() -> bool:
     return workflow_mode() == "branch_pr"
 
-DEFAULT_MAIN_BRANCH = "main"
+DEFAULT_BASE_BRANCH = "main"
+GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
 WORKTREES_DIR = SWARM_DIR / "worktrees"
 # Legacy PR artifacts directory (pre per-task layout).
 PRS_DIR = WORKFLOW_DIR / "prs"
+
+
+def config_base_branch() -> str:
+    return str(_SWARM_CONFIG.get("base_branch") or "").strip()
+
+
+def pinned_base_branch(*, cwd: Path = ROOT) -> str:
+    return git_config_get(GIT_CONFIG_BASE_BRANCH_KEY, cwd=cwd)
+
+
+def maybe_pin_base_branch(*, cwd: Path = ROOT) -> Optional[str]:
+    configured = config_base_branch()
+    if configured:
+        return configured
+    existing = pinned_base_branch(cwd=cwd)
+    if existing:
+        return existing
+    branch = git_current_branch(cwd=cwd)
+    if not branch or branch == "HEAD":
+        return None
+    if branch.startswith("task/"):
+        return None
+    git_config_set(GIT_CONFIG_BASE_BRANCH_KEY, branch, cwd=cwd)
+    return branch
+
+
+def base_branch(*, cwd: Path = ROOT) -> str:
+    return config_base_branch() or pinned_base_branch(cwd=cwd) or DEFAULT_BASE_BRANCH
 
 
 def now_iso_utc() -> str:
@@ -781,6 +836,7 @@ def guard_commit_check(
         die("No staged files", code=2)
 
     current_branch = git_current_branch(cwd=cwd)
+    integration_branch = base_branch(cwd=cwd)
     if is_branch_pr_mode():
         if "tasks.json" in staged and not allow_tasks:
             die(
@@ -790,7 +846,7 @@ def guard_commit_check(
                         "Fix:",
                         "  1) Remove tasks.json from the index (`git restore --staged tasks.json`)",
                         "  2) Commit code/docs/PR artifacts on the task branch",
-                        "  3) Close the task on main via INTEGRATOR (tasks.json only in closure commit)",
+                        f"  3) Close the task on {integration_branch} via INTEGRATOR (tasks.json only in closure commit)",
                         f"Context: {format_command_context(cwd=cwd)}",
                     ]
                 ),
@@ -802,14 +858,14 @@ def guard_commit_check(
                     f"Refusing commit: tasks.json from a worktree checkout (.codex-swarm/worktrees/*)\nContext: {format_command_context(cwd=cwd)}",
                     code=2,
                 )
-            if current_branch != DEFAULT_MAIN_BRANCH:
+            if current_branch != integration_branch:
                 die(
-                    f"Refusing commit: tasks.json allowed only on {DEFAULT_MAIN_BRANCH!r} in branch_pr mode\n"
+                    f"Refusing commit: tasks.json allowed only on {integration_branch!r} in branch_pr mode\n"
                     f"Context: {format_command_context(cwd=cwd)}",
                     code=2,
                 )
         if not allow_tasks:
-            if current_branch != DEFAULT_MAIN_BRANCH:
+            if current_branch != integration_branch:
                 parsed = parse_task_id_from_task_branch(current_branch)
                 if parsed != task_id:
                     die(
@@ -1489,7 +1545,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
         pr_meta = pr_load_meta(pr_path / "meta.json")
         pr_branch = str(pr_meta.get("branch") or "").strip()
-        pr_base = str(pr_meta.get("base_branch") or DEFAULT_MAIN_BRANCH).strip()
+        pr_base = str(pr_meta.get("base_branch") or base_branch()).strip()
         pr_check(task_id, branch=pr_branch or None, base=pr_base or None, quiet=True)
     if args.author and args.body and not args.force:
         require_structured_comment(args.body, prefix="Verified:", min_chars=60)
@@ -1732,7 +1788,7 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
         die("--agent is required in workflow_mode='branch_pr' (e.g., --agent CODER)", code=2)
 
     slug = normalize_slug(args.slug or task_title(task_id) or "work")
-    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    base = (args.base or base_branch()).strip()
     branch = default_task_branch(task_id, slug)
 
     if not git_branch_exists(base):
@@ -1811,7 +1867,7 @@ def _git_ahead_behind(branch: str, base: str, *, cwd: Path) -> Tuple[int, int]:
 def cmd_branch_status(args: argparse.Namespace) -> None:
     cwd = Path.cwd().resolve()
     branch = (args.branch or git_current_branch(cwd=cwd)).strip()
-    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    base = (args.base or base_branch(cwd=cwd)).strip()
     if not git_branch_exists(branch, cwd=cwd):
         die(f"Unknown branch: {branch}", code=2)
     if not git_branch_exists(base, cwd=cwd):
@@ -1897,7 +1953,7 @@ def cmd_work_start(args: argparse.Namespace) -> None:
         die("--worktree is required in workflow_mode='branch_pr' for `work start`", code=2)
 
     slug = normalize_slug(args.slug or task_title(task_id) or "work")
-    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    base = (args.base or base_branch()).strip()
     branch = default_task_branch(task_id, slug)
     worktree_path = WORKTREES_DIR / f"{task_id}-{slug}"
 
@@ -1965,10 +2021,10 @@ def git_list_task_branches(*, cwd: Path = ROOT) -> List[str]:
 def cmd_cleanup_merged(args: argparse.Namespace) -> None:
     require_not_task_worktree(action="cleanup merged")
     ensure_invoked_from_repo_root(action="cleanup merged")
-    require_branch(DEFAULT_MAIN_BRANCH, action="cleanup merged")
+    require_branch(base_branch(), action="cleanup merged")
     ensure_git_clean(action="cleanup merged")
 
-    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    base = (args.base or base_branch()).strip()
     if not git_branch_exists(base):
         die(f"Unknown base branch: {base}", code=2)
 
@@ -2350,7 +2406,7 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         author = "unknown"
 
     branch = (args.branch or git_current_branch()).strip()
-    base = (args.base or DEFAULT_MAIN_BRANCH).strip()
+    base = (args.base or base_branch()).strip()
     if branch == base:
         die(f"Refusing to open PR on base branch {base!r}", code=2)
     if not git_branch_exists(branch):
@@ -2410,7 +2466,7 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     meta_path = target / "meta.json"
     meta = pr_load_meta(meta_path)
     branch = (args.branch or str(meta.get("branch") or "")).strip() or git_current_branch()
-    base = (args.base or str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH)).strip()
+    base = (args.base or str(meta.get("base_branch") or base_branch())).strip()
     if not git_branch_exists(branch):
         die(f"Unknown branch: {branch}", code=2)
 
@@ -2452,7 +2508,7 @@ def pr_check(
     if meta_task_id and meta_task_id != task_id:
         die(f"PR meta.json task_id mismatch: expected {task_id}, got {meta_task_id}", code=2)
 
-    base_branch = (base or str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH)).strip()
+    base_ref = (base or str(meta.get("base_branch") or base_branch())).strip()
     meta_branch = str(meta.get("branch") or "").strip()
     if branch and meta_branch and meta_branch != branch:
         die(f"PR meta.json branch mismatch: expected {branch}, got {meta_branch}", code=2)
@@ -2461,8 +2517,8 @@ def pr_check(
         die(f"Working tree is dirty (pr check requires clean state)\nContext: {format_command_context(cwd=Path.cwd().resolve())}", code=2)
     if not git_branch_exists(pr_branch):
         die(f"Unknown branch: {pr_branch}", code=2)
-    if not git_branch_exists(base_branch):
-        die(f"Unknown base branch: {base_branch}", code=2)
+    if not git_branch_exists(base_ref):
+        die(f"Unknown base branch: {base_ref}", code=2)
     parsed_task_id = parse_task_id_from_task_branch(pr_branch)
     if is_branch_pr_mode() and parsed_task_id != task_id:
         die(f"Branch {pr_branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)", code=2)
@@ -2485,20 +2541,20 @@ def pr_check(
     if empty_sections:
         die(f"PR doc {doc_hint} has empty section(s): {', '.join(empty_sections)}", code=2)
 
-    subjects = git_log_subjects(base_branch, pr_branch, limit=200)
+    subjects = git_log_subjects(base_ref, pr_branch, limit=200)
     if not subjects:
-        die(f"No commits found on {pr_branch!r} compared to {base_branch!r}", code=2)
+        die(f"No commits found on {pr_branch!r} compared to {base_ref!r}", code=2)
     if not any(task_id in subject for subject in subjects):
         die(f"Branch {pr_branch!r} has no commit subject mentioning {task_id}", code=2)
 
-    changed = git_diff_names(base_branch, pr_branch)
+    changed = git_diff_names(base_ref, pr_branch)
     if "tasks.json" in changed:
         die(f"Branch {pr_branch!r} modifies tasks.json (single-writer violation)", code=2)
 
     if not quiet:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
         print_block("ACTION", f"Validate PR for {task_id}")
-        print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={pr_branch} base={base_branch}")
+        print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={pr_branch} base={base_ref}")
         print_block("NEXT", "If green, INTEGRATOR can run `python scripts/agentctl.py integrate ...`.")
 
 
@@ -2653,7 +2709,7 @@ def run_verify_with_capture(
 def cmd_integrate(args: argparse.Namespace) -> None:
     require_not_task_worktree(action="integrate")
     ensure_invoked_from_repo_root(action="integrate")
-    require_branch(DEFAULT_MAIN_BRANCH, action="integrate")
+    require_branch(base_branch(), action="integrate")
     ensure_git_clean(action="integrate")
     ensure_path_ignored(WORKTREES_DIRNAME, cwd=ROOT)
 
@@ -2674,7 +2730,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
     meta_source = meta_rel if (pr_path / "meta.json").exists() else f"{branch}:{meta_rel}"
     meta = pr_load_meta_text(meta_text, source=meta_source)
 
-    base = (args.base or str(meta.get("base_branch") or DEFAULT_MAIN_BRANCH)).strip()
+    base = (args.base or str(meta.get("base_branch") or base_branch())).strip()
     strategy = (args.merge_strategy or str(meta.get("merge_strategy") or "squash")).strip().lower()
     if strategy not in {"squash", "merge", "rebase"}:
         die("--merge-strategy must be squash|merge|rebase", code=2)
@@ -2848,7 +2904,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
         print_block("RESULT", f"merge_commit={merge_hash} finish=OK")
         print_block(
             "NEXT",
-            f"Commit closure on main: stage `tasks.json` + `{(pr_path / 'meta.json').relative_to(ROOT)}` (and any docs), then commit `✅ {task_id} close ...`.",
+            f"Commit closure on base branch: stage `tasks.json` + `{(pr_path / 'meta.json').relative_to(ROOT)}` (and any docs), then commit `✅ {task_id} close ...`.",
         )
     finally:
         if created_temp:
@@ -2889,7 +2945,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_work_start.add_argument("task_id")
     p_work_start.add_argument("--agent", help="Agent creating the checkout (e.g., CODER)")
     p_work_start.add_argument("--slug", required=True, help="Short slug for the branch/worktree name (e.g., work-start)")
-    p_work_start.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_work_start.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_work_start.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
     p_work_start.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
     p_work_start.add_argument("--overwrite", action="store_true", help="Overwrite docs/workflow/T-###/README.md when scaffolding")
@@ -2900,7 +2956,7 @@ def build_parser() -> argparse.ArgumentParser:
     cleanup_sub = p_cleanup.add_subparsers(dest="cleanup_cmd", required=True)
 
     p_cleanup_merged = cleanup_sub.add_parser("merged", help="Remove merged task branches and their worktrees")
-    p_cleanup_merged.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_cleanup_merged.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_cleanup_merged.add_argument("--yes", action="store_true", help="Actually delete; without this flag, prints a dry-run plan")
     p_cleanup_merged.add_argument("--quiet", action="store_true", help="Minimal output")
     p_cleanup_merged.set_defaults(func=cmd_cleanup_merged)
@@ -2912,7 +2968,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_branch_create.add_argument("task_id")
     p_branch_create.add_argument("--agent", help="Agent creating the branch (e.g., CODER)")
     p_branch_create.add_argument("--slug", required=True, help="Short slug for the branch/worktree name (e.g., auth-cache)")
-    p_branch_create.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_branch_create.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_branch_create.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
     p_branch_create.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
     p_branch_create.add_argument("--quiet", action="store_true", help="Minimal output")
@@ -2920,7 +2976,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_branch_status = branch_sub.add_parser("status", help="Show quick branch/task status (ahead/behind, worktree path)")
     p_branch_status.add_argument("--branch", help="Branch name (default: current branch)")
-    p_branch_status.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_branch_status.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_branch_status.set_defaults(func=cmd_branch_status)
 
     p_branch_remove = branch_sub.add_parser("remove", help="Remove a task worktree and/or branch (manual confirmation recommended)")
@@ -2936,7 +2992,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr_open = pr_sub.add_parser("open", help="Create PR artifact folder + templates")
     p_pr_open.add_argument("task_id")
     p_pr_open.add_argument("--branch", help="Task branch name (default: current branch)")
-    p_pr_open.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_pr_open.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_pr_open.add_argument("--author", help="Agent/author creating the PR artifact (e.g., CODER)")
     p_pr_open.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_open.set_defaults(func=cmd_pr_open)
@@ -2965,7 +3021,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_integrate = sub.add_parser("integrate", help="Merge a task branch into main (gated by PR artifact + verify)")
     p_integrate.add_argument("task_id")
     p_integrate.add_argument("--branch", help="Task branch to integrate (default: from PR meta.json)")
-    p_integrate.add_argument("--base", default=DEFAULT_MAIN_BRANCH, help=f"Base branch (default: {DEFAULT_MAIN_BRANCH})")
+    p_integrate.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_integrate.add_argument("--merge-strategy", dest="merge_strategy", default="squash", help="squash|merge|rebase (default: squash)")
     p_integrate.add_argument("--run-verify", action="store_true", help="Run task verify commands (or always when configured) and append output to PR verify.log")
     p_integrate.add_argument("--dry-run", action="store_true", help="Print plan + preflight checks without making changes")
@@ -3143,6 +3199,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[List[str]] = None) -> None:
+    maybe_pin_base_branch(cwd=ROOT)
     parser = build_parser()
     args = parser.parse_args(argv)
     func = getattr(args, "func", None)

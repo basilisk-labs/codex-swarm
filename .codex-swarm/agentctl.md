@@ -29,7 +29,7 @@ python scripts/agentctl.py guard commit T-123 -m "✨ T-123 Short meaningful sum
 # if you want a safe wrapper that also runs `git commit`
 python scripts/agentctl.py commit T-123 -m "✨ T-123 Short meaningful summary" --allow <path-prefix>
 
-# when closing a task in the branching workflow (INTEGRATOR on main)
+# when closing a task in the branching workflow (INTEGRATOR on the base branch)
 python scripts/agentctl.py finish T-123 --commit <git-rev> --author INTEGRATOR --body "Verified: ... (what ran, results, caveats)"
 ```
 
@@ -45,15 +45,15 @@ python scripts/agentctl.py work start T-123 --agent CODER --slug <slug> --worktr
 python scripts/agentctl.py branch create T-123 --agent CODER --slug <slug> --worktree
 
 # show quick status (ahead/behind, worktree path)
-python scripts/agentctl.py branch status --branch task/T-123/<slug> --base main
+python scripts/agentctl.py branch status --branch task/T-123/<slug>
 
 # open/update/check the tracked PR artifact (local PR simulation)
 python scripts/agentctl.py pr open T-123 --branch task/T-123/<slug> --author CODER
-python scripts/agentctl.py pr update T-123  # optional; integrate refreshes diffstat + README auto-summary on main
+python scripts/agentctl.py pr update T-123  # optional; integrate refreshes diffstat + README auto-summary on the base branch
 python scripts/agentctl.py pr check T-123
 python scripts/agentctl.py pr note T-123 --author CODER --body "Handoff: ..."
 
-# integrate into main (INTEGRATOR only; run from repo root on main)
+# integrate into the base branch (INTEGRATOR only; run from repo root on the base branch)
 # includes: pr check → verify (skips if already verified for the same SHA unless --run-verify) → merge → refresh diffstat/README auto-summary → finish → task lint
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify
 python scripts/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --dry-run
@@ -83,7 +83,7 @@ python scripts/agentctl.py guard suggest-allow --format args
 ## Workflow reminders
 
 - `tasks.json` is canonical; do not edit it by hand.
-- In branching workflow, `agentctl` rejects tasks.json writes outside the repo root checkout on `main` (and guardrails reject committing tasks.json from task branches).
+- In branching workflow, `agentctl` rejects tasks.json writes outside the repo root checkout on the pinned base branch (and guardrails reject committing tasks.json from task branches).
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
 - Keep allowlists tight: pass only the path prefixes you intend to commit.
@@ -103,3 +103,18 @@ python scripts/agentctl.py guard suggest-allow --format args
   - Integration/closure is performed only by INTEGRATOR via `python scripts/agentctl.py integrate` / `python scripts/agentctl.py finish`.
 
 In `branch_pr`, executors leave handoff notes in `docs/workflow/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `tasks.json` at closure.
+
+## Base branch
+
+By default, `agentctl` uses a pinned “base branch” as the mainline for branch/worktree creation and integration. Pinning happens automatically on first run:
+
+- If `git config --get codexswarm.baseBranch` is unset and the current branch is not a task branch, `agentctl` sets it to the current branch.
+- You can override it explicitly per command via `--base`, or persistently via `.codex-swarm/swarm.config.json` → `base_branch`.
+
+Useful commands:
+
+```bash
+git config --get codexswarm.baseBranch
+git config --local codexswarm.baseBranch <branch>
+git config --unset codexswarm.baseBranch
+```
