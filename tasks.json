@@ -2093,15 +2093,13 @@
         "git",
         "branching"
       ],
-      "depends_on": [
-        "[]"
-      ]
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f064a3906b6d6559094c54dc52a6e90c2171d6ea9c737e6c50fcf57c5654c5b5"
+    "checksum": "c67fbfa0efbce5726a8f8a9a80f028a4971bb0f8d914f672db7c91d0bbf0acac"
   }
 }
