@@ -49,7 +49,27 @@ print(json.dumps(data, indent=2, ensure_ascii=False))
 PY
 
 # Initialize a fresh repository after the cleanup so the folder can be reused independently.
-git init
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  # If we're already in a git repo, pin the current branch as the base branch for agentctl.
+  current_branch="$(git symbolic-ref --short -q HEAD || true)"
+  if [[ -n "${current_branch}" && "${current_branch}" != "HEAD" ]]; then
+    git config --local codexswarm.baseBranch "${current_branch}"
+  fi
+else
+  # Initialize a new git repo. Prefer `main` when supported.
+  if git init -b main >/dev/null 2>&1; then
+    :
+  else
+    git init
+    git switch -c main >/dev/null 2>&1 || true
+  fi
+
+  current_branch="$(git symbolic-ref --short -q HEAD || true)"
+  if [[ -n "${current_branch}" && "${current_branch}" != "HEAD" ]]; then
+    git config --local codexswarm.baseBranch "${current_branch}"
+  fi
+fi
+
 git add .codex-swarm scripts .gitignore AGENTS.md tasks.json
 git commit -m "Initial commit"
 
