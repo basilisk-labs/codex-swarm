@@ -2104,12 +2104,26 @@
           "body": "Verified: Base branch now pins to local git config (codexswarm.baseBranch); integrate/guard/cleanup use it; no-op integrates fail fast."
         }
       ]
+    },
+    {
+      "id": "T-088",
+      "title": "clean.sh: interactive workflow_mode + prompt scrubbing",
+      "description": "Add interactive workflow_mode selection (direct vs branch_pr) to clean.sh, update .codex-swarm/swarm.config.json accordingly, and remove agent prompt instructions for the unused workflow mode when generating a reusable snapshot.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "tags": [
+        "clean",
+        "workflow",
+        "agents"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f86e4b329c5d548bd4c540b3d3c6bc18ced3a4b88c1ae6078fdbc49c08a7c0d2"
+    "checksum": "639f6fb3f0774f32ea96efb35490ebbd3758c3f0da285573f97e6d7e64cf38d9"
   }
 }
