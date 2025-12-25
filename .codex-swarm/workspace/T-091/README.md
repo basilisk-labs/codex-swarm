@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Added a strict start-of-run rule at the end of `AGENTS.md`.
+- Added strict start-of-run rules at the end of `AGENTS.md`.
 
 ## Goal
 
@@ -10,7 +10,7 @@
 
 ## Scope
 
-- Update `AGENTS.md` with an end-of-file startup rule.
+- Update `AGENTS.md` with end-of-file startup rules.
 
 ## Risks
 
@@ -22,7 +22,7 @@
 
 ## Rollback Plan
 
-- Revert commits `69c66ba` and the follow-up work commit.
+- Revert commits `69c66ba`, `a103029`, and the follow-up work commit.
 
 ## Changes Summary (auto)
 

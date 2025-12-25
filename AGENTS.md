@@ -247,3 +247,4 @@ All agents, including ORCHESTRATOR, are defined as JSON files inside the `.codex
 # STARTUP RULE
 
 - Always begin any work by engaging the ORCHESTRATOR; no other agent may initiate a run.
+- Start work right now with the ORCHESTRATOR.
