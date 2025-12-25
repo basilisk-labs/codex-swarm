@@ -2397,12 +2397,26 @@
         "hash": "0b222dfbd26ac511935b4a3026686a4685280d4f",
         "message": "🔧 T-102 harden depends_on parsing"
       }
+    },
+    {
+      "id": "T-103",
+      "title": "Update GitHub sync scripts for new .codex-swarm structure",
+      "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "github",
+        "tasks",
+        "agentctl"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f5b83ee043b803e3f313aae60cbf033bf4c389d0d6e0073f0ea63abc58766eda"
+    "checksum": "b4089a72ea97e3047cb0bcea046ddc7cc8d71ea30d53b46b9f3f3e2ee24a1e18"
   }
 }
