@@ -2280,12 +2280,22 @@
       "id": "T-097",
       "title": "Rename docs index and update references",
       "description": "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
       "depends_on": [
         "[]"
+      ],
+      "commit": {
+        "hash": "cc0ae159d12d582dbaec8d916b8e936fed08a02a",
+        "message": "📝 T-097 rename docs index"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
       ]
     }
   ],
@@ -2293,6 +2303,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "63686f62ab3ea9c0293c3edea30fb82073629b6fa7014d29cbbb3656551f6690"
+    "checksum": "44cc25a97c7bbdbbb9c0f785f20127f33490c060b6de58df9e4ad1269345c462"
   }
 }
