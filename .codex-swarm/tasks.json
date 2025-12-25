@@ -2156,20 +2156,24 @@
       "id": "T-090",
       "title": "Move ORCHESTRATOR spec into JSON",
       "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "agents",
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "b3ab2947a02cb1a0779e680d0784ae9f79255d2f",
+        "message": "🧭 T-090 move ORCHESTRATOR spec to JSON"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "69afbfa11a16b28a3573e0c394b9bc925bd670cfe50f36624e842f3bb4195ef1"
+    "checksum": "1665da76910f33f4a657359f682f52aaaaf5e2faa4e41ab01d322b8a858d4ee5"
   }
 }
