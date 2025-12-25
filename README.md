@@ -53,23 +53,6 @@ Documentation:
 
 ## 📚 Docs index
 
-- `docs/README.md`: Entry point with reading order and document map.
-- `docs/overview.md`: What Codex Swarm is and how it fits together.
-- `docs/prerequisites.md`: Required tools and environment assumptions.
-- `docs/setup.md`: Initial setup steps and sanity checks.
-- `docs/workflow.md`: End-to-end workflow and handoffs.
-- `docs/agents.md`: Agent roles and responsibilities.
-- `docs/tasks-and-agentctl.md`: Task lifecycle and agentctl commands.
-- `docs/branching-and-pr-artifacts.md`: `workflow_mode` and PR artifact rules.
-- `docs/commands.md`: Command reference and quick snippets.
-- `docs/troubleshooting.md`: Common issues and fixes.
-- `docs/glossary.md`: Key terms and artifacts.
-- `docs/architecture.md`: Pointer to the **Architecture & Workflow** section in this README.
-- `.codex-swarm/agentctl.md`: `agentctl` quick reference (task ops + git guardrails).
-- `CONTRIBUTING.md`: How to propose changes and work with maintainers.
-- `CODE_OF_CONDUCT.md`: Community expectations and reporting.
-
-Quick descriptions:
 - `docs/README.md`: Start here for the reading order and document map.
 - `docs/overview.md`: Definitions, scope, and core principles.
 - `docs/prerequisites.md`: Tools and environment assumptions.
