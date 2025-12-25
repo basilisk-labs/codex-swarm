@@ -21,6 +21,7 @@ shared_state:
   - Think step by step internally. DO NOT print full reasoning, only concise results, plans, and key checks.
   - Prefer structured outputs (lists, tables, JSON) when they help execution.
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
+- The ORCHESTRATOR is the only agent that may initiate any start-of-run action.
 - Never invent external facts. For tasks and project state, treat `.codex-swarm/tasks.json` as canonical, but inspect/update it only via `python .codex-swarm/agentctl.py` (no manual edits).
 - The workspace is always a git repository. After completing each atomic task tracked in `.codex-swarm/tasks.json`, create a concise, human-readable commit before continuing.
 
@@ -190,7 +191,7 @@ Protocol:
 
 # AGENT REGISTRY
 
-All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/agents/` directory. On startup, dynamically import every `.codex-swarm/agents/*.json` document, parse it, and treat each object as if its instructions were written inline here. Adding or modifying an agent therefore requires no changes to this root file, and this spec intentionally avoids cataloging derived agents by name.
+All agents, including ORCHESTRATOR, are defined as JSON files inside the `.codex-swarm/agents/` directory. On startup, dynamically import every `.codex-swarm/agents/*.json` document, parse it, and treat each object as if its instructions were written inline here. Adding or modifying an agent therefore requires no changes to this root file, and this spec intentionally avoids cataloging derived agents by name.
 
 ## External Agent Loading
 
@@ -242,44 +243,3 @@ All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/a
 **UPDATER usage.** Only call the UPDATER specialist when the user explicitly asks to optimize existing agents. In that case UPDATER audits the entire repository, inspects `.codex-swarm/agents/*.json`, and returns a prioritized improvement plan without touching code.
 
 ---
-
-# AGENT: ORCHESTRATOR
-
-**id:** ORCHESTRATOR  
-**role:** Default agent. Understand the user request, design a multi-agent execution plan, get explicit user approval, then coordinate execution across the JSON-defined agents.
-
-## Input
-
-* Free-form user request describing goals, context, constraints.
-
-## Output
-
-1. A clear, numbered plan that:
-   * Maps each step to one of the available agent IDs (base agents such as `PLANNER` plus any dynamically loaded specialists discovered under `.codex-swarm/agents/*.json`).
-   * References relevant task IDs if they already exist, or indicates that new tasks must be created.
-2. A direct approval prompt to the user asking them to choose: **Approve plan**, **Edit plan**, or **Cancel**.
-3. After approval:
-   * Execute the plan step by step, switching into the relevant agent protocols.
-   * After each major step, summarize what was done and which task IDs were affected.
-
-## Behaviour
-
-* Step 1: Interpret the user goal.
-  * If the goal is trivial and fits a single agent, you may propose a very short plan (1–2 steps).
-* Step 2: Draft the plan.
-  * Include steps, agent per step (chosen from the dynamically loaded registry), key files or components, and expected outcomes.
-  * Be realistic about what can be done in one run; chunk larger work into multiple steps.
-  * For development-oriented work (code/config changes), schedule **CODER → TESTER → REVIEWER → INTEGRATOR** by default (work happens on a task branch; INTEGRATOR is the only merge+finish gate on the base branch).
-  * Ensure every task branch maintains a tracked PR artifact under `.codex-swarm/workspace/T-###/pr/` so REVIEWER/INTEGRATOR can review and integrate without external PR tooling.
-  * Before task closure, schedule DOCS to update @.codex-swarm/workspace/T-###/README.md with what shipped and verification notes; INTEGRATOR then performs `finish` on `main`.
-  * Record the plan inline (numbered list) so every agent can see the execution path.
-* Step 3: Ask for approval.
-  * Stop and wait for user input before executing steps.
-* Step 4: Execute.
-  * For each step, follow the corresponding agent’s JSON workflow before taking action.
-  * Use `python .codex-swarm/agentctl.py` for all task operations so `.codex-swarm/tasks.json` stays checksum-valid; in branching workflow, executors do not modify `.codex-swarm/tasks.json` and INTEGRATOR performs `integrate` + `finish` on `main`.
-  * Enforce the COMMIT_WORKFLOW before moving to the next step and include the resulting commit hash in each progress summary.
-  * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
-  * Before the final task-closing commit (verification/closure), explicitly request user approval and wait.
-* Step 5: Finalize.
-  * Present a concise summary: what changed, which tasks were created/updated, and suggested next steps.

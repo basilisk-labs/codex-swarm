@@ -64,6 +64,7 @@ Prerequisites:
 │   ├── agentctl.md
 │   ├── config.json
 │   └── agents
+│       ├── ORCHESTRATOR.json
 │       ├── PLANNER.json
 │       ├── CODER.json
 │       ├── TESTER.json
@@ -93,9 +94,10 @@ Prerequisites:
 
 | Path | Purpose |
 | --- | --- |
-| `AGENTS.md` | 🌐 Global rules, commit workflow, and the ORCHESTRATOR specification (plus the JSON template for new agents). |
+| `AGENTS.md` | 🌐 Global rules, commit workflow, and the JSON template for new agents. |
 | `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python .codex-swarm/agentctl.py` commands + commit guardrails. |
 | `.codex-swarm/config.json` | ⚙️ Framework config (paths + workflow_mode). |
+| `.codex-swarm/agents/ORCHESTRATOR.json` | 🧭 Default agent that initiates runs, plans, and coordinates execution. |
 | `.codex-swarm/agents/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python .codex-swarm/agentctl.py` and kept aligned with each plan. |
 | `.codex-swarm/agents/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
 | `.codex-swarm/agents/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
@@ -137,7 +139,7 @@ This section expands on the concepts referenced above and shows how the swarm fi
 
 ### Core building blocks
 
-1. **Global rules and the ORCHESTRATOR** live in `AGENTS.md`.
+1. **Global rules** live in `AGENTS.md`, and the ORCHESTRATOR lives in `.codex-swarm/agents/ORCHESTRATOR.json`.
 2. **Specialists** live in `.codex-swarm/agents/*.json` and are dynamically loaded by the orchestrator.
 3. **Tasks** live in `.codex-swarm/tasks.json` and are the canonical source of truth.
 4. **Task operations and git guardrails** flow through `python .codex-swarm/agentctl.py`.
