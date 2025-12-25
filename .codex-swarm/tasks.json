@@ -2173,20 +2173,24 @@
       "id": "T-091",
       "title": "Add end-of-file ORCHESTRATOR start rule",
       "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "low",
       "owner": "DOCS",
       "tags": [
         "docs",
         "agents"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
+        "message": "🧭 T-091 add explicit orchestrator start line"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "84c86d1c1a9d985cdd90f4c2b6c7438381d6b8a14778d70758cfeede185d99ef"
+    "checksum": "f40c34288203156af6fa7b2dee02584990eb9da0643c468a2b6470c87f19ba53"
   }
 }
