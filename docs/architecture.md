@@ -11,5 +11,5 @@ Codex Swarm is a local workflow layer that combines JSON-defined agents, a task 
 
 ## Where to Read Next
 - `README.md` for diagrams and the full architecture narrative.
-- `docs/workflow.md` for end-to-end process details.
-- `docs/branching-and-pr-artifacts.md` for workflow_mode specifics.
+- `workflow.md` for end-to-end process details.
+- `branching-and-pr-artifacts.md` for `workflow_mode` specifics.

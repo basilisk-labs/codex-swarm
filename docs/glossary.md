@@ -19,7 +19,7 @@ A separate checkout used for task branches in `branch_pr` mode.
 Config switch that chooses between `direct` and `branch_pr` workflows.
 
 ## Verify
-Running declared checks for a task via agentctl.
+Running declared checks for a task via `agentctl`.
 
 ## Guard
 Pre-commit checks that validate staged files and commit messages.

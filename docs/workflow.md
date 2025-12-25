@@ -3,7 +3,7 @@
 ## End-to-End Flow
 1. You state a goal to the ORCHESTRATOR.
 2. ORCHESTRATOR proposes a plan and asks for approval.
-3. PLANNER creates or updates tasks in `.codex-swarm/tasks.json` using agentctl.
+3. PLANNER creates or updates tasks in `.codex-swarm/tasks.json` using `agentctl`.
 4. Execution agents implement changes and update workflow artifacts.
 5. REVIEWER assesses changes and leaves handoff notes.
 6. INTEGRATOR verifies, merges, and closes tasks (when `workflow_mode=branch_pr`).

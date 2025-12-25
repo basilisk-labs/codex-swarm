@@ -1,4 +1,4 @@
-# Tasks and Agentctl
+# Tasks and agentctl
 
 ## Canonical Task Source
 - `.codex-swarm/tasks.json` is the single source of truth.
@@ -6,7 +6,7 @@
 
 ## Task Lifecycle
 - Statuses: TODO, DOING, DONE, BLOCKED.
-- Transitions are recorded via agentctl commands (`start`, `block`, `finish`).
+- Transitions are recorded via `agentctl` commands (`start`, `block`, `finish`).
 
 ## Core Commands
 ```bash

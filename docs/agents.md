@@ -10,7 +10,7 @@ All agents are defined in JSON under `.codex-swarm/agents/`. `AGENTS.md` provide
 
 ## PLANNER
 - Owns the task backlog.
-- Uses agentctl to add/update tasks and enforce dependencies.
+- Uses `agentctl` to add/update tasks and enforce dependencies.
 - Creates the initial per-task workflow artifact.
 
 ## CODER
