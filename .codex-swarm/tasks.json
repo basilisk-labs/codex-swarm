@@ -2436,12 +2436,24 @@
         "hash": "fbc029009285cf68d7730f23156fce5572b52d96",
         "message": "📝 T-104 update README layout"
       }
+    },
+    {
+      "id": "T-105",
+      "title": "Merge docs index sections",
+      "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "2e840d9c70d23143c68c1ed79c70cfd94a420d56d64242ef418c23611c4943a8"
+    "checksum": "b9804a3de2ffd8a0ca8072813f643b9dadf43ecd5fb19422204e3c122e1abdb8"
   }
 }
