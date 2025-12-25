@@ -2190,13 +2190,17 @@
       "id": "T-092",
       "title": "Align batch finish commit naming docs",
       "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
+        "message": "📝 T-092 align batch finish docs"
+      }
     },
     {
       "id": "T-093",
@@ -2421,6 +2425,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "00c41f388d8bac2bd6983f151887e32fe2166dcba073f6131d28a5faab819aa7"
+    "checksum": "b9d292c3b96581bb66dd1de8cb440cf8cce6d95b8d190f8139441519a697e705"
   }
 }
