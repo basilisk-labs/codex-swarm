@@ -2441,19 +2441,23 @@
       "id": "T-105",
       "title": "Merge docs index sections",
       "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "9d6cf15ab9c6bdf76abee921795806b19bc16f2e",
+        "message": "📝 T-105 merge docs index sections"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b9804a3de2ffd8a0ca8072813f643b9dadf43ecd5fb19422204e3c122e1abdb8"
+    "checksum": "66d338d39a97f3df89cc767785570128b492f25f18d3a49a5e2f495895be5759"
   }
 }
