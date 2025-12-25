@@ -49,9 +49,19 @@ Prerequisites:
 
 ## 📚 Docs index
 
-- `GUIDELINE.md`: Framework usage guidelines (day-to-day workflow).
-- `.codex-swarm/agentctl.md`: `agentctl` quick reference (task ops + git guardrails).
+- `docs/index.md`: Entry point with reading order and document map.
+- `docs/overview.md`: What Codex Swarm is and how it fits together.
+- `docs/prerequisites.md`: Required tools and environment assumptions.
+- `docs/setup.md`: Initial setup steps and sanity checks.
+- `docs/workflow.md`: End-to-end workflow and handoffs.
+- `docs/agents.md`: Agent roles and responsibilities.
+- `docs/tasks-and-agentctl.md`: Task lifecycle and agentctl commands.
+- `docs/branching-and-pr-artifacts.md`: `workflow_mode` and PR artifact rules.
+- `docs/commands.md`: Command reference and quick snippets.
+- `docs/troubleshooting.md`: Common issues and fixes.
+- `docs/glossary.md`: Key terms and artifacts.
 - `docs/architecture.md`: Pointer to the **Architecture & Workflow** section in this README.
+- `.codex-swarm/agentctl.md`: `agentctl` quick reference (task ops + git guardrails).
 - `CONTRIBUTING.md`: How to propose changes and work with maintainers.
 - `CODE_OF_CONDUCT.md`: Community expectations and reporting.
 
@@ -79,17 +89,18 @@ Prerequisites:
 ├── .codex-swarm/tasks.json
 ├── tasks.html
 ├── docs
-│   ├── architecture.md
-│   └── workflow
-│       └── T-123
-│           ├── README.md
-│           └── pr
-│               ├── meta.json
-│               ├── diffstat.txt
-│               ├── verify.log
-│               └── review.md
-├── scripts
-│   └── agentctl.py
+│   ├── index.md
+│   ├── overview.md
+│   ├── prerequisites.md
+│   ├── setup.md
+│   ├── workflow.md
+│   ├── agents.md
+│   ├── tasks-and-agentctl.md
+│   ├── branching-and-pr-artifacts.md
+│   ├── commands.md
+│   ├── troubleshooting.md
+│   ├── glossary.md
+│   └── architecture.md
 ```
 
 | Path | Purpose |
