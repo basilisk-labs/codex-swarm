@@ -2424,20 +2424,24 @@
       "id": "T-104",
       "title": "Align README repository layout with current structure",
       "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "readme",
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "fbc029009285cf68d7730f23156fce5572b52d96",
+        "message": "📝 T-104 update README layout"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a45a686ae3ca4b2001af0265ba4071a33d94bc532b561b402d3a956bf2e287f5"
+    "checksum": "2e840d9c70d23143c68c1ed79c70cfd94a420d56d64242ef418c23611c4943a8"
   }
 }
