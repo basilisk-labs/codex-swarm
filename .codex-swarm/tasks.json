@@ -2457,19 +2457,23 @@
       "id": "T-106",
       "title": "Audit docs for clarity and consistency",
       "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "fe29281d02dadd4154586cbd088361ba54174a97",
+        "message": "📝 T-106 align docs links and wording"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7822945507f9ba06b92ea2d40efe08849af075b6f783678d62d573ea65b8352b"
+    "checksum": "2862e420dfc0521a7f50f0a420d7998558a3cebf8c5a906eed83d1fd17a571ea"
   }
 }
