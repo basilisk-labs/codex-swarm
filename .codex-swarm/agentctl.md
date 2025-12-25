@@ -113,7 +113,7 @@ python .codex-swarm/agentctl.py guard suggest-allow --format args
 
 ## Workflow reminders
 
-- `.codex-swarm/tasks.json` is canonical; do not edit it by hand.
+- `.codex-swarm/tasks.json` is canonical; agents are forbidden from editing it by hand (use agentctl only).
 - In branching workflow, `agentctl` rejects .codex-swarm/tasks.json writes outside the repo root checkout on the pinned base branch (and guardrails reject committing .codex-swarm/tasks.json from task branches).
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
