@@ -2468,12 +2468,24 @@
         "hash": "fe29281d02dadd4154586cbd088361ba54174a97",
         "message": "📝 T-106 align docs links and wording"
       }
+    },
+    {
+      "id": "T-107",
+      "title": "Link file references in docs",
+      "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "2862e420dfc0521a7f50f0a420d7998558a3cebf8c5a906eed83d1fd17a571ea"
+    "checksum": "0f86f6fdd2e0f2f151305c29143ee4f3739838d364b75549b8eb25807904e292"
   }
 }
