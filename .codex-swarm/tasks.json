@@ -2385,20 +2385,24 @@
       "id": "T-102",
       "title": "Harden agentctl depends_on parsing",
       "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "agentctl",
         "tasks"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "0b222dfbd26ac511935b4a3026686a4685280d4f",
+        "message": "🔧 T-102 harden depends_on parsing"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "86e9d50f982a71f952f5036cb36c58f82be95176c08857cbc4d4b238d94d926d"
+    "checksum": "f5b83ee043b803e3f313aae60cbf033bf4c389d0d6e0073f0ea63abc58766eda"
   }
 }
