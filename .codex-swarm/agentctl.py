@@ -1309,6 +1309,10 @@ def cmd_task_add(args: argparse.Namespace) -> None:
     status = (args.status or "TODO").strip().upper()
     if status not in ALLOWED_STATUSES:
         die(f"Invalid status: {status}")
+    raw_depends_on = [dep for dep in (args.depends_on or []) if isinstance(dep, str)]
+    normalized_depends_on = list(
+        dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
+    )
     for task_id in task_ids:
         task: Dict = {
             "id": task_id,
@@ -1318,7 +1322,7 @@ def cmd_task_add(args: argparse.Namespace) -> None:
             "priority": args.priority,
             "owner": args.owner,
             "tags": list(dict.fromkeys((args.tag or []))),
-            "depends_on": list(dict.fromkeys((args.depends_on or []))),
+            "depends_on": normalized_depends_on,
         }
         if args.verify:
             task["verify"] = list(dict.fromkeys(args.verify))
@@ -1354,7 +1358,9 @@ def cmd_task_update(args: argparse.Namespace) -> None:
     if args.depends_on:
         existing = [dep for dep in (task.get("depends_on") or []) if isinstance(dep, str)]
         merged = existing + args.depends_on
-        task["depends_on"] = list(dict.fromkeys(dep.strip() for dep in merged if dep.strip()))
+        task["depends_on"] = list(
+            dict.fromkeys(dep.strip() for dep in merged if dep.strip() and dep.strip() != "[]")
+        )
 
     if args.replace_verify:
         task["verify"] = []

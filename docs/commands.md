@@ -9,7 +9,7 @@ python .codex-swarm/agentctl.py quickstart
 ```bash
 python .codex-swarm/agentctl.py task list
 python .codex-swarm/agentctl.py task show T-123
-python .codex-swarm/agentctl.py task add T-123 --title "..." --description "..." --depends-on "[]"
+python .codex-swarm/agentctl.py task add T-123 --title "..." --description "..."
 python .codex-swarm/agentctl.py task lint
 ```
 
