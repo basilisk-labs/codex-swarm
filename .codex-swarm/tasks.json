@@ -2168,12 +2168,25 @@
         "hash": "b3ab2947a02cb1a0779e680d0784ae9f79255d2f",
         "message": "🧭 T-090 move ORCHESTRATOR spec to JSON"
       }
+    },
+    {
+      "id": "T-091",
+      "title": "Add end-of-file ORCHESTRATOR start rule",
+      "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
+      "status": "TODO",
+      "priority": "low",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "1665da76910f33f4a657359f682f52aaaaf5e2faa4e41ab01d322b8a858d4ee5"
+    "checksum": "84c86d1c1a9d985cdd90f4c2b6c7438381d6b8a14778d70758cfeede185d99ef"
   }
 }
