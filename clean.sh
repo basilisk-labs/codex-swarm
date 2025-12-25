@@ -21,7 +21,7 @@ export MODE
 
 # This script cleans the project folder by removing the root repository links so agents can be used for anything.
 # It removes leftover assets, metadata, and git state that would tie the copy to the original repo.
-# It also removes framework-development artifacts that aren't needed for a reusable snapshot.
+# It also removes framework-development artifacts (including docs/) that aren't needed for a reusable snapshot.
 #
 # Note: .codex-swarm/agentctl.md and .codex-swarm/workspace stay as part of the framework snapshot.
 

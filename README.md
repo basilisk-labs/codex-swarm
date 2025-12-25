@@ -49,7 +49,7 @@ Prerequisites:
 
 ## 📚 Docs index
 
-- `docs/index.md`: Entry point with reading order and document map.
+- `docs/README.md`: Entry point with reading order and document map.
 - `docs/overview.md`: What Codex Swarm is and how it fits together.
 - `docs/prerequisites.md`: Required tools and environment assumptions.
 - `docs/setup.md`: Initial setup steps and sanity checks.
@@ -64,6 +64,20 @@ Prerequisites:
 - `.codex-swarm/agentctl.md`: `agentctl` quick reference (task ops + git guardrails).
 - `CONTRIBUTING.md`: How to propose changes and work with maintainers.
 - `CODE_OF_CONDUCT.md`: Community expectations and reporting.
+
+Quick descriptions:
+- `docs/README.md`: Start here for the reading order and document map.
+- `docs/overview.md`: Definitions, scope, and core principles.
+- `docs/prerequisites.md`: Tools and environment assumptions.
+- `docs/setup.md`: Setup steps and sanity checks.
+- `docs/workflow.md`: End-to-end process and handoffs.
+- `docs/agents.md`: Role responsibilities and ownership boundaries.
+- `docs/tasks-and-agentctl.md`: Task lifecycle and agentctl usage.
+- `docs/branching-and-pr-artifacts.md`: `workflow_mode`, branches, and PR artifacts.
+- `docs/commands.md`: Common commands and quick snippets.
+- `docs/troubleshooting.md`: Common failures and fixes.
+- `docs/glossary.md`: Terms and artifacts glossary.
+- `docs/architecture.md`: Pointer to architecture diagrams in this README.
 
 ## 🗂️ Repository Layout
 
@@ -89,7 +103,7 @@ Prerequisites:
 ├── .codex-swarm/tasks.json
 ├── tasks.html
 ├── docs
-│   ├── index.md
+│   ├── README.md
 │   ├── overview.md
 │   ├── prerequisites.md
 │   ├── setup.md
