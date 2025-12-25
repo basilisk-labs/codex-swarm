@@ -2206,9 +2206,7 @@
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
-      "depends_on": [
-        "[]"
-      ],
+      "depends_on": [],
       "commit": {
         "hash": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
         "message": "📝 T-093 write docs content"
@@ -2228,9 +2226,7 @@
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
-      "depends_on": [
-        "[]"
-      ],
+      "depends_on": [],
       "commit": {
         "hash": "9900d029d4f831d920a82e58869c7d7ec8b28623",
         "message": "📝 T-094 update docs index"
@@ -2250,9 +2246,7 @@
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
-      "depends_on": [
-        "[]"
-      ],
+      "depends_on": [],
       "commit": {
         "hash": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
         "message": "📝 T-095 align README docs"
@@ -2268,13 +2262,23 @@
       "id": "T-096",
       "title": "Centralize agentctl guidance",
       "description": "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "7eb0068599e887d0ceda3f427e413b1a7505d6dc",
+        "message": "🛠️ T-096 centralize agentctl guidance"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only update in agentctl.md and agent JSONs; no tests required."
+        }
+      ]
     },
     {
       "id": "T-097",
@@ -2284,9 +2288,7 @@
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
-      "depends_on": [
-        "[]"
-      ],
+      "depends_on": [],
       "commit": {
         "hash": "cc0ae159d12d582dbaec8d916b8e936fed08a02a",
         "message": "📝 T-097 rename docs index"
@@ -2303,6 +2305,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "44cc25a97c7bbdbbb9c0f785f20127f33490c060b6de58df9e4ad1269345c462"
+    "checksum": "fd01f412abefee1ace592065bf6e583d02a28d6cd6b929909af3b2703247b934"
   }
 }
