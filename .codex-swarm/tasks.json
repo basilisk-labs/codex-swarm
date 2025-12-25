@@ -2185,12 +2185,24 @@
         "hash": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
         "message": "🧭 T-091 add explicit orchestrator start line"
       }
+    },
+    {
+      "id": "T-092",
+      "title": "Align batch finish commit naming docs",
+      "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f40c34288203156af6fa7b2dee02584990eb9da0643c468a2b6470c87f19ba53"
+    "checksum": "64f718032d0628b2a094e97f3d2051788eea4accad9934ebd60cd2ecedc71abd"
   }
 }
