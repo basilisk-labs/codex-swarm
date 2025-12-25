@@ -2452,12 +2452,24 @@
         "hash": "9d6cf15ab9c6bdf76abee921795806b19bc16f2e",
         "message": "📝 T-105 merge docs index sections"
       }
+    },
+    {
+      "id": "T-106",
+      "title": "Audit docs for clarity and consistency",
+      "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "66d338d39a97f3df89cc767785570128b492f25f18d3a49a5e2f495895be5759"
+    "checksum": "7822945507f9ba06b92ea2d40efe08849af075b6f783678d62d573ea65b8352b"
   }
 }
