@@ -21,7 +21,7 @@ from typing import Dict, Iterable, List, Optional, Set, Tuple
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 SWARM_DIR = ROOT / ".codex-swarm"
-SWARM_CONFIG_PATH = SWARM_DIR / "swarm.config.json"
+SWARM_CONFIG_PATH = SWARM_DIR / "config.json"
 
 ALLOWED_WORKFLOW_MODES: Set[str] = {"direct", "branch_pr"}
 DEFAULT_WORKFLOW_MODE = "direct"
@@ -311,6 +311,7 @@ TASKS_PATH = _resolve_repo_relative_path(_PATHS.get("tasks_path"), label="tasks_
 AGENTS_DIR = _resolve_repo_relative_path(_PATHS.get("agents_dir"), label="agents_dir")
 AGENTCTL_DOCS_PATH = _resolve_repo_relative_path(_PATHS.get("agentctl_docs_path"), label="agentctl_docs_path")
 WORKFLOW_DIR = _resolve_repo_relative_path(_PATHS.get("workflow_dir"), label="workflow_dir")
+TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
 
 
 def workflow_mode() -> str:
@@ -855,29 +856,29 @@ def guard_commit_check(
                 ),
                 code=2,
             )
-        if "tasks.json" in staged and not allow_tasks:
+        if TASKS_PATH_REL in staged and not allow_tasks:
             die(
                 "\n".join(
                     [
-                        "Refusing commit: tasks.json is forbidden in workflow_mode='branch_pr'",
+                        f"Refusing commit: {TASKS_PATH_REL} is forbidden in workflow_mode='branch_pr'",
                         "Fix:",
-                        "  1) Remove tasks.json from the index (`git restore --staged tasks.json`)",
+                        f"  1) Remove {TASKS_PATH_REL} from the index (`git restore --staged {TASKS_PATH_REL}`)",
                         "  2) Commit code/docs/PR artifacts on the task branch",
-                        f"  3) Close the task on {integration_branch} via INTEGRATOR (tasks.json only in closure commit)",
+                        f"  3) Close the task on {integration_branch} via INTEGRATOR (tasks file only in closure commit)",
                         f"Context: {format_command_context(cwd=cwd)}",
                     ]
                 ),
                 code=2,
             )
-        if "tasks.json" in staged and allow_tasks:
+        if TASKS_PATH_REL in staged and allow_tasks:
             if is_task_worktree_checkout(cwd=cwd):
                 die(
-                    f"Refusing commit: tasks.json from a worktree checkout (.codex-swarm/worktrees/*)\nContext: {format_command_context(cwd=cwd)}",
+                    f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout (.codex-swarm/worktrees/*)\nContext: {format_command_context(cwd=cwd)}",
                     code=2,
                 )
             if current_branch != integration_branch:
                 die(
-                    f"Refusing commit: tasks.json allowed only on {integration_branch!r} in branch_pr mode\n"
+                    f"Refusing commit: {TASKS_PATH_REL} allowed only on {integration_branch!r} in branch_pr mode\n"
                     f"Context: {format_command_context(cwd=cwd)}",
                     code=2,
                 )
@@ -910,7 +911,7 @@ def guard_commit_check(
 
     denied = set()
     if not allow_tasks:
-        denied.update({"tasks.json"})
+        denied.update({TASKS_PATH_REL})
 
     for path in staged:
         if path in denied:
@@ -1104,7 +1105,7 @@ def cmd_task_lint(args: argparse.Namespace) -> None:
         for message in result["errors"]:
             print(f"❌ {message}", file=sys.stderr)
         raise SystemExit(2)
-    print("✅ tasks.json OK")
+    print(f"✅ {TASKS_PATH_REL} OK")
 
 
 def cmd_ready(args: argparse.Namespace) -> None:
@@ -2613,8 +2614,8 @@ def pr_check(
         die(f"Branch {pr_branch!r} has no commit subject mentioning {task_id}", code=2)
 
     changed = git_diff_names(base_ref, pr_branch)
-    if "tasks.json" in changed:
-        die(f"Branch {pr_branch!r} modifies tasks.json (single-writer violation)", code=2)
+    if TASKS_PATH_REL in changed:
+        die(f"Branch {pr_branch!r} modifies {TASKS_PATH_REL} (single-writer violation)", code=2)
 
     if not quiet:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
@@ -2810,7 +2811,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
     print_block("ACTION", f"Integrate {branch} into {base} for {task_id} (strategy={strategy})")
 
     pr_check(task_id, branch=branch, base=base, quiet=True)
-    assert_no_diff_paths(base=base, branch=branch, forbidden=["tasks.json"], cwd=ROOT)
+    assert_no_diff_paths(base=base, branch=branch, forbidden=[TASKS_PATH_REL], cwd=ROOT)
     base_sha_before_merge = git_rev_parse(base)
 
     verify_commands = get_task_verify_commands_for(task_id)
@@ -2992,7 +2993,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
         print_block("RESULT", f"merge_commit={merge_hash} finish=OK")
         print_block(
             "NEXT",
-            f"Commit closure on base branch: stage `tasks.json` + `{(pr_path / 'meta.json').relative_to(ROOT)}` (and any docs), then commit `✅ {task_id} close ...`.",
+            f"Commit closure on base branch: stage `{TASKS_PATH_REL}` + `{(pr_path / 'meta.json').relative_to(ROOT)}` (and any docs), then commit `✅ {task_id} close ...`.",
         )
     finally:
         if created_temp:

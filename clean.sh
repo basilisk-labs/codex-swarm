@@ -40,13 +40,13 @@ rm -rf \
   README.md \
   tasks.html \
   LICENSE \
-  tasks.json \
+  .codex-swarm/tasks.json \
   CONTRIBUTING.md \
   CODE_OF_CONDUCT.md \
   GUIDELINE.md
 
-# Recreate an empty tasks.json so the framework is usable after cleanup.
-python - <<'PY' > tasks.json
+# Recreate an empty tasks file so the framework is usable after cleanup.
+python - <<'PY' > .codex-swarm/tasks.json
 import hashlib
 import json
 
@@ -210,8 +210,8 @@ def scrub_workflow_mode_docs(path: Path) -> None:
         out.append(line)
     Path(path).write_text("".join(out), encoding="utf-8")
 
-# 1) Set the workflow mode in swarm.config.json
-config_path = ROOT / ".codex-swarm" / "swarm.config.json"
+# 1) Set the workflow mode in config.json
+config_path = ROOT / ".codex-swarm" / "config.json"
 config = json.loads(config_path.read_text(encoding="utf-8"))
 config["workflow_mode"] = mode
 write_json(config_path, config)
@@ -248,7 +248,7 @@ else
   fi
 fi
 
-git add .codex-swarm .gitignore AGENTS.md tasks.json
+git add .codex-swarm .gitignore AGENTS.md
 git commit -m "Initial commit"
 
 rm -rf clean.sh

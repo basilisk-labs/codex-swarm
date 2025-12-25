@@ -1,6 +1,6 @@
 # agentctl quickstart
 
-`python .codex-swarm/agentctl.py` is the only supported way to inspect/update `tasks.json` (manual edits break the checksum).
+`python .codex-swarm/agentctl.py` is the only supported way to inspect/update `.codex-swarm/tasks.json` (manual edits break the checksum).
 
 ## Common commands
 
@@ -9,7 +9,7 @@
 python .codex-swarm/agentctl.py task list
 python .codex-swarm/agentctl.py task show T-123
 
-# validate tasks.json (schema/deps/checksum)
+# validate .codex-swarm/tasks.json (schema/deps/checksum)
 python .codex-swarm/agentctl.py task lint
 
 # readiness gate (deps DONE)
@@ -82,35 +82,35 @@ python .codex-swarm/agentctl.py guard suggest-allow --format args
 
 ## Workflow reminders
 
-- `tasks.json` is canonical; do not edit it by hand.
-- In branching workflow, `agentctl` rejects tasks.json writes outside the repo root checkout on the pinned base branch (and guardrails reject committing tasks.json from task branches).
+- `.codex-swarm/tasks.json` is canonical; do not edit it by hand.
+- In branching workflow, `agentctl` rejects .codex-swarm/tasks.json writes outside the repo root checkout on the pinned base branch (and guardrails reject committing .codex-swarm/tasks.json from task branches).
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
 - Keep allowlists tight: pass only the path prefixes you intend to commit.
 
 ## Workflow mode
 
-`agentctl` behavior is controlled by `.codex-swarm/swarm.config.json`:
+`agentctl` behavior is controlled by `.codex-swarm/config.json`:
 
 - `workflow_mode: "direct"`: low-ceremony, single-checkout workflow.
   - Do all work in the current checkout; do not create task branches/worktrees (`agentctl branch create` is refused).
   - `python .codex-swarm/agentctl.py work start T-123` only scaffolds `.codex-swarm/workspace/T-###/README.md` (it does not create a branch/worktree).
   - PR artifacts under `.codex-swarm/workspace/T-###/pr/` are optional.
-  - Tasks can be implemented and closed on the current branch; `tasks.json` is still updated only via `python .codex-swarm/agentctl.py` (no manual edits).
-- `workflow_mode: "branch_pr"`: strict branching workflow (task branches + worktrees + tracked PR artifacts + single-writer `tasks.json`).
-  - Planning and closure happen in the repo root checkout on `main`; `tasks.json` is never modified/committed on task branches.
+  - Tasks can be implemented and closed on the current branch; `.codex-swarm/tasks.json` is still updated only via `python .codex-swarm/agentctl.py` (no manual edits).
+- `workflow_mode: "branch_pr"`: strict branching workflow (task branches + worktrees + tracked PR artifacts + single-writer `.codex-swarm/tasks.json`).
+  - Planning and closure happen in the repo root checkout on `main`; `.codex-swarm/tasks.json` is never modified/committed on task branches.
   - Executors work in `.codex-swarm/worktrees/T-###-<slug>/` on `task/T-###/<slug>`.
   - Each task uses tracked PR artifacts under `.codex-swarm/workspace/T-###/pr/`.
   - Integration/closure is performed only by INTEGRATOR via `python .codex-swarm/agentctl.py integrate` / `python .codex-swarm/agentctl.py finish`.
 
-In `branch_pr`, executors leave handoff notes in `.codex-swarm/workspace/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `tasks.json` at closure.
+In `branch_pr`, executors leave handoff notes in `.codex-swarm/workspace/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `.codex-swarm/tasks.json` at closure.
 
 ## Base branch
 
 By default, `agentctl` uses a pinned “base branch” as the mainline for branch/worktree creation and integration. Pinning happens automatically on first run:
 
 - If `git config --get codexswarm.baseBranch` is unset and the current branch is not a task branch, `agentctl` sets it to the current branch.
-- You can override it explicitly per command via `--base`, or persistently via `.codex-swarm/swarm.config.json` → `base_branch`.
+- You can override it explicitly per command via `--base`, or persistently via `.codex-swarm/config.json` → `base_branch`.
 
 Useful commands:
 

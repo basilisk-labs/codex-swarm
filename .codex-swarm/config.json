@@ -4,7 +4,7 @@
   "paths": {
     "agents_dir": ".codex-swarm/agents",
     "agentctl_docs_path": ".codex-swarm/agentctl.md",
-    "tasks_path": "tasks.json",
+    "tasks_path": ".codex-swarm/tasks.json",
     "workflow_dir": ".codex-swarm/workspace"
   }
 }

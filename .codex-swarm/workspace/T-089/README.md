@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Moved agentctl and workflow artifacts under `.codex-swarm` and updated live docs/configs.
+- Moved agentctl, config, tasks, and workflow artifacts under `.codex-swarm` and updated live docs/configs.
 
 ## Goal
 
@@ -11,8 +11,10 @@
 ## Scope
 
 - Move `scripts/agentctl.py` to `.codex-swarm/agentctl.py`.
+- Rename `.codex-swarm/swarm.config.json` to `.codex-swarm/config.json`.
+- Move `tasks.json` to `.codex-swarm/tasks.json`.
 - Move `docs/workflow/` to `.codex-swarm/workspace/`.
-- Update framework docs, agent prompts, config, and `clean.sh` references.
+- Update framework docs, agent prompts, config, `agentctl.py`, `tasks.html`, and `clean.sh` references.
 
 ## Risks
 

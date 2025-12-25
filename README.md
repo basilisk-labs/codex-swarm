@@ -24,7 +24,7 @@ Prerequisites:
    - The ORCHESTRATOR will propose a plan, map steps to agents (PLANNER/CODER/TESTER/DOCS/REVIEWER/INTEGRATOR), and ask for approval.
 
 3. Task tracking:
-   - `tasks.json` is the single source of truth.
+   - `.codex-swarm/tasks.json` is the single source of truth.
    - Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show T-123` to inspect tasks.
    - Use `python .codex-swarm/agentctl.py task lint` to validate schema/deps/checksum (manual edits are not allowed).
 
@@ -38,13 +38,13 @@ Prerequisites:
 3. PLANNER: creates T-041 (refactor) and T-042 (docs) and scaffolds `.codex-swarm/workspace/T-041/README.md`.
 4. CODER: creates `task/T-041/{slug}` + `.codex-swarm/worktrees/T-041-{slug}/`, implements the change, and opens/updates `.codex-swarm/workspace/T-041/pr/`.
 5. REVIEWER: reviews the PR artifact and leaves handoff notes in `.codex-swarm/workspace/T-041/pr/review.md`.
-6. INTEGRATOR: runs `pr check`, merges to `main`, then closes via `finish` (updates `tasks.json`).
+6. INTEGRATOR: runs `pr check`, merges to `main`, then closes via `finish` (updates `.codex-swarm/tasks.json`).
 
 ## ✨ Highlights
 
 - 🧠 **Orchestrated specialists:** Every agent prompt lives in `.codex-swarm/agents/*.json` so the orchestrator can load roles, permissions, and workflows dynamically.
 - 🧭 **Workflow guardrails:** The global instructions in `AGENTS.md` enforce approvals, planning, and emoji-prefixed commits so collaboration stays predictable.
-- 📝 **Docs-first cadence:** `tasks.json` drives the backlog, and `python .codex-swarm/agentctl.py` provides a safe CLI for inspecting/updating tasks (checksum-backed, no manual edits).
+- 📝 **Docs-first cadence:** `.codex-swarm/tasks.json` drives the backlog, and `python .codex-swarm/agentctl.py` provides a safe CLI for inspecting/updating tasks (checksum-backed, no manual edits).
 - 🧪 **Post-change test coverage:** Development work can hand off to TESTER so relevant behavior is protected by automated tests before moving on.
 
 ## 📚 Docs index
@@ -62,7 +62,7 @@ Prerequisites:
 ├── AGENTS.md
 ├── .codex-swarm
 │   ├── agentctl.md
-│   ├── swarm.config.json
+│   ├── config.json
 │   └── agents
 │       ├── PLANNER.json
 │       ├── CODER.json
@@ -75,7 +75,7 @@ Prerequisites:
 ├── clean.sh
 ├── LICENSE
 ├── README.md
-├── tasks.json
+├── .codex-swarm/tasks.json
 ├── tasks.html
 ├── docs
 │   ├── architecture.md
@@ -95,7 +95,7 @@ Prerequisites:
 | --- | --- |
 | `AGENTS.md` | 🌐 Global rules, commit workflow, and the ORCHESTRATOR specification (plus the JSON template for new agents). |
 | `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python .codex-swarm/agentctl.py` commands + commit guardrails. |
-| `.codex-swarm/swarm.config.json` | ⚙️ Framework config (paths + workflow_mode). |
+| `.codex-swarm/config.json` | ⚙️ Framework config (paths + workflow_mode). |
 | `.codex-swarm/agents/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python .codex-swarm/agentctl.py` and kept aligned with each plan. |
 | `.codex-swarm/agents/CODER.json` | 🔧 Implementation specialist responsible for code or config edits tied to task IDs. |
 | `.codex-swarm/agents/TESTER.json` | 🧪 Adds or extends automated tests for the relevant code changes after implementation. |
@@ -104,22 +104,22 @@ Prerequisites:
 | `.codex-swarm/agents/DOCS.json` | 🧾 Writes per-task workflow artifacts under `.codex-swarm/workspace/` and keeps docs synchronized. |
 | `.codex-swarm/agents/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
 | `.codex-swarm/agents/UPDATER.json` | 🔍 Audits the repo and agent prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
-| `tasks.json` | 📊 Canonical backlog (checksum-backed). Do not edit by hand; use `python .codex-swarm/agentctl.py`. |
-| `.codex-swarm/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + tasks.json lint/checksum enforcement. |
+| `.codex-swarm/tasks.json` | 📊 Canonical backlog (checksum-backed). Do not edit by hand; use `python .codex-swarm/agentctl.py`. |
+| `.codex-swarm/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + .codex-swarm/tasks.json lint/checksum enforcement. |
 | `README.md` | 📚 High-level overview and onboarding material for the repository. |
 | `LICENSE` | 📝 MIT License for the project. |
 | `assets/` | 🖼️ Contains the header image shown on this README and any future static visuals. |
 | `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the snapshot as your own local project. |
-| `tasks.html` | 🖥️ A tiny local UI for browsing `tasks.json` in a browser (no server). |
+| `tasks.html` | 🖥️ A tiny local UI for browsing `.codex-swarm/tasks.json` in a browser (no server). |
 | `.codex-swarm/workspace/` | 🧾 Per-task workflow artifacts (one folder per task ID). |
 
 ## 🧾 Commit Workflow
 
 - The workspace is always a git repository, so every meaningful change must land in version control.
 - Default to a minimal 3-phase commit cadence per task:
-  - Planning: `tasks.json` + initial `.codex-swarm/workspace/T-###/README.md` artifact.
+  - Planning: `.codex-swarm/tasks.json` + initial `.codex-swarm/workspace/T-###/README.md` artifact.
   - Implementation: the actual change set (preferably including tests) as a single work commit.
-  - Verification/closure: run checks, update `.codex-swarm/workspace/T-###/README.md`, and mark the task `DONE` in `tasks.json`.
+  - Verification/closure: run checks, update `.codex-swarm/workspace/T-###/README.md`, and mark the task `DONE` in `.codex-swarm/tasks.json`.
 - The agent that performs the work stages and commits before handing control back to the orchestrator, briefly describing the completed plan item so the summary is obvious, and the orchestrator pauses the plan until that commit exists.
 - Step summaries mention the new commit hash and confirm the working tree is clean so humans can audit progress directly from the conversation.
 - If a plan step produces no file changes, call that out explicitly; otherwise the swarm must not proceed without a commit.
@@ -139,7 +139,7 @@ This section expands on the concepts referenced above and shows how the swarm fi
 
 1. **Global rules and the ORCHESTRATOR** live in `AGENTS.md`.
 2. **Specialists** live in `.codex-swarm/agents/*.json` and are dynamically loaded by the orchestrator.
-3. **Tasks** live in `tasks.json` and are the canonical source of truth.
+3. **Tasks** live in `.codex-swarm/tasks.json` and are the canonical source of truth.
 4. **Task operations and git guardrails** flow through `python .codex-swarm/agentctl.py`.
 5. **Per-task workflow artifacts** live under `.codex-swarm/workspace/T-###/` (canonical doc: `README.md`, PR artifact: `pr/`).
 
@@ -147,10 +147,10 @@ This section expands on the concepts referenced above and shows how the swarm fi
 
 ### Workflow modes
 
-Codex Swarm supports two modes (configured via `.codex-swarm/swarm.config.json` → `workflow_mode`):
+Codex Swarm supports two modes (configured via `.codex-swarm/config.json` → `workflow_mode`):
 
 - `direct`: low-ceremony, single-checkout workflow (task branches/worktrees and `.codex-swarm/workspace/T-###/pr/` are optional).
-- `branch_pr`: strict branching workflow with per-task branches/worktrees, tracked PR artifacts, and a single-writer `tasks.json` (planning/closure on `main`, integration/closure by INTEGRATOR).
+- `branch_pr`: strict branching workflow with per-task branches/worktrees, tracked PR artifacts, and a single-writer `.codex-swarm/tasks.json` (planning/closure on `main`, integration/closure by INTEGRATOR).
 
 ### Default agent flow (Mermaid)
 
@@ -160,7 +160,7 @@ In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main
 flowchart TD
   U["User"] --> O["ORCHESTRATOR"]
   O -->|Backlog + task breakdown| P["PLANNER (main)"]
-  P --> TJ["tasks.json (main only)"]
+  P --> TJ[".codex-swarm/tasks.json (main only)"]
   P -->|Planning artifact| WF[".codex-swarm/workspace/T-123/README.md"]
   O -->|Task branch + worktree| E["CODER/TESTER/DOCS (task/T-123/SLUG in .codex-swarm/worktrees/)"]
   E -->|Work commits| B["task/T-123/SLUG commits"]
@@ -168,7 +168,7 @@ flowchart TD
   O -->|Review| R["REVIEWER"]
   R -->|Handoff notes| PR
   O -->|Verify + merge + close| I["INTEGRATOR (main)"]
-  I -->|pr check / verify / merge / refresh artifacts / finish| DONE["Task marked DONE (tasks.json)"]
+  I -->|pr check / verify / merge / refresh artifacts / finish| DONE["Task marked DONE (.codex-swarm/tasks.json)"]
 ```
 
 ### Detailed agent sequence (Mermaid)
@@ -185,7 +185,7 @@ sequenceDiagram
   participant R as REVIEWER
   participant I as INTEGRATOR
   participant A as "agentctl"
-  participant TJ as "tasks.json"
+  participant TJ as ".codex-swarm/tasks.json"
   participant WF as ".codex-swarm/workspace/T-123/README.md"
   participant PR as ".codex-swarm/workspace/T-123/pr/"
   participant CR as CREATOR
@@ -193,7 +193,7 @@ sequenceDiagram
 
   U->>O: Describe goal / request (free-form)
   O->>P: Decompose goal -> tasks T-123 (+ dependencies / verify)
-  P->>A: task add/update/comment (no manual edits to tasks.json)
+  P->>A: task add/update/comment (no manual edits to .codex-swarm/tasks.json)
   A->>TJ: Update backlog (checksum-backed)
 
   P->>D: Create planning artifact for T-123 (skeleton)

@@ -2,7 +2,7 @@
 AGENTS_SPEC: v0.2
 default_agent: ORCHESTRATOR
 shared_state:
-  - tasks.json
+  - .codex-swarm/tasks.json
 -->
 
 # CODEX IDE CONTEXT
@@ -21,8 +21,8 @@ shared_state:
   - Think step by step internally. DO NOT print full reasoning, only concise results, plans, and key checks.
   - Prefer structured outputs (lists, tables, JSON) when they help execution.
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
-- Never invent external facts. For tasks and project state, treat `tasks.json` as canonical, but inspect/update it only via `python .codex-swarm/agentctl.py` (no manual edits).
-- The workspace is always a git repository. After completing each atomic task tracked in `tasks.json`, create a concise, human-readable commit before continuing.
+- Never invent external facts. For tasks and project state, treat `.codex-swarm/tasks.json` as canonical, but inspect/update it only via `python .codex-swarm/agentctl.py` (no manual edits).
+- The workspace is always a git repository. After completing each atomic task tracked in `.codex-swarm/tasks.json`, create a concise, human-readable commit before continuing.
 
 ---
 
@@ -43,7 +43,7 @@ shared_state:
 - When work spans multiple sub-steps, write a short numbered plan directly in your reply before editing anything. Update that list as progress is made so everyone can see the latest path.
 - Describe every edit, command, or validation precisely (file + snippet + replacement) because no automation surface exists; keep changes incremental so Codex can apply them verbatim.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
-- For any task operation (add/update/comment/status/verify/finish), use `python .codex-swarm/agentctl.py` rather than editing `tasks.json` directly so the checksum stays valid.
+- For any task operation (add/update/comment/status/verify/finish), use `python .codex-swarm/agentctl.py` rather than editing `.codex-swarm/tasks.json` directly so the checksum stays valid.
 - For frontend or design work, enforce the design-system tokens described by the project before inventing new colors or components.
 - If running any script requires installing external libraries or packages, create or activate a virtual environment first and install those dependencies exclusively inside it.
 
@@ -53,10 +53,10 @@ shared_state:
 
 - Treat each plan task (`T-###`) as an atomic unit of work and keep commits minimal.
 - Default to a task-branch cadence (planning on the pinned base branch, execution on a task branch, closure on the pinned base branch):
-  1) **Planning (base branch)**: add/update the task in `tasks.json` + create/update `.codex-swarm/workspace/T-###/README.md` (skeleton/spec) and commit them together.
+  1) **Planning (base branch)**: add/update the task in `.codex-swarm/tasks.json` + create/update `.codex-swarm/workspace/T-###/README.md` (skeleton/spec) and commit them together.
   2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `.codex-swarm/workspace/T-###/pr/`.
   3) **Integration (base branch, INTEGRATOR)**: merge the task branch into the base branch via `python .codex-swarm/agentctl.py integrate …` (optionally running verify and capturing output in `.codex-swarm/workspace/T-###/pr/verify.log`).
-  4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/workspace/T-###/README.md` with what shipped and mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, committing `tasks.json` + docs/artifacts together.
+  4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/workspace/T-###/README.md` with what shipped and mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, committing `.codex-swarm/tasks.json` + docs/artifacts together.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
 - Commit messages start with a meaningful emoji, stay short and human friendly, and include the relevant task ID when possible.
@@ -75,14 +75,14 @@ shared_state:
 
 ## Workflow modes
 
-`workflow_mode` is configured in `.codex-swarm/swarm.config.json` and controls how strict the workflow guardrails are.
+`workflow_mode` is configured in `.codex-swarm/config.json` and controls how strict the workflow guardrails are.
 
 - `direct`: low-ceremony, single-checkout workflow.
   - Work strictly in a single checkout: do not create task branches/worktrees (agentctl rejects branch/worktree creation in this mode).
   - `.codex-swarm/workspace/T-###/pr/` is optional (you may still use it for review notes and verification logs).
-  - Any agent may implement and close a task on the current branch, including committing `tasks.json` updates created via `python .codex-swarm/agentctl.py` (prefer doing planning/closure on the pinned base branch when possible).
+  - Any agent may implement and close a task on the current branch, including committing `.codex-swarm/tasks.json` updates created via `python .codex-swarm/agentctl.py` (prefer doing planning/closure on the pinned base branch when possible).
 - `branch_pr`: strict branching workflow with local “PR artifacts”.
-  - Planning and closure happen only in the repo root checkout on the pinned base branch; `tasks.json` is a single-writer file and is never modified/committed on task branches.
+  - Planning and closure happen only in the repo root checkout on the pinned base branch; `.codex-swarm/tasks.json` is a single-writer file and is never modified/committed on task branches.
   - Implementation happens only on a per-task branch + worktree: `task/T-###/<slug>` in `.codex-swarm/worktrees/T-###-<slug>/`.
   - Each task branch maintains tracked PR artifacts under `.codex-swarm/workspace/T-###/pr/`.
   - Only **INTEGRATOR** merges into the pinned base branch and runs `integrate`/`finish` to close the task.
@@ -97,13 +97,13 @@ shared_state:
 - **1 task = 1 branch** (branch is per `T-###`, not per agent).
 - **Branch naming**: `task/T-123/<slug>` (slug = short, lowercase, dash-separated).
 - **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/T-123-<slug>/` (ignored by git).
-- **Single-writer `tasks.json`**:
-  - Never modify or commit `tasks.json` on a task branch.
-  - In branching workflow, `tasks.json` updates happen only on the pinned base branch via `python .codex-swarm/agentctl.py` (agentctl guardrails enforce this).
+- **Single-writer `.codex-swarm/tasks.json`**:
+  - Never modify or commit `.codex-swarm/tasks.json` on a task branch.
+  - In branching workflow, `.codex-swarm/tasks.json` updates happen only on the pinned base branch via `python .codex-swarm/agentctl.py` (agentctl guardrails enforce this).
   - Task closure (`finish`) is performed on the pinned base branch by **INTEGRATOR** after integration + verify.
 - **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `.codex-swarm/workspace/T-###/pr/`.
-- **Mode toggle**: `agentctl` reads `.codex-swarm/swarm.config.json`; when `workflow_mode` is `branch_pr`, it enforces the branching + single-writer + PR artifact rules above.
-- **Handoff notes**: agents do not write to `tasks.json` during branch work; instead they leave short notes in `.codex-swarm/workspace/T-###/pr/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `tasks.json` at task closure.
+- **Mode toggle**: `agentctl` reads `.codex-swarm/config.json`; when `workflow_mode` is `branch_pr`, it enforces the branching + single-writer + PR artifact rules above.
+- **Handoff notes**: agents do not write to `.codex-swarm/tasks.json` during branch work; instead they leave short notes in `.codex-swarm/workspace/T-###/pr/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `.codex-swarm/tasks.json` at task closure.
 
 ## PR artifact structure (tracked)
 
@@ -121,20 +121,20 @@ For each task `T-123`:
 2. Work only inside `.codex-swarm/worktrees/T-123-<slug>/` on the task branch (`task/T-123/<slug>`).
 3. Commit only via `python .codex-swarm/agentctl.py guard commit …` (or `python .codex-swarm/agentctl.py commit …`).
 4. Open/update PR artifacts: `python .codex-swarm/agentctl.py pr open …` and `python .codex-swarm/agentctl.py pr update …`.
-5. Hard bans: do not touch `tasks.json`, do not run `finish`, do not merge into the base branch (INTEGRATOR owns integration + closure).
+5. Hard bans: do not touch `.codex-swarm/tasks.json`, do not run `finish`, do not merge into the base branch (INTEGRATOR owns integration + closure).
 
 ## INTEGRATOR cheat sheet
 
 1. Work from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).
 2. Validate: `python .codex-swarm/agentctl.py pr check T-123`.
 3. Integrate (includes verify + finish + task lint): `python .codex-swarm/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify`.
-4. Commit closure on the pinned base branch: stage `tasks.json` (+ docs/artifacts) and commit `✅ T-123 close ...`.
+4. Commit closure on the pinned base branch: stage `.codex-swarm/tasks.json` (+ docs/artifacts) and commit `✅ T-123 close ...`.
 
 # SHARED_STATE
 
 ## Task Tracking
 
-### `tasks.json` (canonical)
+### `.codex-swarm/tasks.json` (canonical)
 
 Purpose: single machine-editable backlog that stores every task, including rich context.
 
@@ -170,23 +170,23 @@ Schema (JSON):
 - `verify` (optional) is a list of local shell commands that must pass before marking `DONE` (typically run by INTEGRATOR via `verify`/`integrate`, or allowed to run automatically inside `finish`).
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
 - `commit` is required when a task is `DONE`.
-- `meta` is maintained by `agentctl`; manual edits to `tasks.json` will break the checksum and fail `agentctl task lint`.
+- `meta` is maintained by `agentctl`; manual edits to `.codex-swarm/tasks.json` will break the checksum and fail `agentctl task lint`.
 
 ### Status Transition Protocol
 
 - **Create / Reprioritize (PLANNER only, on the base branch).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python .codex-swarm/agentctl.py`).
-- **Work in branches.** During implementation, do not update `tasks.json`; record progress and verification notes in `.codex-swarm/workspace/T-###/README.md` and `.codex-swarm/workspace/T-###/pr/`.
-- **Integrate + close (INTEGRATOR, on the base branch).** INTEGRATOR merges the task branch into the base branch, runs verify, and marks tasks `DONE` via `python .codex-swarm/agentctl.py finish` (the only tasks.json write required for closure).
-- **Status Sync.** `tasks.json` is canonical. There is no derived status board file; use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show T-123`.
+- **Work in branches.** During implementation, do not update `.codex-swarm/tasks.json`; record progress and verification notes in `.codex-swarm/workspace/T-###/README.md` and `.codex-swarm/workspace/T-###/pr/`.
+- **Integrate + close (INTEGRATOR, on the base branch).** INTEGRATOR merges the task branch into the base branch, runs verify, and marks tasks `DONE` via `python .codex-swarm/agentctl.py finish` (the only .codex-swarm/tasks.json write required for closure).
+- **Status Sync.** `.codex-swarm/tasks.json` is canonical. There is no derived status board file; use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show T-123`.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
 
 Protocol:
 
-- Before changing tasks: review the latest `tasks.json` so you understand the current state.
+- Before changing tasks: review the latest `.codex-swarm/tasks.json` so you understand the current state.
 - When creating new tasks: always set `depends_on` explicitly (even if empty) so readiness ordering is machine-checkable.
-- When updating: do not edit `tasks.json` by hand; use `python .codex-swarm/agentctl.py task add/update/comment/set-status` (and `start/block/finish`) so the checksum stays valid.
+- When updating: do not edit `.codex-swarm/tasks.json` by hand; use `python .codex-swarm/agentctl.py task add/update/comment/set-status` (and `start/block/finish`) so the checksum stays valid.
 - In your reply: list every task ID you touched plus the new status or notes.
-- Only `tasks.json` stores task data. Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show T-123` to inspect tasks during execution.
+- Only `.codex-swarm/tasks.json` stores task data. Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show T-123` to inspect tasks during execution.
 
 # AGENT REGISTRY
 
@@ -277,7 +277,7 @@ All non-orchestrator agents are defined as JSON files inside the `.codex-swarm/a
   * Stop and wait for user input before executing steps.
 * Step 4: Execute.
   * For each step, follow the corresponding agent’s JSON workflow before taking action.
-  * Use `python .codex-swarm/agentctl.py` for all task operations so `tasks.json` stays checksum-valid; in branching workflow, executors do not modify `tasks.json` and INTEGRATOR performs `integrate` + `finish` on `main`.
+  * Use `python .codex-swarm/agentctl.py` for all task operations so `.codex-swarm/tasks.json` stays checksum-valid; in branching workflow, executors do not modify `.codex-swarm/tasks.json` and INTEGRATOR performs `integrate` + `finish` on `main`.
   * Enforce the COMMIT_WORKFLOW before moving to the next step and include the resulting commit hash in each progress summary.
   * Keep the user in the loop: after each block of work, show a short progress summary referencing the numbered plan items.
   * Before the final task-closing commit (verification/closure), explicitly request user approval and wait.

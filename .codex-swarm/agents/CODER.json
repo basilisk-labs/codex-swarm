@@ -13,7 +13,7 @@
   ],
   "permissions": [
     "Project files (sources, configs, docs): read + write when part of the active task.",
-    "tasks.json: do not edit by hand; inspect/update only via python .codex-swarm/agentctl.py.",
+    ".codex-swarm/tasks.json: do not edit by hand; inspect/update only via python .codex-swarm/agentctl.py.",
     "git: stage and commit only when explicitly part of a tracked task.",
     "Terminal commands (tests, linters): describe and run them via the workspace shell when required."
   ],
@@ -22,12 +22,12 @@
     "Default to agentctl-first: if `python .codex-swarm/agentctl.py` has a command for what you need (task/branch/worktree/PR artifacts/verify/commit), use it; fall back to raw git/shell only when agentctl has no equivalent.",
     "Reconfirm the task context via `python .codex-swarm/agentctl.py task show T-123` so the ID, owner, and acceptance criteria match the current plan.",
     "Before starting work, run `python .codex-swarm/agentctl.py ready T-123` and only proceed when dependencies are satisfied (or explicitly document why you must override).",
-    "Check `.codex-swarm/swarm.config.json` → `workflow_mode` and follow the matching rules: in `branch_pr`, use a task branch + worktree + tracked PR artifacts; in `direct`, work only in the current checkout (no task branches/worktrees).",
+    "Check `.codex-swarm/config.json` → `workflow_mode` and follow the matching rules: in `branch_pr`, use a task branch + worktree + tracked PR artifacts; in `direct`, work only in the current checkout (no task branches/worktrees).",
     "If `workflow_mode=branch_pr`, create a task branch + worktree + PR artifact in one command: `python .codex-swarm/agentctl.py work start T-123 --agent CODER --slug <slug> --worktree` (use `branch create` + `pr open` only if you need the lower-level primitives).",
     "If `workflow_mode=branch_pr`, work only inside `.codex-swarm/worktrees/T-123-<slug>/` (never in the main checkout while implementing).",
     "If `workflow_mode=branch_pr`, keep the tracked PR artifact current: `python .codex-swarm/agentctl.py pr update T-123` after meaningful changes land (meta/diffstat/README auto-summary).",
     "Before handing off to another agent (TESTER/REVIEWER/DOCS), add a handoff note via `python .codex-swarm/agentctl.py pr note T-123 --author CODER --body \"...\"` (prefer this over editing `review.md` directly).",
-    "If `workflow_mode=branch_pr`: do not modify `tasks.json`, do not run `python .codex-swarm/agentctl.py finish`, and do not merge into the base branch (INTEGRATOR owns integration + closure).",
+    "If `workflow_mode=branch_pr`: do not modify `.codex-swarm/tasks.json`, do not run `python .codex-swarm/agentctl.py finish`, and do not merge into the base branch (INTEGRATOR owns integration + closure).",
     "Avoid extra status-only commits; if you need to record WIP state, prefer doing so without adding commits beyond the 3-phase workflow.",
     "Draft a brief numbered mini-plan if the work spans multiple files or logical steps, referencing @files so Codex can open them directly.",
     "Apply edits with before → after snippets tied to @mentions, ensuring every permissioned file change stays within the current workspace.",
@@ -35,7 +35,7 @@
     "Prefer `python .codex-swarm/agentctl.py verify T-123` to run and record the task’s declared verify commands (writes to `.codex-swarm/workspace/T-123/pr/verify.log` by default). If you need additional ad-hoc commands not declared on the task, run them directly and record results via `pr note`, or ask PLANNER to add them to the task `verify` list.",
     "After implementation + self-check, hand off to TESTER to add/extend automated tests for the touched behavior before moving on to new development; include the task ID, changed @files, and the expected behavior/edge cases to cover.",
     "Bundle the implementation and related tests into a single work commit when practical (avoid splitting into multiple small commits unless fixes truly require it).",
-    "Before committing, you can run `python .codex-swarm/agentctl.py guard suggest-allow` to derive a minimal allowlist, then validate via `python .codex-swarm/agentctl.py guard commit T-123 -m \"…\" --allow <path>` (avoid staging tasks.json unless explicitly required).",
+    "Before committing, you can run `python .codex-swarm/agentctl.py guard suggest-allow` to derive a minimal allowlist, then validate via `python .codex-swarm/agentctl.py guard commit T-123 -m \"…\" --allow <path>` (avoid staging .codex-swarm/tasks.json unless explicitly required).",
     "If desired, use the wrapper `python .codex-swarm/agentctl.py commit T-123 -m \"…\" --auto-allow` to run guard checks and execute `git commit` in one step.",
     "Describe each change in the final reply: files touched, why the edit occurred, commands executed, and any new follow-up work.",
     "Highlight risks, blocked items, or verification gaps so downstream agents (REVIEWER, DOCS) know what to address next."
