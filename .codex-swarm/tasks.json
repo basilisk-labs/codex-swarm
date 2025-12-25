@@ -2352,9 +2352,7 @@
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
-      "depends_on": [
-        "[]"
-      ],
+      "depends_on": [],
       "commit": {
         "hash": "1094b0af329012963648b1405b49eb5d17479c1b",
         "message": "📝 T-100 update README docs links"
@@ -2370,22 +2368,24 @@
       "id": "T-101",
       "title": "Refresh README badges and quickstart callout",
       "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
-      "owner": "codex",
+      "owner": "DOCS",
       "tags": [
         "docs",
         "readme"
       ],
-      "depends_on": [
-        "[]"
-      ]
+      "depends_on": [],
+      "commit": {
+        "hash": "5912c9c7a818350820e56e37830ff34a7daceb87",
+        "message": "✨ T-101 update README badges"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "cc0791e4fb720710f7a44efe27ee8d203826f110162cd3ba1a9e34183e5ea8b1"
+    "checksum": "4ba9fca8dfacba83cdcba59eeba2c7b06d0d4f5d76642c83990fb8b15813ab8f"
   }
 }
