@@ -2202,36 +2202,66 @@
       "id": "T-093",
       "title": "Write docs content for new templates",
       "description": "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
       "depends_on": [
         "[]"
+      ],
+      "commit": {
+        "hash": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
+        "message": "📝 T-093 write docs content"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
       ]
     },
     {
       "id": "T-094",
       "title": "Add docs index links and reading order",
       "description": "Update docs/index.md with a document map, reading order, and links to the new docs set.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
       "depends_on": [
         "[]"
+      ],
+      "commit": {
+        "hash": "9900d029d4f831d920a82e58869c7d7ec8b28623",
+        "message": "📝 T-094 update docs index"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
       ]
     },
     {
       "id": "T-095",
       "title": "Align README docs index with new docs",
       "description": "Update README.md and related references so the documentation structure matches the new docs/ files.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
       "depends_on": [
         "[]"
+      ],
+      "commit": {
+        "hash": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
+        "message": "📝 T-095 align README docs"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
       ]
     }
   ],
@@ -2239,6 +2269,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9e722e4edeb7b3216624ff9bb1a5938ead10bb2bd83bbcdce6ee146235abf85b"
+    "checksum": "b459e745292d7fde6001b61793c9b1f10aa28880c8abac87d4e7580154b10881"
   }
 }
