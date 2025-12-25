@@ -2,12 +2,32 @@
 
 # Codex Swarm
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](docs/prerequisites.md)
+[![Workflow: direct/branch_pr](https://img.shields.io/badge/Workflow-direct%20%7C%20branch__pr-2b6cb0.svg)](docs/branching-and-pr-artifacts.md)
+[![Tasks: JSON](https://img.shields.io/badge/Tasks-.codex--swarm%2Ftasks.json-0f766e.svg)](.codex-swarm/tasks.json)
+[![Docs](https://img.shields.io/badge/Docs-Start%20Here-6b7280.svg)](docs/README.md)
+[![Last Commit](https://img.shields.io/github/last-commit/basilisk-labs/codex-swarm.svg)](https://github.com/basilisk-labs/codex-swarm/commits/main)
+[![Stars](https://img.shields.io/github/stars/basilisk-labs/codex-swarm.svg?style=social)](https://github.com/basilisk-labs/codex-swarm/stargazers)
 
 Codex Swarm turns your local IDE + OpenAI Codex plugin into a predictable multi-agent workflow. It fixes the “just chat with the model” chaos by adding a small, opinionated layer: JSON-defined agents, a shared task backlog, and commit rules so every change is planned and traceable. There is no separate runner or daemon—everything lives in this repo and flows through the plugin you already use.
 
+**Quick links:** `docs/README.md` · `docs/setup.md` · `docs/workflow.md` · `docs/commands.md` · `docs/troubleshooting.md`
+
+## Table of contents
+
+- [Getting Started](#getting-started)
+- [Example: auto-doc for a tiny refactor](#example-auto-doc-for-a-tiny-refactor)
+- [Highlights](#-highlights)
+- [Docs index](#-docs-index)
+- [Repository Layout](#-repository-layout)
+- [Commit Workflow](#-commit-workflow)
+- [Architecture & Workflow](#architecture--workflow)
+
 ## Getting Started
+
+> Quickstart: run `python .codex-swarm/agentctl.py quickstart` to see the short setup checklist.
 
 Prerequisites:
 - OpenAI Codex plugin (Cursor / VS Code / JetBrains) configured for your repo
