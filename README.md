@@ -90,10 +90,11 @@ Documentation:
 
 ```
 .
-├── AGENTS.md
 ├── .codex-swarm
 │   ├── agentctl.md
+│   ├── agentctl.py
 │   ├── config.json
+│   ├── tasks.json
 │   └── agents
 │       ├── ORCHESTRATOR.json
 │       ├── PLANNER.json
@@ -104,11 +105,22 @@ Documentation:
 │       ├── CREATOR.json
 │       ├── INTEGRATOR.json
 │       └── UPDATER.json
+│   ├── workspace
+│   └── worktrees
+├── .github
+│   ├── scripts
+│   │   └── sync_tasks.py
+│   └── workflows
+│       └── sync-tasks.yml
+├── AGENTS.md
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
 ├── clean.sh
 ├── LICENSE
 ├── README.md
-├── .codex-swarm/tasks.json
 ├── tasks.html
+├── assets
+│   └── header.png
 ├── docs
 │   ├── README.md
 │   ├── overview.md
@@ -127,7 +139,10 @@ Documentation:
 | Path | Purpose |
 | --- | --- |
 | `AGENTS.md` | 🌐 Global rules, commit workflow, and the JSON template for new agents. |
+| `.github/scripts/sync_tasks.py` | 🔁 Syncs `.codex-swarm/tasks.json` to GitHub Issues and ProjectV2. |
+| `.github/workflows/sync-tasks.yml` | 🤖 GitHub Actions workflow that runs the sync script. |
 | `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python .codex-swarm/agentctl.py` commands + commit guardrails. |
+| `.codex-swarm/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + .codex-swarm/tasks.json lint/checksum enforcement. |
 | `.codex-swarm/config.json` | ⚙️ Framework config (paths + workflow_mode). |
 | `.codex-swarm/agents/ORCHESTRATOR.json` | 🧭 Default agent that initiates runs, plans, and coordinates execution. |
 | `.codex-swarm/agents/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python .codex-swarm/agentctl.py` and kept aligned with each plan. |
@@ -139,13 +154,15 @@ Documentation:
 | `.codex-swarm/agents/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
 | `.codex-swarm/agents/UPDATER.json` | 🔍 Audits the repo and agent prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
 | `.codex-swarm/tasks.json` | 📊 Canonical backlog (checksum-backed). Do not edit by hand; use `python .codex-swarm/agentctl.py`. |
-| `.codex-swarm/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + .codex-swarm/tasks.json lint/checksum enforcement. |
+| `.codex-swarm/workspace/` | 🧾 Per-task workflow artifacts (one folder per task ID). |
+| `.codex-swarm/worktrees/` | 🧱 Task worktrees used in `workflow_mode=branch_pr`. |
 | `README.md` | 📚 High-level overview and onboarding material for the repository. |
 | `LICENSE` | 📝 MIT License for the project. |
+| `CODE_OF_CONDUCT.md` | 🤝 Community guidelines and escalation paths. |
+| `CONTRIBUTING.md` | 🧩 Contribution guide and workflow expectations. |
 | `assets/` | 🖼️ Contains the header image shown on this README and any future static visuals. |
 | `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the snapshot as your own local project. |
 | `tasks.html` | 🖥️ A tiny local UI for browsing `.codex-swarm/tasks.json` in a browser (no server). |
-| `.codex-swarm/workspace/` | 🧾 Per-task workflow artifacts (one folder per task ID). |
 
 ## 🧾 Commit Workflow
 
