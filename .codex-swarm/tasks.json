@@ -2321,12 +2321,24 @@
           "body": "Verified: agentctl task add produced tasks.json entry; task lint OK; docs update only."
         }
       ]
+    },
+    {
+      "id": "T-099",
+      "title": "Fill T-096 artifact and enforce doc completion",
+      "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs.",
+      "status": "TODO",
+      "priority": "low",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "e39c649bcc27e0fd829c14d25cd13ce8f9efeaac61d5bbce036c16a8b53b4f1e"
+    "checksum": "98c716239d799d08638421b502e5e4306fe708ea58c3dade8d24f87fa7c3b20a"
   }
 }
