@@ -2299,12 +2299,24 @@
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
       ]
+    },
+    {
+      "id": "T-098",
+      "title": "Verify agentctl task writes + clarify no-manual-edits",
+      "description": "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "fd01f412abefee1ace592065bf6e583d02a28d6cd6b929909af3b2703247b934"
+    "checksum": "9d9cbc85364b554603fc8f2b31eb2277efc3abd8fb3412a090a6d584f7593358"
   }
 }
