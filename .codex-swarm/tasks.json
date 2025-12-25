@@ -2197,12 +2197,48 @@
         "docs"
       ],
       "depends_on": []
+    },
+    {
+      "id": "T-093",
+      "title": "Write docs content for new templates",
+      "description": "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [],
+      "depends_on": [
+        "[]"
+      ]
+    },
+    {
+      "id": "T-094",
+      "title": "Add docs index links and reading order",
+      "description": "Update docs/index.md with a document map, reading order, and links to the new docs set.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [],
+      "depends_on": [
+        "[]"
+      ]
+    },
+    {
+      "id": "T-095",
+      "title": "Align README docs index with new docs",
+      "description": "Update README.md and related references so the documentation structure matches the new docs/ files.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [],
+      "depends_on": [
+        "[]"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "64f718032d0628b2a094e97f3d2051788eea4accad9934ebd60cd2ecedc71abd"
+    "checksum": "9e722e4edeb7b3216624ff9bb1a5938ead10bb2bd83bbcdce6ee146235abf85b"
   }
 }
