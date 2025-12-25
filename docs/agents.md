@@ -1,7 +1,7 @@
 # Agents
 
 ## Where Agents Live
-All agents are defined in JSON under `.codex-swarm/agents/`. `AGENTS.md` provides the global rules that govern all of them.
+All agents are defined in JSON under [`.codex-swarm/agents/`](../.codex-swarm/agents/). [`AGENTS.md`](../AGENTS.md) provides the global rules that govern all of them.
 
 ## ORCHESTRATOR
 - Starts every run.

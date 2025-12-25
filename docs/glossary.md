@@ -4,13 +4,13 @@
 A role with a JSON-defined scope and workflow.
 
 ## Task ID
-A unique identifier like T-123 used to track work in `.codex-swarm/tasks.json`.
+A unique identifier like T-123 used to track work in [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json).
 
 ## Workflow Artifact
-Per-task documentation under `.codex-swarm/workspace/T-123/`.
+Per-task documentation under [`.codex-swarm/workspace/T-123/`](../.codex-swarm/workspace/T-123/).
 
 ## PR Artifact
-Local PR simulation files under `.codex-swarm/workspace/T-123/pr/`.
+Local PR simulation files under [`.codex-swarm/workspace/T-123/pr/`](../.codex-swarm/workspace/T-123/pr/).
 
 ## Worktree
 A separate checkout used for task branches in `branch_pr` mode.

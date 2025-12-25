@@ -1,7 +1,7 @@
 # Tasks and agentctl
 
 ## Canonical Task Source
-- `.codex-swarm/tasks.json` is the single source of truth.
+- [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json) is the single source of truth.
 - Manual edits are not allowed because of checksum enforcement.
 
 ## Task Lifecycle

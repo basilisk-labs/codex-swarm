@@ -15,13 +15,13 @@ Codex Swarm is a local, repo-scoped framework that structures how you use the Op
 - Explicit approvals: plans and closures require human approval.
 
 ## Core Components
-- `AGENTS.md`: global rules and workflow policies.
-- `.codex-swarm/agents/*.json`: the authoritative agent definitions.
-- `.codex-swarm/tasks.json`: the canonical backlog (checksum protected).
-- `.codex-swarm/agentctl.py`: task and workflow helper CLI.
-- `.codex-swarm/workspace/`: per-task workflow artifacts.
+- [`AGENTS.md`](../AGENTS.md): global rules and workflow policies.
+- [`.codex-swarm/agents/`](../.codex-swarm/agents/): the authoritative agent definitions.
+- [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json): the canonical backlog (checksum protected).
+- [`.codex-swarm/agentctl.py`](../.codex-swarm/agentctl.py): task and workflow helper CLI.
+- [`.codex-swarm/workspace/`](../.codex-swarm/workspace/): per-task workflow artifacts.
 
 ## Where to Start
-- Read `AGENTS.md` for the global rules.
+- Read [`AGENTS.md`](../AGENTS.md) for the global rules.
 - Use `python .codex-swarm/agentctl.py quickstart` to see common commands.
 - Start a request with the ORCHESTRATOR.

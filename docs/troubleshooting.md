@@ -1,7 +1,7 @@
 # Troubleshooting
 
 ## tasks.json checksum errors
-- Cause: manual edits to `.codex-swarm/tasks.json`.
+- Cause: manual edits to [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json).
 - Fix: revert the manual change and reapply via `agentctl`.
 
 ## Dirty working tree before commit
