@@ -2419,12 +2419,25 @@
         "hash": "a6e47cab956e1b39d5f10ca6ddc02024cc92fe6c",
         "message": "🔧 T-103 align GitHub sync paths"
       }
+    },
+    {
+      "id": "T-104",
+      "title": "Align README repository layout with current structure",
+      "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "readme",
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b9d292c3b96581bb66dd1de8cb440cf8cce6d95b8d190f8139441519a697e705"
+    "checksum": "a45a686ae3ca4b2001af0265ba4071a33d94bc532b561b402d3a956bf2e287f5"
   }
 }
