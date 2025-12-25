@@ -2402,7 +2402,7 @@
       "id": "T-103",
       "title": "Update GitHub sync scripts for new .codex-swarm structure",
       "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [
@@ -2410,13 +2410,17 @@
         "tasks",
         "agentctl"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "a6e47cab956e1b39d5f10ca6ddc02024cc92fe6c",
+        "message": "🔧 T-103 align GitHub sync paths"
+      }
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b4089a72ea97e3047cb0bcea046ddc7cc8d71ea30d53b46b9f3f3e2ee24a1e18"
+    "checksum": "00c41f388d8bac2bd6983f151887e32fe2166dcba073f6131d28a5faab819aa7"
   }
 }
