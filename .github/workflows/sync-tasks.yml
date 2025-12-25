@@ -3,7 +3,7 @@ name: Sync tasks.json to GitHub Issues
 on:
   push:
     paths:
-      - "tasks.json"
+      - ".codex-swarm/tasks.json"
   workflow_dispatch: {}
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Sync tasks.json to issues
+      - name: Sync .codex-swarm/tasks.json to issues
         env:
           GITHUB_TOKEN: ${{ secrets.TASKS_SYNC_TOKEN }}
           GITHUB_OWNER: basilisk-labs

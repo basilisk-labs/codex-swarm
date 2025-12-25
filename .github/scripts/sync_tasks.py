@@ -2,7 +2,7 @@
 """
 Sync tasks.json with GitHub Issues AND ProjectV2 Status.
 
-Source of truth: tasks.json
+Source of truth: .codex-swarm/tasks.json
 
 For each task:
   - Ensure there is a GitHub Issue with label `task-id:<ID>`
@@ -29,7 +29,7 @@ import requests
 # ---------- Config & session ----------
 
 ROOT = Path(__file__).resolve().parents[2]  # repo root
-TASKS_PATH = ROOT / "tasks.json"
+TASKS_PATH = ROOT / ".codex-swarm" / "tasks.json"
 
 GITHUB_API_REST = "https://api.github.com"
 GITHUB_API_GRAPHQL = "https://api.github.com/graphql"
@@ -95,7 +95,7 @@ def build_body(task: Dict[str, Any]) -> str:
         lines.append(f"- Commit: [`{h[:7]}`]({url}) — {msg}")
 
     lines.append(
-        "\n_This issue is synced from `tasks.json`. "
+        "\n_This issue is synced from `.codex-swarm/tasks.json`. "
         "Change status and details in that file, not here._"
     )
     return "\n".join(lines)
