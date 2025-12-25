@@ -26,6 +26,7 @@ python .codex-swarm/agentctl.py pr check T-123
 python .codex-swarm/agentctl.py verify T-123
 python .codex-swarm/agentctl.py finish T-123 --commit <git-rev> --author INTEGRATOR --body "Verified: ..."
 ```
+For batch finishes, include all task IDs in the commit subject, e.g. `✅ T-123 T-124 close ...`.
 
 ## Guardrails and Git Hygiene
 ```bash
