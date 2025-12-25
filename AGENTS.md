@@ -59,6 +59,7 @@ shared_state:
   3) **Integration (base branch, INTEGRATOR)**: merge the task branch into the base branch via `python .codex-swarm/agentctl.py integrate …` (optionally running verify and capturing output in `.codex-swarm/workspace/T-###/pr/verify.log`).
   4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/workspace/T-###/README.md` with what shipped and mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, committing `.codex-swarm/tasks.json` + docs/artifacts together.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
+- Do not finish a task until `.codex-swarm/workspace/T-###/README.md` is fully filled in (no placeholder `...`).
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
 - Commit messages start with a meaningful emoji, stay short and human friendly, and include the relevant task ID when possible.
 - Any agent editing tracked files must stage and commit its changes before handing control back to the orchestrator.
