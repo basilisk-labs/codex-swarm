@@ -2380,12 +2380,25 @@
         "hash": "5912c9c7a818350820e56e37830ff34a7daceb87",
         "message": "✨ T-101 update README badges"
       }
+    },
+    {
+      "id": "T-102",
+      "title": "Harden agentctl depends_on parsing",
+      "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "agentctl",
+        "tasks"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4ba9fca8dfacba83cdcba59eeba2c7b06d0d4f5d76642c83990fb8b15813ab8f"
+    "checksum": "86e9d50f982a71f952f5036cb36c58f82be95176c08857cbc4d4b238d94d926d"
   }
 }
