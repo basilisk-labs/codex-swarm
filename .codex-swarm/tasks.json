@@ -2151,12 +2151,25 @@
           "body": "Verified: Not run (path refactor only); no runtime behavior changes; please run agentctl --help if needed."
         }
       ]
+    },
+    {
+      "id": "T-090",
+      "title": "Move ORCHESTRATOR spec into JSON",
+      "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "agents",
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b7318dddc5287e03543b17e5098ef33f984f816c61765c3ddbe6e569318e9ad8"
+    "checksum": "69afbfa11a16b28a3573e0c394b9bc925bd670cfe50f36624e842f3bb4195ef1"
   }
 }
