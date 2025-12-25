@@ -249,6 +249,20 @@ def normalize_slug(value: str) -> str:
     return raw or "work"
 
 
+def normalize_task_ids(values: Iterable[str]) -> List[str]:
+    task_ids: List[str] = []
+    seen: Set[str] = set()
+    for value in values:
+        task_id = str(value or "").strip()
+        if not task_id:
+            die("task_id must be non-empty", code=2)
+        if task_id in seen:
+            die(f"Duplicate task id: {task_id}", code=2)
+        seen.add(task_id)
+        task_ids.append(task_id)
+    return task_ids
+
+
 def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
     task_token = task_id.strip().lower()
     if not task_token:
@@ -1282,27 +1296,35 @@ def cmd_task_add(args: argparse.Namespace) -> None:
     tasks = data.get("tasks")
     if not isinstance(tasks, list):
         die("tasks.json must contain a top-level 'tasks' list")
-    task_id = args.task_id.strip()
-    if any(isinstance(task, dict) and task.get("id") == task_id for task in tasks):
-        die(f"Task already exists: {task_id}")
+    raw_task_ids = args.task_id if isinstance(args.task_id, list) else [args.task_id]
+    task_ids = normalize_task_ids(raw_task_ids)
+    existing_ids = {
+        str(task.get("id") or "").strip()
+        for task in tasks
+        if isinstance(task, dict) and str(task.get("id") or "").strip()
+    }
+    for task_id in task_ids:
+        if task_id in existing_ids:
+            die(f"Task already exists: {task_id}")
     status = (args.status or "TODO").strip().upper()
     if status not in ALLOWED_STATUSES:
         die(f"Invalid status: {status}")
-    task: Dict = {
-        "id": task_id,
-        "title": args.title,
-        "description": args.description,
-        "status": status,
-        "priority": args.priority,
-        "owner": args.owner,
-        "tags": list(dict.fromkeys((args.tag or []))),
-        "depends_on": list(dict.fromkeys((args.depends_on or []))),
-    }
-    if args.verify:
-        task["verify"] = list(dict.fromkeys(args.verify))
-    if args.comment_author and args.comment_body:
-        task["comments"] = [{"author": args.comment_author, "body": args.comment_body}]
-    tasks.append(task)
+    for task_id in task_ids:
+        task: Dict = {
+            "id": task_id,
+            "title": args.title,
+            "description": args.description,
+            "status": status,
+            "priority": args.priority,
+            "owner": args.owner,
+            "tags": list(dict.fromkeys((args.tag or []))),
+            "depends_on": list(dict.fromkeys((args.depends_on or []))),
+        }
+        if args.verify:
+            task["verify"] = list(dict.fromkeys(args.verify))
+        if args.comment_author and args.comment_body:
+            task["comments"] = [{"author": args.comment_author, "body": args.comment_body}]
+        tasks.append(task)
     write_tasks_json(data)
 
 
@@ -1541,29 +1563,18 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
 
 
 def cmd_finish(args: argparse.Namespace) -> None:
-    task_id = args.task_id.strip()
-    if not task_id:
-        die("task_id must be non-empty", code=2)
+    raw_task_ids = args.task_id if isinstance(args.task_id, list) else [args.task_id]
+    task_ids = normalize_task_ids(raw_task_ids)
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)
     require_tasks_json_write_context(force=bool(args.force))
-    pr_path: Optional[Path] = None
-    pr_branch: str = ""
-    pr_base: str = ""
-    pr_meta: Dict = {}
+    pr_context: Dict[str, Dict[str, object]] = {}
     if is_branch_pr_mode() and not args.force:
         ensure_git_clean(action="finish")
         if not args.author or not args.body:
             die("--author and --body are required in workflow_mode='branch_pr'", code=2)
         if str(args.author).strip().upper() != "INTEGRATOR":
             die("--author must be INTEGRATOR in workflow_mode='branch_pr'", code=2)
-        pr_path = pr_dir_any(task_id)
-        if not pr_path.exists():
-            die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
-        pr_meta = pr_load_meta(pr_path / "meta.json")
-        pr_branch = str(pr_meta.get("branch") or "").strip()
-        pr_base = str(pr_meta.get("base_branch") or base_branch()).strip()
-        pr_check(task_id, branch=pr_branch or None, base=pr_base or None, quiet=True)
     if args.author and args.body and not args.force:
         require_structured_comment(args.body, prefix="Verified:", min_chars=60)
 
@@ -1576,77 +1587,129 @@ def cmd_finish(args: argparse.Namespace) -> None:
             print(f"❌ {message}", file=sys.stderr)
         die("tasks.json failed lint (use --force to override)", code=2)
 
-    ok, warnings = readiness(task_id)
-    if not ok and not args.force:
-        for warning in warnings:
-            print(f"⚠️ {warning}")
-        die(f"Task is not ready: {task_id} (use --force to override)", code=2)
-
     commit_info = get_commit_info(args.commit)
-    if args.require_task_id_in_commit and task_id not in commit_info.get("message", "") and not args.force:
-        die(
-            f"Commit subject does not mention {task_id}: {commit_info.get('message')!r} "
-            "(use --force or --no-require-task-id-in-commit)"
-        )
+    if args.require_task_id_in_commit and not args.force:
+        missing = [task_id for task_id in task_ids if task_id not in commit_info.get("message", "")]
+        if missing:
+            die(
+                f"Commit subject does not mention {', '.join(missing)}: {commit_info.get('message')!r} "
+                "(use --force or --no-require-task-id-in-commit)"
+            )
 
     data = load_json(TASKS_PATH)
     tasks = data.get("tasks", [])
     if not isinstance(tasks, list):
         die("tasks.json must contain a top-level 'tasks' list")
 
-    target = _ensure_task_object(data, task_id)
+    tasks_by_id, _ = index_tasks_by_id(tasks)
+    assume_done = set(task_ids)
+    tasks_override: Dict[str, Dict] = {}
+    for task_key, task in tasks_by_id.items():
+        if task_key in assume_done:
+            override = dict(task)
+            override["status"] = "DONE"
+            tasks_override[task_key] = override
+        else:
+            tasks_override[task_key] = task
 
-    verify = target.get("verify")
-    if verify is None:
-        commands: List[str] = []
-    elif isinstance(verify, list):
-        commands = [cmd.strip() for cmd in verify if isinstance(cmd, str) and cmd.strip()]
-    else:
-        if not args.force:
-            die(f"{task_id}: verify must be a list of strings (use --force to override)", code=2)
-        commands = []
-    if commands and not args.skip_verify and not args.force:
-        run_verify_commands(task_id, commands, cwd=ROOT, quiet=args.quiet)
+    dep_state, dep_warnings = compute_dependency_state(tasks_override)
 
-    target["status"] = "DONE"
-    target["commit"] = commit_info
+    if not args.force:
+        for task_id in task_ids:
+            if task_id not in tasks_override:
+                die(f"Unknown task id: {task_id}")
+            info = dep_state.get(task_id) or {}
+            missing = info.get("missing") or []
+            incomplete = info.get("incomplete") or []
+            if missing or incomplete:
+                for warning in dep_warnings:
+                    print(f"⚠️ {warning}")
+                if missing:
+                    print(f"⚠️ {task_id}: missing deps: {', '.join(missing)}")
+                if incomplete:
+                    print(f"⚠️ {task_id}: incomplete deps: {', '.join(incomplete)}")
+                die(f"Task is not ready: {task_id} (use --force to override)", code=2)
 
-    if pr_path and is_branch_pr_mode() and not args.force:
-        review_path = pr_path / "review.md"
-        if review_path.exists():
-            notes = parse_handoff_notes(review_path.read_text(encoding="utf-8", errors="replace"))
-            if notes:
-                digest = hashlib.sha256(
-                    ("\n".join(f"{n['author']}:{n['body']}" for n in notes)).encode("utf-8")
-                ).hexdigest()
-                applied = str(pr_meta.get("handoff_applied_digest") or "").strip()
-                if digest != applied:
-                    comments = target.get("comments")
-                    if not isinstance(comments, list):
-                        comments = []
-                    for note in notes:
-                        comments.append({"author": note["author"], "body": note["body"]})
-                    target["comments"] = comments
-                    pr_meta["handoff_applied_digest"] = digest
-                    pr_meta["handoff_applied_at"] = now_iso_utc()
-                    pr_write_meta(pr_path / "meta.json", pr_meta)
-        now = now_iso_utc()
-        pr_meta.setdefault("merged_at", now)
-        pr_meta.setdefault("merge_commit", commit_info.get("hash"))
-        pr_meta.setdefault("closed_at", now)
-        pr_meta["close_commit"] = commit_info.get("hash")
-        pr_meta["status"] = pr_meta.get("status") or "CLOSED"
-        if str(pr_meta.get("status")).strip().upper() != "CLOSED":
-            pr_meta["status"] = "CLOSED"
-        pr_meta["updated_at"] = now
-        pr_write_meta(pr_path / "meta.json", pr_meta)
+    verify_commands: Dict[str, List[str]] = {}
+    for task_id in task_ids:
+        target = tasks_by_id.get(task_id)
+        if not target:
+            die(f"Unknown task id: {task_id}")
+        verify = target.get("verify")
+        if verify is None:
+            commands = []
+        elif isinstance(verify, list):
+            commands = [cmd.strip() for cmd in verify if isinstance(cmd, str) and cmd.strip()]
+        else:
+            if not args.force:
+                die(f"{task_id}: verify must be a list of strings (use --force to override)", code=2)
+            commands = []
+        verify_commands[task_id] = commands
 
-    if args.author and args.body:
-        comments = target.get("comments")
-        if not isinstance(comments, list):
-            comments = []
-        comments.append({"author": args.author, "body": args.body})
-        target["comments"] = comments
+    if is_branch_pr_mode() and not args.force:
+        for task_id in task_ids:
+            pr_path = pr_dir_any(task_id)
+            if not pr_path.exists():
+                die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
+            pr_meta = pr_load_meta(pr_path / "meta.json")
+            pr_branch = str(pr_meta.get("branch") or "").strip()
+            pr_base = str(pr_meta.get("base_branch") or base_branch()).strip()
+            pr_check(task_id, branch=pr_branch or None, base=pr_base or None, quiet=True)
+            pr_context[task_id] = {
+                "pr_path": pr_path,
+                "pr_meta": pr_meta,
+            }
+
+    for task_id in task_ids:
+        commands = verify_commands.get(task_id) or []
+        if commands and not args.skip_verify and not args.force:
+            run_verify_commands(task_id, commands, cwd=ROOT, quiet=args.quiet)
+
+    for task_id in task_ids:
+        target = _ensure_task_object(data, task_id)
+        target["status"] = "DONE"
+        target["commit"] = commit_info
+
+        if is_branch_pr_mode() and not args.force:
+            context = pr_context.get(task_id)
+            if context:
+                pr_path = context["pr_path"]
+                pr_meta = context["pr_meta"]
+                review_path = pr_path / "review.md"
+                if review_path.exists():
+                    notes = parse_handoff_notes(review_path.read_text(encoding="utf-8", errors="replace"))
+                    if notes:
+                        digest = hashlib.sha256(
+                            ("\n".join(f"{n['author']}:{n['body']}" for n in notes)).encode("utf-8")
+                        ).hexdigest()
+                        applied = str(pr_meta.get("handoff_applied_digest") or "").strip()
+                        if digest != applied:
+                            comments = target.get("comments")
+                            if not isinstance(comments, list):
+                                comments = []
+                            for note in notes:
+                                comments.append({"author": note["author"], "body": note["body"]})
+                            target["comments"] = comments
+                            pr_meta["handoff_applied_digest"] = digest
+                            pr_meta["handoff_applied_at"] = now_iso_utc()
+                            pr_write_meta(pr_path / "meta.json", pr_meta)
+                now = now_iso_utc()
+                pr_meta.setdefault("merged_at", now)
+                pr_meta.setdefault("merge_commit", commit_info.get("hash"))
+                pr_meta.setdefault("closed_at", now)
+                pr_meta["close_commit"] = commit_info.get("hash")
+                pr_meta["status"] = pr_meta.get("status") or "CLOSED"
+                if str(pr_meta.get("status")).strip().upper() != "CLOSED":
+                    pr_meta["status"] = "CLOSED"
+                pr_meta["updated_at"] = now
+                pr_write_meta(pr_path / "meta.json", pr_meta)
+
+        if args.author and args.body:
+            comments = target.get("comments")
+            if not isinstance(comments, list):
+                comments = []
+            comments.append({"author": args.author, "body": args.body})
+            target["comments"] = comments
 
     write_tasks_json(data)
 
@@ -3176,8 +3239,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_lint.add_argument("--quiet", action="store_true", help="Suppress warnings")
     p_lint.set_defaults(func=cmd_task_lint)
 
-    p_add = task_sub.add_parser("add", help="Add a new task to tasks.json (no manual edits)")
-    p_add.add_argument("task_id")
+    p_add = task_sub.add_parser("add", help="Add new task(s) to tasks.json (no manual edits)")
+    p_add.add_argument("task_id", nargs="+", help="One or more task IDs")
     p_add.add_argument("--title", required=True)
     p_add.add_argument("--description", required=True)
     p_add.add_argument("--status", default="TODO", help="Default: TODO")
@@ -3267,9 +3330,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_finish = sub.add_parser(
         "finish",
-        help="Mark task DONE + attach commit metadata (typically after a code commit)",
+        help="Mark task(s) DONE + attach commit metadata (typically after a code commit)",
     )
-    p_finish.add_argument("task_id")
+    p_finish.add_argument("task_id", nargs="+", help="One or more task IDs")
     p_finish.add_argument("--commit", default="HEAD", help="Git rev to attach as task commit metadata (default: HEAD)")
     p_finish.add_argument("--author", help="Optional comment author (requires --body)")
     p_finish.add_argument("--body", help="Optional comment body (requires --author)")

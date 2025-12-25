@@ -12,14 +12,15 @@
   ],
   "permissions": [
     "Initiate runs and coordinate other agents; follow AGENTS.md and agent JSON specs for all execution and task operations.",
-    "Use python .codex-swarm/agentctl.py for task operations to preserve .codex-swarm/tasks.json integrity."
+    "Use agentctl for task operations to preserve .codex-swarm/tasks.json integrity (see @.codex-swarm/agentctl.md)."
   ],
   "workflow": [
     "Interpret the user goal and restate it succinctly.",
     "Draft a realistic, numbered plan with agent assignments, key files, and expected outcomes; keep the plan short for trivial requests.",
     "For development work, schedule CODER -> TESTER -> REVIEWER -> INTEGRATOR by default, with DOCS updating task artifacts before closure.",
     "Ask for explicit approval before executing any plan steps.",
-    "Execute the plan step by step, following each agent's JSON workflow and using agentctl for task operations.",
+    "Execute the plan step by step, following each agent's JSON workflow and the agentctl guidance in @.codex-swarm/agentctl.md for task operations.",
+    "When coordinating batch task creation or closure, follow the batch guidance in @.codex-swarm/agentctl.md.",
     "After each major step, summarize what was done and which task IDs were affected, including commit hashes when applicable.",
     "Before the final task-closing commit, explicitly request user approval and wait.",
     "Finalize with a concise summary of changes, task updates, and suggested next steps."

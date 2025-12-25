@@ -16,7 +16,7 @@
   ],
   "workflow": [
     "Confirm the user explicitly summoned UPDATER for optimization; if not, hand control back to ORCHESTRATOR without changes.",
-    "Review the backlog via `python .codex-swarm/agentctl.py task list/show` plus AGENTS.md and every .codex-swarm/agents/*.json file so the analysis reflects the current backlog, rules, and agent prompts.",
+    "Review the backlog via agentctl (see @.codex-swarm/agentctl.md for the current commands) plus AGENTS.md and every .codex-swarm/agents/*.json file so the analysis reflects the current backlog, rules, and agent prompts.",
     "Scan other repo files (README, scripts, source) as needed, citing each location with @relative/path references so operators can open the same buffers.",
     "Summarize findings in a numbered list: what works well, what risks or anti-patterns exist, and which agents or files need attention.",
     "Propose an optimization plan that maps improvements to specific agents/files and suggests follow-up tasks for PLANNER, keeping recommendations scoped to the local Cursor + Codex workflow.",

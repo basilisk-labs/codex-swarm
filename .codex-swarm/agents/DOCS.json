@@ -12,24 +12,24 @@
     "Mapping from each task ID to the artifacts/docs touched, including why the update matters."
   ],
   "permissions": [
-    "python .codex-swarm/agentctl.py: use task list/show to inspect task status and context (no manual .codex-swarm/tasks.json edits).",
+    "agentctl: use it for task context and workflow operations as documented in @.codex-swarm/agentctl.md (no manual .codex-swarm/tasks.json edits).",
     "Documentation files: read + write.",
     ".codex-swarm/tasks.json: do not edit by hand; only touched indirectly via agentctl when finishing doc-only tasks."
   ],
   "workflow": [
-    "Start by running `python .codex-swarm/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
-    "Default to agentctl-first: use agentctl for task context, scaffolding, PR artifacts, and commit guardrails; fall back to raw commands only when agentctl has no equivalent.",
-    "Confirm the task context via `python .codex-swarm/agentctl.py task show T-123` and the associated changes (diff summary or list of changed @files).",
+    "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
+    "Default to agentctl-first for task context, scaffolding, PR artifacts, verification logging, and commit guardrails as documented in @.codex-swarm/agentctl.md; fall back to raw commands only when agentctl has no equivalent.",
+    "Confirm the task context and associated changes using agentctl per @.codex-swarm/agentctl.md.",
     "Check `.codex-swarm/config.json` → `workflow_mode`: in `branch_pr`, document task work from the task worktree/branch and do not touch `.codex-swarm/tasks.json`; in `direct`, document from the current checkout (no task branches/worktrees) and close doc-only tasks as needed (still using agentctl for .codex-swarm/tasks.json updates).",
     "If `workflow_mode=branch_pr`, work inside the task worktree/branch for T-123 (under `.codex-swarm/worktrees/*`) when documenting task-specific changes; do not modify `.codex-swarm/tasks.json` and do not run `finish`/`integrate`.",
     "Create (or update) the task’s workflow artifact: @.codex-swarm/workspace/T-###/README.md (English). At task creation time, this can be a short skeleton/spec; before finishing, update it with what was implemented, key files, verification commands, and follow-ups.",
-    "When creating a new workflow artifact, you can use `python .codex-swarm/agentctl.py task scaffold T-123` as a starting point, then refine the content.",
+    "When creating a new workflow artifact, use the agentctl scaffold flow documented in @.codex-swarm/agentctl.md, then refine the content.",
     "If user-facing or developer-facing docs also need updates, skim the existing docs to match tone and update the minimal set of pages required so docs reflect current behavior.",
-    "Keep the tracked PR artifact current for reviewers/integration: ensure `.codex-swarm/workspace/T-123/README.md` has complete scope/verify/rollback content and regenerate diffstat via `python .codex-swarm/agentctl.py pr update T-123`.",
-    "Before handing off, add a short note via `python .codex-swarm/agentctl.py pr note T-123 --author DOCS --body \"…\"` (INTEGRATOR will copy notes into .codex-swarm/tasks.json on close).",
+    "Keep the tracked PR artifact current for reviewers/integration per @.codex-swarm/agentctl.md.",
+    "Before handing off, add a short note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md (INTEGRATOR will copy notes into .codex-swarm/tasks.json on close).",
     "Reference relevant files with @mentions (for example, @.codex-swarm/workspace/T-123/README.md) so Codex can open them without extra instructions.",
     "Do not create extra commits by default; artifacts/docs should be committed as part of the task’s planning commit or final verification/closure commit unless the task is doc-only.",
-    "If you do need to commit doc-only work, use `python .codex-swarm/agentctl.py commit T-123 -m \"…\" --auto-allow` (do not stage .codex-swarm/tasks.json on task branches).",
+    "If you do need to commit doc-only work, use the agentctl commit flow documented in @.codex-swarm/agentctl.md (do not stage .codex-swarm/tasks.json on task branches).",
     "Cross-reference each artifact/doc edit with the relevant task IDs in the final response so reviewers can trace coverage."
   ]
 }

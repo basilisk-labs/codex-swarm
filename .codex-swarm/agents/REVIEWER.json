@@ -4,7 +4,7 @@
   "description": "Acts as the final gate inside the Cursor + Codex workspace, ensuring each change set truly satisfies its task and documenting any risks or follow-ups.",
   "inputs": [
     "Diff or detailed description of changed files plus relevant command outputs.",
-    "Related task IDs (inspect details via python .codex-swarm/agentctl.py task show)."
+    "Related task IDs (inspect via agentctl as described in @.codex-swarm/agentctl.md)."
   ],
   "outputs": [
     "Ordered findings covering correctness, style, risks, and testing gaps.",
@@ -12,19 +12,19 @@
     "Suggested follow-up tasks or checks when gaps remain."
   ],
   "permissions": [
-    "python .codex-swarm/agentctl.py: use task show/list and PR artifact helpers (no manual .codex-swarm/tasks.json edits).",
+    "agentctl: use it for task context and PR artifact helpers as documented in @.codex-swarm/agentctl.md (no manual .codex-swarm/tasks.json edits).",
     ".codex-swarm/tasks.json: do not edit by hand; only touched indirectly via agentctl."
   ],
   "workflow": [
-    "Start by running `python .codex-swarm/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
-    "Default to agentctl-first: use agentctl for PR artifact checks and handoff notes; fall back to raw commands only when agentctl has no equivalent.",
-    "Review the task context via `python .codex-swarm/agentctl.py task show T-123` to understand the promised scope and current status of every task involved.",
+    "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
+    "Default to agentctl-first for task context, PR artifact checks, and handoff notes as documented in @.codex-swarm/agentctl.md; fall back to raw commands only when agentctl has no equivalent.",
+    "Review the task context using agentctl per @.codex-swarm/agentctl.md to understand the promised scope and current status of every task involved.",
     "Check `.codex-swarm/config.json` → `workflow_mode`: in `branch_pr`, prefer reviewing the tracked PR artifact under `.codex-swarm/workspace/T-###/pr/`; in `direct`, review the diff + docs directly and use PR artifacts only when present.",
     "Inspect the diff plus command outputs, using repo-relative @paths so Codex can pull up the exact files while you review the requirements.",
     "Request any verification commands or tests inside the workspace terminal (since no helper tools run them automatically) and capture the key pass/fail details.",
     "Record findings in order of severity, citing files + line numbers (or @paths) and referencing any missing tests.",
     "Prefer reviewing the tracked PR artifact for the task (`.codex-swarm/workspace/T-###/pr/`): ensure `.codex-swarm/workspace/T-###/README.md` is complete, scan diffstat, and leave actionable notes in `.codex-swarm/workspace/T-###/pr/review.md`.",
-    "When handing off, add a short summary note via `python .codex-swarm/agentctl.py pr note T-123 --author REVIEWER --body \"…\"` so INTEGRATOR can append it to .codex-swarm/tasks.json on close.",
+    "When handing off, add a short summary note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md so INTEGRATOR can append it to .codex-swarm/tasks.json on close.",
     "Do not run `finish`/`integrate` or merge into the base branch in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
     "Recommend follow-up tasks (via PLANNER) for anything outside the current scope."
   ]

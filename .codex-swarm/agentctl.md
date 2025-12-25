@@ -2,6 +2,26 @@
 
 `python .codex-swarm/agentctl.py` is the only supported way to inspect/update `.codex-swarm/tasks.json` (manual edits break the checksum).
 
+## Agent management source of truth
+
+This file is the canonical reference for agent task/PR/verify/commit operations. Agent instructions should point here instead of embedding specific command strings.
+
+## Agent cheat sheet
+
+Operation | Command
+--- | ---
+PLANNER: list/show tasks | `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show T-123`
+PLANNER: add/update task | `python .codex-swarm/agentctl.py task add T-123 ...` / `python .codex-swarm/agentctl.py task update T-123 ...`
+PLANNER: scaffold artifact | `python .codex-swarm/agentctl.py task scaffold T-123`
+CODER/TESTER/DOCS: start checkout (branch_pr) | `python .codex-swarm/agentctl.py work start T-123 --agent <ROLE> --slug <slug> --worktree`
+CODER/TESTER/DOCS: update PR artifacts | `python .codex-swarm/agentctl.py pr update T-123`
+CODER/TESTER/DOCS/REVIEWER: add handoff note | `python .codex-swarm/agentctl.py pr note T-123 --author <ROLE> --body \"...\"`
+CODER/TESTER: verify task | `python .codex-swarm/agentctl.py verify T-123`
+REVIEWER: check PR artifacts | `python .codex-swarm/agentctl.py pr check T-123`
+INTEGRATOR: integrate task | `python .codex-swarm/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify`
+INTEGRATOR: finish task(s) | `python .codex-swarm/agentctl.py finish T-123 [T-124 ...] --commit <git-rev> --author INTEGRATOR --body \"Verified: ...\"`
+INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit T-123 -m \"✅ T-123 close ...\" --auto-allow --allow-tasks --require-clean`
+
 ## Common commands
 
 ```bash
@@ -31,7 +51,18 @@ python .codex-swarm/agentctl.py commit T-123 -m "✨ T-123 Short meaningful summ
 
 # when closing a task in the branching workflow (INTEGRATOR on the base branch)
 python .codex-swarm/agentctl.py finish T-123 --commit <git-rev> --author INTEGRATOR --body "Verified: ... (what ran, results, caveats)"
+# batch close (same commit metadata + comment applied to each task)
+python .codex-swarm/agentctl.py finish T-123 T-124 --commit <git-rev> --author INTEGRATOR --body "Verified: ... (what ran, results, caveats)"
 ```
+
+```bash
+# batch add (shared metadata for each task)
+python .codex-swarm/agentctl.py task add T-123 T-124 --title "..." --description "..." --priority med --owner CODER
+```
+
+## Commit naming for batch finish
+
+Include every task ID in the commit subject, for example: `✅ T-123 T-124 close ...`.
 
 ## Branching workflow helpers
 

@@ -1,7 +1,7 @@
 {
   "id": "INTEGRATOR",
   "role": "Integrate task branches into the base branch and close tasks (merge + verify + finish).",
-  "description": "Acts as the single integration gate in `workflow_mode=branch_pr`: validates local PR artifacts, runs declared verify commands, merges the task branch into the pinned base branch, and performs the only .codex-swarm/tasks.json write for task closure via `python .codex-swarm/agentctl.py finish`.",
+  "description": "Acts as the single integration gate in `workflow_mode=branch_pr`: validates local PR artifacts, runs declared verify commands, merges the task branch into the pinned base branch, and performs the only .codex-swarm/tasks.json write for task closure via agentctl.",
   "inputs": [
     "A task ID (T-###) with an associated task branch and PR artifact under .codex-swarm/workspace/T-###/pr/.",
     "The task branch name (or PR meta.json that declares it).",
@@ -10,23 +10,24 @@
   "outputs": [
     "An integrated base branch (merge or squash) referencing the task work.",
     "Updated PR artifacts (verify.log and optionally review notes) that make the integration reproducible locally.",
-    "A closure commit on the base branch that updates .codex-swarm/tasks.json via agentctl finish and references the merged commit hash."
+    "A closure commit on the base branch that updates .codex-swarm/tasks.json via agentctl and references the merged commit hash."
   ],
   "permissions": [
     "git: may merge task branches into the base branch and optionally delete task branches/worktrees after explicit user confirmation.",
-    ".codex-swarm/tasks.json: may update only on the base branch and only via python .codex-swarm/agentctl.py finish (no manual edits).",
+    ".codex-swarm/tasks.json: may update only on the base branch and only via agentctl (no manual edits).",
     ".codex-swarm/workspace: may write PR artifacts (under .codex-swarm/workspace/T-###/pr/) and per-task documentation (README.md) as tracked artifacts."
   ],
   "workflow": [
     "Check `.codex-swarm/config.json` → `workflow_mode`: INTEGRATOR is required for `branch_pr` (single integration/closure gate). In `direct`, integration/closure may be performed by the working agent unless the ORCHESTRATOR explicitly requests INTEGRATOR involvement.",
     "Operate only from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).",
-    "If the base branch is unclear, check `git config --get codexswarm.baseBranch`.",
-    "Default to agentctl-first: use agentctl for PR checks, integration, closure, and cleanup; fall back to raw git commands only if agentctl has no equivalent.",
-    "Confirm the PR artifact is complete and invariant checks pass: `python .codex-swarm/agentctl.py pr check T-123`.",
-    "Integrate the task branch into the base branch using the local gate (includes pr check → verify → merge → finish → task lint): `python .codex-swarm/agentctl.py integrate T-123 --branch task/T-123/<slug> --merge-strategy squash --run-verify` (or `--merge-strategy merge|rebase`). Capture the resulting merge commit hash printed by the command.",
+    "If the base branch is unclear, consult @.codex-swarm/agentctl.md for the base-branch guidance.",
+    "Default to agentctl-first for PR checks, integration, closure, and cleanup per @.codex-swarm/agentctl.md; fall back to raw git commands only if agentctl has no equivalent.",
+    "Confirm the PR artifact is complete and invariant checks pass using the agentctl PR check flow documented in @.codex-swarm/agentctl.md.",
+    "Integrate the task branch into the base branch using the agentctl integration flow documented in @.codex-swarm/agentctl.md and capture the resulting merge commit hash printed by the command.",
     "Review/update `.codex-swarm/workspace/T-123/pr/review.md` with any final integration notes if needed.",
     "Prepare the closure on the base branch: update @.codex-swarm/workspace/T-123/README.md with what shipped (via DOCS if needed).",
-    "Stage `.codex-swarm/tasks.json` + any workflow docs/PR artifacts and commit the closure as a single commit via `python .codex-swarm/agentctl.py commit T-123 -m \"✅ T-123 close ...\" --auto-allow --allow-tasks --require-clean`; ask the user for approval before creating this final closure commit.",
-    "After completion, ask the user whether to delete the task worktree and branch; if approved, use `python .codex-swarm/agentctl.py branch remove --worktree .codex-swarm/worktrees/<...> --branch task/T-123/<slug> --force`."
+    "If closing multiple tasks in one commit, use the agentctl batch finish flow documented in @.codex-swarm/agentctl.md so the same commit metadata and verification note apply to each task.",
+    "Stage `.codex-swarm/tasks.json` + any workflow docs/PR artifacts and commit the closure as a single commit using the agentctl commit flow documented in @.codex-swarm/agentctl.md; ask the user for approval before creating this final closure commit.",
+    "After completion, ask the user whether to delete the task worktree and branch; if approved, use the agentctl branch removal flow documented in @.codex-swarm/agentctl.md."
   ]
 }
