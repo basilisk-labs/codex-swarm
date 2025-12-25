@@ -243,3 +243,7 @@ All agents, including ORCHESTRATOR, are defined as JSON files inside the `.codex
 **UPDATER usage.** Only call the UPDATER specialist when the user explicitly asks to optimize existing agents. In that case UPDATER audits the entire repository, inspects `.codex-swarm/agents/*.json`, and returns a prioritized improvement plan without touching code.
 
 ---
+
+# STARTUP RULE
+
+- Always begin any work by engaging the ORCHESTRATOR; no other agent may initiate a run.
