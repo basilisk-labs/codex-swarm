@@ -23,7 +23,7 @@ export MODE
 # It removes leftover assets, metadata, and git state that would tie the copy to the original repo.
 # It also removes framework-development artifacts that aren't needed for a reusable snapshot.
 #
-# Note: .codex-swarm/agentctl.md stays as part of the framework snapshot.
+# Note: .codex-swarm/agentctl.md and .codex-swarm/workspace stay as part of the framework snapshot.
 
 rm -rf \
   .DS_Store \
@@ -36,6 +36,7 @@ rm -rf \
   .venv \
   assets \
   docs \
+  scripts \
   README.md \
   tasks.html \
   LICENSE \
@@ -131,8 +132,8 @@ def scrub_line(line: str) -> Optional[str]:
         if "--worktree" in s:
             s = s.replace("--worktree", "").replace("  ", " ").replace("  ", " ").strip()
             s = s.replace("  ", " ")
-            s = s.replace("`python scripts/agentctl.py work start T-123 --agent <ROLE> --slug <slug>`", "`python scripts/agentctl.py work start T-123`")
-            s = s.replace("`python scripts/agentctl.py work start T-123 --agent CODER --slug <slug>`", "`python scripts/agentctl.py work start T-123`")
+            s = s.replace("`python .codex-swarm/agentctl.py work start T-123 --agent <ROLE> --slug <slug>`", "`python .codex-swarm/agentctl.py work start T-123`")
+            s = s.replace("`python .codex-swarm/agentctl.py work start T-123 --agent CODER --slug <slug>`", "`python .codex-swarm/agentctl.py work start T-123`")
         return s or None
 
     # branch_pr
@@ -247,7 +248,7 @@ else
   fi
 fi
 
-git add .codex-swarm scripts .gitignore AGENTS.md tasks.json
+git add .codex-swarm .gitignore AGENTS.md tasks.json
 git commit -m "Initial commit"
 
 rm -rf clean.sh

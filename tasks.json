@@ -2128,12 +2128,25 @@
           "body": "Verified: tasks/workflow artifact added; clean.sh already includes interactive mode selection + prompt scrubbing."
         }
       ]
+    },
+    {
+      "id": "T-089",
+      "title": "Refactor workflow paths",
+      "description": "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "refactor",
+        "paths"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5ba32fe2821d38d63d52cb3d42a868c604863524bd97ba7fb1475c9a03e1e46f"
+    "checksum": "54c52f16d0d8969209130e4b3d92116396e75edf37e1e8292d2dc65087110df6"
   }
 }
