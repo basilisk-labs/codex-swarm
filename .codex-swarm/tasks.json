@@ -2326,19 +2326,41 @@
       "id": "T-099",
       "title": "Fill T-096 artifact and enforce doc completion",
       "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "low",
       "owner": "DOCS",
       "tags": [
         "docs"
       ],
-      "depends_on": []
+      "depends_on": [],
+      "commit": {
+        "hash": "be41f3b5cdebf6a1d18b4562e722b6c4041733b4",
+        "message": "🛠️ T-099 enforce doc completion + fill T-096"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only updates to workflow artifacts and guardrails; no tests required."
+        }
+      ]
+    },
+    {
+      "id": "T-100",
+      "title": "Update README docs links",
+      "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [],
+      "depends_on": [
+        "[]"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "98c716239d799d08638421b502e5e4306fe708ea58c3dade8d24f87fa7c3b20a"
+    "checksum": "c102302c50a43283ab8cfff9cd9ffdf949413cd70d836b87078a3bcb6fbf0413"
   }
 }

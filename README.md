@@ -31,6 +31,10 @@ Prerequisites:
 4. Optional (clean slate):
    - Run `./clean.sh` to remove framework-development artifacts and reinitialize git, leaving only the minimal “runtime” files needed to reuse Codex Swarm as your own local project.
 
+Documentation:
+- Start at `docs/README.md` for the reading order and document map.
+- Use the Docs index below to jump to specific guides.
+
 ## Example: auto-doc for a tiny refactor
 
 1. User: “Refactor utils/date.ts and update the README accordingly.”
