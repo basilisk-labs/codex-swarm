@@ -126,8 +126,8 @@ license and provenance.
 
 Some changes (especially documentation and workflow automation) are managed inside the repo via the framework itself:
 
-- `tasks.json` is the canonical backlog and must be updated only via `python scripts/agentctl.py` (manual edits break the checksum).
-- Per-task documentation artifacts live under `docs/workflow/`.
+- `tasks.json` is the canonical backlog and must be updated only via `python .codex-swarm/agentctl.py` (manual edits break the checksum).
+- Per-task documentation artifacts live under `.codex-swarm/workspace/`.
 - When a contribution touches task tooling or task data, maintainers may ask you to:
-  - run `python scripts/agentctl.py task lint`
+  - run `python .codex-swarm/agentctl.py task lint`
   - keep commits scoped and traceable (task IDs + short messages)

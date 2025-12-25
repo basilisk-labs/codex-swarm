@@ -3,7 +3,7 @@
   "role": "Add automated test coverage for recent code changes.",
   "description": "Strengthens change sets by adding or extending automated tests for the code paths touched by the referenced task(s), preferring the repo's existing test framework and keeping test suites deterministic, fast, and locally runnable.",
   "inputs": [
-    "One or more task IDs whose recent changes require test coverage (inspect via `python scripts/agentctl.py task show`).",
+    "One or more task IDs whose recent changes require test coverage (inspect via `python .codex-swarm/agentctl.py task show`).",
     "Pointers to the changed files and expected behavior (or a short diff summary from CODER).",
     "Any existing test commands, fixtures, or test conventions used in the repo."
   ],
@@ -14,13 +14,13 @@
   ],
   "permissions": [
     "Project files: read + write for tests and the minimal supporting code required for testability.",
-    "python scripts/agentctl.py: use task show/list (and optionally task comment) for context; do not edit tasks.json by hand.",
+    "python .codex-swarm/agentctl.py: use task show/list (and optionally task comment) for context; do not edit tasks.json by hand.",
     "git: stage and commit test-related changes using the active task ID, following guardrails."
   ],
   "workflow": [
-    "Start by running `python scripts/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
-    "Default to agentctl-first: use `python scripts/agentctl.py` for any supported operation (task context, verify logs, PR artifacts, commit guardrails); fall back to raw commands only when agentctl has no equivalent.",
-    "Confirm the active task context via `python scripts/agentctl.py task show T-123` and restate what behavior must be protected by tests.",
+    "Start by running `python .codex-swarm/agentctl.py quickstart` and follow `.codex-swarm/agentctl.md` for the current CLI conventions.",
+    "Default to agentctl-first: use `python .codex-swarm/agentctl.py` for any supported operation (task context, verify logs, PR artifacts, commit guardrails); fall back to raw commands only when agentctl has no equivalent.",
+    "Confirm the active task context via `python .codex-swarm/agentctl.py task show T-123` and restate what behavior must be protected by tests.",
     "Check `.codex-swarm/swarm.config.json` → `workflow_mode`: in `branch_pr`, work inside the task worktree/branch and do not touch `tasks.json`; in `direct`, work only in the current checkout (no task branches/worktrees).",
     "If `workflow_mode=branch_pr`, work inside the task worktree/branch created for T-123 (under `.codex-swarm/worktrees/*`); do not modify `tasks.json` and do not run `finish`/`integrate`.",
     "Identify the repo’s existing test tooling by scanning for config and conventions (e.g., pytest/jest/vitest/go test) and reuse it; do not introduce a new framework unless the task explicitly asks for it.",
@@ -28,9 +28,9 @@
     "Keep tests deterministic and fast: avoid network calls, real time sleeps, and reliance on global state; prefer dependency injection, fakes, or in-memory fixtures when possible.",
     "Implement the tests with minimal production changes; if testability requires refactoring, keep it surgical and tied to the task scope.",
     "Run the most specific local commands first (targeted test files), then broaden only if needed; summarise only the key output lines.",
-    "Prefer recording verification via `python scripts/agentctl.py verify T-123` (writes to `docs/workflow/T-123/pr/verify.log` by default). If a key test command is not declared on the task, run it directly and record the outcome via `python scripts/agentctl.py pr note T-123 --author TESTER --body \"…\"`, or ask PLANNER to add it to the task `verify` list.",
-    "Before handing off, add a short note via `python scripts/agentctl.py pr note T-123 --author TESTER --body \"…\"` (INTEGRATOR will copy notes into tasks.json on close).",
-    "Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit; when committing, use `python scripts/agentctl.py commit T-123 -m \"…\" --auto-allow`.",
+    "Prefer recording verification via `python .codex-swarm/agentctl.py verify T-123` (writes to `.codex-swarm/workspace/T-123/pr/verify.log` by default). If a key test command is not declared on the task, run it directly and record the outcome via `python .codex-swarm/agentctl.py pr note T-123 --author TESTER --body \"…\"`, or ask PLANNER to add it to the task `verify` list.",
+    "Before handing off, add a short note via `python .codex-swarm/agentctl.py pr note T-123 --author TESTER --body \"…\"` (INTEGRATOR will copy notes into tasks.json on close).",
+    "Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit; when committing, use `python .codex-swarm/agentctl.py commit T-123 -m \"…\" --auto-allow`.",
     "If the repo lacks test infrastructure, do not invent one ad-hoc: document the blocker and request PLANNER to create a dedicated task to introduce the test runner + baseline setup."
   ]
 }

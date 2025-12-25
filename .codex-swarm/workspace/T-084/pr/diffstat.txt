@@ -1,0 +1,13 @@
+ .codex-swarm/agents/CODER.json      |  8 +++++---
+ .codex-swarm/agents/CREATOR.json    |  3 ++-
+ .codex-swarm/agents/DOCS.json       |  4 +++-
+ .codex-swarm/agents/INTEGRATOR.json |  3 ++-
+ .codex-swarm/agents/PLANNER.json    |  2 ++
+ .codex-swarm/agents/REVIEWER.json   |  7 ++++---
+ .codex-swarm/agents/TESTER.json     |  7 ++++---
+ .codex-swarm/workspace/T-084/README.md       | 32 ++++++++++++++++++++++++--------
+ .codex-swarm/workspace/T-084/pr/diffstat.txt | 13 +++++++++++++
+ .codex-swarm/workspace/T-084/pr/meta.json    | 12 ++++++++++++
+ .codex-swarm/workspace/T-084/pr/review.md    | 21 +++++++++++++++++++++
+ .codex-swarm/workspace/T-084/pr/verify.log   |  2 ++
+ 12 files changed, 94 insertions(+), 20 deletions(-)

@@ -1,0 +1,12 @@
+ .codex-swarm/agentctl.md            |  25 ++++++--
+ .codex-swarm/agents/CODER.json      |   2 +-
+ .codex-swarm/agents/INTEGRATOR.json |  19 +++---
+ .codex-swarm/agents/PLANNER.json    |   2 +-
+ .codex-swarm/agents/REVIEWER.json   |   2 +-
+ AGENTS.md                           |  35 ++++++-----
+ .codex-swarm/workspace/T-087/pr/diffstat.txt |   1 +
+ .codex-swarm/workspace/T-087/pr/meta.json    |  12 ++++
+ .codex-swarm/workspace/T-087/pr/review.md    |  21 +++++++
+ .codex-swarm/workspace/T-087/pr/verify.log   |   2 +
+ scripts/agentctl.py                 | 117 +++++++++++++++++++++++++++---------
+ 11 files changed, 176 insertions(+), 62 deletions(-)

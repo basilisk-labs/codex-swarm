@@ -1,0 +1,8 @@
+ .codex-swarm/agentctl.md            |   3 ++
+ .codex-swarm/workspace/T-075/README.md       |  25 ++++++---
+ .codex-swarm/workspace/T-075/pr/diffstat.txt |   8 +++
+ .codex-swarm/workspace/T-075/pr/meta.json    |  12 +++++
+ .codex-swarm/workspace/T-075/pr/review.md    |  21 ++++++++
+ .codex-swarm/workspace/T-075/pr/verify.log   |   2 +
+ scripts/agentctl.py                 | 105 +++++++++++++++++++++++++++++++++++-
+ 7 files changed, 167 insertions(+), 9 deletions(-)
