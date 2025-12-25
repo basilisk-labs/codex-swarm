@@ -2348,12 +2348,22 @@
       "id": "T-100",
       "title": "Update README docs links",
       "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "tags": [],
       "depends_on": [
         "[]"
+      ],
+      "commit": {
+        "hash": "1094b0af329012963648b1405b49eb5d17479c1b",
+        "message": "📝 T-100 update README docs links"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
       ]
     }
   ],
@@ -2361,6 +2371,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "c102302c50a43283ab8cfff9cd9ffdf949413cd70d836b87078a3bcb6fbf0413"
+    "checksum": "1eabbf9034baf40def78a31211df1082aad24d345014ae89eb3ecad1f5a7db87"
   }
 }
