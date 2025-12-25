@@ -2263,12 +2263,24 @@
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
       ]
+    },
+    {
+      "id": "T-096",
+      "title": "Centralize agentctl guidance",
+      "description": "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs"
+      ],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b459e745292d7fde6001b61793c9b1f10aa28880c8abac87d4e7580154b10881"
+    "checksum": "ce6187be34d6eff6657d3f8b9e0cc114c087abfb9bd1d68a109060099af2dc83"
   }
 }
