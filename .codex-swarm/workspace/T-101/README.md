@@ -1,0 +1,31 @@
+# T-101: Refresh README badges and quickstart callout
+
+## Summary
+
+- ...
+
+## Goal
+
+- ...
+
+## Scope
+
+- ...
+
+## Risks
+
+- ...
+
+## Verify Steps
+
+- ...
+
+## Rollback Plan
+
+- ...
+
+## Changes Summary (auto)
+
+<!-- BEGIN AUTO SUMMARY -->
+- (no file changes)
+<!-- END AUTO SUMMARY -->

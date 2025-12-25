@@ -2365,12 +2365,27 @@
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
       ]
+    },
+    {
+      "id": "T-101",
+      "title": "Refresh README badges and quickstart callout",
+      "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "codex",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "depends_on": [
+        "[]"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "1eabbf9034baf40def78a31211df1082aad24d345014ae89eb3ecad1f5a7db87"
+    "checksum": "cc0791e4fb720710f7a44efe27ee8d203826f110162cd3ba1a9e34183e5ea8b1"
   }
 }
