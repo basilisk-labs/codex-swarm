@@ -2128,7 +2128,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
 
     if is_branch_pr_mode() and not args.force:
         for task_id in task_ids:
-            pr_path = pr_dir_any(task_id)
+            pr_path = pr_dir(task_id)
             if not pr_path.exists():
                 die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
             pr_meta = pr_load_meta(pr_path / "meta.json")
@@ -3208,7 +3208,7 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
     if not body:
         die("--body is required", code=2)
 
-    target = pr_dir_any(task_id)
+    target = pr_dir(task_id)
     review_path = target / "review.md"
     if not review_path.exists():
         die(
