@@ -2519,7 +2519,9 @@
       "priority": "med",
       "owner": "CODER",
       "tags": [],
-      "depends_on": []
+      "depends_on": [
+        "T-110"
+      ]
     },
     {
       "id": "T-112",
@@ -2529,7 +2531,9 @@
       "priority": "med",
       "owner": "CODER",
       "tags": [],
-      "depends_on": []
+      "depends_on": [
+        "T-111"
+      ]
     },
     {
       "id": "T-113",
@@ -2539,7 +2543,9 @@
       "priority": "med",
       "owner": "CODER",
       "tags": [],
-      "depends_on": []
+      "depends_on": [
+        "T-114"
+      ]
     },
     {
       "id": "T-114",
@@ -2549,13 +2555,15 @@
       "priority": "med",
       "owner": "CODER",
       "tags": [],
-      "depends_on": []
+      "depends_on": [
+        "T-112"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a99bec233fef13d4b5a7d60342834e8a10db433bb4c7e8c22e8f64b52f8d38f9"
+    "checksum": "0524e5665fc5537f3d1371ee3cc4ad5574a091fd1fcb5f944cb6175a2eacc238"
   }
 }
