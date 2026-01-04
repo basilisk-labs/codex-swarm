@@ -2,7 +2,8 @@
 """
 Sync tasks.json with GitHub Issues AND ProjectV2 Status.
 
-Source of truth: .codex-swarm/tasks.json
+Source of truth: the configured tasks backend; `.codex-swarm/tasks.json` is a
+snapshot produced by `agentctl task export`.
 
 For each task:
   - Ensure there is a GitHub Issue with label `task-id:<ID>`
@@ -52,6 +53,10 @@ SESSION.headers.update(
 # ---------- Helpers ----------
 
 def load_tasks() -> List[Dict[str, Any]]:
+    if not TASKS_PATH.exists():
+        raise SystemExit(
+            "Missing .codex-swarm/tasks.json. Run `python3 .codex-swarm/agentctl.py task export` first."
+        )
     data = json.loads(TASKS_PATH.read_text())
     return data["tasks"]
 
@@ -95,8 +100,8 @@ def build_body(task: Dict[str, Any]) -> str:
         lines.append(f"- Commit: [`{h[:7]}`]({url}) — {msg}")
 
     lines.append(
-        "\n_This issue is synced from `.codex-swarm/tasks.json`. "
-        "Change status and details in that file, not here._"
+        "\n_This issue is synced from `.codex-swarm/tasks.json` (exported snapshot). "
+        "Change status and details in the backend and re-export, not here._"
     )
     return "\n".join(lines)
 

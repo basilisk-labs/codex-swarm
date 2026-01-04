@@ -3,7 +3,11 @@ name: Sync tasks.json to GitHub Issues
 on:
   push:
     paths:
+      - ".codex-swarm/tasks/**"
       - ".codex-swarm/tasks.json"
+      - ".codex-swarm/config.json"
+      - ".codex-swarm/agentctl.py"
+      - ".codex-swarm/backends/**"
   workflow_dispatch: {}
 
 jobs:
@@ -22,6 +26,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests
+
+      - name: Export tasks snapshot
+        run: |
+          python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json
 
       - name: Sync .codex-swarm/tasks.json to issues
         env:
