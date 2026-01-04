@@ -16,7 +16,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Set, Tuple
+from typing import Callable, Dict, Iterable, List, Optional, Set, Tuple
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -394,6 +394,29 @@ WORKFLOW_DIR = _resolve_repo_relative_path(_PATHS.get("workflow_dir"), label="wo
 TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
 BACKEND_CONFIG = load_backend_config()
 BACKEND_CLASS = load_backend_class(BACKEND_CONFIG) if BACKEND_CONFIG else None
+_BACKEND_INSTANCE: Optional[object] = None
+
+
+def backend_enabled() -> bool:
+    return BACKEND_CLASS is not None
+
+
+def backend_settings() -> Dict:
+    settings = BACKEND_CONFIG.get("settings") if isinstance(BACKEND_CONFIG, dict) else None
+    return settings if isinstance(settings, dict) else {}
+
+
+def backend_instance() -> Optional[object]:
+    global _BACKEND_INSTANCE
+    if not backend_enabled():
+        return None
+    if _BACKEND_INSTANCE is not None:
+        return _BACKEND_INSTANCE
+    try:
+        _BACKEND_INSTANCE = BACKEND_CLASS(backend_settings())
+    except TypeError:
+        _BACKEND_INSTANCE = BACKEND_CLASS()
+    return _BACKEND_INSTANCE
 
 
 def workflow_mode() -> str:
@@ -486,6 +509,11 @@ def write_tasks_json(data: Dict) -> None:
     write_json(TASKS_PATH, data)
 
 
+def write_tasks_json_to_path(path: Path, data: Dict) -> None:
+    update_tasks_meta(data)
+    write_json(path, data)
+
+
 def load_tasks() -> List[Dict]:
     data = load_json(TASKS_PATH)
     tasks = data.get("tasks", [])
@@ -497,6 +525,36 @@ def load_tasks() -> List[Dict]:
     return tasks
 
 
+def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
+    backend = backend_instance()
+    if backend is None:
+        data = load_json(TASKS_PATH)
+        tasks = data.get("tasks", [])
+        if not isinstance(tasks, list):
+            die("tasks.json must contain a top-level 'tasks' list")
+
+        def save(updated_tasks: List[Dict]) -> None:
+            data["tasks"] = updated_tasks
+            write_tasks_json(data)
+
+        return tasks, save
+
+    list_tasks = getattr(backend, "list_tasks", None)
+    write_task = getattr(backend, "write_task", None)
+    if not callable(list_tasks) or not callable(write_task):
+        die("Configured backend must implement list_tasks() and write_task()", code=2)
+    tasks = list_tasks()
+    if not isinstance(tasks, list):
+        die("Backend list_tasks() must return a list of tasks", code=2)
+
+    def save(updated_tasks: List[Dict]) -> None:
+        for task in updated_tasks:
+            if isinstance(task, dict):
+                write_task(task)
+
+    return tasks, save
+
+
 def format_task_line(task: Dict) -> str:
     task_id = str(task.get("id") or "").strip()
     title = str(task.get("title") or "").strip() or "(untitled task)"
@@ -505,7 +563,7 @@ def format_task_line(task: Dict) -> str:
 
 
 def cmd_task_list(args: argparse.Namespace) -> None:
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, warnings = index_tasks_by_id(tasks)
     if warnings and not args.quiet:
         for warning in warnings:
@@ -530,7 +588,7 @@ def cmd_task_list(args: argparse.Namespace) -> None:
 
 
 def cmd_task_next(args: argparse.Namespace) -> None:
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, warnings = index_tasks_by_id(tasks)
     dep_state, dep_warnings = compute_dependency_state(tasks_by_id)
     warnings = warnings + dep_warnings
@@ -604,7 +662,7 @@ def cmd_task_search(args: argparse.Namespace) -> None:
     if not query:
         die("Query must be non-empty", code=2)
 
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, warnings = index_tasks_by_id(tasks)
     if warnings and not args.quiet:
         for warning in warnings:
@@ -649,8 +707,8 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
 
     title = args.title
     if not title and not args.force:
-        data = load_json(TASKS_PATH)
-        task = _ensure_task_object(data, task_id)
+        tasks, _ = load_task_store()
+        task = _ensure_task_object(tasks, task_id)
         title = str(task.get("title") or "").strip()
 
     target = workflow_task_readme_path(task_id)
@@ -667,7 +725,7 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
 
 
 def cmd_task_show(args: argparse.Namespace) -> None:
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, warnings = index_tasks_by_id(tasks)
     if warnings and not args.quiet:
         for warning in warnings:
@@ -708,6 +766,31 @@ def cmd_task_show(args: argparse.Namespace) -> None:
             author = str(comment.get("author") or "unknown")
             body = str(comment.get("body") or "").strip()
             print(f"- {author}: {body}")
+
+
+def cmd_task_export(args: argparse.Namespace) -> None:
+    fmt = str(args.format or "json").strip().lower()
+    if fmt != "json":
+        die(f"Unsupported export format: {fmt}", code=2)
+    out_raw = str(args.out or TASKS_PATH_REL).strip()
+    out_path = _resolve_repo_relative_path(out_raw, label="task export output")
+    tasks, _ = load_task_store()
+    write_tasks_json_to_path(out_path, {"tasks": tasks})
+    if not args.quiet:
+        print(f"✅ exported tasks to {out_path.relative_to(ROOT)}")
+
+
+def cmd_sync(args: argparse.Namespace) -> None:
+    backend = backend_instance()
+    if backend is None:
+        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+    backend_id = str(BACKEND_CONFIG.get("id") or "").strip()
+    if args.backend and backend_id and args.backend != backend_id:
+        die(f"Configured backend is {backend_id!r}, not {args.backend!r}", code=2)
+    sync = getattr(backend, "sync", None)
+    if not callable(sync):
+        die("Configured backend does not support sync()", code=2)
+    sync(direction=args.direction, conflict=args.conflict, quiet=args.quiet)
 
 
 def index_tasks_by_id(tasks: List[Dict]) -> Tuple[Dict[str, Dict], List[str]]:
@@ -809,7 +892,7 @@ def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Di
 
 
 def readiness(task_id: str) -> Tuple[bool, List[str]]:
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, index_warnings = index_tasks_by_id(tasks)
     dep_state, dep_warnings = compute_dependency_state(tasks_by_id)
     warnings = index_warnings + dep_warnings
@@ -1285,8 +1368,8 @@ def cmd_start(args: argparse.Namespace) -> None:
                 print(f"⚠️ {warning}")
             die(f"Task is not ready: {args.task_id} (use --force to override)", code=2)
 
-    data = load_json(TASKS_PATH)
-    target = _ensure_task_object(data, args.task_id)
+    tasks, save = load_task_store()
+    target = _ensure_task_object(tasks, args.task_id)
     current = str(target.get("status") or "").strip().upper() or "TODO"
     if not is_transition_allowed(current, "DOING") and not args.force:
         die(f"Refusing status transition {current} -> DOING (use --force to override)", code=2)
@@ -1297,7 +1380,7 @@ def cmd_start(args: argparse.Namespace) -> None:
         comments = []
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
-    write_tasks_json(data)
+    save(tasks)
     if not args.quiet:
         print(f"✅ {args.task_id} is DOING")
 
@@ -1308,8 +1391,8 @@ def cmd_block(args: argparse.Namespace) -> None:
     require_tasks_json_write_context(force=bool(args.force))
     if not args.force:
         require_structured_comment(args.body, prefix="Blocked:", min_chars=40)
-    data = load_json(TASKS_PATH)
-    target = _ensure_task_object(data, args.task_id)
+    tasks, save = load_task_store()
+    target = _ensure_task_object(tasks, args.task_id)
     current = str(target.get("status") or "").strip().upper() or "TODO"
     if not is_transition_allowed(current, "BLOCKED") and not args.force:
         die(f"Refusing status transition {current} -> BLOCKED (use --force to override)", code=2)
@@ -1319,39 +1402,33 @@ def cmd_block(args: argparse.Namespace) -> None:
         comments = []
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
-    write_tasks_json(data)
+    save(tasks)
     if not args.quiet:
         print(f"✅ {args.task_id} is BLOCKED")
 
 
 def cmd_task_comment(args: argparse.Namespace) -> None:
     require_tasks_json_write_context()
-    data = load_json(TASKS_PATH)
-    tasks = data.get("tasks", [])
-    if not isinstance(tasks, list):
-        die("tasks.json must contain a top-level 'tasks' list")
-
-    target: Optional[Dict] = None
-    for task in tasks:
-        if isinstance(task, dict) and task.get("id") == args.task_id:
-            target = task
-            break
-    if not target:
-        die(f"Unknown task id: {args.task_id}")
+    tasks, save = load_task_store()
+    target = _ensure_task_object(tasks, args.task_id)
 
     comments = target.get("comments")
     if not isinstance(comments, list):
         comments = []
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
+    save(tasks)
 
-    write_tasks_json(data)
 
-
-def _ensure_task_object(data: Dict, task_id: str) -> Dict:
-    tasks = data.get("tasks")
+def _ensure_task_object(container: object, task_id: str) -> Dict:
+    if isinstance(container, list):
+        tasks = container
+    elif isinstance(container, dict):
+        tasks = container.get("tasks")
+    else:
+        tasks = None
     if not isinstance(tasks, list):
-        die("tasks.json must contain a top-level 'tasks' list")
+        die("tasks list must be provided")
     for task in tasks:
         if isinstance(task, dict) and task.get("id") == task_id:
             return task
@@ -1360,10 +1437,7 @@ def _ensure_task_object(data: Dict, task_id: str) -> Dict:
 
 def cmd_task_add(args: argparse.Namespace) -> None:
     require_tasks_json_write_context()
-    data = load_json(TASKS_PATH)
-    tasks = data.get("tasks")
-    if not isinstance(tasks, list):
-        die("tasks.json must contain a top-level 'tasks' list")
+    tasks, save = load_task_store()
     raw_task_ids = args.task_id if isinstance(args.task_id, list) else [args.task_id]
     task_ids = normalize_task_ids(raw_task_ids)
     existing_ids = {
@@ -1397,13 +1471,13 @@ def cmd_task_add(args: argparse.Namespace) -> None:
         if args.comment_author and args.comment_body:
             task["comments"] = [{"author": args.comment_author, "body": args.comment_body}]
         tasks.append(task)
-    write_tasks_json(data)
+    save(tasks)
 
 
 def cmd_task_update(args: argparse.Namespace) -> None:
     require_tasks_json_write_context()
-    data = load_json(TASKS_PATH)
-    task = _ensure_task_object(data, args.task_id)
+    tasks, save = load_task_store()
+    task = _ensure_task_object(tasks, args.task_id)
 
     if args.title is not None:
         task["title"] = args.title
@@ -1437,7 +1511,7 @@ def cmd_task_update(args: argparse.Namespace) -> None:
         merged = existing + args.verify
         task["verify"] = list(dict.fromkeys(cmd.strip() for cmd in merged if cmd.strip()))
 
-    write_tasks_json(data)
+    save(tasks)
 
 
 def _scrub_value(value: object, find_text: str, replace_text: str) -> object:
@@ -1457,10 +1531,7 @@ def cmd_task_scrub(args: argparse.Namespace) -> None:
         die("--find must be non-empty", code=2)
 
     require_tasks_json_write_context()
-    data = load_json(TASKS_PATH)
-    tasks = data.get("tasks")
-    if not isinstance(tasks, list):
-        die("tasks.json must contain a top-level 'tasks' list")
+    tasks, save = load_task_store()
 
     updated_tasks: List[Dict] = []
     changed_task_ids: List[str] = []
@@ -1486,8 +1557,7 @@ def cmd_task_scrub(args: argparse.Namespace) -> None:
                 print(task_id)
         return
 
-    data["tasks"] = updated_tasks
-    write_tasks_json(data)
+    save(updated_tasks)
     if not args.quiet:
         print(f"Updated {len(set(changed_task_ids))} task(s).")
 
@@ -1596,18 +1666,8 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
         die("--author and --body must be provided together", code=2)
 
     require_tasks_json_write_context(force=bool(args.force))
-    data = load_json(TASKS_PATH)
-    tasks = data.get("tasks", [])
-    if not isinstance(tasks, list):
-        die("tasks.json must contain a top-level 'tasks' list")
-
-    target: Optional[Dict] = None
-    for task in tasks:
-        if isinstance(task, dict) and task.get("id") == args.task_id:
-            target = task
-            break
-    if not target:
-        die(f"Unknown task id: {args.task_id}")
+    tasks, save = load_task_store()
+    target = _ensure_task_object(tasks, args.task_id)
 
     current = str(target.get("status") or "").strip().upper() or "TODO"
     if not is_transition_allowed(current, nxt) and not args.force:
@@ -1632,8 +1692,7 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
     if args.commit:
         commit_info = get_commit_info(args.commit)
         target["commit"] = commit_info
-
-    write_tasks_json(data)
+    save(tasks)
 
 
 def cmd_finish(args: argparse.Namespace) -> None:
@@ -1652,14 +1711,15 @@ def cmd_finish(args: argparse.Namespace) -> None:
     if args.author and args.body and not args.force:
         require_structured_comment(args.body, prefix="Verified:", min_chars=60)
 
-    lint = lint_tasks_json()
-    if lint["warnings"] and not args.quiet:
-        for message in lint["warnings"]:
-            print(f"⚠️ {message}")
-    if lint["errors"] and not args.force:
-        for message in lint["errors"]:
-            print(f"❌ {message}", file=sys.stderr)
-        die("tasks.json failed lint (use --force to override)", code=2)
+    if not backend_enabled():
+        lint = lint_tasks_json()
+        if lint["warnings"] and not args.quiet:
+            for message in lint["warnings"]:
+                print(f"⚠️ {message}")
+        if lint["errors"] and not args.force:
+            for message in lint["errors"]:
+                print(f"❌ {message}", file=sys.stderr)
+            die("tasks.json failed lint (use --force to override)", code=2)
 
     commit_info = get_commit_info(args.commit)
     if args.require_task_id_in_commit and not args.force:
@@ -1670,10 +1730,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
                 "(use --force or --no-require-task-id-in-commit)"
             )
 
-    data = load_json(TASKS_PATH)
-    tasks = data.get("tasks", [])
-    if not isinstance(tasks, list):
-        die("tasks.json must contain a top-level 'tasks' list")
+    tasks, save = load_task_store()
 
     tasks_by_id, _ = index_tasks_by_id(tasks)
     assume_done = set(task_ids)
@@ -1740,7 +1797,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             run_verify_commands(task_id, commands, cwd=ROOT, quiet=args.quiet)
 
     for task_id in task_ids:
-        target = _ensure_task_object(data, task_id)
+        target = _ensure_task_object(tasks, task_id)
         target["status"] = "DONE"
         target["commit"] = commit_info
 
@@ -1785,7 +1842,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             comments.append({"author": args.author, "body": args.body})
             target["comments"] = comments
 
-    write_tasks_json(data)
+    save(tasks)
 
 
 def git_rev_parse(rev: str, *, cwd: Path = ROOT) -> str:
@@ -1918,7 +1975,7 @@ def assert_no_diff_paths(*, base: str, branch: str, forbidden: List[str], cwd: P
         )
 
 def task_title(task_id: str) -> str:
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, _ = index_tasks_by_id(tasks)
     task = tasks_by_id.get(task_id)
     return str(task.get("title") or "").strip() if task else ""
@@ -2227,7 +2284,7 @@ def cmd_cleanup_merged(args: argparse.Namespace) -> None:
     if not git_branch_exists(base):
         die(f"Unknown base branch: {base}", code=2)
 
-    tasks = load_tasks()
+    tasks, _ = load_task_store()
     tasks_by_id, _ = index_tasks_by_id(tasks)
 
     candidates: List[Dict[str, str]] = []
@@ -2841,8 +2898,8 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
 
 
 def get_task_verify_commands_for(task_id: str) -> List[str]:
-    data = load_json(TASKS_PATH)
-    task = _ensure_task_object(data, task_id)
+    tasks, _ = load_task_store()
+    task = _ensure_task_object(tasks, task_id)
     verify = task.get("verify")
     if verify is None:
         return []
@@ -3387,6 +3444,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_scaffold.add_argument("--quiet", action="store_true", help="Minimal output")
     p_scaffold.set_defaults(func=cmd_task_scaffold)
 
+    p_export = task_sub.add_parser("export", help="Export tasks to JSON snapshot")
+    p_export.add_argument("--format", default="json", help="Export format (default: json)")
+    p_export.add_argument("--out", default=TASKS_PATH_REL, help="Output path (repo-relative)")
+    p_export.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_export.set_defaults(func=cmd_task_export)
+
     p_comment = task_sub.add_parser("comment", help="Append a comment to a task")
     p_comment.add_argument("task_id")
     p_comment.add_argument("--author", required=True)
@@ -3420,6 +3483,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Allow finishing even if commit subject does not mention the task id",
     )
     p_finish.set_defaults(require_task_id_in_commit=True, func=cmd_finish)
+
+    p_sync = sub.add_parser("sync", help="Sync tasks with a backend")
+    p_sync.add_argument("backend", nargs="?", help="Backend id (e.g., redmine)")
+    p_sync.add_argument("--direction", default="push", choices=["push", "pull"], help="Sync direction")
+    p_sync.add_argument(
+        "--conflict",
+        default="diff",
+        choices=["diff", "prefer-local", "prefer-remote", "fail"],
+        help="Conflict strategy (default: diff)",
+    )
+    p_sync.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_sync.set_defaults(func=cmd_sync)
 
     return parser
 
