@@ -316,10 +316,13 @@ def load_backend_config() -> Dict:
     data = load_json(config_path)
     if not isinstance(data, dict):
         die(f"{config_path} must contain a JSON object", code=2)
-    for key in ("id", "version", "module", "class"):
+    for key in ("id", "module", "class"):
         value = data.get(key)
         if not isinstance(value, str) or not value.strip():
             die(f"{config_path} is missing required field {key!r}", code=2)
+    version = data.get("version")
+    if not isinstance(version, (int, str)):
+        die(f"{config_path} is missing required field 'version'", code=2)
     settings = data.get("settings")
     if settings is None:
         data["settings"] = {}
@@ -345,6 +348,7 @@ def load_backend_class(backend_config: Dict) -> Optional[type]:
     if not spec or not spec.loader:
         die(f"Failed to load backend module: {module_path}", code=2)
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)  # type: ignore[call-arg]
     class_name = str(backend_config.get("class") or "").strip()
     if not class_name:
@@ -779,6 +783,27 @@ def cmd_task_export(args: argparse.Namespace) -> None:
     write_tasks_json_to_path(out_path, {"tasks": tasks})
     if not args.quiet:
         print(f"✅ exported tasks to {out_path.relative_to(ROOT)}")
+
+
+def cmd_task_migrate(args: argparse.Namespace) -> None:
+    require_tasks_json_write_context(force=bool(args.force))
+    backend = backend_instance()
+    if backend is None:
+        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+    write_task = getattr(backend, "write_task", None)
+    if not callable(write_task):
+        die("Configured backend does not support write_task()", code=2)
+    source_raw = str(args.source or TASKS_PATH_REL).strip()
+    source_path = _resolve_repo_relative_path(source_raw, label="task migrate source")
+    data = load_json(source_path)
+    tasks = data.get("tasks")
+    if not isinstance(tasks, list):
+        die("tasks.json must contain a top-level 'tasks' list")
+    for task in tasks:
+        if isinstance(task, dict):
+            write_task(task)
+    if not args.quiet:
+        print(f"✅ migrated {len(tasks)} task(s) into backend")
 
 
 def cmd_sync(args: argparse.Namespace) -> None:
@@ -3475,6 +3500,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_export.add_argument("--out", default=TASKS_PATH_REL, help="Output path (repo-relative)")
     p_export.add_argument("--quiet", action="store_true", help="Minimal output")
     p_export.set_defaults(func=cmd_task_export)
+
+    p_migrate = task_sub.add_parser("migrate", help="Migrate tasks.json into the configured backend")
+    p_migrate.add_argument("--source", default=TASKS_PATH_REL, help="Source tasks.json path (repo-relative)")
+    p_migrate.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_migrate.add_argument("--force", action="store_true", help="Bypass base-branch checks")
+    p_migrate.set_defaults(func=cmd_task_migrate)
 
     p_comment = task_sub.add_parser("comment", help="Append a comment to a task")
     p_comment.add_argument("task_id")
