@@ -2565,14 +2565,19 @@
     {
       "id": "202601041253-0003H",
       "title": "redmine backend: canonical source + offline fallback",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [
         "202601041253-0003J"
       ],
       "tags": [],
-      "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling."
+      "commit": {
+        "hash": "7cafeace14cd6f307a5137f3ae94eb74080afcd0",
+        "message": "🧩 T-113 add redmine backend"
+      },
+      "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003J",
@@ -2815,6 +2820,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "bda8daa6a138ab574d827250f54950a4c930e0f87e2cc6995350a620636fd1c5"
+    "checksum": "403aa27190990795d8738c3c1a6171a300f3f8f210b12601bcfb51cb306404c5"
   }
 }
