@@ -395,6 +395,7 @@ TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
 BACKEND_CONFIG = load_backend_config()
 BACKEND_CLASS = load_backend_class(BACKEND_CONFIG) if BACKEND_CONFIG else None
 _BACKEND_INSTANCE: Optional[object] = None
+LEGACY_WORKFLOW_DIR = SWARM_DIR / "workspace"
 
 
 def backend_enabled() -> bool:
@@ -442,7 +443,7 @@ GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
 WORKTREES_DIR = SWARM_DIR / "worktrees"
 # Legacy PR artifacts directory (pre per-task layout).
-PRS_DIR = WORKFLOW_DIR / "prs"
+LEGACY_PRS_DIR = LEGACY_WORKFLOW_DIR / "prs"
 
 
 def config_base_branch() -> str:
@@ -2231,7 +2232,7 @@ def cmd_work_start(args: argparse.Namespace) -> None:
     if not worktree_path.exists():
         die(f"Expected worktree not found: {worktree_path}", code=2)
 
-    readme_in_worktree = worktree_path / "docs" / "workflow" / task_id / "README.md"
+    readme_in_worktree = worktree_path / ".codex-swarm" / "tasks" / task_id / "README.md"
     if readme_in_worktree.exists() and not getattr(args, "overwrite", False):
         pass
     else:
@@ -2240,7 +2241,7 @@ def cmd_work_start(args: argparse.Namespace) -> None:
             scaffold_args.insert(-1, "--overwrite")
         _run_agentctl_in_checkout(scaffold_args, cwd=worktree_path, quiet=True)
 
-    pr_path = worktree_path / "docs" / "workflow" / task_id / "pr"
+    pr_path = worktree_path / ".codex-swarm" / "tasks" / task_id / "pr"
     if pr_path.exists():
         _run_agentctl_in_checkout(["pr", "update", task_id, "--quiet"], cwd=worktree_path, quiet=True)
         pr_action = "updated"
@@ -2259,7 +2260,7 @@ def cmd_work_start(args: argparse.Namespace) -> None:
             "\n".join(
                 [
                     f"Open `{worktree_path}` in your IDE",
-                    f"Edit `.codex-swarm/workspace/{task_id}/README.md` and implement changes",
+                    f"Edit `.codex-swarm/tasks/{task_id}/README.md` and implement changes",
                     f"Update PR artifacts: `python .codex-swarm/agentctl.py pr update {task_id}`",
                 ]
             ),
@@ -2336,30 +2337,45 @@ def workflow_task_dir(task_id: str) -> Path:
 
 
 def workflow_task_readme_path(task_id: str) -> Path:
-    # Canonical per-task documentation (replaces .codex-swarm/workspace/T-###.md and PR description.md).
+    # Canonical per-task documentation (now under .codex-swarm/tasks/<task-id>/README.md).
     return workflow_task_dir(task_id) / "README.md"
 
 
+def legacy_workflow_task_dir(task_id: str) -> Path:
+    return LEGACY_WORKFLOW_DIR / task_id
+
+
+def legacy_workflow_task_readme_path(task_id: str) -> Path:
+    return legacy_workflow_task_dir(task_id) / "README.md"
+
+
 def legacy_workflow_task_doc_path(task_id: str) -> Path:
-    return WORKFLOW_DIR / f"{task_id}.md"
+    return LEGACY_WORKFLOW_DIR / f"{task_id}.md"
 
 
 def pr_dir(task_id: str) -> Path:
-    # New layout (T-074+): .codex-swarm/workspace/T-###/pr/
+    # New layout (T-074+): .codex-swarm/tasks/<task-id>/pr/
     return workflow_task_dir(task_id) / "pr"
 
 
 def legacy_pr_dir(task_id: str) -> Path:
-    return PRS_DIR / task_id
+    return LEGACY_PRS_DIR / task_id
+
+
+def legacy_task_pr_dir(task_id: str) -> Path:
+    return legacy_workflow_task_dir(task_id) / "pr"
 
 
 def pr_dir_any(task_id: str) -> Path:
     new = pr_dir(task_id)
     if new.exists():
         return new
-    old = legacy_pr_dir(task_id)
-    if old.exists():
-        return old
+    legacy_task_pr = legacy_task_pr_dir(task_id)
+    if legacy_task_pr.exists():
+        return legacy_task_pr
+    legacy_prs = legacy_pr_dir(task_id)
+    if legacy_prs.exists():
+        return legacy_prs
     return new
 
 
@@ -2527,7 +2543,11 @@ def pr_load_meta_text(text: str, *, source: str) -> Dict:
 
 
 def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> Optional[str]:
-    candidates = [pr_dir(task_id) / filename, legacy_pr_dir(task_id) / filename]
+    candidates = [
+        pr_dir(task_id) / filename,
+        legacy_task_pr_dir(task_id) / filename,
+        legacy_pr_dir(task_id) / filename,
+    ]
     for path in candidates:
         if path.exists():
             return path.read_text(encoding="utf-8", errors="replace")
@@ -2544,7 +2564,7 @@ def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str])
 def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str]:
     """
     PR "description" doc:
-      - New layout: .codex-swarm/workspace/T-###/README.md
+      - New layout: .codex-swarm/tasks/<task-id>/README.md
       - Legacy layout: .codex-swarm/workspace/prs/T-###/description.md
     """
     readme = workflow_task_readme_path(task_id)
@@ -2555,6 +2575,9 @@ def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str
             return text
     if readme.exists():
         return readme.read_text(encoding="utf-8", errors="replace")
+    legacy_readme = legacy_workflow_task_readme_path(task_id)
+    if legacy_readme.exists():
+        return legacy_readme.read_text(encoding="utf-8", errors="replace")
     legacy_description = legacy_pr_dir(task_id) / "description.md"
     if legacy_description.exists():
         return legacy_description.read_text(encoding="utf-8", errors="replace")
@@ -2569,6 +2592,7 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
     if text is not None:
         return text
     target = pr_dir(task_id)
+    legacy_task = legacy_task_pr_dir(task_id)
     legacy = legacy_pr_dir(task_id)
     if not branch:
         die(
@@ -2579,7 +2603,8 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
                     f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR artifacts from that branch",
                     "  2) Or check out the task branch that contains the PR artifact files",
                     f"Expected (new): {target.relative_to(ROOT)}",
-                    f"Fallback (legacy): {legacy.relative_to(ROOT)}",
+                    f"Fallback (legacy): {legacy_task.relative_to(ROOT)}",
+                    f"Fallback (older): {legacy.relative_to(ROOT)}",
                     f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
                 ]
             ),
@@ -2587,11 +2612,12 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
         )
 
     rel = (target / filename).relative_to(ROOT).as_posix()
+    legacy_task_rel = (legacy_task / filename).relative_to(ROOT).as_posix()
     legacy_rel = (legacy / filename).relative_to(ROOT).as_posix()
     die(
         "\n".join(
             [
-                f"Missing PR artifact file in {branch!r}: {rel} (or legacy {legacy_rel})",
+                f"Missing PR artifact file in {branch!r}: {rel} (or legacy {legacy_task_rel}, {legacy_rel})",
                 "Fix:",
                 f"  1) Ensure the task branch contains `{rel}` (run `python .codex-swarm/agentctl.py pr open {task_id}` in the branch)",
                 "  2) Commit the PR artifact files to the task branch",
@@ -3211,7 +3237,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify = sub.add_parser("verify", help="Run verify commands declared on a task (tasks.json)")
     p_verify.add_argument("task_id")
     p_verify.add_argument("--cwd", help="Run verify commands in this repo subdirectory/worktree (must be under repo root)")
-    p_verify.add_argument("--log", help="Append output to a log file (e.g., .codex-swarm/workspace/T-123/pr/verify.log)")
+    p_verify.add_argument("--log", help="Append output to a log file (e.g., .codex-swarm/tasks/<task-id>/pr/verify.log)")
     p_verify.add_argument(
         "--skip-if-unchanged",
         action="store_true",
@@ -3231,7 +3257,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_work_start.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_work_start.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
     p_work_start.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
-    p_work_start.add_argument("--overwrite", action="store_true", help="Overwrite .codex-swarm/workspace/T-###/README.md when scaffolding")
+    p_work_start.add_argument("--overwrite", action="store_true", help="Overwrite .codex-swarm/tasks/<task-id>/README.md when scaffolding")
     p_work_start.add_argument("--quiet", action="store_true", help="Minimal output")
     p_work_start.set_defaults(func=cmd_work_start)
 
@@ -3269,7 +3295,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_branch_remove.add_argument("--quiet", action="store_true", help="Minimal output")
     p_branch_remove.set_defaults(func=cmd_branch_remove)
 
-    p_pr = sub.add_parser("pr", help="Local PR artifact helpers (.codex-swarm/workspace/T-###/pr)")
+    p_pr = sub.add_parser("pr", help="Local PR artifact helpers (.codex-swarm/tasks/<task-id>/pr)")
     pr_sub = p_pr.add_subparsers(dest="pr_cmd", required=True)
 
     p_pr_open = pr_sub.add_parser("open", help="Create PR artifact folder + templates")
@@ -3294,7 +3320,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr_check.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_check.set_defaults(func=cmd_pr_check)
 
-    p_pr_note = pr_sub.add_parser("note", help="Append a handoff note bullet to .codex-swarm/workspace/T-###/pr/review.md")
+    p_pr_note = pr_sub.add_parser("note", help="Append a handoff note bullet to .codex-swarm/tasks/<task-id>/pr/review.md")
     p_pr_note.add_argument("task_id")
     p_pr_note.add_argument("--author", required=True, help="Note author/role (e.g., CODER)")
     p_pr_note.add_argument("--body", required=True, help="Note body text")
@@ -3436,7 +3462,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument("--quiet", action="store_true", help="Suppress warnings")
     p_search.set_defaults(func=cmd_task_search)
 
-    p_scaffold = task_sub.add_parser("scaffold", help="Create .codex-swarm/workspace/T-###/README.md skeleton for a task")
+    p_scaffold = task_sub.add_parser("scaffold", help="Create .codex-swarm/tasks/<task-id>/README.md skeleton for a task")
     p_scaffold.add_argument("task_id")
     p_scaffold.add_argument("--title", help="Optional title override")
     p_scaffold.add_argument("--overwrite", action="store_true", help="Overwrite if the file exists")
