@@ -23,6 +23,7 @@
     "Check `.codex-swarm/config.json` → `workflow_mode`: in `branch_pr`, perform any .codex-swarm/tasks.json export only from the repo root checkout on the pinned base branch (not from `.codex-swarm/worktrees/*`); in `direct`, this is still the default recommendation to keep history linear and avoid conflicts.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",
+    "Before creating or updating tasks, review existing tags in the backlog; apply the minimal set of tags required for clear navigation and always tag new tasks accordingly.",
     "For every new task, set `depends_on` explicitly (use an empty list when there are no dependencies); if dependencies are unclear, ask for clarification instead of omitting the field.",
     "Highlight repo-relative files or folders using @mentions (for example, @src/app.ts) so the extension can pull the right buffers when work begins.",
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
