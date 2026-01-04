@@ -2480,12 +2480,32 @@
         "docs"
       ],
       "depends_on": []
+    },
+    {
+      "id": "T-108",
+      "title": "Docs: modular backends + local tasks model",
+      "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [],
+      "depends_on": []
+    },
+    {
+      "id": "T-109",
+      "title": "Docs: modularize + numbered docs",
+      "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0f86f6fdd2e0f2f151305c29143ee4f3739838d364b75549b8eb25807904e292"
+    "checksum": "c7615bbde6bacfa2c1cfcce0519969bdb6f239539a3d80bfe8a3414010f49f6c"
   }
 }
