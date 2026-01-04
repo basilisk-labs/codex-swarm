@@ -1,11 +1,14 @@
 ---
 id: "202601041253-0003R"
 title: "Migrate legacy task IDs to new format"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "f84ae1546f3077d674c659dce3ce9bf690160894", message: "🆔 202601041253-0003R migrate legacy task IDs" }
+comments:
+  - { author: "INTEGRATOR", body: "Verified: python3 .codex-swarm/agentctl.py task list --quiet; ids migrated." }
 description: "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies."
 ---
 # 202601041253-0003R: Migrate legacy task IDs to new format

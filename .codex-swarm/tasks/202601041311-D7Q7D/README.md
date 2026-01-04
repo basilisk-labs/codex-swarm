@@ -1,14 +1,16 @@
 ---
 id: "202601041311-D7Q7D"
 title: "Fix frontmatter parsing and commit id rules"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "ea9ed7a50d1789d452abb61c00987e0925c76ecb", message: "🛠️ D7Q7D fix frontmatter parsing and commit checks" }
+comments:
+  - { author: "INTEGRATOR", body: "Verified: normalized frontmatter parsing, commit-id suffix checks updated, and docs refreshed." }
 description: "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
 ---
-
 # 202601041311-D7Q7D: Fix frontmatter parsing and commit id rules
 
 ## Summary
