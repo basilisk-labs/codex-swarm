@@ -711,6 +711,7 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
         die("task_id must be non-empty", code=2)
 
     title = args.title
+    task: Optional[Dict] = None
     if not title and not args.force:
         tasks, _ = load_task_store()
         task = _ensure_task_object(tasks, task_id)
@@ -724,7 +725,19 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
         die(f"File already exists: {target}", code=2)
 
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(task_readme_template(task_id), encoding="utf-8")
+    frontmatter = ""
+    if target.exists():
+        frontmatter, _ = split_frontmatter_block(target.read_text(encoding="utf-8", errors="replace"))
+    backend = backend_instance()
+    if backend and task and callable(getattr(backend, "write_task", None)):
+        backend.write_task(task)
+        frontmatter, _ = split_frontmatter_block(target.read_text(encoding="utf-8", errors="replace"))
+    template = task_readme_template(task_id)
+    if frontmatter:
+        content = frontmatter.rstrip() + "\n\n" + template + "\n"
+    else:
+        content = template + "\n"
+    target.write_text(content, encoding="utf-8")
     if not args.quiet:
         print(f"✅ wrote {target.relative_to(ROOT)}")
 
@@ -2452,6 +2465,22 @@ def task_readme_template(task_id: str) -> str:
             "",
         ]
     )
+
+
+def split_frontmatter_block(text: str) -> Tuple[str, str]:
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return "", text
+    end_idx = None
+    for idx in range(1, len(lines)):
+        if lines[idx].strip() == "---":
+            end_idx = idx
+            break
+    if end_idx is None:
+        return "", text
+    front = "\n".join(lines[: end_idx + 1]).rstrip() + "\n"
+    body = "\n".join(lines[end_idx + 1 :]).lstrip("\n")
+    return front, body
 
 
 def pr_review_template(task_id: str) -> str:
