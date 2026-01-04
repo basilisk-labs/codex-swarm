@@ -1,3 +1,13 @@
+---
+id: "T-119"
+title: "Fix GitHub sync scripts for snapshot backend"
+status: "TODO"
+priority: "med"
+owner: "CODER"
+depends_on: []
+tags: []
+description: "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
+---
 # T-119: Fix GitHub sync scripts for snapshot backend
 
 ## Summary
