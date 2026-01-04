@@ -3,14 +3,16 @@
 ## End-to-End Flow
 1. You state a goal to the ORCHESTRATOR.
 2. ORCHESTRATOR proposes a plan and asks for approval.
-3. PLANNER creates or updates tasks in [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json) using `agentctl`.
+3. PLANNER creates or updates tasks via `agentctl` against the active backend.
 4. Execution agents implement changes and update workflow artifacts.
 5. REVIEWER assesses changes and leaves handoff notes.
 6. INTEGRATOR verifies, merges, and closes tasks (when `workflow_mode=branch_pr`).
 
 ## Planning and Tasks
-- Every task is atomic and tracked by ID (T-###).
-- [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json) is canonical and checksum-protected.
+- Every task is atomic and tracked by ID (`YYYYMMDDHHMM-<RAND>`).
+- The canonical task source depends on the backend:
+  - `local`: `.codex-swarm/tasks/` is canonical.
+  - `redmine`: Redmine is canonical; `.codex-swarm/tasks/` is a cache/offline layer.
 - Task changes are done only via `python .codex-swarm/agentctl.py`.
 
 ## Implementation
@@ -19,11 +21,15 @@
 - DOCS updates user-facing docs and task artifacts.
 
 ## Verification and Closure
-- Use `python .codex-swarm/agentctl.py verify T-123` to run declared checks.
-- Closure updates [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json) via `finish`.
+- Use `python .codex-swarm/agentctl.py verify 202601031816-7F3K2Q` to run declared checks.
+- Closure updates the canonical backend via `finish`, then refreshes the local cache/export.
 - A clean git status is required before handoff.
 
 ## Commit Expectations
 - One task maps to one implementation commit.
 - Planning and closure commits are used when required by the workflow.
 - Commit messages are short, emoji-prefixed, and include the task ID.
+
+## Planned Expansions
+- Add a section on offline-first behavior when Redmine is unavailable.
+- Add a quick example of task creation in `local` vs `redmine` backends.

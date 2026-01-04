@@ -38,3 +38,6 @@ All agents are defined in JSON under [`.codex-swarm/agents/`](../.codex-swarm/ag
 ## CREATOR and UPDATER
 - CREATOR adds new agents when no existing role fits the need.
 - UPDATER audits and proposes improvements only when explicitly requested.
+
+## Planned Expansions
+- Add a note on how agents interact with backend-aware task operations.
