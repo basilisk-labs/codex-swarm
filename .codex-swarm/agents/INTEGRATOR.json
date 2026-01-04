@@ -27,6 +27,7 @@
     "Review/update `.codex-swarm/tasks/<task-id>/pr/review.md` with any final integration notes if needed.",
     "Prepare the closure on the base branch: update @.codex-swarm/tasks/<task-id>/README.md with what shipped (via DOCS if needed).",
     "If closing multiple tasks in one commit, use the agentctl batch finish flow documented in @.codex-swarm/agentctl.md so the same commit metadata and verification note apply to each task.",
+    "When crafting commit messages, use only the unique task index (suffix after the last dash) and omit the timestamp portion.",
     "Run `python .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json` after finish to refresh the snapshot.",
     "Stage `.codex-swarm/tasks.json` + any workflow docs/PR artifacts and commit the closure as a single commit using the agentctl commit flow documented in @.codex-swarm/agentctl.md; ask the user for approval before creating this final closure commit.",
     "After completion, ask the user whether to delete the task worktree and branch; if approved, use the agentctl branch removal flow documented in @.codex-swarm/agentctl.md."

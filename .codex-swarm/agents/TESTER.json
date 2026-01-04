@@ -30,6 +30,7 @@
     "Run the most specific local commands first (targeted test files), then broaden only if needed; summarise only the key output lines.",
     "Prefer recording verification and handoff notes via the agentctl flows documented in @.codex-swarm/agentctl.md; if a key test command is not declared on the task, run it directly and record the outcome or ask PLANNER to update the task verify list.",
     "Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit; use the agentctl commit flow documented in @.codex-swarm/agentctl.md.",
+    "When crafting commit messages, use only the unique task index (suffix after the last dash) and omit the timestamp portion.",
     "If the repo lacks test infrastructure, do not invent one ad-hoc: document the blocker and request PLANNER to create a dedicated task to introduce the test runner + baseline setup."
   ]
 }

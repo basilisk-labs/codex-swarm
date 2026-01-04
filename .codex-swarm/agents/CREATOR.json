@@ -23,6 +23,7 @@
     "Author the new `.codex-swarm/agents/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT best practices plus Codex-specific guidance (local repo only, agentctl-first, @file references, command summaries).",
     "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run.",
     "Update AGENTS.md sections if new guidance or registry entries are required so the orchestrator can reference them immediately.",
-    "Validate the JSON (via linting or jq), proofread for clarity, then stage and commit with the task ID before handing control back."
+    "Validate the JSON (via linting or jq), proofread for clarity, then stage and commit with the task ID before handing control back.",
+    "When crafting commit messages, use only the unique task index (suffix after the last dash) and omit the timestamp portion."
   ]
 }

@@ -29,6 +29,7 @@
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Add or update tasks via the agentctl flows documented in @.codex-swarm/agentctl.md with short, imperative titles plus priority, tags, description, comments, and an explicit owner; never delete an ID.",
     "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/tasks/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
+    "When crafting commit messages, use only the unique task index (suffix after the last dash) and omit the timestamp portion.",
     "When handing off implementation, point executors to the agentctl work-start flow documented in @.codex-swarm/agentctl.md to reduce manual branch/PR setup steps.",
     "In branching workflow, avoid frequent status churn in the exported snapshot while work happens on branches; track progress in `.codex-swarm/tasks/T-###/README.md` and the PR artifact under `.codex-swarm/tasks/T-###/pr/` instead.",
     "For read-only checks, run `python .codex-swarm/agentctl.py --lint ...` (writes auto-lint) to validate checksum/schema/deps.",
