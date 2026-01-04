@@ -36,3 +36,8 @@ description: "Update agent prompts to require tasks.json export after finish/clo
 ## Rollback Plan
 
 - Revert prompt updates in `.codex-swarm/agents/*.json` and `AGENTS.md`.
+
+## Changes Summary
+
+- Updated agent prompts to treat `tasks.json` as a snapshot and export it after closure.
+- Aligned backend wording across AGENTS and agent JSONs.
