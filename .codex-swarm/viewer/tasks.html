@@ -1,0 +1,1215 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Swarm - Tasks</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap");
+      :root {
+        color-scheme: light dark;
+        --bg: #0f1115;
+        --bg-2: #12151b;
+        --panel: #171b23;
+        --panel-2: #1b202a;
+        --text: #e6e8ee;
+        --muted: #a3adbe;
+        --border: rgba(230, 232, 238, 0.12);
+        --shadow: rgba(8, 10, 14, 0.22);
+        --accent: #3b82f6;
+        --accent-2: #60a5fa;
+        --good: #22c55e;
+        --warn: #f59e0b;
+        --bad: #ef4444;
+        --chip-bg: rgba(255, 255, 255, 0.04);
+        --chip-border: rgba(255, 255, 255, 0.1);
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        --column-gap: 16px;
+        --card-gap: 12px;
+      }
+
+      html[data-theme="light"] {
+        --bg: #f5f6f8;
+        --bg-2: #ffffff;
+        --panel: #ffffff;
+        --panel-2: #f4f5f7;
+        --text: #0b0f16;
+        --muted: #5f6b7b;
+        --border: rgba(15, 23, 42, 0.1);
+        --shadow: rgba(15, 23, 42, 0.06);
+        --chip-bg: rgba(15, 23, 42, 0.04);
+        --chip-border: rgba(15, 23, 42, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        background: linear-gradient(180deg, var(--bg), var(--bg-2));
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .wrap {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 28px 20px 54px;
+      }
+
+      header {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mark {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      }
+
+      h1 {
+        font-size: 18px;
+        margin: 0;
+        letter-spacing: 0.3px;
+      }
+
+      .meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: 0 10px 24px var(--shadow);
+      }
+
+      .controls {
+        padding: 14px 16px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .controls-grid {
+        display: grid;
+        grid-template-columns: 1.2fr repeat(4, minmax(160px, 0.55fr)) 0.8fr;
+        gap: 12px;
+      }
+
+      @media (max-width: 1100px) {
+        .controls-grid {
+          grid-template-columns: repeat(2, minmax(160px, 1fr));
+        }
+      }
+
+      @media (max-width: 680px) {
+        .controls-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel-2);
+        color: var(--text);
+        outline: none;
+        font-family: var(--sans);
+      }
+
+      input[type="text"]::placeholder {
+        color: var(--muted);
+      }
+
+      input[type="text"]:focus,
+      select:focus {
+        border-color: rgba(59, 130, 246, 0.4);
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--chip-border);
+        background: var(--chip-bg);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+      }
+
+      .dot.todo {
+        background: var(--muted);
+      }
+
+      .dot.doing {
+        background: var(--accent);
+      }
+
+      .dot.blocked {
+        background: var(--bad);
+      }
+
+      .dot.done {
+        background: var(--good);
+      }
+
+      .actions {
+        display: inline-flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel-2);
+        color: var(--text);
+        padding: 8px 14px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+
+      .btn:hover {
+        border-color: rgba(59, 130, 246, 0.5);
+        background: rgba(59, 130, 246, 0.06);
+      }
+
+      .btn-primary {
+        background: rgba(59, 130, 246, 0.12);
+        border-color: rgba(59, 130, 246, 0.45);
+      }
+
+      .board {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(280px, 1fr));
+        gap: var(--column-gap);
+        overflow-x: auto;
+        padding-bottom: 6px;
+        align-items: start;
+      }
+
+      @media (max-width: 1100px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        .board {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .column {
+        display: grid;
+        gap: 12px;
+        min-height: 180px;
+      }
+
+      .column-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .column-title {
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+
+      .column-body {
+        display: grid;
+        gap: var(--card-gap);
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel-2);
+        min-height: 140px;
+        transition: border-color 0.2s ease, background 0.2s ease;
+        align-content: start;
+      }
+
+      .column-body.drag-over {
+        border-color: rgba(59, 130, 246, 0.4);
+        background: rgba(59, 130, 246, 0.06);
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 10px 8px;
+        display: grid;
+        gap: 6px;
+        cursor: grab;
+        animation: none;
+      }
+
+      .card:hover {
+        border-color: rgba(59, 130, 246, 0.35);
+        background: rgba(59, 130, 246, 0.04);
+      }
+
+      .card:active {
+        cursor: grabbing;
+      }
+
+      .card-title {
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+
+      .card-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag {
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: var(--chip-bg);
+        border: 1px solid var(--chip-border);
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .tag-btn {
+        cursor: pointer;
+        background: var(--panel-2);
+        color: var(--text);
+      }
+
+      .card-desc {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+
+      .status-line {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .empty {
+        font-size: 12px;
+        color: var(--muted);
+        padding: 8px;
+      }
+
+      .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: min(420px, 92vw);
+        background: var(--panel);
+        border-left: 1px solid var(--border);
+        box-shadow: -14px 0 30px var(--shadow);
+        transform: translateX(100%);
+        transition: transform 0.2s ease;
+        z-index: 20;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .drawer.open {
+        transform: translateX(0);
+      }
+
+      .drawer-header {
+        padding: 16px 16px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .drawer-body {
+        padding: 14px 16px;
+        display: grid;
+        gap: 12px;
+        overflow: auto;
+      }
+
+      .drawer-footer {
+        padding: 12px 16px 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .drawer-title {
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .drawer-subtitle {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .drawer-section {
+        display: grid;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel-2);
+      }
+
+      .drawer-label {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+      }
+
+      .drawer-value {
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .drawer-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .drawer-meta {
+        display: grid;
+        gap: 4px;
+      }
+
+      .drawer-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .drawer-pill {
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        font-size: 11px;
+        color: var(--text);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      .dep-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--muted);
+      }
+
+      .dep-dot.todo {
+        background: var(--muted);
+      }
+
+      .dep-dot.doing {
+        background: var(--accent);
+      }
+
+      .dep-dot.blocked {
+        background: var(--bad);
+      }
+
+      .dep-dot.done {
+        background: var(--good);
+      }
+
+      .view-toggle {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        padding: 2px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel-2);
+      }
+
+      .view-btn {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .view-btn.active {
+        color: var(--text);
+        background: var(--panel);
+        border: 1px solid var(--border);
+      }
+
+      .table-wrap {
+        margin-top: 18px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--panel);
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      thead th {
+        text-align: left;
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        background: var(--panel-2);
+      }
+
+      tbody td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      tbody tr:hover {
+        background: rgba(59, 130, 246, 0.04);
+      }
+
+      .table-id {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .table-title {
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 2px;
+      }
+
+      .table-sub {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.22);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        z-index: 10;
+      }
+
+      .overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .footer-note {
+        margin-top: 16px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="title-row">
+          <div class="brand">
+            <span class="mark"></span>
+            <div>
+              <h1>Codex Swarm Tasks</h1>
+              <div class="meta" id="loadMeta">Loading /api/tasks...</div>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="view-toggle" id="viewToggle">
+              <button class="view-btn active" data-view="kanban" type="button">Kanban</button>
+              <button class="view-btn" data-view="table" type="button">Table</button>
+            </div>
+            <button class="btn" id="themeToggle">Toggle theme</button>
+            <button class="btn" id="reload">Reload</button>
+          </div>
+        </div>
+        <div class="panel controls">
+          <div class="controls-grid">
+            <label>
+              Search by title
+              <input id="q" type="text" placeholder="Type a task title..." />
+            </label>
+            <label>
+              Status
+              <select id="status">
+                <option value="">All</option>
+                <option value="TODO">TODO</option>
+                <option value="DOING">DOING</option>
+                <option value="BLOCKED">BLOCKED</option>
+                <option value="DONE">DONE</option>
+              </select>
+            </label>
+            <label>
+              Owner
+              <select id="owner">
+                <option value="">All</option>
+              </select>
+            </label>
+            <label>
+              Priority
+              <select id="priority">
+                <option value="">All</option>
+              </select>
+            </label>
+            <label>
+              Tag
+              <select id="tag">
+                <option value="">All</option>
+              </select>
+            </label>
+            <label>
+              Sort by
+              <select id="sort">
+                <option value="status">Status</option>
+                <option value="owner">Owner</option>
+                <option value="priority">Priority</option>
+                <option value="tag">Tag</option>
+              </select>
+            </label>
+          </div>
+          <div class="row">
+            <div class="chips" id="summary"></div>
+            <div class="status-line" id="statusLine"></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="board" id="board"></section>
+      <div class="table-wrap" id="tableView" hidden>
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Status</th>
+              <th>Owner</th>
+              <th>Priority</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="footer-note">Drag cards between columns to update status via local agentctl.</div>
+    </div>
+
+    <div class="overlay" id="drawerOverlay"></div>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-header">
+        <div>
+          <div class="drawer-title" id="drawerTitle">Task</div>
+          <div class="drawer-subtitle" id="drawerSubtitle"></div>
+        </div>
+        <button class="btn" id="drawerClose">Close</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer">
+        <button class="btn btn-primary" id="drawerSave">Update status</button>
+      </div>
+    </aside>
+
+    <script>
+      const STATUS_ORDER = ["TODO", "DOING", "BLOCKED", "DONE"];
+      const PRIORITY_ORDER = ["high", "med", "low"];
+      const STATUS_LABELS = {
+        TODO: "To do",
+        DOING: "In progress",
+        BLOCKED: "Blocked",
+        DONE: "Done",
+      };
+
+      let STATE = {
+        tasks: [],
+        byId: new Map(),
+        dependentsById: new Map(),
+      };
+      let SELECTED_ID = "";
+      let VIEW_MODE = localStorage.getItem("view-mode") || "kanban";
+
+      const statusLine = document.getElementById("statusLine");
+
+      function setStatusLine(text, tone = "") {
+        statusLine.textContent = text;
+        statusLine.style.color = tone || "";
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function normalizeTask(task) {
+        const status = String(task.status || "TODO").toUpperCase();
+        const dependsRaw = task.depends_on || task.dependsOn || [];
+        return {
+          id: String(task.id || ""),
+          title: String(task.title || "").trim() || "Untitled",
+          description: String(task.description || "").trim(),
+          status: STATUS_ORDER.includes(status) ? status : "TODO",
+          owner: String(task.owner || "").trim(),
+          priority: String(task.priority || "").trim(),
+          tags: Array.isArray(task.tags) ? task.tags.filter(Boolean).map(String) : [],
+          dependsOn: Array.isArray(dependsRaw) ? dependsRaw.map(String) : [],
+          comments: Array.isArray(task.comments) ? task.comments : [],
+          verify: Array.isArray(task.verify) ? task.verify : [],
+          commit: task.commit || null,
+        };
+      }
+
+      function buildDependents(tasks) {
+        const map = new Map();
+        tasks.forEach((task) => {
+          (task.dependsOn || []).forEach((dep) => {
+            if (!map.has(dep)) map.set(dep, []);
+            map.get(dep).push(task.id);
+          });
+        });
+        return map;
+      }
+
+      function applyData(data) {
+        const raw = Array.isArray(data?.tasks) ? data.tasks : [];
+        const tasks = raw.map(normalizeTask).filter((t) => t.id);
+        STATE.tasks = tasks;
+        STATE.byId = new Map(tasks.map((t) => [t.id, t]));
+        STATE.dependentsById = buildDependents(tasks);
+
+        fillSelect("owner", optionify(tasks.map((t) => t.owner).filter(Boolean)));
+        fillSelect("priority", optionify(tasks.map((t) => t.priority).filter(Boolean)));
+        fillSelect("tag", optionify(tasks.flatMap((t) => t.tags || [])));
+        renderSummary(tasks);
+        renderView();
+      }
+
+      function optionify(values) {
+        return [...new Set(values)].sort((a, b) => String(a).localeCompare(String(b)));
+      }
+
+      function fillSelect(id, values) {
+        const select = document.getElementById(id);
+        const keep = select.value;
+        select.querySelectorAll("option:not([value=''])").forEach((o) => o.remove());
+        for (const v of values) {
+          const opt = document.createElement("option");
+          opt.value = v;
+          opt.textContent = v;
+          select.appendChild(opt);
+        }
+        if (values.includes(keep)) select.value = keep;
+      }
+
+      function renderSummary(tasks) {
+        const summary = document.getElementById("summary");
+        summary.innerHTML = "";
+        const total = tasks.length;
+        const counts = STATUS_ORDER.reduce((acc, st) => {
+          acc[st] = tasks.filter((t) => t.status === st).length;
+          return acc;
+        }, {});
+
+        const chips = [
+          { label: `Total ${total}`, dot: "todo" },
+          { label: `TODO ${counts.TODO}`, dot: "todo" },
+          { label: `DOING ${counts.DOING}`, dot: "doing" },
+          { label: `BLOCKED ${counts.BLOCKED}`, dot: "blocked" },
+          { label: `DONE ${counts.DONE}`, dot: "done" },
+        ];
+
+        chips.forEach((item) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span class="dot ${item.dot}"></span><span>${item.label}</span>`;
+          summary.appendChild(chip);
+        });
+      }
+
+      function applyFilters(tasks) {
+        const q = String(document.getElementById("q").value || "").trim().toLowerCase();
+        const status = String(document.getElementById("status").value || "");
+        const owner = String(document.getElementById("owner").value || "");
+        const priority = String(document.getElementById("priority").value || "");
+        const tag = String(document.getElementById("tag").value || "");
+
+        return tasks.filter((t) => {
+          if (status && t.status !== status) return false;
+          if (owner && t.owner !== owner) return false;
+          if (priority && t.priority !== priority) return false;
+          if (tag && !t.tags.includes(tag)) return false;
+          if (!q) return true;
+          return t.title.toLowerCase().includes(q);
+        });
+      }
+
+      function sortTasks(tasks, mode) {
+        const sorted = [...tasks];
+        const compare = {
+          status: (a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status),
+          owner: (a, b) => String(a.owner).localeCompare(String(b.owner)),
+          priority: (a, b) => {
+            const ai = PRIORITY_ORDER.indexOf(a.priority);
+            const bi = PRIORITY_ORDER.indexOf(b.priority);
+            return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+          },
+          tag: (a, b) => String(a.tags[0] || "").localeCompare(String(b.tags[0] || "")),
+        }[mode];
+
+        sorted.sort((a, b) => {
+          const primary = compare ? compare(a, b) : 0;
+          if (primary !== 0) return primary;
+          return a.id.localeCompare(b.id);
+        });
+        return sorted;
+      }
+
+      function renderBoard(filtered) {
+        const board = document.getElementById("board");
+        board.innerHTML = "";
+        renderSummary(filtered);
+
+        const sortMode = String(document.getElementById("sort").value || "status");
+
+        STATUS_ORDER.forEach((status) => {
+          const col = document.createElement("div");
+          col.className = "column";
+          const header = document.createElement("div");
+          header.className = "column-header";
+          header.innerHTML = `<div class="column-title">${STATUS_LABELS[status]}</div><div class="meta">${filtered.filter((t) => t.status === status).length}</div>`;
+          const body = document.createElement("div");
+          body.className = "column-body";
+          body.dataset.status = status;
+
+          const tasks = sortTasks(
+            filtered.filter((t) => t.status === status),
+            sortMode,
+          );
+
+          if (!tasks.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty";
+            empty.textContent = "No tasks";
+            body.appendChild(empty);
+          } else {
+            tasks.forEach((task, idx) => body.appendChild(renderCard(task, idx)));
+          }
+
+          wireDrop(body);
+          col.appendChild(header);
+          col.appendChild(body);
+          board.appendChild(col);
+        });
+      }
+
+      function renderTable(filtered) {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+        if (!filtered.length) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.colSpan = 5;
+          cell.className = "table-sub";
+          cell.textContent = "No tasks";
+          row.appendChild(cell);
+          tbody.appendChild(row);
+          return;
+        }
+        const sorted = sortTasks(filtered, String(document.getElementById("sort").value || "status"));
+        sorted.forEach((task) => {
+          const row = document.createElement("tr");
+          row.style.cursor = "pointer";
+          row.addEventListener("click", () => openDrawer(task.id));
+          row.innerHTML = `
+            <td>
+              <div class="table-title">${escapeHtml(task.title)}</div>
+              <div class="table-id">${escapeHtml(task.id)}</div>
+            </td>
+            <td>${escapeHtml(task.status)}</td>
+            <td>${escapeHtml(task.owner || "-")}</td>
+            <td>${escapeHtml(task.priority || "-")}</td>
+            <td>${task.tags.length ? task.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ") : "-"}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function setViewMode(mode) {
+        VIEW_MODE = mode;
+        localStorage.setItem("view-mode", mode);
+        document.querySelectorAll(".view-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.view === mode);
+        });
+        document.getElementById("board").hidden = mode !== "kanban";
+        document.getElementById("tableView").hidden = mode !== "table";
+      }
+
+      function renderView() {
+        const filtered = applyFilters(STATE.tasks);
+        renderSummary(filtered);
+        if (VIEW_MODE === "table") {
+          renderTable(filtered);
+        } else {
+          renderBoard(filtered);
+        }
+      }
+
+      function renderCard(task, idx) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.draggable = window.location.protocol !== "file:";
+        card.dataset.id = task.id;
+        card.style.animationDelay = `${Math.min(idx, 8) * 0.03}s`;
+        card.addEventListener("click", (ev) => {
+          const tagEl = ev.target.closest(".tag-btn");
+          if (tagEl) {
+            ev.stopPropagation();
+            const tag = tagEl.dataset.tag || "";
+            if (tag) {
+              document.getElementById("tag").value = tag;
+              renderView();
+            }
+            return;
+          }
+          openDrawer(task.id);
+        });
+
+        const meta = [task.id];
+        if (task.owner) meta.push(task.owner);
+        if (task.priority) meta.push(task.priority);
+
+        card.innerHTML = `
+          <div class="card-title">${escapeHtml(task.title)}</div>
+          <div class="card-meta">${meta.map((m) => `<span>${escapeHtml(m)}</span>`).join(" - ")}</div>
+          ${
+            task.description
+              ? `<div class="card-desc">${escapeHtml(task.description.slice(0, 160))}${task.description.length > 160 ? "..." : ""}</div>`
+              : ""
+          }
+          <div class="card-tags">${task.tags
+            .map((t) => `<span class="tag tag-btn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`)
+            .join("")}</div>
+        `;
+
+        card.addEventListener("dragstart", (ev) => {
+          ev.dataTransfer?.setData("text/plain", task.id);
+          ev.dataTransfer.effectAllowed = "move";
+        });
+
+        return card;
+      }
+
+      function wireDrop(zone) {
+        zone.addEventListener("dragover", (ev) => {
+          ev.preventDefault();
+          zone.classList.add("drag-over");
+        });
+        zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+        zone.addEventListener("drop", async (ev) => {
+          ev.preventDefault();
+          zone.classList.remove("drag-over");
+          const taskId = ev.dataTransfer?.getData("text/plain");
+          if (!taskId) return;
+          const targetStatus = zone.dataset.status;
+          const task = STATE.byId.get(taskId);
+          if (!task || task.status === targetStatus) return;
+          await updateStatus(taskId, targetStatus);
+        });
+      }
+
+      async function updateStatus(taskId, status) {
+        try {
+          setStatusLine(`Updating ${taskId} -> ${status}...`);
+          const res = await fetch(`/api/tasks/${encodeURIComponent(taskId)}/status`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          });
+          const payload = await res.json();
+          if (!res.ok || payload.error) {
+            throw new Error(payload.error || "Update failed");
+          }
+          applyData(payload.data);
+          setStatusLine(`Updated ${taskId} -> ${status}`, "var(--accent)");
+          if (SELECTED_ID === taskId) {
+            openDrawer(taskId);
+          }
+        } catch (err) {
+          setStatusLine(`Failed: ${err.message || err}`, "var(--bad)");
+        }
+      }
+
+      async function loadTasks() {
+        const res = await fetch("/api/tasks", { cache: "no-store" });
+        if (!res.ok) throw new Error(`Failed to load /api/tasks: HTTP ${res.status}`);
+        return res.json();
+      }
+
+      function wireControls() {
+        ["q", "status", "owner", "priority", "tag", "sort"].forEach((id) => {
+          const el = document.getElementById(id);
+          el.addEventListener("input", renderView);
+          el.addEventListener("change", renderView);
+        });
+      }
+
+      function statusClassFor(id) {
+        const task = STATE.byId.get(id);
+        if (!task) return "todo";
+        const status = String(task.status || "").toLowerCase();
+        if (status === "doing") return "doing";
+        if (status === "blocked") return "blocked";
+        if (status === "done") return "done";
+        return "todo";
+      }
+
+      function renderDepPills(ids) {
+        if (!ids.length) return "-";
+        return ids
+          .map(
+            (id) => `
+            <span class="drawer-pill" data-task-id="${escapeHtml(id)}">
+              <span class="dep-dot ${statusClassFor(id)}"></span>
+              <span>${escapeHtml(id)}</span>
+            </span>
+          `,
+          )
+          .join("");
+      }
+
+      function openDrawer(taskId) {
+        const task = STATE.byId.get(taskId);
+        if (!task) return;
+        SELECTED_ID = taskId;
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        document.getElementById("drawerTitle").textContent = `${task.id} - ${task.title}`;
+        document.getElementById("drawerSubtitle").textContent = task.status;
+        const body = document.getElementById("drawerBody");
+        const dependents = STATE.dependentsById.get(task.id) || [];
+        const dependsOn = task.dependsOn || [];
+        const commentsCount = Array.isArray(task.comments) ? task.comments.length : 0;
+        const verifyCount = Array.isArray(task.verify) ? task.verify.length : 0;
+        body.innerHTML = `
+          <div class="drawer-section">
+            <div class="drawer-label">Status</div>
+            <select id="drawerStatus">
+              ${STATUS_ORDER.map((st) => `<option value="${st}" ${st === task.status ? "selected" : ""}>${st}</option>`).join("")}
+            </select>
+          </div>
+          <div class="drawer-grid">
+            <div class="drawer-section drawer-meta">
+              <div class="drawer-label">Owner</div>
+              <div class="drawer-value">${escapeHtml(task.owner || "-")}</div>
+            </div>
+            <div class="drawer-section drawer-meta">
+              <div class="drawer-label">Priority</div>
+              <div class="drawer-value">${escapeHtml(task.priority || "-")}</div>
+            </div>
+            <div class="drawer-section drawer-meta">
+              <div class="drawer-label">Tags</div>
+              <div class="drawer-value">${
+                task.tags.length ? task.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ") : "-"
+              }</div>
+            </div>
+          </div>
+          <div class="drawer-section">
+            <div class="drawer-label">Dependencies</div>
+            <div class="drawer-meta">
+              <div class="drawer-label">Depends on (${dependsOn.length})</div>
+              <div class="drawer-pills">${renderDepPills(dependsOn)}</div>
+            </div>
+            <div class="drawer-meta">
+              <div class="drawer-label">Dependents (${dependents.length})</div>
+              <div class="drawer-pills">${renderDepPills(dependents)}</div>
+            </div>
+          </div>
+          <div class="drawer-section">
+            <div class="drawer-label">Additional</div>
+            <div class="drawer-meta">
+              <div class="drawer-label">Comments</div>
+              <div class="drawer-value">${commentsCount}</div>
+            </div>
+            <div class="drawer-meta">
+              <div class="drawer-label">Verify steps</div>
+              <div class="drawer-value">${verifyCount || "-"}</div>
+            </div>
+            <div class="drawer-meta">
+              <div class="drawer-label">Commit</div>
+              <div class="drawer-value">${task.commit?.hash ? escapeHtml(String(task.commit.hash).slice(0, 12)) : "-"}</div>
+            </div>
+          </div>
+          <div class="drawer-section">
+            <div class="drawer-label">Description</div>
+            <div class="drawer-value">${escapeHtml(task.description || "No description")}</div>
+          </div>
+        `;
+        drawer.classList.add("open");
+        overlay.classList.add("open");
+
+        body.querySelectorAll(".drawer-pill").forEach((pill) => {
+          pill.addEventListener("click", () => {
+            const id = pill.getAttribute("data-task-id") || "";
+            if (id) openDrawer(id);
+          });
+        });
+      }
+
+      function closeDrawer() {
+        SELECTED_ID = "";
+        document.getElementById("drawer").classList.remove("open");
+        document.getElementById("drawerOverlay").classList.remove("open");
+      }
+
+      function setTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+      }
+
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute("data-theme") || "dark";
+        setTheme(current === "dark" ? "light" : "dark");
+      }
+
+      async function main() {
+        const theme = localStorage.getItem("theme") || "dark";
+        setTheme(theme);
+        document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+        document.getElementById("reload").addEventListener("click", () => window.location.reload());
+        wireControls();
+        document.querySelectorAll(".view-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            setViewMode(btn.dataset.view);
+            renderView();
+          });
+        });
+        setViewMode(VIEW_MODE);
+
+        if (window.location.protocol === "file:") {
+          document.getElementById("loadMeta").textContent = "Open this via viewer.sh for live updates.";
+          setStatusLine("Drag-and-drop disabled in file mode.");
+          return;
+        }
+
+        try {
+          const data = await loadTasks();
+          applyData(data);
+          document.getElementById("loadMeta").textContent = `Loaded ${STATE.tasks.length} tasks - ${new Date().toLocaleString()}`;
+          setStatusLine("Ready for drag-and-drop status updates.");
+          document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+          document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+          document.getElementById("drawerSave").addEventListener("click", async () => {
+            if (!SELECTED_ID) return;
+            const status = document.getElementById("drawerStatus")?.value || "";
+            if (!status) return;
+            await updateStatus(SELECTED_ID, status);
+          });
+        } catch (err) {
+          document.getElementById("loadMeta").textContent = "Load failed";
+          setStatusLine(err.message || String(err), "var(--bad)");
+        }
+      }
+
+      main();
+    </script>
+  </body>
+</html>

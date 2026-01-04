@@ -38,7 +38,8 @@ rm -rf \
   docs \
   scripts \
   README.md \
-  tasks.html \
+  .codex-swarm/viewer \
+  Makefile \
   LICENSE \
   .codex-swarm/tasks.json \
   CONTRIBUTING.md \

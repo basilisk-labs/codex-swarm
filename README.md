@@ -163,7 +163,7 @@ Documentation:
 | `CONTRIBUTING.md` | 🧩 Contribution guide and workflow expectations. |
 | `assets/` | 🖼️ Contains the header image shown on this README and any future static visuals. |
 | `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the snapshot as your own local project. |
-| `.codex-swarm/viewer/tasks.html` | 🖥️ A local UI for browsing `.codex-swarm/tasks.json` in a browser (served via `tasks_server.py`). |
+| `.codex-swarm/viewer/tasks.html` | 🖥️ A local UI for browsing `.codex-swarm/tasks.json` in a browser (served via `viewer.sh`). |
 
 ## 🧾 Commit Workflow
 

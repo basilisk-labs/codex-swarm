@@ -15,7 +15,7 @@ Codex Swarm is a local workflow layer that combines JSON-defined agents, a plugg
 1. **Agent layer:** Orchestrator + specialist agents from `.codex-swarm/agents/`.
 2. **Workflow layer:** `agentctl` CLI enforces guardrails and routes task ops to the active backend.
 3. **Backend layer:** pluggable task storage (local or Redmine), with auto offline fallback when Redmine is unavailable.
-4. **Export layer:** `tasks.json` generated from the canonical backend for local tooling like `tasks.html`.
+4. **Export layer:** `tasks.json` generated from the canonical backend for local tooling like `.codex-swarm/viewer/tasks.html`.
 
 ## Where to Read Next
 - [`README.md`](../README.md) for diagrams and the full architecture narrative.
