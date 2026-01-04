@@ -62,7 +62,7 @@ python .codex-swarm/agentctl.py task add <task-id> <task-id> --title "..." --des
 
 ## Commit naming for batch finish
 
-Include every task ID in the commit subject, for example: `✅ <task-id> <task-id> close ...`.
+Include every task ID in the commit subject (full id or suffix after the last dash), for example: `✅ <suffix> <suffix> close ...`.
 
 ## Branching workflow helpers
 

@@ -70,6 +70,11 @@ def _parse_scalar(value: str) -> object:
     if lowered in {"null", "none"}:
         return None
     if raw[0] in ("\"", "'") and raw[-1] == raw[0]:
+        if raw[0] == "\"":
+            try:
+                return json.loads(raw)
+            except json.JSONDecodeError:
+                return _strip_quotes(raw)
         return _strip_quotes(raw)
     if raw.isdigit():
         return int(raw)

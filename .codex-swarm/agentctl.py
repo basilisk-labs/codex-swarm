@@ -282,9 +282,20 @@ def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
     task_token = task_id.strip().lower()
     if not task_token:
         return True
+    task_suffix = task_token.split("-")[-1] if "-" in task_token else task_token
     tokens = re.findall(r"[0-9A-Za-zА-Яа-яЁё]+(?:-[0-9A-Za-zА-Яа-яЁё]+)*", message.lower())
-    meaningful = [t for t in tokens if t != task_token and t not in GENERIC_COMMIT_TOKENS]
+    meaningful = [t for t in tokens if t not in {task_token, task_suffix} and t not in GENERIC_COMMIT_TOKENS]
     return bool(meaningful)
+
+
+def task_id_variants(task_id: str) -> Set[str]:
+    raw = task_id.strip()
+    if not raw:
+        return set()
+    variants = {raw}
+    if "-" in raw:
+        variants.add(raw.split("-")[-1])
+    return variants
 
 
 def require_structured_comment(body: str, *, prefix: str, min_chars: int) -> None:
@@ -1222,8 +1233,9 @@ def guard_commit_check(
     quiet: bool,
     cwd: Path,
 ) -> None:
-    if task_id not in message:
-        die(f"Commit message must include {task_id}", code=2)
+    variants = task_id_variants(task_id)
+    if not variants or not any(token in message for token in variants):
+        die(f"Commit message must include {task_id} (or its suffix)", code=2)
     if not commit_message_has_meaningful_summary(task_id, message):
         die(
             "Commit message is too generic; include a short summary (and constraints when relevant), "
@@ -1953,7 +1965,12 @@ def cmd_finish(args: argparse.Namespace) -> None:
 
     commit_info = get_commit_info(args.commit)
     if args.require_task_id_in_commit and not args.force:
-        missing = [task_id for task_id in task_ids if task_id not in commit_info.get("message", "")]
+        message = commit_info.get("message", "")
+        missing = [
+            task_id
+            for task_id in task_ids
+            if not any(token in message for token in task_id_variants(task_id))
+        ]
         if missing:
             die(
                 f"Commit subject does not mention {', '.join(missing)}: {commit_info.get('message')!r} "
@@ -3075,8 +3092,9 @@ def pr_check(
     subjects = git_log_subjects(base_ref, pr_branch, limit=200)
     if not subjects:
         die(f"No commits found on {pr_branch!r} compared to {base_ref!r}", code=2)
-    if not any(task_id in subject for subject in subjects):
-        die(f"Branch {pr_branch!r} has no commit subject mentioning {task_id}", code=2)
+    variants = task_id_variants(task_id)
+    if not any(any(token in subject for token in variants) for subject in subjects):
+        die(f"Branch {pr_branch!r} has no commit subject mentioning {task_id} (or its suffix)", code=2)
 
     changed = git_diff_names(base_ref, pr_branch)
     if TASKS_PATH_REL in changed:
