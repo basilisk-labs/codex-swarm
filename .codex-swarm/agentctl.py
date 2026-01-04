@@ -643,6 +643,9 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
     if not isinstance(tasks, list):
         die("Backend list_tasks() must return a list of tasks", code=2)
     tasks_by_id = {str(task.get("id") or ""): task for task in tasks if isinstance(task, dict)}
+    tasks_digest_by_id = {
+        task_id: task_digest(task) for task_id, task in tasks_by_id.items() if task_id
+    }
 
     def save(updated_tasks: List[Dict]) -> None:
         global _TASK_CACHE
@@ -653,10 +656,12 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
             task_id = str(task.get("id") or "").strip()
             if not task_id:
                 continue
-            existing = tasks_by_id.get(task_id)
-            if existing is not None and task_digest(existing) == task_digest(task):
+            existing_digest = tasks_digest_by_id.get(task_id)
+            new_digest = task_digest(task)
+            if existing_digest is not None and existing_digest == new_digest:
                 continue
             tasks_by_id[task_id] = task
+            tasks_digest_by_id[task_id] = new_digest
             changed.append(task)
         if changed:
             if callable(write_tasks):
