@@ -1,12 +1,14 @@
 ---
 id: "202601041253-0003N"
 title: "Remove legacy workspace directory"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: ["202601041253-0003K"]
 tags: []
+commit: { hash: "25a6c054b1b513003186c6b337437547c6fb4a79", message: "🧩 T-117 remove legacy workspace" }
 description: "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references."
+dirty: true
 ---
 # 202601041253-0003N: Remove legacy workspace directory
 

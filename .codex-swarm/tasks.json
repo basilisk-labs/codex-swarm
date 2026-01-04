@@ -2628,14 +2628,19 @@
     {
       "id": "202601041253-0003N",
       "title": "Remove legacy workspace directory",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [
         "202601041253-0003K"
       ],
       "tags": [],
-      "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references."
+      "commit": {
+        "hash": "25a6c054b1b513003186c6b337437547c6fb4a79",
+        "message": "🧩 T-117 remove legacy workspace"
+      },
+      "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003P",
@@ -2819,12 +2824,26 @@
       ],
       "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible.",
       "dirty": true
+    },
+    {
+      "id": "202601042147-CMT01",
+      "title": "Clarify commit message suffix usage",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "workflow"
+      ],
+      "description": "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion.",
+      "dirty": true
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "89b24887617e05a3b608697b7022d035c0a9b4e90c739ee811ca49d8120ce373"
+    "checksum": "0d5d85133aadd2e69da22e635323f0d27125a91906bae1a765c1c826fa6fd014"
   }
 }
