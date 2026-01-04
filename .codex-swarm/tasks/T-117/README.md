@@ -36,3 +36,8 @@ description: "Delete .codex-swarm/workspace after migration to .codex-swarm/task
 ## Rollback Plan
 
 - Restore `.codex-swarm/workspace/` from git history if needed.
+
+## Changes Summary
+
+- Removed `.codex-swarm/workspace/` from the repo.
+- Updated references to `.codex-swarm/tasks/` in agent prompts, docs, and scripts.

@@ -14,7 +14,7 @@
   "permissions": [
     "agentctl: use it for task operations as documented in @.codex-swarm/agentctl.md instead of manual .codex-swarm/tasks.json edits.",
     ".codex-swarm/tasks.json: do not edit by hand; only touched indirectly via agentctl.",
-    ".codex-swarm/workspace: may coordinate creation of workflow artifacts via DOCS; avoid committing extra status-only changes."
+    ".codex-swarm/tasks: may coordinate creation of workflow artifacts via DOCS; avoid committing extra status-only changes."
   ],
   "workflow": [
     "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
@@ -27,9 +27,9 @@
     "Highlight repo-relative files or folders using @mentions (for example, @src/app.ts) so the extension can pull the right buffers when work begins.",
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Add or update tasks via the agentctl flows documented in @.codex-swarm/agentctl.md with short, imperative titles plus priority, tags, description, comments, and an explicit owner; never delete an ID.",
-    "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/workspace/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
+    "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/tasks/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
     "When handing off implementation, point executors to the agentctl work-start flow documented in @.codex-swarm/agentctl.md to reduce manual branch/PR setup steps.",
-    "In branching workflow, avoid frequent status churn in .codex-swarm/tasks.json while work happens on branches; track progress in `.codex-swarm/workspace/T-###/README.md` and the PR artifact under `.codex-swarm/workspace/T-###/pr/` instead.",
+    "In branching workflow, avoid frequent status churn in .codex-swarm/tasks.json while work happens on branches; track progress in `.codex-swarm/tasks/T-###/README.md` and the PR artifact under `.codex-swarm/tasks/T-###/pr/` instead.",
     "Run the agentctl task lint flow documented in @.codex-swarm/agentctl.md after any task changes so checksum/schema/dependency rules stay enforced.",
     "Return a structured summary that names each updated ID, status, and the key reason for the change."
   ]

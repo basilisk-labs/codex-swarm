@@ -41,7 +41,7 @@ python .codex-swarm/agentctl.py block T-123 --author CODER --body "Blocked: ... 
 
 # run per-task verify commands (declared on the task)
 python .codex-swarm/agentctl.py verify T-123 --skip-if-unchanged
-# (when .codex-swarm/workspace/T-123/pr/verify.log exists, agentctl will append to it by default)
+# (when .codex-swarm/tasks/T-123/pr/verify.log exists, agentctl will append to it by default)
 
 # before committing, validate staged allowlist + message quality
 python .codex-swarm/agentctl.py guard commit T-123 -m "✨ T-123 Short meaningful summary" --auto-allow
@@ -103,7 +103,7 @@ python .codex-swarm/agentctl.py task next
 # search tasks by text (title/description/tags/comments)
 python .codex-swarm/agentctl.py task search agentctl
 
-# scaffold a workflow artifact (.codex-swarm/workspace/T-###/README.md)
+# scaffold a workflow artifact (.codex-swarm/tasks/T-###/README.md)
 python .codex-swarm/agentctl.py task scaffold T-123
 
 # suggest minimal --allow prefixes based on staged files
@@ -114,7 +114,7 @@ python .codex-swarm/agentctl.py guard suggest-allow --format args
 ## Workflow reminders
 
 - `.codex-swarm/tasks.json` is canonical; agents are forbidden from editing it by hand (use agentctl only).
-- Before finishing a task, ensure @.codex-swarm/workspace/T-###/README.md is filled in (no placeholder `...`).
+- Before finishing a task, ensure @.codex-swarm/tasks/T-###/README.md is filled in (no placeholder `...`).
 - In branching workflow, `agentctl` rejects .codex-swarm/tasks.json writes outside the repo root checkout on the pinned base branch (and guardrails reject committing .codex-swarm/tasks.json from task branches).
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
@@ -126,16 +126,16 @@ python .codex-swarm/agentctl.py guard suggest-allow --format args
 
 - `workflow_mode: "direct"`: low-ceremony, single-checkout workflow.
   - Do all work in the current checkout; do not create task branches/worktrees (`agentctl branch create` is refused).
-  - `python .codex-swarm/agentctl.py work start T-123` only scaffolds `.codex-swarm/workspace/T-###/README.md` (it does not create a branch/worktree).
-  - PR artifacts under `.codex-swarm/workspace/T-###/pr/` are optional.
+  - `python .codex-swarm/agentctl.py work start T-123` only scaffolds `.codex-swarm/tasks/T-###/README.md` (it does not create a branch/worktree).
+  - PR artifacts under `.codex-swarm/tasks/T-###/pr/` are optional.
   - Tasks can be implemented and closed on the current branch; `.codex-swarm/tasks.json` is still updated only via `python .codex-swarm/agentctl.py` (no manual edits).
 - `workflow_mode: "branch_pr"`: strict branching workflow (task branches + worktrees + tracked PR artifacts + single-writer `.codex-swarm/tasks.json`).
   - Planning and closure happen in the repo root checkout on `main`; `.codex-swarm/tasks.json` is never modified/committed on task branches.
   - Executors work in `.codex-swarm/worktrees/T-###-<slug>/` on `task/T-###/<slug>`.
-  - Each task uses tracked PR artifacts under `.codex-swarm/workspace/T-###/pr/`.
+  - Each task uses tracked PR artifacts under `.codex-swarm/tasks/T-###/pr/`.
   - Integration/closure is performed only by INTEGRATOR via `python .codex-swarm/agentctl.py integrate` / `python .codex-swarm/agentctl.py finish`.
 
-In `branch_pr`, executors leave handoff notes in `.codex-swarm/workspace/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `.codex-swarm/tasks.json` at closure.
+In `branch_pr`, executors leave handoff notes in `.codex-swarm/tasks/T-###/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to `.codex-swarm/tasks.json` at closure.
 
 ## Base branch
 

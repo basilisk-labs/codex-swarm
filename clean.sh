@@ -23,7 +23,7 @@ export MODE
 # It removes leftover assets, metadata, and git state that would tie the copy to the original repo.
 # It also removes framework-development artifacts (including docs/) that aren't needed for a reusable snapshot.
 #
-# Note: .codex-swarm/agentctl.md and .codex-swarm/workspace stay as part of the framework snapshot.
+# Note: .codex-swarm/agentctl.md and .codex-swarm/tasks stay as part of the framework snapshot.
 
 rm -rf \
   .DS_Store \

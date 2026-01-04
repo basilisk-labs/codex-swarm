@@ -1,9 +1,0 @@
-# Verify log
-
-- `python -m compileall scripts/agentctl.py` (OK)
-- `python scripts/agentctl.py task lint` (OK)
-- `python scripts/agentctl.py pr check T-067 --branch task/T-067/branch-pr --base main` (OK)
-- `python scripts/agentctl.py branch create T-067 --agent CODER --slug smoke --worktree` (OK)
-- `python scripts/agentctl.py finish T-067 ...` on non-main (expected FAIL)
-- `python scripts/agentctl.py integrate T-067 --branch task/T-067/branch-pr --dry-run` on main (OK)
-- `python scripts/agentctl.py verify T-067` on main (OK)

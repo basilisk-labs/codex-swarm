@@ -1,9 +1,0 @@
-# Verify log
-
-[2025-12-16T14:23:55+00:00] sha=fb26de7a28c7a416fb6ba0ef07e4dc9d0db57c3c $ python -m compileall scripts/agentctl.py
-
-[2025-12-16T14:23:55+00:00] sha=fb26de7a28c7a416fb6ba0ef07e4dc9d0db57c3c $ python scripts/agentctl.py task lint
-✅ tasks.json OK
-
-[2025-12-16T14:23:56+00:00] ✅ verified_sha=fb26de7a28c7a416fb6ba0ef07e4dc9d0db57c3c
-
