@@ -1,14 +1,18 @@
 ---
 id: "202601041346-YM3R8"
 title: "Agentctl performance and UX improvements"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd", message: "📝 YM3R8 expand agentctl.md coverage" }
+comments:
+  - { author: "INTEGRATOR", body: "Verified: batch writes, caching, JSON errors, lazy lint, and logging flags implemented." }
+  - { author: "INTEGRATOR", body: "Verified: documentation updated for lint/flags and agent guidance." }
+  - { author: "INTEGRATOR", body: "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes." }
 description: "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
 ---
-
 # 202601041346-YM3R8: Agentctl performance and UX improvements
 
 ## Summary
