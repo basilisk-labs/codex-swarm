@@ -2713,12 +2713,22 @@
         }
       ],
       "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
+    },
+    {
+      "id": "202601041331-Q11MC",
+      "title": "Prune legacy paths and optimize agentctl",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "da9cdc55d73939df3bcf52344484ab1ae6d4d992364b3bfd66090193fb2a0d89"
+    "checksum": "3234976e2b9057dd24160c84d0350e7457824f0267c2aeb7c1fb428183bc7ad0"
   }
 }

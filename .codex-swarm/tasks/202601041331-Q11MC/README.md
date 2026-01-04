@@ -8,7 +8,6 @@ depends_on: []
 tags: []
 description: "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl."
 ---
-
 # 202601041331-Q11MC: Prune legacy paths and optimize agentctl
 
 ## Summary
