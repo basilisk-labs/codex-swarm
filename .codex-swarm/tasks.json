@@ -2472,7 +2472,7 @@
     {
       "id": "202601041253-0003B",
       "title": "Link file references in docs",
-      "status": "DONE",
+      "status": "TODO",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [],
@@ -2483,7 +2483,8 @@
         "hash": "7e88f9df016c340dbf314d6f687473f2f955ea6c",
         "message": "📝 T-107 link doc file references"
       },
-      "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks."
+      "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003C",
@@ -2610,186 +2611,12 @@
       ],
       "tags": [],
       "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references."
-    },
-    {
-      "id": "202601041253-0003P",
-      "title": "Update clean.sh for new structure",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "commit": {
-        "hash": "04fdd37dca3c7541e1d957e263b473547c94d6ad",
-        "message": "🧹 T-118 update clean.sh for tasks layout"
-      },
-      "comments": [
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: bash -n clean.sh; cleanup resets .codex-swarm/tasks and snapshot."
-        }
-      ],
-      "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
-    },
-    {
-      "id": "202601041253-0003Q",
-      "title": "Fix GitHub sync scripts for snapshot backend",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "commit": {
-        "hash": "1939744c7df301f0a9b1533a7ff7025624d45a3c",
-        "message": "🔁 T-119 export snapshot before GitHub sync"
-      },
-      "comments": [
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: python3 -m py_compile .github/scripts/sync_tasks.py; export step documented."
-        }
-      ],
-      "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
-    },
-    {
-      "id": "202601041253-0003R",
-      "title": "Migrate legacy task IDs to new format",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "commit": {
-        "hash": "f84ae1546f3077d674c659dce3ce9bf690160894",
-        "message": "🆔 202601041253-0003R migrate legacy task IDs"
-      },
-      "comments": [
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: python3 .codex-swarm/agentctl.py task list --quiet; ids migrated."
-        }
-      ],
-      "description": "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies."
-    },
-    {
-      "id": "202601041253-0003S",
-      "title": "agentctl: preserve frontmatter on scaffold overwrite",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "commit": {
-        "hash": "e571744e288fc0f63599967eae460d290d4c97ef",
-        "message": "🛠️ T-121 preserve scaffold frontmatter"
-      },
-      "comments": [
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: python3 .codex-swarm/agentctl.py task scaffold 202601041253-0003S --overwrite preserved frontmatter."
-        }
-      ],
-      "description": "Keep the frontmatter block intact when overwriting task README scaffolds."
-    },
-    {
-      "id": "202601041300-00040",
-      "title": "tasks.html kanban viewer with local server",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "codex",
-      "depends_on": [],
-      "tags": [
-        "tasks-ui",
-        "kanban"
-      ],
-      "commit": {
-        "hash": "8ebac65cf3df403807155f58e430ba30e925692b",
-        "message": "🛠️ 202601041300-00040 tasks viewer"
-      },
-      "comments": [
-        {
-          "author": "codex",
-          "body": "Started viewer/server refactor to move UI into .codex-swarm/viewer."
-        }
-      ],
-      "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes."
-    },
-    {
-      "id": "202601041311-D7Q7D",
-      "title": "Fix frontmatter parsing and commit id rules",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "commit": {
-        "hash": "ea9ed7a50d1789d452abb61c00987e0925c76ecb",
-        "message": "🛠️ D7Q7D fix frontmatter parsing and commit checks"
-      },
-      "comments": [
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: normalized frontmatter parsing, commit-id suffix checks updated, and docs refreshed."
-        }
-      ],
-      "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
-    },
-    {
-      "id": "202601041331-Q11MC",
-      "title": "Prune legacy paths and optimize agentctl",
-      "status": "TODO",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl."
-    },
-    {
-      "id": "202601041346-YM3R8",
-      "title": "Agentctl performance and UX improvements",
-      "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [],
-      "commit": {
-        "hash": "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd",
-        "message": "📝 YM3R8 expand agentctl.md coverage"
-      },
-      "comments": [
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: batch writes, caching, JSON errors, lazy lint, and logging flags implemented."
-        },
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: documentation updated for lint/flags and agent guidance."
-        },
-        {
-          "author": "INTEGRATOR",
-          "body": "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes."
-        }
-      ],
-      "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
-    },
-    {
-      "id": "202601042107-TAG01",
-      "title": "Clarify planner task tags + deps",
-      "status": "TODO",
-      "priority": "med",
-      "owner": "CODER",
-      "depends_on": [],
-      "tags": [
-        "agents",
-        "workflow"
-      ],
-      "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "1d180caf5978d3442f294ec0c8edc3134f5e90f957d0c04dc70b2d08cc56a5dd"
+    "checksum": "016ecc3f6b8622717b9968b165cdac1cd77fd9b1cc9f53a8f620640833967e6d"
   }
 }

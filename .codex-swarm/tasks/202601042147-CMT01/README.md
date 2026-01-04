@@ -7,4 +7,4 @@ owner: "CODER"
 depends_on: []
 tags: ["agents", "workflow"]
 description: "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion."
----
+dirty: true---
