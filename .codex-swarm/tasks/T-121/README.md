@@ -1,3 +1,13 @@
+---
+id: "T-121"
+title: "agentctl: preserve frontmatter on scaffold overwrite"
+status: "TODO"
+priority: "med"
+owner: "CODER"
+depends_on: []
+tags: []
+description: "Keep the frontmatter block intact when overwriting task README scaffolds."
+---
 # T-121: agentctl: preserve frontmatter on scaffold overwrite
 
 ## Summary
