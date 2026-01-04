@@ -1,0 +1,14 @@
+---
+id: "T-077"
+title: "agentctl: cleanup merged task branches/worktrees"
+status: "DONE"
+priority: "med"
+owner: "CODER"
+depends_on: ["T-074"]
+tags: ["agentctl", "workflow", "cleanup"]
+verify: ["python -m compileall scripts/agentctl.py", "python scripts/agentctl.py task lint"]
+commit: { hash: "cedb50251e77482aecf066e0fe5e2baa2c3d4078", message: "🧹 T-077 add cleanup merged command" }
+comments:
+  - { author: "INTEGRATOR", body: "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-077/pr." }
+description: "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\n\nAcceptance:\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\n- Deletes only when:\n  - task is `DONE` in `tasks.json`, AND\n  - `git diff --name-only main...<branch>` is empty.\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\n- Never writes `tasks.json`."
+---

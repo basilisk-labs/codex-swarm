@@ -1,3 +1,13 @@
+---
+id: "T-115"
+title: "agentctl: migrate tasks.json to local backend"
+status: "TODO"
+priority: "med"
+owner: "CODER"
+depends_on: ["T-112"]
+tags: []
+description: "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
+---
 # T-115: agentctl: migrate tasks.json to local backend
 
 ## Summary
@@ -35,3 +45,4 @@
 - `.codex-swarm/agentctl.py`: add `task migrate` command for seeding backend from tasks.json.
 - `.codex-swarm/config.json`: set `tasks_backend.config_path` to local backend plugin.
 <!-- END AUTO SUMMARY -->
+

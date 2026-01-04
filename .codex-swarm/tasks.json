@@ -3,7 +3,6 @@
     {
       "id": "T-001",
       "title": "Document framework in README",
-      "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -11,16 +10,16 @@
         "docs",
         "readme"
       ],
-      "comments": [],
       "commit": {
         "hash": "76d362097fa5d7237d78e4142d9d4ce7f9511513",
         "message": "Create README.md"
-      }
+      },
+      "comments": [],
+      "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly."
     },
     {
       "id": "T-002",
       "title": "Restructure agent registry into JSON files",
-      "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -28,16 +27,16 @@
         "agents",
         "architecture"
       ],
-      "comments": [],
       "commit": {
         "hash": "645a960e59145717d77f4bfab367c2a14234cc03",
         "message": "Dynamic Agents"
-      }
+      },
+      "comments": [],
+      "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance."
     },
     {
       "id": "T-003",
       "title": "Move tasks data into .AGENTS/TASKS.json",
-      "description": "Ensure task state is available in a machine-readable JSON file for Codex automation.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -45,16 +44,16 @@
         "state",
         "persistence"
       ],
-      "comments": [],
       "commit": {
         "hash": "645a960e59145717d77f4bfab367c2a14234cc03",
         "message": "Dynamic Agents"
-      }
+      },
+      "comments": [],
+      "description": "Ensure task state is available in a machine-readable JSON file for Codex automation."
     },
     {
       "id": "T-004",
       "title": "Enforce per-task git commits in AGENTS spec",
-      "description": "Document the rule that every plan item must end with its own git commit for traceability.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -62,16 +61,16 @@
         "workflow",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "fb9f40ff9b294361cf2d6322d4b68d220ebbf1c6",
         "message": "T-004: enforce per-task commits"
-      }
+      },
+      "comments": [],
+      "description": "Document the rule that every plan item must end with its own git commit for traceability."
     },
     {
       "id": "T-005",
       "title": "Document commit workflow in README",
-      "description": "Expand the README with details on emoji commits and atomic task tracking.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -79,16 +78,16 @@
         "docs",
         "workflow"
       ],
-      "comments": [],
       "commit": {
         "hash": "fa8627b7e1cb31047987216d42f6664cd1fe8767",
         "message": "T-005: document commit workflow"
-      }
+      },
+      "comments": [],
+      "description": "Expand the README with details on emoji commits and atomic task tracking."
     },
     {
       "id": "T-006",
       "title": "Add Agent Creator workflow",
-      "description": "Describe how new specialist agents are proposed, reviewed, and added to the registry.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -96,16 +95,16 @@
         "agents",
         "automation"
       ],
-      "comments": [],
       "commit": {
         "hash": "3a9cc7dcbf8d8ada931d5318ce04ed855254888c",
         "message": "Mark T-006 done"
-      }
+      },
+      "comments": [],
+      "description": "Describe how new specialist agents are proposed, reviewed, and added to the registry."
     },
     {
       "id": "T-007",
       "title": "Improve commit message guidance",
-      "description": "Tighten the instructions around writing meaningful, emoji-prefixed commit messages.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -113,16 +112,16 @@
         "workflow",
         "git"
       ],
-      "comments": [],
       "commit": {
         "hash": "6e8c80e12a6127ec040d1148cee1bfe1e0e41772",
         "message": "Mark T-007 and T-008 done"
-      }
+      },
+      "comments": [],
+      "description": "Tighten the instructions around writing meaningful, emoji-prefixed commit messages."
     },
     {
       "id": "T-008",
       "title": "Document repository structure in README",
-      "description": "Add a quick-start tour of key files and directories so contributors know where to work.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -130,16 +129,16 @@
         "docs",
         "readme"
       ],
-      "comments": [],
       "commit": {
         "hash": "6e8c80e12a6127ec040d1148cee1bfe1e0e41772",
         "message": "Mark T-007 and T-008 done"
-      }
+      },
+      "comments": [],
+      "description": "Add a quick-start tour of key files and directories so contributors know where to work."
     },
     {
       "id": "T-009",
       "title": "Define status transition protocol",
-      "description": "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -147,16 +146,16 @@
         "workflow",
         "tasks"
       ],
-      "comments": [],
       "commit": {
         "hash": "bb1d0296309f47bcfe7b541b9157a92306cb8543",
         "message": "Mark T-009 done"
-      }
+      },
+      "comments": [],
+      "description": "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED."
     },
     {
       "id": "T-010",
       "title": "Automate agent registry updates",
-      "description": "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -164,16 +163,16 @@
         "agents",
         "automation"
       ],
-      "comments": [],
       "commit": {
         "hash": "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1",
         "message": "Mark T-010 done"
-      }
+      },
+      "comments": [],
+      "description": "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list."
     },
     {
       "id": "T-011",
       "title": "Evaluate workflow and suggest improvements",
-      "description": "Review the end-to-end authoring flow and capture improvement ideas inside the docs.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -181,16 +180,16 @@
         "workflow",
         "analysis"
       ],
-      "comments": [],
       "commit": {
         "hash": "d9572ab9f3738eced63f4d13f9d149d1d6af6517",
         "message": "Docs T-011 workflow analysis"
-      }
+      },
+      "comments": [],
+      "description": "Review the end-to-end authoring flow and capture improvement ideas inside the docs."
     },
     {
       "id": "T-012",
       "title": "Generalize AGENTS.md to remove agent-specific guidance",
-      "description": "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -198,16 +197,16 @@
         "docs",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "e92c42039af7d566e79e2d7651c718e1fdaa8b88",
         "message": "Review T-012 generalize AGENTS spec"
-      }
+      },
+      "comments": [],
+      "description": "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions."
     },
     {
       "id": "T-013",
       "title": "Align agent prompts with GPT-5.1 guide",
-      "description": "Update every agent spec so prompts match the GPT-5.1 best practices.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -215,16 +214,16 @@
         "prompting",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "a70b1319af38ab8f8cc3d04d002a01aa4ef70e92",
         "message": "Mark T-013 done"
-      }
+      },
+      "comments": [],
+      "description": "Update every agent spec so prompts match the GPT-5.1 best practices."
     },
     {
       "id": "T-014",
       "title": "Document Cursor + Codex local workflow in AGENTS.md",
-      "description": "Add environment assumptions for local-only workflows without remote runtimes.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -232,16 +231,16 @@
         "docs",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "db8902599b40ae42ed97c009f1c17e3402664783",
         "message": "Mark T-014 done"
-      }
+      },
+      "comments": [],
+      "description": "Add environment assumptions for local-only workflows without remote runtimes."
     },
     {
       "id": "T-015",
       "title": "Align agent prompts with Cursor + Codex constraints",
-      "description": "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -249,16 +248,16 @@
         "prompting",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "9358629edcbdb575b58a9903e647d765b5dfe03f",
         "message": "Mark T-015 done"
-      }
+      },
+      "comments": [],
+      "description": "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools."
     },
     {
       "id": "T-016",
       "title": "Remove tool references from AGENTS.md for Codex-only workflow",
-      "description": "Strip references to unsupported helper tools to keep instructions aligned with the local stack.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -266,16 +265,16 @@
         "docs",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "d5b3e2eac2dc04098d97248ddba1dcca271311fa",
         "message": "Mark T-016 done"
-      }
+      },
+      "comments": [],
+      "description": "Strip references to unsupported helper tools to keep instructions aligned with the local stack."
     },
     {
       "id": "T-017",
       "title": "Update agent prompts for tool-less Codex context",
-      "description": "Reword prompts so agents do not assume access to external search or commands.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -283,16 +282,16 @@
         "prompting",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "6ed438a36b77e1ae7ca742ce4ace0fd4391c978e",
         "message": "Mark T-017 done"
-      }
+      },
+      "comments": [],
+      "description": "Reword prompts so agents do not assume access to external search or commands."
     },
     {
       "id": "T-018",
       "title": "Streamline AGENTS.md English guidelines",
-      "description": "Trim redundant English-language instructions and keep the doc crisp.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -300,16 +299,16 @@
         "docs",
         "agents"
       ],
-      "comments": [],
       "commit": {
         "hash": "673ff98d3b5efdba4cf81a4ce4b5558748d8ed3e",
         "message": "Mark T-018 complete"
-      }
+      },
+      "comments": [],
+      "description": "Trim redundant English-language instructions and keep the doc crisp."
     },
     {
       "id": "T-019",
       "title": "Add glossary-aware translation agent",
-      "description": "Introduce a translator agent that respects glossary entries when localizing README content.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -317,16 +316,16 @@
         "agents",
         "localization"
       ],
-      "comments": [],
       "commit": {
         "hash": "4cf2f07b1c9c8dddeb76cd85aa9cdff07cf4bb07",
         "message": "Add T-019 translator agent"
-      }
+      },
+      "comments": [],
+      "description": "Introduce a translator agent that respects glossary entries when localizing README content."
     },
     {
       "id": "T-020",
       "title": "Add Spanish README translation",
-      "description": "Provide a Spanish version of the README while keeping glossary terms consistent.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -334,21 +333,21 @@
         "docs",
         "localization"
       ],
+      "commit": {
+        "hash": "631c837f044c2f8ff5a3a785cca6d695a990b3a2",
+        "message": "Mark T-020 done after README.es review"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Added README.es.md and ensured glossary coverage for Spanish terminology."
         }
       ],
-      "commit": {
-        "hash": "631c837f044c2f8ff5a3a785cca6d695a990b3a2",
-        "message": "Mark T-020 done after README.es review"
-      }
+      "description": "Provide a Spanish version of the README while keeping glossary terms consistent."
     },
     {
       "id": "T-021",
       "title": "Enhance translator glossary workflow",
-      "description": "Teach the translator agent how to maintain glossary metadata and usage counts automatically.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -356,21 +355,21 @@
         "agents",
         "localization"
       ],
+      "commit": {
+        "hash": "e19258da08620b2b494932ebaa96c806ada33699",
+        "message": "Mark T-021 done"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated the TRANSLATOR agent so every run maintains GLOSSARY.json, tracks usage frequencies, and enforces approved terms."
         }
       ],
-      "commit": {
-        "hash": "e19258da08620b2b494932ebaa96c806ada33699",
-        "message": "Mark T-021 done"
-      }
+      "description": "Teach the translator agent how to maintain glossary metadata and usage counts automatically."
     },
     {
       "id": "T-022",
       "title": "Add Russian README translation",
-      "description": "Add a Russian localization of the README plus supporting glossary entries.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -378,21 +377,21 @@
         "docs",
         "localization"
       ],
+      "commit": {
+        "hash": "934d327f0938d4b76760cb585073b6d69b223e6d",
+        "message": "Mark T-022 done after translation review"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Added README.ru.md plus GLOSSARY.json context so translation terminology stays consistent."
         }
       ],
-      "commit": {
-        "hash": "934d327f0938d4b76760cb585073b6d69b223e6d",
-        "message": "Mark T-022 done after translation review"
-      }
+      "description": "Add a Russian localization of the README plus supporting glossary entries."
     },
     {
       "id": "T-023",
       "title": "Add Spanish README translation",
-      "description": "Deliver another Spanish README update incorporating the refined glossary process.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -400,21 +399,21 @@
         "docs",
         "localization"
       ],
+      "commit": {
+        "hash": "1f58561634734d0e73374ccd1264d15d57f7c251",
+        "message": "T-023: mark Spanish README translation done"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Created README.es.md and updated GLOSSARY.json with Spanish equivalents for existing terms."
         }
       ],
-      "commit": {
-        "hash": "1f58561634734d0e73374ccd1264d15d57f7c251",
-        "message": "T-023: mark Spanish README translation done"
-      }
+      "description": "Deliver another Spanish README update incorporating the refined glossary process."
     },
     {
       "id": "T-024",
       "title": "Revise glossary schema for translations",
-      "description": "Restructure the glossary so English remains canonical while localized entries store metadata per language.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -423,21 +422,21 @@
         "localization",
         "glossary"
       ],
+      "commit": {
+        "hash": "eb5a18530947e3387e401f9539595db257492b0c",
+        "message": "T-024: finalize glossary schema work"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated the TRANSLATOR workflow and converted GLOSSARY.json so languages own their preferred terms and descriptions."
         }
       ],
-      "commit": {
-        "hash": "eb5a18530947e3387e401f9539595db257492b0c",
-        "message": "T-024: finalize glossary schema work"
-      }
+      "description": "Restructure the glossary so English remains canonical while localized entries store metadata per language."
     },
     {
       "id": "T-025",
       "title": "Clarify emoji commit workflow",
-      "description": "Clarify how commits should start with emojis and summarize completed plan items.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -445,21 +444,21 @@
         "workflow",
         "git"
       ],
+      "commit": {
+        "hash": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
+        "message": "✅ Mark T-025 done"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated AGENTS.md and README.md so commit messages start with meaningful emojis referencing the finished plan item."
         }
       ],
-      "commit": {
-        "hash": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
-        "message": "✅ Mark T-025 done"
-      }
+      "description": "Clarify how commits should start with emojis and summarize completed plan items."
     },
     {
       "id": "T-026",
       "title": "Enforce atomic task planning",
-      "description": "Ensure the PLANNER splits every request into single-owner tasks with unique commits.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -467,21 +466,21 @@
         "workflow",
         "planning"
       ],
+      "commit": {
+        "hash": "851c576b97b52541b3cab13ed3555c97d4d1f475",
+        "message": "🧩 T-026 enforce atomic planning"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Updated .AGENTS/PLANNER.json, AGENTS.md, and README.md so the PLANNER keeps tasks atomic."
         }
       ],
-      "commit": {
-        "hash": "851c576b97b52541b3cab13ed3555c97d4d1f475",
-        "message": "🧩 T-026 enforce atomic planning"
-      }
+      "description": "Ensure the PLANNER splits every request into single-owner tasks with unique commits."
     },
     {
       "id": "T-027",
       "title": "Add UPDATER optimization agent",
-      "description": "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -489,21 +488,21 @@
         "agents",
         "optimization"
       ],
+      "commit": {
+        "hash": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
+        "message": "✅ Review UPDATER agent deliverable (T-027)"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Verified .AGENTS/UPDATER.json and AGENTS.md to ensure the new agent only runs on explicit optimization requests and outputs a repo-wide optimization plan."
         }
       ],
-      "commit": {
-        "hash": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
-        "message": "✅ Review UPDATER agent deliverable (T-027)"
-      }
+      "description": "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested."
     },
     {
       "id": "T-028",
       "title": "Add virtualenv installation reminder",
-      "description": "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -511,21 +510,21 @@
         "docs",
         "workflow"
       ],
+      "commit": {
+        "hash": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
+        "message": "✅ mark T-028 done"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Added AGENTS.md guidance reminding contributors to install external dependencies only within virtual environments before running scripts."
         }
       ],
-      "commit": {
-        "hash": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
-        "message": "✅ mark T-028 done"
-      }
+      "description": "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments."
     },
     {
       "id": "T-029",
       "title": "Audit agents for optimization opportunities",
-      "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
       "status": "DONE",
       "priority": "high",
       "owner": "UPDATER",
@@ -533,21 +532,21 @@
         "agents",
         "optimization"
       ],
+      "commit": {
+        "hash": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
+        "message": "🧭 T-029 finish agent audit"
+      },
       "comments": [
         {
           "author": "UPDATER",
           "body": "Reported the missing glossary and CODER permission gaps plus suggested focused follow-ups."
         }
       ],
-      "commit": {
-        "hash": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
-        "message": "🧭 T-029 finish agent audit"
-      }
+      "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps."
     },
     {
       "id": "T-030",
       "title": "Clarify CODER agent permissions",
-      "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -555,21 +554,21 @@
         "agents",
         "permissions"
       ],
+      "commit": {
+        "hash": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
+        "message": "🧩 T-030 revise coder agent"
+      },
       "comments": [
         {
           "author": "CODER",
           "body": "Expanded permissions, workflow detail, and verification guidance to match the current responsibilities."
         }
       ],
-      "commit": {
-        "hash": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
-        "message": "🧩 T-030 revise coder agent"
-      }
+      "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request."
     },
     {
       "id": "T-031",
       "title": "Sync README with current agent lineup",
-      "description": "Refresh README.md so it describes the existing agents (including UPDATER), workflow rules, and repository layout that reflect the latest codebase.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -577,21 +576,21 @@
         "docs",
         "readme"
       ],
+      "commit": {
+        "hash": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
+        "message": "✅ T-031 finish README sync task"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "README now mentions the UPDATER optimization agent and lifecycle so the doc mirrors the current codebase."
         }
       ],
-      "commit": {
-        "hash": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
-        "message": "✅ T-031 finish README sync task"
-      }
+      "description": "Refresh README.md so it describes the existing agents (including UPDATER), workflow rules, and repository layout that reflect the latest codebase."
     },
     {
       "id": "T-032",
       "title": "Stylize README with icons and ASCII art",
-      "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -599,21 +598,21 @@
         "docs",
         "readme"
       ],
+      "commit": {
+        "hash": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
+        "message": "📝 T-032 stylize README"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "README now shows ASCII art, icons, and refreshed formatting so it feels more polished."
         }
       ],
-      "commit": {
-        "hash": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
-        "message": "📝 T-032 stylize README"
-      }
+      "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact."
     },
     {
       "id": "T-033",
       "title": "Style tasks board markdown output",
-      "description": "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -622,21 +621,21 @@
         "workflow",
         "formatting"
       ],
+      "commit": {
+        "hash": "2f93325a23837b89b0431b3219cee725b6902583",
+        "message": "🛠️ T-033 style tasks board"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Verified the board now bolds headings, code-highlights metadata, uppercases agent owners with icons, and links commit hashes."
         }
       ],
-      "commit": {
-        "hash": "2f93325a23837b89b0431b3219cee725b6902583",
-        "message": "🛠️ T-033 style tasks board"
-      }
+      "description": "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board."
     },
     {
       "id": "T-034",
       "title": "Bold status, description, commit labels",
-      "description": "Render the `_Status`, `_Description`, and `_Commit` prefixes as bold text while leaving their italic suffixes intact.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -645,21 +644,21 @@
         "workflow",
         "formatting"
       ],
+      "commit": {
+        "hash": "f52008459f7415f33a7d3064d064ec841718d00e",
+        "message": "🛠️ T-034 bold label headers"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Confirmed the label prefixes are bold while the italics remain on the suffix, so the board matches the request."
         }
       ],
-      "commit": {
-        "hash": "f52008459f7415f33a7d3064d064ec841718d00e",
-        "message": "🛠️ T-034 bold label headers"
-      }
+      "description": "Render the `_Status`, `_Description`, and `_Commit` prefixes as bold text while leaving their italic suffixes intact."
     },
     {
       "id": "T-035",
       "title": "Remove italic on description label",
-      "description": "Render the description label without italics so only the bold text shows.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -667,21 +666,21 @@
         "docs",
         "workflow"
       ],
+      "commit": {
+        "hash": "6c5bc662a3f71b8e206a48133cc401033142ccd2",
+        "message": "🛠️ T-035 remove description italic"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Confirmed the description label is no longer italicized yet still stands out via bold styling."
         }
       ],
-      "commit": {
-        "hash": "6c5bc662a3f71b8e206a48133cc401033142ccd2",
-        "message": "🛠️ T-035 remove description italic"
-      }
+      "description": "Render the description label without italics so only the bold text shows."
     },
     {
       "id": "T-036",
       "title": "Beautify summary table",
-      "description": "Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -690,21 +689,21 @@
         "workflow",
         "formatting"
       ],
+      "commit": {
+        "hash": "463a8853f38d3b9f3ebd9f6a191f3f7c81db0aa7",
+        "message": "🛠️ T-036 beautify summary table"
+      },
       "comments": [
         {
           "author": "reviewer",
           "body": "Confirmed the summary section is now a table with playful emoji notes and the `_Status` italic text stays intact."
         }
       ],
-      "commit": {
-        "hash": "463a8853f38d3b9f3ebd9f6a191f3f7c81db0aa7",
-        "message": "🛠️ T-036 beautify summary table"
-      }
+      "description": "Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is."
     },
     {
       "id": "T-037",
       "title": "Add CONTRIBUTING guidelines",
-      "description": "Document the recommended contribution workflow and behavioral expectations for Codex Swarm.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -712,21 +711,21 @@
         "docs",
         "workflow"
       ],
+      "commit": {
+        "hash": "ec13d916bfc5d0e577b757d2a16dd8380ca3861d",
+        "message": "📝 T-037 add contributing guidelines"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Added CONTRIBUTING.md with the requested contribution guidance."
         }
       ],
-      "commit": {
-        "hash": "ec13d916bfc5d0e577b757d2a16dd8380ca3861d",
-        "message": "📝 T-037 add contributing guidelines"
-      }
+      "description": "Document the recommended contribution workflow and behavioral expectations for Codex Swarm."
     },
     {
       "id": "T-038",
       "title": "Document README usage guidance",
-      "description": "Ensure README describes the codebase and includes local development steps (download Zip, run clean.sh).",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -734,21 +733,21 @@
         "docs",
         "readme"
       ],
+      "commit": {
+        "hash": "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc",
+        "message": "📝 T-038 update README local dev"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Extended README with code breakdown and local dev steps (download zip, run clean.sh)."
         }
       ],
-      "commit": {
-        "hash": "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc",
-        "message": "📝 T-038 update README local dev"
-      }
+      "description": "Ensure README describes the codebase and includes local development steps (download Zip, run clean.sh)."
     },
     {
       "id": "T-039",
       "title": "Update cleanup script to remove CONTRIBUTING.md and itself",
-      "description": "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -756,21 +755,21 @@
         "automation",
         "cleanup"
       ],
+      "commit": {
+        "hash": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
+        "message": "🛠️ T-039 update cleanup script to remove CONTRIBUTING.md and self"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "clean.sh now removes CONTRIBUTING.md and deletes itself after repository cleanup."
         }
       ],
-      "commit": {
-        "hash": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
-        "message": "🛠️ T-039 update cleanup script to remove CONTRIBUTING.md and self"
-      }
+      "description": "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo."
     },
     {
       "id": "T-040",
       "title": "Add README onboarding sections",
-      "description": "Add a focused Getting Started path, example session log, and limitations/non-goals to README with a simpler intro.",
       "status": "DONE",
       "priority": "high",
       "owner": "DOCS",
@@ -778,21 +777,21 @@
         "docs",
         "readme"
       ],
+      "commit": {
+        "hash": "f9c3e6c1e4bb906895811443799ef70faf18c7a3",
+        "message": "📘 T-040 add README onboarding"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Refreshed README intro, added a concrete Getting Started path with clean.sh guidance, an example session, and a Limitations/Non-goals section."
         }
       ],
-      "commit": {
-        "hash": "f9c3e6c1e4bb906895811443799ef70faf18c7a3",
-        "message": "📘 T-040 add README onboarding"
-      }
+      "description": "Add a focused Getting Started path, example session log, and limitations/non-goals to README with a simpler intro."
     },
     {
       "id": "T-041",
       "title": "Document framework guideline",
-      "description": "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -800,16 +799,16 @@
         "docs",
         "guideline"
       ],
-      "comments": [],
       "commit": {
         "hash": "21ddede356590745546962fedebbead23b2edae2",
         "message": "📝 T-041 document framework guideline"
-      }
+      },
+      "comments": [],
+      "description": "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework."
     },
     {
       "id": "T-042",
       "title": "Expand framework guideline",
-      "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -818,16 +817,16 @@
         "guideline",
         "workflow"
       ],
-      "comments": [],
       "commit": {
         "hash": "18a62ee44d660dd7d7e8590329edb92194e4eba6",
         "message": "📝 T-042 expand framework guideline"
-      }
+      },
+      "comments": [],
+      "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear."
     },
     {
       "id": "T-043",
       "title": "Update .gitignore to include .env files",
-      "description": "Ignore `.env*` so sensitive environment overrides stay out of the repo.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -835,21 +834,21 @@
         "git",
         "workflow"
       ],
+      "commit": {
+        "hash": "a63694f182aff97ce18b5b9458bf54982e787120",
+        "message": "🛠️ T-043 update .gitignore to include .env files"
+      },
       "comments": [
         {
           "author": "docs",
           "body": ".gitignore now ignores `.env` variants following the cleanup."
         }
       ],
-      "commit": {
-        "hash": "a63694f182aff97ce18b5b9458bf54982e787120",
-        "message": "🛠️ T-043 update .gitignore to include .env files"
-      }
+      "description": "Ignore `.env*` so sensitive environment overrides stay out of the repo."
     },
     {
       "id": "T-044",
       "title": "Add sync_tasks.py script to synchronize tasks.json with GitHub Issues",
-      "description": "Ensure the local tasks.json reflects the completed synchronization script and the GitHub Issues mirror.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -857,21 +856,21 @@
         "automation",
         "sync"
       ],
+      "commit": {
+        "hash": "5e3b74a497ada1b723813b416747ccc47ca6ddbc",
+        "message": "✨ T-044 add sync_tasks.py script to synchronize tasks.json with GitHub Issues"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Recorded completion of sync_tasks.py so tasks.json stays aligned with GitHub Issues."
         }
       ],
-      "commit": {
-        "hash": "5e3b74a497ada1b723813b416747ccc47ca6ddbc",
-        "message": "✨ T-044 add sync_tasks.py script to synchronize tasks.json with GitHub Issues"
-      }
+      "description": "Ensure the local tasks.json reflects the completed synchronization script and the GitHub Issues mirror."
     },
     {
       "id": "T-045",
       "title": "Add GitHub Actions workflow to sync tasks.json with GitHub Issues",
-      "description": "Document the new `.github/workflows/sync-tasks.yml` workflow that keeps tasks.json and GitHub Issues synchronized.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -879,21 +878,21 @@
         "automation",
         "workflow"
       ],
+      "commit": {
+        "hash": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
+        "message": "✨ T-045 add GitHub Actions workflow to sync tasks.json with GitHub Issues"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Workflow file exists and ensures tasks.json is kept in sync via GitHub Actions."
         }
       ],
-      "commit": {
-        "hash": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
-        "message": "✨ T-045 add GitHub Actions workflow to sync tasks.json with GitHub Issues"
-      }
+      "description": "Document the new `.github/workflows/sync-tasks.yml` workflow that keeps tasks.json and GitHub Issues synchronized."
     },
     {
       "id": "T-046",
       "title": "Enhance sync_tasks.py to integrate ProjectV2 status updates and project number",
-      "description": "The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -902,21 +901,21 @@
         "project",
         "sync"
       ],
+      "commit": {
+        "hash": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
+        "message": "✨ T-046 enhance sync_tasks.py to integrate ProjectV2 status updates and update workflow with project number"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "ProjectV2 integration is wired up, and the workflow now provides the project number."
         }
       ],
-      "commit": {
-        "hash": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
-        "message": "✨ T-046 enhance sync_tasks.py to integrate ProjectV2 status updates and update workflow with project number"
-      }
+      "description": "The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion."
     },
     {
       "id": "T-047",
       "title": "Create Code of Conduct",
-      "description": "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -924,21 +923,21 @@
         "docs",
         "policy"
       ],
+      "commit": {
+        "hash": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
+        "message": "📌 T-047 start Code of Conduct task"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Added CODE_OF_CONDUCT.md covering standards, unacceptable behaviors, and reporting guidance."
         }
       ],
-      "commit": {
-        "hash": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
-        "message": "📌 T-047 start Code of Conduct task"
-      }
+      "description": "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles."
     },
     {
       "id": "T-048",
       "title": "Remove markdown task board references",
-      "description": "Remove references to the markdown task board and stop generating it; tasks.json remains the single source of truth.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -947,21 +946,21 @@
         "workflow",
         "tasks"
       ],
+      "commit": {
+        "hash": "759a800bde828ebb252bac2bb8f24fb7531989de",
+        "message": "🧹 T-048 remove markdown task board"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Removed the markdown task board and updated docs/scripts; verified the repo contains no remaining references to it."
         }
       ],
-      "commit": {
-        "hash": "759a800bde828ebb252bac2bb8f24fb7531989de",
-        "message": "🧹 T-048 remove markdown task board"
-      }
+      "description": "Remove references to the markdown task board and stop generating it; tasks.json remains the single source of truth."
     },
     {
       "id": "T-049",
       "title": "Add tasks.html UI for browsing tasks.json",
-      "description": "Add a standalone HTML interface to view and filter tasks.json (search, status/owner/priority/tag filters, sorting, and file:// fallback via file picker).",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -970,21 +969,21 @@
         "tasks",
         "workflow"
       ],
+      "commit": {
+        "hash": "5cc30b601bb86f224a984851dae8137374db7ded",
+        "message": "✨ T-049 add tasks.html tasks viewer"
+      },
       "comments": [
         {
           "author": "docs",
           "body": "Added tasks.html as a local-first viewer for tasks.json (auto-load over HTTP, plus file picker/drag-drop when opened via file://)."
         }
       ],
-      "commit": {
-        "hash": "5cc30b601bb86f224a984851dae8137374db7ded",
-        "message": "✨ T-049 add tasks.html tasks viewer"
-      }
+      "description": "Add a standalone HTML interface to view and filter tasks.json (search, status/owner/priority/tag filters, sorting, and file:// fallback via file picker)."
     },
     {
       "id": "T-050",
       "title": "Adopt agentctl-based agent workflow",
-      "description": "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata).",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -996,6 +995,10 @@
       "verify": [
         "python scripts/agentctl.py agents"
       ],
+      "commit": {
+        "hash": "8f6ecd8bd1a461e52243f90732530069652a45c1",
+        "message": "🛠️ T-050 Adopt agentctl workflow"
+      },
       "comments": [
         {
           "author": "PLANNER",
@@ -1010,15 +1013,11 @@
           "body": "Verified: agentctl task lint passes; AGENTS.md/.AGENTS now require agentctl for task ops; scripts/agentctl.py is tracked; Limitations: existing CODEX owner warnings remain."
         }
       ],
-      "commit": {
-        "hash": "8f6ecd8bd1a461e52243f90732530069652a45c1",
-        "message": "🛠️ T-050 Adopt agentctl workflow"
-      }
+      "description": "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata)."
     },
     {
       "id": "T-051",
       "title": "Remove legacy tasks.py + migrate docs to agentctl",
-      "description": "Delete scripts/tasks.py and update README.md + any other docs/configs that mention the old tasks.py/status-board flow, replacing it with the agentctl CLI workflow (ready/start/block/task/verify/guard/finish).",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
@@ -1031,6 +1030,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
+      "commit": {
+        "hash": "d6517d61191b4d80e80acc63117b6e55ba02c557",
+        "message": "🧹 T-051 Remove tasks.py; migrate docs to agentctl"
+      },
       "comments": [
         {
           "author": "PLANNER",
@@ -1045,15 +1048,11 @@
           "body": "Verified: scripts/tasks.py removed; README.md and GUIDELINE.md updated to agentctl-based task lifecycle (ready/start/block/task/verify/guard/finish); agentctl task lint passes; Limitations: existing CODEX owner warnings remain."
         }
       ],
-      "commit": {
-        "hash": "d6517d61191b4d80e80acc63117b6e55ba02c557",
-        "message": "🧹 T-051 Remove tasks.py; migrate docs to agentctl"
-      }
+      "description": "Delete scripts/tasks.py and update README.md + any other docs/configs that mention the old tasks.py/status-board flow, replacing it with the agentctl CLI workflow (ready/start/block/task/verify/guard/finish)."
     },
     {
       "id": "T-052",
       "title": "Add TESTER agent + enforce post-CODER testing",
-      "description": "Add a new TESTER specialist agent responsible for adding automated test coverage for code changes. Wire the workflow so development-oriented plans always schedule TESTER after CODER before REVIEWER, and update CODER instructions to explicitly hand off to TESTER after implementation/self-check.\\n\\nAcceptance criteria:\\n- New @.AGENTS/TESTER.json exists (id=TESTER) with clear inputs/outputs/permissions/workflow for adding/maintaining tests.\\n- @.AGENTS/CODER.json explicitly hands off to TESTER for test coverage after implementation and local checks.\\n- @AGENTS.md updates ORCHESTRATOR rules so dev tasks plan CODER -> TESTER -> REVIEWER by default (unless justified).\\n- @README.md reflects the new agent in the lineup and repository layout.\\n\\nNotes:\\n- Prefer existing test framework; if none, propose a dedicated task to introduce test infrastructure rather than inventing one ad-hoc.",
       "status": "DONE",
       "priority": "med",
       "owner": "CREATOR",
@@ -1065,6 +1064,10 @@
         "python scripts/agentctl.py agents",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "cc0a0a73dd2d3864f6d2cb9619d8837465046887",
+        "message": "🧪 T-052 Add TESTER agent and enforce post-CODER tests"
+      },
       "comments": [
         {
           "author": "CREATOR",
@@ -1075,15 +1078,11 @@
           "body": "Verified: agent registry lists TESTER, JSON prompts validate, and tasks.json lints clean (workflow now defaults to CODER -> TESTER -> REVIEWER for dev work)."
         }
       ],
-      "commit": {
-        "hash": "cc0a0a73dd2d3864f6d2cb9619d8837465046887",
-        "message": "🧪 T-052 Add TESTER agent and enforce post-CODER tests"
-      }
+      "description": "Add a new TESTER specialist agent responsible for adding automated test coverage for code changes. Wire the workflow so development-oriented plans always schedule TESTER after CODER before REVIEWER, and update CODER instructions to explicitly hand off to TESTER after implementation/self-check.\\\\n\\\\nAcceptance criteria:\\\\n- New @.AGENTS/TESTER.json exists (id=TESTER) with clear inputs/outputs/permissions/workflow for adding/maintaining tests.\\\\n- @.AGENTS/CODER.json explicitly hands off to TESTER for test coverage after implementation and local checks.\\\\n- @AGENTS.md updates ORCHESTRATOR rules so dev tasks plan CODER -> TESTER -> REVIEWER by default (unless justified).\\\\n- @README.md reflects the new agent in the lineup and repository layout.\\\\n\\\\nNotes:\\\\n- Prefer existing test framework; if none, propose a dedicated task to introduce test infrastructure rather than inventing one ad-hoc."
     },
     {
       "id": "T-053",
       "title": "Require DOCS workflow artifact before finishing tasks",
-      "description": "Change DOCS agent behavior so it runs before finishing any task and produces an atomic documentation artifact under @docs/workflow (e.g., @docs/workflow/T-025.md) describing what was implemented. Update orchestration guidance so plans include DOCS before REVIEWER marks tasks DONE.\\n\\nAcceptance criteria:\\n- @docs/workflow directory exists and is committed (with a short README describing artifact convention).\\n- @.AGENTS/DOCS.json instructs producing @docs/workflow/T-###.md artifacts (English, atomic, task-scoped).\\n- @AGENTS.md ORCHESTRATOR guidance schedules DOCS before finishing any task (DOCS before REVIEWER finish).\\n\\nNotes:\\n- Artifacts must be task-ID named, contain summary + changed files + verification commands (when available).",
       "status": "DONE",
       "priority": "med",
       "owner": "CREATOR",
@@ -1096,6 +1095,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
+      "commit": {
+        "hash": "3fb0eb1971185bbd96efed13e037218cde291800",
+        "message": "🧾 T-053 Add workflow artifacts to DOCS"
+      },
       "comments": [
         {
           "author": "CREATOR",
@@ -1106,15 +1109,11 @@
           "body": "Verified: DOCS now produces task-scoped workflow artifacts under docs/workflow/T-###.md before tasks are marked DONE, docs/workflow is present, and ORCHESTRATOR guidance schedules DOCS before finishing."
         }
       ],
-      "commit": {
-        "hash": "3fb0eb1971185bbd96efed13e037218cde291800",
-        "message": "🧾 T-053 Add workflow artifacts to DOCS"
-      }
+      "description": "Change DOCS agent behavior so it runs before finishing any task and produces an atomic documentation artifact under @docs/workflow (e.g., @docs/workflow/T-025.md) describing what was implemented. Update orchestration guidance so plans include DOCS before REVIEWER marks tasks DONE.\\\\n\\\\nAcceptance criteria:\\\\n- @docs/workflow directory exists and is committed (with a short README describing artifact convention).\\\\n- @.AGENTS/DOCS.json instructs producing @docs/workflow/T-###.md artifacts (English, atomic, task-scoped).\\\\n- @AGENTS.md ORCHESTRATOR guidance schedules DOCS before finishing any task (DOCS before REVIEWER finish).\\\\n\\\\nNotes:\\\\n- Artifacts must be task-ID named, contain summary + changed files + verification commands (when available)."
     },
     {
       "id": "T-054",
       "title": "Extend clean.sh to remove framework dev files",
-      "description": "Update @clean.sh so cleanup removes framework-development artifacts (including @docs/) when preparing a reusable snapshot.\\n\\nAcceptance criteria:\\n- Running clean.sh removes @docs/ and other framework-specific files/directories it currently leaves behind.\\n- Script remains idempotent and safe (no unscoped rm outside repo root).",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -1126,6 +1125,10 @@
         "bash -n clean.sh",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "b1ff627216f332cc34652d0a2968c78e89c68d2d",
+        "message": "🧹 T-054 Clean docs and framework artifacts"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1136,15 +1139,11 @@
           "body": "Verified: clean.sh now removes docs/ and other framework-development artifacts (tasks.html, .DS_Store) during cleanup; script syntax checks pass and tasks.json lints clean."
         }
       ],
-      "commit": {
-        "hash": "b1ff627216f332cc34652d0a2968c78e89c68d2d",
-        "message": "🧹 T-054 Clean docs and framework artifacts"
-      }
+      "description": "Update @clean.sh so cleanup removes framework-development artifacts (including @docs/) when preparing a reusable snapshot.\\\\n\\\\nAcceptance criteria:\\\\n- Running clean.sh removes @docs/ and other framework-specific files/directories it currently leaves behind.\\\\n- Script remains idempotent and safe (no unscoped rm outside repo root)."
     },
     {
       "id": "T-055",
       "title": "Reduce per-task commits to 3-phase workflow",
-      "description": "Update agent workflows so they avoid extra commits beyond what is necessary. Target a default 3-commit cadence per task:\\n1) Planning: add the task + create initial workflow artifact @docs/workflow/T-###.md (skeleton/spec).\\n2) Implementation: implement the change set (preferably including tests) in a single work commit.\\n3) Verification/closure: run tests + review, update the workflow artifact with what was implemented, and mark the task DONE (tasks.json) in one final commit.\\n\\nAcceptance criteria:\\n- @AGENTS.md COMMIT_WORKFLOW reflects the 3-commit default and explicitly discourages extra 'start/status' commits.\\n- Agent prompts (.AGENTS/*.json) align: TESTER does not commit by default; DOCS artifacts are committed as part of planning/closure; REVIEWER closes tasks with a single final commit; CODER bundles implementation+tests into one work commit where practical.\\n- Existing guardrails (agentctl) remain usable (finish may reference the implementation commit hash).",
       "status": "DONE",
       "priority": "med",
       "owner": "CREATOR",
@@ -1157,6 +1156,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
+      "commit": {
+        "hash": "20b580ff017d997987112ec3bd46597cd7efe8db",
+        "message": "🧭 T-055 Reduce commits with 3-phase workflow"
+      },
       "comments": [
         {
           "author": "CREATOR",
@@ -1167,15 +1170,11 @@
           "body": "Verified: agent workflows now target a minimal 3-phase commit cadence (plan+artifact, implementation, verification/closure) and avoid extra status-only commits; agent registry and tasks lint pass."
         }
       ],
-      "commit": {
-        "hash": "20b580ff017d997987112ec3bd46597cd7efe8db",
-        "message": "🧭 T-055 Reduce commits with 3-phase workflow"
-      }
+      "description": "Update agent workflows so they avoid extra commits beyond what is necessary. Target a default 3-commit cadence per task:\\\\n1) Planning: add the task + create initial workflow artifact @docs/workflow/T-###.md (skeleton/spec).\\\\n2) Implementation: implement the change set (preferably including tests) in a single work commit.\\\\n3) Verification/closure: run tests + review, update the workflow artifact with what was implemented, and mark the task DONE (tasks.json) in one final commit.\\\\n\\\\nAcceptance criteria:\\\\n- @AGENTS.md COMMIT_WORKFLOW reflects the 3-commit default and explicitly discourages extra 'start/status' commits.\\\\n- Agent prompts (.AGENTS/*.json) align: TESTER does not commit by default; DOCS artifacts are committed as part of planning/closure; REVIEWER closes tasks with a single final commit; CODER bundles implementation+tests into one work commit where practical.\\\\n- Existing guardrails (agentctl) remain usable (finish may reference the implementation commit hash)."
     },
     {
       "id": "T-056",
       "title": "Add Mermaid agent workflow diagram to README",
-      "description": "Update @README.md to include a short description and a Mermaid diagram (flowchart) showing the default agent workflow and handoffs (ORCHESTRATOR, PLANNER, CODER, TESTER, DOCS, REVIEWER).\\n\\nAcceptance criteria:\\n- README includes a Mermaid flowchart block describing the typical flow (plan -> implement -> test -> docs -> review -> finish).\\n- Diagram matches current agent rules (3-phase commits, DOCS artifact before DONE, CODER -> TESTER for dev work).",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -1197,12 +1196,12 @@
           "author": "REVIEWER",
           "body": "Verified: README now includes a Mermaid flowchart of the default agent workflow, reflecting current handoffs (CODER->TESTER, DOCS before finish) and the 3-phase commit cadence; agent registry and tasks lint pass."
         }
-      ]
+      ],
+      "description": "Update @README.md to include a short description and a Mermaid diagram (flowchart) showing the default agent workflow and handoffs (ORCHESTRATOR, PLANNER, CODER, TESTER, DOCS, REVIEWER).\\\\n\\\\nAcceptance criteria:\\\\n- README includes a Mermaid flowchart block describing the typical flow (plan -> implement -> test -> docs -> review -> finish).\\\\n- Diagram matches current agent rules (3-phase commits, DOCS artifact before DONE, CODER -> TESTER for dev work)."
     },
     {
       "id": "T-057",
       "title": "Fix Mermaid workflow diagram for GitHub rendering",
-      "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\n\\nAcceptance criteria:\\n- Mermaid block renders on GitHub README view.\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits).",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -1224,12 +1223,12 @@
           "author": "REVIEWER",
           "body": "Verified: Mermaid flowchart + sequence diagram use GitHub-safe labels (no ###), diagram still reflects CODER->TESTER and DOCS pre-finish, and lint/agents checks pass."
         }
-      ]
+      ],
+      "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\\\n\\\\nAcceptance criteria:\\\\n- Mermaid block renders on GitHub README view.\\\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits)."
     },
     {
       "id": "T-058",
       "title": "Agentctl quickstart + docs pointer",
-      "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -1254,12 +1253,12 @@
           "author": "REVIEWER",
           "body": "Verified: Ran python scripts/agentctl.py task lint; checked python scripts/agentctl.py quickstart output; checked python scripts/agentctl.py --help; confirmed clean.sh preserves docs/agentctl.md while removing other docs."
         }
-      ]
+      ],
+      "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster."
     },
     {
       "id": "T-059",
       "title": "Add agentctl git/task ergonomics",
-      "description": "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit).",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -1280,12 +1279,12 @@
           "author": "REVIEWER",
           "body": "Verified: Ran python scripts/agentctl.py task lint and python scripts/agentctl.py guard --help; spot-checked python scripts/agentctl.py task next and python scripts/agentctl.py task search agentctl."
         }
-      ]
+      ],
+      "description": "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit)."
     },
     {
       "id": "T-060",
       "title": "Update agents to use agentctl docs + helpers",
-      "description": "Update .AGENTS/*.json workflows to explicitly reference docs/agentctl.md (via # agentctl quickstart\n\n`python scripts/agentctl.py` is the only supported way to inspect/update `tasks.json` (manual edits break the checksum).\n\n## Common commands\n\n```bash\n# list/show\npython scripts/agentctl.py task list\npython scripts/agentctl.py task show T-123\n\n# validate tasks.json (schema/deps/checksum)\npython scripts/agentctl.py task lint\n\n# readiness gate (deps DONE)\npython scripts/agentctl.py ready T-123\n\n# status transitions that require structured comments\npython scripts/agentctl.py start T-123 --author CODER --body \"Start: ... (why, scope, plan, risks)\"\npython scripts/agentctl.py block T-123 --author CODER --body \"Blocked: ... (what blocks, next step, owner)\"\n\n# run per-task verify commands (declared on the task)\npython scripts/agentctl.py verify T-123\n\n# before committing, validate staged allowlist + message quality\npython scripts/agentctl.py guard commit T-123 -m \"✨ T-123 Short meaningful summary\" --allow <path-prefix>\n\n# if you want a safe wrapper that also runs `git commit`\npython scripts/agentctl.py commit T-123 -m \"✨ T-123 Short meaningful summary\" --allow <path-prefix>\n\n# when closing a task: mark DONE + attach commit metadata (typically after implementation commit)\npython scripts/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body \"Verified: ... (what ran, results, caveats)\"\n```\n\n## Ergonomics helpers\n\n```bash\n# find tasks that are ready to start (deps DONE)\npython scripts/agentctl.py task next\n\n# search tasks by text (title/description/tags/comments)\npython scripts/agentctl.py task search agentctl\n\n# scaffold a workflow artifact (docs/workflow/T-###.md)\npython scripts/agentctl.py task scaffold T-123\n\n# suggest minimal --allow prefixes based on staged files\npython scripts/agentctl.py guard suggest-allow\npython scripts/agentctl.py guard suggest-allow --format args\n```\n\n## Workflow reminders\n\n- `tasks.json` is canonical; do not edit it by hand.\n- Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).\n- Prefer `start/block/finish` over `task set-status`.\n- Keep allowlists tight: pass only the path prefixes you intend to commit.) and prefer the new helper commands (task next/search/scaffold, guard suggest-allow, commit wrapper) where applicable.",
       "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
@@ -1306,12 +1305,12 @@
           "author": "REVIEWER",
           "body": "Verified: Ran python scripts/agentctl.py task lint and python scripts/agentctl.py agents; confirmed .AGENTS workflows now start with python scripts/agentctl.py quickstart and reference docs/agentctl.md and helper commands."
         }
-      ]
+      ],
+      "description": "Update .AGENTS/*.json workflows to explicitly reference docs/agentctl.md (via # agentctl quickstart\\n\\n`python scripts/agentctl.py` is the only supported way to inspect/update `tasks.json` (manual edits break the checksum).\\n\\n## Common commands\\n\\n```bash\\n# list/show\\npython scripts/agentctl.py task list\\npython scripts/agentctl.py task show T-123\\n\\n# validate tasks.json (schema/deps/checksum)\\npython scripts/agentctl.py task lint\\n\\n# readiness gate (deps DONE)\\npython scripts/agentctl.py ready T-123\\n\\n# status transitions that require structured comments\\npython scripts/agentctl.py start T-123 --author CODER --body \\\"Start: ... (why, scope, plan, risks)\\\"\\npython scripts/agentctl.py block T-123 --author CODER --body \\\"Blocked: ... (what blocks, next step, owner)\\\"\\n\\n# run per-task verify commands (declared on the task)\\npython scripts/agentctl.py verify T-123\\n\\n# before committing, validate staged allowlist + message quality\\npython scripts/agentctl.py guard commit T-123 -m \\\"✨ T-123 Short meaningful summary\\\" --allow <path-prefix>\\n\\n# if you want a safe wrapper that also runs `git commit`\\npython scripts/agentctl.py commit T-123 -m \\\"✨ T-123 Short meaningful summary\\\" --allow <path-prefix>\\n\\n# when closing a task: mark DONE + attach commit metadata (typically after implementation commit)\\npython scripts/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body \\\"Verified: ... (what ran, results, caveats)\\\"\\n```\\n\\n## Ergonomics helpers\\n\\n```bash\\n# find tasks that are ready to start (deps DONE)\\npython scripts/agentctl.py task next\\n\\n# search tasks by text (title/description/tags/comments)\\npython scripts/agentctl.py task search agentctl\\n\\n# scaffold a workflow artifact (docs/workflow/T-###.md)\\npython scripts/agentctl.py task scaffold T-123\\n\\n# suggest minimal --allow prefixes based on staged files\\npython scripts/agentctl.py guard suggest-allow\\npython scripts/agentctl.py guard suggest-allow --format args\\n```\\n\\n## Workflow reminders\\n\\n- `tasks.json` is canonical; do not edit it by hand.\\n- Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).\\n- Prefer `start/block/finish` over `task set-status`.\\n- Keep allowlists tight: pass only the path prefixes you intend to commit.) and prefer the new helper commands (task next/search/scaffold, guard suggest-allow, commit wrapper) where applicable."
     },
     {
       "id": "T-061",
       "title": "Require user approval before final task-closing commit",
-      "description": "Update agent workflows so that before creating the final closure commit for a task (the commit that marks the task DONE in tasks.json, typically together with docs/workflow/T-###.md updates), the agent must explicitly request user confirmation and wait for approval.\\n\\nAcceptance criteria:\\n- AGENTS.md COMMIT_WORKFLOW states that the final closure commit requires explicit user approval.\\n- ORCHESTRATOR guidance includes a pause/confirmation request before the closing commit.\\n- REVIEWER workflow requires asking the user before running agentctl finish + committing tasks.json (and any workflow artifact updates).",
       "status": "DONE",
       "priority": "med",
       "owner": "REVIEWER",
@@ -1333,12 +1332,12 @@
           "author": "REVIEWER",
           "body": "Verified: AGENTS.md and REVIEWER workflow now require explicit user approval before the final task-closing commit; task lint and agents registry checks pass."
         }
-      ]
+      ],
+      "description": "Update agent workflows so that before creating the final closure commit for a task (the commit that marks the task DONE in tasks.json, typically together with docs/workflow/T-###.md updates), the agent must explicitly request user confirmation and wait for approval.\\\\n\\\\nAcceptance criteria:\\\\n- AGENTS.md COMMIT_WORKFLOW states that the final closure commit requires explicit user approval.\\\\n- ORCHESTRATOR guidance includes a pause/confirmation request before the closing commit.\\\\n- REVIEWER workflow requires asking the user before running agentctl finish + committing tasks.json (and any workflow artifact updates)."
     },
     {
       "id": "T-062",
       "title": "Refresh project documentation + cleanup",
-      "description": "Update the repo documentation to match the current codebase and workflow (agentctl-driven tasks, JSON agent registry, commit/verification cadence).\\n\\nScope:\\n- Refresh @README.md, @GUIDELINE.md, @CONTRIBUTING.md, @CODE_OF_CONDUCT.md to reflect current scripts and file layout.\\n- Restructure docs where helpful (move deep/auxiliary content into @docs/ and keep root docs as entrypoints with links).\\n- Update @clean.sh so it removes framework-development artifacts, leaving only what is necessary to *use* the framework (e.g., @AGENTS.md, @.AGENTS/, @scripts/, @.gitignore, and optionally @docs/agentctl.md).\\n\\nAcceptance criteria:\\n- Root docs are accurate and non-duplicative; links resolve.\\n- clean.sh is repo-root scoped, idempotent, and leaves only the minimal runtime files listed above.\\n- Verification commands pass.",
       "status": "DONE",
       "priority": "high",
       "owner": "DOCS",
@@ -1351,6 +1350,10 @@
         "bash -n clean.sh",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "c4d8084771dabcdb57353f5e7792322010f648ed",
+        "message": "📝 T-062 Refresh docs and cleanup"
+      },
       "comments": [
         {
           "author": "PLANNER",
@@ -1361,15 +1364,11 @@
           "body": "Verified: Ran bash -n clean.sh and python scripts/agentctl.py task lint; docs refreshed and docs/architecture.md added; clean.sh now removes dev artifacts, preserves docs/agentctl.md when present, and recreates checksum-valid tasks.json."
         }
       ],
-      "commit": {
-        "hash": "c4d8084771dabcdb57353f5e7792322010f648ed",
-        "message": "📝 T-062 Refresh docs and cleanup"
-      }
+      "description": "Update the repo documentation to match the current codebase and workflow (agentctl-driven tasks, JSON agent registry, commit/verification cadence).\\\\n\\\\nScope:\\\\n- Refresh @README.md, @GUIDELINE.md, @CONTRIBUTING.md, @CODE_OF_CONDUCT.md to reflect current scripts and file layout.\\\\n- Restructure docs where helpful (move deep/auxiliary content into @docs/ and keep root docs as entrypoints with links).\\\\n- Update @clean.sh so it removes framework-development artifacts, leaving only what is necessary to *use* the framework (e.g., @AGENTS.md, @.AGENTS/, @scripts/, @.gitignore, and optionally @docs/agentctl.md).\\\\n\\\\nAcceptance criteria:\\\\n- Root docs are accurate and non-duplicative; links resolve.\\\\n- clean.sh is repo-root scoped, idempotent, and leaves only the minimal runtime files listed above.\\\\n- Verification commands pass."
     },
     {
       "id": "T-063",
       "title": "Redesign tasks.html (Codex Swarm) + dependency visualization",
-      "description": "Refresh @tasks.html to be simpler/lighter and clearly show task dependencies.\n\nScope:\n- Update UI styling to a minimal, airy Codex Swarm-branded layout.\n- Add a dependency inspector that makes it easy to see \"depends_on\" and reverse dependencies (tasks that depend on the selected task).\n- Include a small visual graph (SVG) for the selected task to make upstream/downstream relationships obvious.\n\nAcceptance criteria:\n- @tasks.html header is branded as Codex Swarm.\n- Dependencies are visible both as lists and as a small graph for the selected task.\n- Clicking a dependency navigates/updates the selection.\n- No server required: keep file picker + drag/drop fallback for file://.\n",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -1390,12 +1389,12 @@
           "author": "REVIEWER",
           "body": "Verified: python scripts/agentctl.py task lint; manual check of tasks.html dependency inspector (lists + SVG graph + navigation)"
         }
-      ]
+      ],
+      "description": "Refresh @tasks.html to be simpler/lighter and clearly show task dependencies.\\n\\nScope:\\n- Update UI styling to a minimal, airy Codex Swarm-branded layout.\\n- Add a dependency inspector that makes it easy to see \\\"depends_on\\\" and reverse dependencies (tasks that depend on the selected task).\\n- Include a small visual graph (SVG) for the selected task to make upstream/downstream relationships obvious.\\n\\nAcceptance criteria:\\n- @tasks.html header is branded as Codex Swarm.\\n- Dependencies are visible both as lists and as a small graph for the selected task.\\n- Clicking a dependency navigates/updates the selection.\\n- No server required: keep file picker + drag/drop fallback for file://.\\n"
     },
     {
       "id": "T-064",
       "title": "Restructure framework folders into .codex-swarm",
-      "description": "Move all framework-specific artifacts under .codex-swarm (agents + agentctl docs + config), update references/docs, and update clean.sh accordingly.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -1418,12 +1417,12 @@
           "author": "REVIEWER",
           "body": "Verified: Ran python scripts/agentctl.py verify T-064 (task lint, agents, quickstart, bash -n clean.sh); framework paths now live under .codex-swarm."
         }
-      ]
+      ],
+      "description": "Move all framework-specific artifacts under .codex-swarm (agents + agentctl docs + config), update references/docs, and update clean.sh accordingly."
     },
     {
       "id": "T-065",
       "title": "Move architecture.md content into README",
-      "description": "Move the full contents of docs/architecture.md into README.md for easier discovery; leave docs/architecture.md as a thin pointer to avoid duplication.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
@@ -1443,12 +1442,12 @@
           "author": "REVIEWER",
           "body": "Verified: Ran python scripts/agentctl.py verify T-065 (task lint) and reviewed README/architecture pointer consistency."
         }
-      ]
+      ],
+      "description": "Move the full contents of docs/architecture.md into README.md for easier discovery; leave docs/architecture.md as a thin pointer to avoid duplication."
     },
     {
       "id": "T-066",
       "title": "Branch workflow: task branches + worktrees + local PR artifacts",
-      "description": "Introduce a branching workflow to enable parallel agent work without tasks.json conflicts: task branch per T-###, required git worktree under .codex-swarm/worktrees, PR-like artifacts under docs/workflow/prs, and an INTEGRATOR role responsible for merge + finish on main.",
       "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
@@ -1470,12 +1469,12 @@
           "author": "INTEGRATOR",
           "body": "Verified: Ran python scripts/agentctl.py task lint; python -m compileall scripts/agentctl.py; checked agentctl branch/pr/integrate help output."
         }
-      ]
+      ],
+      "description": "Introduce a branching workflow to enable parallel agent work without tasks.json conflicts: task branch per T-###, required git worktree under .codex-swarm/worktrees, PR-like artifacts under docs/workflow/prs, and an INTEGRATOR role responsible for merge + finish on main."
     },
     {
       "id": "T-067",
       "title": "Align agentctl with branch_pr spec (worktrees, PR checks, integrate)",
-      "description": "Implement the stricter branch_pr workflow spec: worktrees under .codex-swarm/worktrees, branch naming task/T-###/<slug>, new branch status, stricter pr open/update/check, integrate dry-run + verify in branch worktree, workflow_mode config in .codex-swarm/swarm.config.json, and stronger finish/guard/verify guardrails + standardized outputs.",
       "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
@@ -1501,12 +1500,12 @@
           "author": "INTEGRATOR",
           "body": "Verified: merged commit 91b3760 on main; pr check and verify T-067 passed; handoff notes captured from PR review."
         }
-      ]
+      ],
+      "description": "Implement the stricter branch_pr workflow spec: worktrees under .codex-swarm/worktrees, branch naming task/T-###/<slug>, new branch status, stricter pr open/update/check, integrate dry-run + verify in branch worktree, workflow_mode config in .codex-swarm/swarm.config.json, and stronger finish/guard/verify guardrails + standardized outputs."
     },
     {
       "id": "T-068",
       "title": "agentctl verify: log output + skip if unchanged",
-      "description": "Add flags to python scripts/agentctl.py verify to reduce manual PR bookkeeping and redundant runs. Acceptance: (1) verify T-### --log PATH appends a timestamped entry per verify command with combined stdout+stderr; (2) --skip-if-unchanged skips when current SHA (prefer PR meta.json head_sha when log path is under docs/workflow/prs/T-###, else git rev-parse HEAD in --cwd) matches last recorded verified SHA; (3) after success, record last_verified_sha and last_verified_at in PR meta.json when available; (4) document the new flow in .codex-swarm/agentctl.md.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
@@ -1519,6 +1518,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "324e74e5f3bcb4ad1bb239eb1e02bac645553721",
+        "message": "🧾 T-068 update PR verify artifacts"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1529,30 +1532,30 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-068."
         }
       ],
-      "commit": {
-        "hash": "324e74e5f3bcb4ad1bb239eb1e02bac645553721",
-        "message": "🧾 T-068 update PR verify artifacts"
-      }
+      "description": "Add flags to python scripts/agentctl.py verify to reduce manual PR bookkeeping and redundant runs. Acceptance: (1) verify T-### --log PATH appends a timestamped entry per verify command with combined stdout+stderr; (2) --skip-if-unchanged skips when current SHA (prefer PR meta.json head_sha when log path is under docs/workflow/prs/T-###, else git rev-parse HEAD in --cwd) matches last recorded verified SHA; (3) after success, record last_verified_sha and last_verified_at in PR meta.json when available; (4) document the new flow in .codex-swarm/agentctl.md."
     },
     {
       "id": "T-069",
       "title": "agentctl pr note: append handoff notes",
-      "description": "Add a convenience command to append correctly formatted bullets under the '## Handoff Notes' section in docs/workflow/prs/T-###/review.md. Acceptance: (1) python scripts/agentctl.py pr note T-### --author ROLE --body TEXT adds a '- ROLE: TEXT' entry under Handoff Notes; (2) preserves existing content and keeps formatting stable; (3) emits clear errors/fixes when the PR artifact is missing; (4) update .codex-swarm/agentctl.md with the new command.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
+      "depends_on": [
+        "T-068"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "pipeline"
       ],
-      "depends_on": [
-        "T-068"
-      ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "771cdf260f496ee5fb1a2e2e4f291141c455785f",
+        "message": "✨ T-069 pr note helper"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1567,30 +1570,30 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-069."
         }
       ],
-      "commit": {
-        "hash": "771cdf260f496ee5fb1a2e2e4f291141c455785f",
-        "message": "✨ T-069 pr note helper"
-      }
+      "description": "Add a convenience command to append correctly formatted bullets under the '## Handoff Notes' section in docs/workflow/prs/T-###/review.md. Acceptance: (1) python scripts/agentctl.py pr note T-### --author ROLE --body TEXT adds a '- ROLE: TEXT' entry under Handoff Notes; (2) preserves existing content and keeps formatting stable; (3) emits clear errors/fixes when the PR artifact is missing; (4) update .codex-swarm/agentctl.md with the new command."
     },
     {
       "id": "T-070",
       "title": "agentctl guard commit: add --auto-allow",
-      "description": "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
+      "depends_on": [
+        "T-068"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "pipeline"
       ],
-      "depends_on": [
-        "T-068"
-      ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "26eabcc06d63db1b67637df7bc84b849c27e789e",
+        "message": "✨ T-070 guard commit auto-allow"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1601,15 +1604,11 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-070."
         }
       ],
-      "commit": {
-        "hash": "26eabcc06d63db1b67637df7bc84b849c27e789e",
-        "message": "✨ T-070 guard commit auto-allow"
-      }
+      "description": "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md."
     },
     {
       "id": "T-071",
       "title": "Require explicit depends_on on task add",
-      "description": "Update the agent pipeline instructions so every task added to tasks.json includes an explicit depends_on list (use [] when there are no dependencies). Update AGENTS.md schema/docs and PLANNER workflow to require setting dependencies (and to ask for clarification when dependencies are unknown).",
       "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
@@ -1631,22 +1630,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-071."
         }
-      ]
+      ],
+      "description": "Update the agent pipeline instructions so every task added to tasks.json includes an explicit depends_on list (use [] when there are no dependencies). Update AGENTS.md schema/docs and PLANNER workflow to require setting dependencies (and to ask for clarification when dependencies are unknown)."
     },
     {
       "id": "T-072",
       "title": "agentctl task add: default depends_on to []",
-      "description": "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated).",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
+      "depends_on": [
+        "T-071"
+      ],
       "tags": [
         "agentctl",
         "tasks",
         "dependencies"
-      ],
-      "depends_on": [
-        "T-071"
       ],
       "verify": [
         "python scripts/agentctl.py task lint",
@@ -1661,25 +1660,29 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-072."
         }
-      ]
+      ],
+      "description": "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated)."
     },
     {
       "id": "T-073",
       "title": "Reduce integrate noise: auto-sync PR meta head_sha",
-      "description": "Speed up the pipeline by removing the common integrate warning about stale PR meta head_sha. Acceptance: (1) python scripts/agentctl.py integrate no longer prints \"PR meta head_sha differs\" in normal usage; (2) integrate uses the actual task branch HEAD SHA for verify and writes it into docs/workflow/prs/T-###/meta.json on main (head_sha + last_verified_sha) so artifacts stay consistent; (3) safe in workflow_mode=branch_pr and never writes to the task branch; (4) meta.json ends up correct after integration.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
+      "depends_on": [],
       "tags": [
         "agentctl",
         "workflow",
         "pipeline"
       ],
-      "depends_on": [],
       "verify": [
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
+      "commit": {
+        "hash": "6ee132fca0297c6909cdb6b2b60fa5e3f83bcc28",
+        "message": "✨ T-073 integrate meta head_sha sync"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1690,24 +1693,20 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-073."
         }
       ],
-      "commit": {
-        "hash": "6ee132fca0297c6909cdb6b2b60fa5e3f83bcc28",
-        "message": "✨ T-073 integrate meta head_sha sync"
-      }
+      "description": "Speed up the pipeline by removing the common integrate warning about stale PR meta head_sha. Acceptance: (1) python scripts/agentctl.py integrate no longer prints \\\"PR meta head_sha differs\\\" in normal usage; (2) integrate uses the actual task branch HEAD SHA for verify and writes it into docs/workflow/prs/T-###/meta.json on main (head_sha + last_verified_sha) so artifacts stay consistent; (3) safe in workflow_mode=branch_pr and never writes to the task branch; (4) meta.json ends up correct after integration."
     },
     {
       "id": "T-074",
       "title": "Unify workflow artifact layout (single per-task folder)",
-      "description": "Eliminate duplication between docs/workflow/T-###.md and docs/workflow/prs/T-###/description.md by moving to a single per-task folder layout under docs/workflow/T-###/. New canonical doc: docs/workflow/T-###/README.md. PR artifacts live at docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}. Update agentctl commands (task scaffold/add, pr open/update/check/note, verify --log, integrate meta sync) to use the new layout, while keeping backward compatibility for the old paths. Migrate existing tracked artifacts (T-055..T-073 and docs/workflow/prs/T-067..T-073) to the new layout and update all docs/agent texts that reference the old pipeline.",
       "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
+      "depends_on": [],
       "tags": [
         "workflow",
         "docs",
         "agentctl"
       ],
-      "depends_on": [],
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
@@ -1724,22 +1723,22 @@
           "author": "INTEGRATOR",
           "body": "Artifacts moved to docs/workflow/T-074/pr/ (legacy docs/workflow/prs/ is deprecated)."
         }
-      ]
+      ],
+      "description": "Eliminate duplication between docs/workflow/T-###.md and docs/workflow/prs/T-###/description.md by moving to a single per-task folder layout under docs/workflow/T-###/. New canonical doc: docs/workflow/T-###/README.md. PR artifacts live at docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}. Update agentctl commands (task scaffold/add, pr open/update/check/note, verify --log, integrate meta sync) to use the new layout, while keeping backward compatibility for the old paths. Migrate existing tracked artifacts (T-055..T-073 and docs/workflow/prs/T-067..T-073) to the new layout and update all docs/agent texts that reference the old pipeline."
     },
     {
       "id": "T-075",
       "title": "agentctl: add work start (branch+pr+scaffold)",
-      "description": "Add a single command to reduce startup friction for a task branch in workflow_mode=branch_pr.\n\nAcceptance:\n- New command: `python scripts/agentctl.py work start T-123 --agent CODER --slug x --worktree`.\n- Performs the equivalent of:\n  - `python scripts/agentctl.py branch create T-123 --agent CODER --slug x --worktree`\n  - `python scripts/agentctl.py pr open T-123 --author CODER --branch task/T-123/x`\n  - `python scripts/agentctl.py task scaffold T-123` (writes `docs/workflow/T-123/README.md`)\n- Creates PR artifacts at `docs/workflow/T-123/pr/` (meta/diffstat/verify.log/review.md).\n- Idempotent with `--reuse`; does not clobber existing artifacts unless `--overwrite` is passed through to scaffold.\n- Prints clear NEXT steps.\n- Never writes `tasks.json`.\n- Update `.codex-swarm/agentctl.md` to document the new command.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "ergonomics"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -1754,22 +1753,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Squash-merged task/T-075/work-start; verify will be recorded via agentctl verify log in this closure; PR artifacts + README updated."
         }
-      ]
+      ],
+      "description": "Add a single command to reduce startup friction for a task branch in workflow_mode=branch_pr.\\n\\nAcceptance:\\n- New command: `python scripts/agentctl.py work start T-123 --agent CODER --slug x --worktree`.\\n- Performs the equivalent of:\\n  - `python scripts/agentctl.py branch create T-123 --agent CODER --slug x --worktree`\\n  - `python scripts/agentctl.py pr open T-123 --author CODER --branch task/T-123/x`\\n  - `python scripts/agentctl.py task scaffold T-123` (writes `docs/workflow/T-123/README.md`)\\n- Creates PR artifacts at `docs/workflow/T-123/pr/` (meta/diffstat/verify.log/review.md).\\n- Idempotent with `--reuse`; does not clobber existing artifacts unless `--overwrite` is passed through to scaffold.\\n- Prints clear NEXT steps.\\n- Never writes `tasks.json`.\\n- Update `.codex-swarm/agentctl.md` to document the new command."
     },
     {
       "id": "T-076",
       "title": "agentctl: verify auto-log to per-task pr/verify.log",
-      "description": "Make `agentctl verify` faster by defaulting the log file when a PR artifact exists.\n\nAcceptance:\n- `python scripts/agentctl.py verify T-123` appends to `docs/workflow/T-123/pr/verify.log` when that PR dir exists.\n- `--log` still overrides.\n- Supports legacy `docs/workflow/prs/T-123/verify.log` during migration.\n- `--skip-if-unchanged` continues to work and uses PR `meta.json:head_sha` when the effective log path is under the PR directory.\n- Update `.codex-swarm/agentctl.md` to document the new default.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "ergonomics"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -1784,22 +1783,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-076/pr."
         }
-      ]
+      ],
+      "description": "Make `agentctl verify` faster by defaulting the log file when a PR artifact exists.\\n\\nAcceptance:\\n- `python scripts/agentctl.py verify T-123` appends to `docs/workflow/T-123/pr/verify.log` when that PR dir exists.\\n- `--log` still overrides.\\n- Supports legacy `docs/workflow/prs/T-123/verify.log` during migration.\\n- `--skip-if-unchanged` continues to work and uses PR `meta.json:head_sha` when the effective log path is under the PR directory.\\n- Update `.codex-swarm/agentctl.md` to document the new default."
     },
     {
       "id": "T-077",
       "title": "agentctl: cleanup merged task branches/worktrees",
-      "description": "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\n\nAcceptance:\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\n- Deletes only when:\n  - task is `DONE` in `tasks.json`, AND\n  - `git diff --name-only main...<branch>` is empty.\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\n- Never writes `tasks.json`.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "cleanup"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -1814,22 +1813,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-077/pr."
         }
-      ]
+      ],
+      "description": "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\\n\\nAcceptance:\\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\\n- Deletes only when:\\n  - task is `DONE` in `tasks.json`, AND\\n  - `git diff --name-only main...<branch>` is empty.\\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\\n- Never writes `tasks.json`."
     },
     {
       "id": "T-078",
       "title": "agentctl: pr check validates README completeness",
-      "description": "Reduce review ping-pong by making `pr check` fail fast on placeholder docs.\n\nAcceptance:\n- `python scripts/agentctl.py pr check T-123` validates `docs/workflow/T-123/README.md` exists and required sections are present and non-placeholder.\n- Error message points to missing/empty section names.\n- Supports legacy `docs/workflow/prs/T-123/description.md` during migration.\n- Update `.codex-swarm/agentctl.md` to reflect the README-based PR doc.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "quality"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -1844,21 +1843,21 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-078/pr."
         }
-      ]
+      ],
+      "description": "Reduce review ping-pong by making `pr check` fail fast on placeholder docs.\\n\\nAcceptance:\\n- `python scripts/agentctl.py pr check T-123` validates `docs/workflow/T-123/README.md` exists and required sections are present and non-placeholder.\\n- Error message points to missing/empty section names.\\n- Supports legacy `docs/workflow/prs/T-123/description.md` during migration.\\n- Update `.codex-swarm/agentctl.md` to reflect the README-based PR doc."
     },
     {
       "id": "T-079",
       "title": "Docs: remove remaining legacy prs/ mentions",
-      "description": "Finish migration documentation cleanup.\n\nAcceptance:\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only.",
       "status": "DONE",
       "priority": "low",
       "owner": "DOCS",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "docs",
         "workflow"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
@@ -1872,22 +1871,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-079/pr."
         }
-      ]
+      ],
+      "description": "Finish migration documentation cleanup.\\n\\nAcceptance:\\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only."
     },
     {
       "id": "T-080",
       "title": "agentctl: integrate auto-updates PR diffstat + README auto-summary",
-      "description": "Reduce manual PR bookkeeping by having `agentctl integrate` refresh the tracked PR artifacts on main.\n\nAcceptance:\n- During `python scripts/agentctl.py integrate T-123 ...` (workflow_mode=branch_pr), after merge it updates:\n  - `docs/workflow/T-123/pr/diffstat.txt` (recomputed for the task branch vs base), and\n  - `docs/workflow/T-123/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->` / `<!-- END AUTO SUMMARY -->`) using the changed files list.\n- No writes happen to the task branch; updates are only in the main checkout after merge.\n- Works with `--merge-strategy squash|merge|rebase`.\n- Update `.codex-swarm/agentctl.md` to state `integrate` refreshes these artifacts automatically.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "ergonomics"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -1902,22 +1901,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-080/pr."
         }
-      ]
+      ],
+      "description": "Reduce manual PR bookkeeping by having `agentctl integrate` refresh the tracked PR artifacts on main.\\n\\nAcceptance:\\n- During `python scripts/agentctl.py integrate T-123 ...` (workflow_mode=branch_pr), after merge it updates:\\n  - `docs/workflow/T-123/pr/diffstat.txt` (recomputed for the task branch vs base), and\\n  - `docs/workflow/T-123/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->` / `<!-- END AUTO SUMMARY -->`) using the changed files list.\\n- No writes happen to the task branch; updates are only in the main checkout after merge.\\n- Works with `--merge-strategy squash|merge|rebase`.\\n- Update `.codex-swarm/agentctl.md` to state `integrate` refreshes these artifacts automatically."
     },
     {
       "id": "T-081",
       "title": "agentctl integrate: skip verify if already verified",
-      "description": "Speed up branch_pr integration by skipping redundant verify runs when the task branch HEAD SHA is already recorded as verified (via PR meta last_verified_sha or pr/verify.log). Keep --run-verify as a force-rerun escape hatch. Also ensure rebase strategy runs rebase before verify so the verified SHA matches what gets merged.",
       "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
+      "depends_on": [
+        "T-074"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "speed"
-      ],
-      "depends_on": [
-        "T-074"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -1932,23 +1931,23 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-081/pr."
         }
-      ]
+      ],
+      "description": "Speed up branch_pr integration by skipping redundant verify runs when the task branch HEAD SHA is already recorded as verified (via PR meta last_verified_sha or pr/verify.log). Keep --run-verify as a force-rerun escape hatch. Also ensure rebase strategy runs rebase before verify so the verified SHA matches what gets merged."
     },
     {
       "id": "T-082",
       "title": "Docs: update README and fix Mermaid diagram",
-      "description": "Update root README.md to reflect latest branch_pr workflow and agentctl behavior (integrate auto-refresh artifacts; integrate may skip verify when SHA already verified). Fix Mermaid diagram so it renders correctly on GitHub.",
       "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
+      "depends_on": [
+        "T-074",
+        "T-081"
+      ],
       "tags": [
         "docs",
         "workflow",
         "mermaid"
-      ],
-      "depends_on": [
-        "T-074",
-        "T-081"
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
@@ -1962,22 +1961,22 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-082/pr."
         }
-      ]
+      ],
+      "description": "Update root README.md to reflect latest branch_pr workflow and agentctl behavior (integrate auto-refresh artifacts; integrate may skip verify when SHA already verified). Fix Mermaid diagram so it renders correctly on GitHub."
     },
     {
       "id": "T-083",
       "title": "Docs: fix README Mermaid parse on GitHub",
-      "description": "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility).",
       "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
+      "depends_on": [
+        "T-082"
+      ],
       "tags": [
         "docs",
         "mermaid",
         "workflow"
-      ],
-      "depends_on": [
-        "T-082"
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
@@ -1991,23 +1990,23 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-083/pr."
         }
-      ]
+      ],
+      "description": "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility)."
     },
     {
       "id": "T-084",
       "title": "Agents: prefer agentctl CLI for supported operations",
-      "description": "Audit scripts/agentctl.py capabilities and update .codex-swarm/agents/*.json prompts so each agent uses agentctl for any supported operation (tasks.json ops, branch/worktree management, PR artifacts, verify logs, commit guardrails, integrate/cleanup). Only fall back to raw git/shell commands when agentctl has no equivalent.",
       "status": "DONE",
       "priority": "high",
       "owner": "PLANNER",
+      "depends_on": [
+        "T-074",
+        "T-083"
+      ],
       "tags": [
         "agents",
         "agentctl",
         "workflow"
-      ],
-      "depends_on": [
-        "T-074",
-        "T-083"
       ],
       "verify": [
         "python scripts/agentctl.py task lint"
@@ -2021,23 +2020,23 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-084/pr."
         }
-      ]
+      ],
+      "description": "Audit scripts/agentctl.py capabilities and update .codex-swarm/agents/*.json prompts so each agent uses agentctl for any supported operation (tasks.json ops, branch/worktree management, PR artifacts, verify logs, commit guardrails, integrate/cleanup). Only fall back to raw git/shell commands when agentctl has no equivalent."
     },
     {
       "id": "T-085",
       "title": "agentctl work start: idempotent scaffold",
-      "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \"File already exists\" errors now that agents default to work start.",
       "status": "DONE",
       "priority": "high",
       "owner": "CODER",
+      "depends_on": [
+        "T-075",
+        "T-084"
+      ],
       "tags": [
         "agentctl",
         "workflow",
         "ergonomics"
-      ],
-      "depends_on": [
-        "T-075",
-        "T-084"
       ],
       "verify": [
         "python -m compileall scripts/agentctl.py",
@@ -2052,21 +2051,21 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-085/pr."
         }
-      ]
+      ],
+      "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \\\"File already exists\\\" errors now that agents default to work start."
     },
     {
       "id": "T-086",
       "title": "Define workflow_mode variants (direct vs branch_pr)",
-      "description": "Add a clear, unambiguous definition of workflow_mode values \"direct\" and \"branch_pr\" across agent instructions and documentation. Document the operational differences (where work happens, whether task branches/worktrees are required, who can write tasks.json, required PR artifacts under docs/workflow/T-###/pr, and which agent is allowed to integrate/finish). Update AGENTS.md and .codex-swarm/agentctl.md accordingly.",
       "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
+      "depends_on": [],
       "tags": [
         "workflow",
         "docs",
         "agents"
       ],
-      "depends_on": [],
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
@@ -2079,21 +2078,21 @@
           "author": "INTEGRATOR",
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-086/pr."
         }
-      ]
+      ],
+      "description": "Add a clear, unambiguous definition of workflow_mode values \\\"direct\\\" and \\\"branch_pr\\\" across agent instructions and documentation. Document the operational differences (where work happens, whether task branches/worktrees are required, who can write tasks.json, required PR artifacts under docs/workflow/T-###/pr, and which agent is allowed to integrate/finish). Update AGENTS.md and .codex-swarm/agentctl.md accordingly."
     },
     {
       "id": "T-087",
       "title": "Pin current git branch as base branch",
-      "description": "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main.",
       "status": "DONE",
       "priority": "med",
       "owner": "human",
+      "depends_on": [],
       "tags": [
         "workflow",
         "git",
         "branching"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d",
         "message": "🛡️ T-087 integrate readiness + no-op handling"
@@ -2103,21 +2102,21 @@
           "author": "INTEGRATOR",
           "body": "Verified: Base branch now pins to local git config (codexswarm.baseBranch); integrate/guard/cleanup use it; no-op integrates fail fast."
         }
-      ]
+      ],
+      "description": "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main."
     },
     {
       "id": "T-088",
       "title": "Backfill task tracking for clean.sh interactive workflow_mode",
-      "description": "Record the clean.sh interactive workflow_mode selection + prompt scrubbing feature in tasks.json and add the per-task workflow README artifact.",
       "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
+      "depends_on": [],
       "tags": [
         "clean",
         "workflow",
         "agents"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "780f1d05339296b8840b004e866e35fc74c67e32",
         "message": "✨ T-088 clean.sh interactive workflow_mode + prompt scrubbing"
@@ -2127,20 +2126,20 @@
           "author": "ORCHESTRATOR",
           "body": "Verified: tasks/workflow artifact added; clean.sh already includes interactive mode selection + prompt scrubbing."
         }
-      ]
+      ],
+      "description": "Record the clean.sh interactive workflow_mode selection + prompt scrubbing feature in tasks.json and add the per-task workflow README artifact."
     },
     {
       "id": "T-089",
       "title": "Refactor workflow paths",
-      "description": "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged.",
       "status": "DONE",
       "priority": "med",
       "owner": "CODER",
+      "depends_on": [],
       "tags": [
         "refactor",
         "paths"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "644b1fedd0789160916655344eb5ce49ed10f3e1",
         "message": "✨ T-089 Move config + tasks paths"
@@ -2150,67 +2149,67 @@
           "author": "INTEGRATOR",
           "body": "Verified: Not run (path refactor only); no runtime behavior changes; please run agentctl --help if needed."
         }
-      ]
+      ],
+      "description": "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged."
     },
     {
       "id": "T-090",
       "title": "Move ORCHESTRATOR spec into JSON",
-      "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "agents",
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "b3ab2947a02cb1a0779e680d0784ae9f79255d2f",
         "message": "🧭 T-090 move ORCHESTRATOR spec to JSON"
-      }
+      },
+      "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit."
     },
     {
       "id": "T-091",
       "title": "Add end-of-file ORCHESTRATOR start rule",
-      "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
       "status": "DONE",
       "priority": "low",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs",
         "agents"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
         "message": "🧭 T-091 add explicit orchestrator start line"
-      }
+      },
+      "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR."
     },
     {
       "id": "T-092",
       "title": "Align batch finish commit naming docs",
-      "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
         "message": "📝 T-092 align batch finish docs"
-      }
+      },
+      "description": "Document commit subject conventions for batch finish in agentctl quickstart."
     },
     {
       "id": "T-093",
       "title": "Write docs content for new templates",
-      "description": "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
-      "tags": [],
       "depends_on": [],
+      "tags": [],
       "commit": {
         "hash": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
         "message": "📝 T-093 write docs content"
@@ -2220,17 +2219,17 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
-      ]
+      ],
+      "description": "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs."
     },
     {
       "id": "T-094",
       "title": "Add docs index links and reading order",
-      "description": "Update docs/index.md with a document map, reading order, and links to the new docs set.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
-      "tags": [],
       "depends_on": [],
+      "tags": [],
       "commit": {
         "hash": "9900d029d4f831d920a82e58869c7d7ec8b28623",
         "message": "📝 T-094 update docs index"
@@ -2240,17 +2239,17 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
-      ]
+      ],
+      "description": "Update docs/index.md with a document map, reading order, and links to the new docs set."
     },
     {
       "id": "T-095",
       "title": "Align README docs index with new docs",
-      "description": "Update README.md and related references so the documentation structure matches the new docs/ files.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
-      "tags": [],
       "depends_on": [],
+      "tags": [],
       "commit": {
         "hash": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
         "message": "📝 T-095 align README docs"
@@ -2260,19 +2259,19 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
-      ]
+      ],
+      "description": "Update README.md and related references so the documentation structure matches the new docs/ files."
     },
     {
       "id": "T-096",
       "title": "Centralize agentctl guidance",
-      "description": "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "7eb0068599e887d0ceda3f427e413b1a7505d6dc",
         "message": "🛠️ T-096 centralize agentctl guidance"
@@ -2282,17 +2281,17 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only update in agentctl.md and agent JSONs; no tests required."
         }
-      ]
+      ],
+      "description": "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations."
     },
     {
       "id": "T-097",
       "title": "Rename docs index and update references",
-      "description": "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
-      "tags": [],
       "depends_on": [],
+      "tags": [],
       "commit": {
         "hash": "cc0ae159d12d582dbaec8d916b8e936fed08a02a",
         "message": "📝 T-097 rename docs index"
@@ -2302,19 +2301,19 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
-      ]
+      ],
+      "description": "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs."
     },
     {
       "id": "T-098",
       "title": "Verify agentctl task writes + clarify no-manual-edits",
-      "description": "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "ba44ab30139e35d29edb1337a1c56d2a4d4e9566",
         "message": "📝 T-098 reinforce no-manual-edits rule"
@@ -2324,19 +2323,19 @@
           "author": "INTEGRATOR",
           "body": "Verified: agentctl task add produced tasks.json entry; task lint OK; docs update only."
         }
-      ]
+      ],
+      "description": "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually."
     },
     {
       "id": "T-099",
       "title": "Fill T-096 artifact and enforce doc completion",
-      "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs.",
       "status": "DONE",
       "priority": "low",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "be41f3b5cdebf6a1d18b4562e722b6c4041733b4",
         "message": "🛠️ T-099 enforce doc completion + fill T-096"
@@ -2346,17 +2345,17 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only updates to workflow artifacts and guardrails; no tests required."
         }
-      ]
+      ],
+      "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs."
     },
     {
       "id": "T-100",
       "title": "Update README docs links",
-      "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
-      "tags": [],
       "depends_on": [],
+      "tags": [],
       "commit": {
         "hash": "1094b0af329012963648b1405b49eb5d17479c1b",
         "message": "📝 T-100 update README docs links"
@@ -2366,216 +2365,217 @@
           "author": "INTEGRATOR",
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
-      ]
+      ],
+      "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find."
     },
     {
       "id": "T-101",
       "title": "Refresh README badges and quickstart callout",
-      "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs",
         "readme"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "5912c9c7a818350820e56e37830ff34a7daceb87",
         "message": "✨ T-101 update README badges"
-      }
+      },
+      "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation."
     },
     {
       "id": "T-102",
       "title": "Harden agentctl depends_on parsing",
-      "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "agentctl",
         "tasks"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "0b222dfbd26ac511935b4a3026686a4685280d4f",
         "message": "🔧 T-102 harden depends_on parsing"
-      }
+      },
+      "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse."
     },
     {
       "id": "T-103",
       "title": "Update GitHub sync scripts for new .codex-swarm structure",
-      "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "github",
         "tasks",
         "agentctl"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "a6e47cab956e1b39d5f10ca6ddc02024cc92fe6c",
         "message": "🔧 T-103 align GitHub sync paths"
-      }
+      },
+      "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout."
     },
     {
       "id": "T-104",
       "title": "Align README repository layout with current structure",
-      "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "readme",
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "fbc029009285cf68d7730f23156fce5572b52d96",
         "message": "📝 T-104 update README layout"
-      }
+      },
+      "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation."
     },
     {
       "id": "T-105",
       "title": "Merge docs index sections",
-      "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "9d6cf15ab9c6bdf76abee921795806b19bc16f2e",
         "message": "📝 T-105 merge docs index sections"
-      }
+      },
+      "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md."
     },
     {
       "id": "T-106",
       "title": "Audit docs for clarity and consistency",
-      "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
       "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": [],
       "commit": {
         "hash": "fe29281d02dadd4154586cbd088361ba54174a97",
         "message": "📝 T-106 align docs links and wording"
-      }
+      },
+      "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow."
     },
     {
       "id": "T-107",
       "title": "Link file references in docs",
-      "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
       "status": "TODO",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [
         "docs"
       ],
-      "depends_on": []
+      "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks."
     },
     {
       "id": "T-108",
       "title": "Docs: modular backends + local tasks model",
-      "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior.",
       "status": "TODO",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [],
-      "depends_on": []
+      "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior."
     },
     {
       "id": "T-109",
       "title": "Docs: modularize + numbered docs",
-      "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order.",
       "status": "TODO",
       "priority": "med",
       "owner": "DOCS",
+      "depends_on": [],
       "tags": [],
-      "depends_on": []
+      "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order."
     },
     {
       "id": "T-110",
       "title": "agentctl: backend plugin loader + config support",
-      "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring.",
       "status": "TODO",
       "priority": "med",
       "owner": "PLANNER",
+      "depends_on": [],
       "tags": [],
-      "depends_on": []
+      "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring."
     },
     {
       "id": "T-111",
       "title": "local backend: tasks/ storage + ID generation",
-      "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json.",
       "status": "TODO",
       "priority": "med",
       "owner": "CODER",
-      "tags": [],
       "depends_on": [
         "T-110"
-      ]
+      ],
+      "tags": [],
+      "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json."
     },
     {
       "id": "T-112",
       "title": "agentctl: route task commands to backend + new sync/export commands",
-      "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help.",
       "status": "TODO",
       "priority": "med",
       "owner": "CODER",
-      "tags": [],
       "depends_on": [
         "T-111"
-      ]
+      ],
+      "tags": [],
+      "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help."
     },
     {
       "id": "T-113",
       "title": "redmine backend: canonical source + offline fallback",
-      "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
       "status": "TODO",
       "priority": "med",
       "owner": "CODER",
-      "tags": [],
       "depends_on": [
         "T-114"
-      ]
+      ],
+      "tags": [],
+      "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling."
     },
     {
       "id": "T-114",
       "title": "agentctl: migrate workspace paths to tasks/ + PR artifacts",
-      "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
       "status": "TODO",
       "priority": "med",
       "owner": "CODER",
-      "tags": [],
       "depends_on": [
         "T-112"
-      ]
+      ],
+      "tags": [],
+      "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly."
     },
     {
       "id": "T-115",
       "title": "agentctl: migrate tasks.json to local backend",
-      "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
       "status": "TODO",
       "priority": "med",
       "owner": "CODER",
-      "tags": [],
       "depends_on": [
         "T-112"
-      ]
+      ],
+      "tags": [],
+      "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a21997c93b115ebb7cc1bf4da99be644a9bd262aae9b148cb0a58a9a130d2351"
+    "checksum": "0d477713c58bcff2ca56aa3993f66563a67f3a444c295fe9b66fbf2d24966dde"
   }
 }
