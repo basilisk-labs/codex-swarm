@@ -2516,11 +2516,15 @@
     {
       "id": "202601041253-0003E",
       "title": "agentctl: backend plugin loader + config support",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "edf60000edb0b50cc9195328d3053157714fc200",
+        "message": "🧩 T-110 add backend plugin loader"
+      },
       "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring."
     },
     {
@@ -2786,6 +2790,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0d39ef8db249445f239b7658b2a7aeb4a80f1b995110b3f52262ad7403dbc0de"
+    "checksum": "1d180caf5978d3442f294ec0c8edc3134f5e90f957d0c04dc70b2d08cc56a5dd"
   }
 }
