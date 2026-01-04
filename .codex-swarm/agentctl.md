@@ -29,6 +29,15 @@ INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -
 - `--json`: emit JSON-formatted errors (for CI/integrations).
 - `--lint`: force tasks.json lint at command start (useful for read-only commands).
 
+Notes:
+- Writes (export/finish/etc.) auto-run lint on `.codex-swarm/tasks.json`.
+- Use `--lint` with read-only commands like `task list`/`task show` when you need validation.
+
+## Error output
+
+- Default: human-readable errors to stderr.
+- `--json`: errors printed as JSON to stdout with `{ error: { code, message, context } }`.
+
 ## Common commands
 
 ```bash
@@ -116,6 +125,9 @@ python .codex-swarm/agentctl.py task search agentctl
 # scaffold a workflow artifact (.codex-swarm/tasks/<task-id>/README.md)
 python .codex-swarm/agentctl.py task scaffold <task-id>
 
+# normalize task READMEs via backend rewrite (fix formatting/escaping)
+python .codex-swarm/agentctl.py task normalize
+
 # suggest minimal --allow prefixes based on staged files
 python .codex-swarm/agentctl.py guard suggest-allow
 python .codex-swarm/agentctl.py guard suggest-allow --format args
@@ -126,6 +138,7 @@ python .codex-swarm/agentctl.py guard suggest-allow --format args
 - `.codex-swarm/tasks.json` is canonical; agents are forbidden from editing it by hand (use agentctl only).
 - Before finishing a task, ensure @.codex-swarm/tasks/<task-id>/README.md is filled in (no placeholder `...`).
 - In branching workflow, `agentctl` rejects .codex-swarm/tasks.json writes outside the repo root checkout on the pinned base branch (and guardrails reject committing .codex-swarm/tasks.json from task branches).
+- Batch writes: when the backend supports `write_tasks`, agentctl uses it to reduce repeated writes during `finish` and `task normalize`.
 - Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).
 - Prefer `start/block/finish` over `task set-status`.
 - Keep allowlists tight: pass only the path prefixes you intend to commit.
