@@ -1,0 +1,14 @@
+{
+  "id": "redmine",
+  "version": 1,
+  "module": "backend.py",
+  "class": "RedmineBackend",
+  "settings": {
+    "url": "https://redmine.example.com",
+    "api_key": "REDACTED",
+    "project_id": "my-project",
+    "status_map": { "TODO": 1, "DOING": 2, "BLOCKED": 3, "DONE": 4 },
+    "custom_fields": { "task_id": 12, "verify": 13, "commit": 14 },
+    "cache_dir": ".codex-swarm/tasks"
+  }
+}
