@@ -895,21 +895,26 @@ def cmd_task_show(args: argparse.Namespace) -> None:
             print(f"- {author}: {body}")
 
 
+def export_tasks_snapshot(out_path: Optional[Path] = None, *, quiet: bool = False) -> None:
+    target_path = out_path or _resolve_repo_relative_path(TASKS_PATH_REL, label="task export output")
+    backend = backend_instance()
+    export_tasks_json = getattr(backend, "export_tasks_json", None) if backend else None
+    if callable(export_tasks_json):
+        export_tasks_json(target_path)
+    else:
+        tasks, _ = load_task_store()
+        write_tasks_json_to_path(target_path, {"tasks": tasks})
+    if not quiet:
+        print(f"✅ exported tasks to {target_path.relative_to(ROOT)}")
+
+
 def cmd_task_export(args: argparse.Namespace) -> None:
     fmt = str(args.format or "json").strip().lower()
     if fmt != "json":
         die(f"Unsupported export format: {fmt}", code=2)
     out_raw = str(args.out or TASKS_PATH_REL).strip()
     out_path = _resolve_repo_relative_path(out_raw, label="task export output")
-    backend = backend_instance()
-    export_tasks_json = getattr(backend, "export_tasks_json", None) if backend else None
-    if callable(export_tasks_json):
-        export_tasks_json(out_path)
-    else:
-        tasks, _ = load_task_store()
-        write_tasks_json_to_path(out_path, {"tasks": tasks})
-    if not args.quiet:
-        print(f"✅ exported tasks to {out_path.relative_to(ROOT)}")
+    export_tasks_snapshot(out_path, quiet=bool(args.quiet))
 
 
 def cmd_task_normalize(args: argparse.Namespace) -> None:
@@ -1740,6 +1745,7 @@ def cmd_start(args: argparse.Namespace) -> None:
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
     save(tasks)
+    export_tasks_snapshot(quiet=bool(args.quiet))
     if not args.quiet:
         print(f"✅ {args.task_id} is DOING")
 
