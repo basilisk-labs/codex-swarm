@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import json
+import secrets
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
 
 FRONTMATTER_BOUNDARY = "---"
 DEFAULT_TASKS_DIR = Path(".codex-swarm/tasks")
+ID_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 
 
 @dataclass
@@ -228,6 +231,17 @@ class LocalBackend:
 
     def task_readme_path(self, task_id: str) -> Path:
         return self.task_dir(task_id) / "README.md"
+
+    def generate_task_id(self, *, length: int = 6, attempts: int = 1000) -> str:
+        if length < 4:
+            raise ValueError("length must be >= 4")
+        for _ in range(attempts):
+            timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
+            suffix = "".join(secrets.choice(ID_ALPHABET) for _ in range(length))
+            task_id = f"{timestamp}-{suffix}"
+            if not self.task_dir(task_id).exists():
+                return task_id
+        raise RuntimeError("Failed to generate a unique task id")
 
     def list_tasks(self) -> List[Dict[str, object]]:
         if not self.root.exists():

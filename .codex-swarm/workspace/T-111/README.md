@@ -3,7 +3,7 @@
 ## Summary
 
 - Add a local backend plugin that reads/writes task frontmatter under `.codex-swarm/tasks/`.
-- Provide basic frontmatter parsing/formatting and JSON snapshot export.
+- Provide basic frontmatter parsing/formatting, ID generation, and JSON snapshot export.
 
 ## Goal
 
@@ -13,7 +13,7 @@
 
 - Create `.codex-swarm/backends/local/backend.json` and `.codex-swarm/backends/local/backend.py`.
 - Implement frontmatter parsing/formatting for core task fields.
-- Implement local task listing, reading, writing, and JSON export.
+- Implement local task listing, reading, writing, ID generation, and JSON export.
 
 ## Risks
 
@@ -32,5 +32,5 @@
 
 <!-- BEGIN AUTO SUMMARY -->
 - `.codex-swarm/backends/local/backend.json`: add local backend plugin definition.
-- `.codex-swarm/backends/local/backend.py`: add local backend implementation and frontmatter parsing helpers.
+- `.codex-swarm/backends/local/backend.py`: add local backend implementation, frontmatter parsing, and ID generation.
 <!-- END AUTO SUMMARY -->
