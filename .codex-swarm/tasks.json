@@ -2599,14 +2599,19 @@
     {
       "id": "202601041253-0003K",
       "title": "agentctl: migrate tasks.json to local backend",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [
         "202601041253-0003G"
       ],
       "tags": [],
-      "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
+      "commit": {
+        "hash": "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6",
+        "message": "🧩 T-115 add tasks.json migration"
+      },
+      "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003M",
@@ -2644,14 +2649,14 @@
         "hash": "04fdd37dca3c7541e1d957e263b473547c94d6ad",
         "message": "🧹 T-118 update clean.sh for tasks layout"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
           "body": "Verified: bash -n clean.sh; cleanup resets .codex-swarm/tasks and snapshot."
         }
       ],
-      "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
+      "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003Q",
@@ -2665,14 +2670,14 @@
         "hash": "1939744c7df301f0a9b1533a7ff7025624d45a3c",
         "message": "🔁 T-119 export snapshot before GitHub sync"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
           "body": "Verified: python3 -m py_compile .github/scripts/sync_tasks.py; export step documented."
         }
       ],
-      "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
+      "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003R",
@@ -2686,14 +2691,14 @@
         "hash": "f84ae1546f3077d674c659dce3ce9bf690160894",
         "message": "🆔 202601041253-0003R migrate legacy task IDs"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
           "body": "Verified: python3 .codex-swarm/agentctl.py task list --quiet; ids migrated."
         }
       ],
-      "description": "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies."
+      "description": "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003S",
@@ -2707,14 +2712,14 @@
         "hash": "e571744e288fc0f63599967eae460d290d4c97ef",
         "message": "🛠️ T-121 preserve scaffold frontmatter"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
           "body": "Verified: python3 .codex-swarm/agentctl.py task scaffold 202601041253-0003S --overwrite preserved frontmatter."
         }
       ],
-      "description": "Keep the frontmatter block intact when overwriting task README scaffolds."
+      "description": "Keep the frontmatter block intact when overwriting task README scaffolds.",
+      "dirty": true
     },
     {
       "id": "202601041300-00040",
@@ -2731,14 +2736,14 @@
         "hash": "8ebac65cf3df403807155f58e430ba30e925692b",
         "message": "🛠️ 202601041300-00040 tasks viewer"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "codex",
           "body": "Started viewer/server refactor to move UI into .codex-swarm/viewer."
         }
       ],
-      "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes."
+      "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes.",
+      "dirty": true
     },
     {
       "id": "202601041311-D7Q7D",
@@ -2752,14 +2757,14 @@
         "hash": "ea9ed7a50d1789d452abb61c00987e0925c76ecb",
         "message": "🛠️ D7Q7D fix frontmatter parsing and commit checks"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
           "body": "Verified: normalized frontmatter parsing, commit-id suffix checks updated, and docs refreshed."
         }
       ],
-      "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
+      "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs.",
+      "dirty": true
     },
     {
       "id": "202601041331-Q11MC",
@@ -2784,7 +2789,6 @@
         "hash": "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd",
         "message": "📝 YM3R8 expand agentctl.md coverage"
       },
-      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2799,7 +2803,8 @@
           "body": "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes."
         }
       ],
-      "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
+      "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags.",
+      "dirty": true
     },
     {
       "id": "202601042107-TAG01",
@@ -2820,6 +2825,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "403aa27190990795d8738c3c1a6171a300f3f8f210b12601bcfb51cb306404c5"
+    "checksum": "89b24887617e05a3b608697b7022d035c0a9b4e90c739ee811ca49d8120ce373"
   }
 }
