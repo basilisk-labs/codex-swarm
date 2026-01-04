@@ -91,7 +91,7 @@ The active backend is selected in `.codex-swarm/config.json`:
 python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tasks.json
 ```
 
-`tasks.html` reads the exported snapshot only.
+`.codex-swarm/viewer/tasks.html` reads the exported snapshot only.
 
 ## Core Commands
 ```bash
@@ -100,6 +100,12 @@ python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py task add 202601031816-7F3K2Q --title "..." --description "..."
 python .codex-swarm/agentctl.py task update 202601031816-7F3K2Q --description "..."
 python .codex-swarm/agentctl.py task lint
+# or run read-only commands with --lint to force validation
+
+Global flags:
+- `--quiet`: suppress non-essential output.
+- `--verbose`: enable extra logging (when available).
+- `--json`: emit JSON-formatted errors (for CI/integrations).
 ```
 
 ## Verification and Closure

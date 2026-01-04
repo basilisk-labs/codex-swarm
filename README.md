@@ -46,7 +46,7 @@ Prerequisites:
 3. Task tracking:
    - The canonical task source depends on the active backend (`local` or `redmine`).
    - Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q` to inspect tasks.
-   - Use `python .codex-swarm/agentctl.py task lint` to validate the local cache and exported snapshot.
+- Use `python .codex-swarm/agentctl.py task lint` or `--lint` on read-only commands to validate the snapshot; writes auto-lint.
 
 4. Optional (clean slate):
    - Run `./clean.sh` to remove framework-development artifacts and reinitialize git, leaving only the minimal “runtime” files needed to reuse Codex Swarm as your own local project.
@@ -118,7 +118,7 @@ Documentation:
 ├── clean.sh
 ├── LICENSE
 ├── README.md
-├── tasks.html
+├── .codex-swarm/viewer/tasks.html
 ├── assets
 │   └── header.png
 ├── docs
@@ -163,7 +163,7 @@ Documentation:
 | `CONTRIBUTING.md` | 🧩 Contribution guide and workflow expectations. |
 | `assets/` | 🖼️ Contains the header image shown on this README and any future static visuals. |
 | `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the snapshot as your own local project. |
-| `tasks.html` | 🖥️ A tiny local UI for browsing `.codex-swarm/tasks.json` in a browser (no server). |
+| `.codex-swarm/viewer/tasks.html` | 🖥️ A local UI for browsing `.codex-swarm/tasks.json` in a browser (served via `tasks_server.py`). |
 
 ## 🧾 Commit Workflow
 
@@ -276,7 +276,7 @@ sequenceDiagram
 
     O->>I: Verify + merge + close (main only)
     I->>A: pr check <task-id>
-    I->>A: integrate <task-id> (verify → merge → refresh artifacts → finish → task lint)
+    I->>A: integrate <task-id> (verify → merge → refresh artifacts → finish → task lint on snapshot write)
     A->>TJ: Set DONE, persist commit hash/message (+ append handoff notes)
 
     O-->>U: Summary + commit link(s)

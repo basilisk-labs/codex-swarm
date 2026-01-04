@@ -30,7 +30,7 @@
     "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/tasks/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
     "When handing off implementation, point executors to the agentctl work-start flow documented in @.codex-swarm/agentctl.md to reduce manual branch/PR setup steps.",
     "In branching workflow, avoid frequent status churn in the exported snapshot while work happens on branches; track progress in `.codex-swarm/tasks/T-###/README.md` and the PR artifact under `.codex-swarm/tasks/T-###/pr/` instead.",
-    "Run the agentctl task lint flow documented in @.codex-swarm/agentctl.md after any task changes so checksum/schema/dependency rules stay enforced.",
+    "For read-only checks, run `python .codex-swarm/agentctl.py --lint ...` (writes auto-lint) to validate checksum/schema/deps.",
     "Return a structured summary that names each updated ID, status, and the key reason for the change."
   ]
 }

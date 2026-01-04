@@ -11,8 +11,16 @@ python .codex-swarm/agentctl.py task list
 python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py task add 202601031816-7F3K2Q --title "..." --description "..."
 python .codex-swarm/agentctl.py task lint
+# or run read-only commands with --lint
 python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tasks.json
 ```
+
+## Global flags
+
+- `--quiet`: suppress non-essential output.
+- `--verbose`: enable extra logging (when available).
+- `--json`: emit JSON-formatted errors (for CI/integrations).
+- `--lint`: force tasks.json lint at command start (useful for read-only commands).
 
 ## Branching and PR Artifacts
 ```bash
@@ -27,7 +35,7 @@ python .codex-swarm/agentctl.py pr check 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py verify 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py finish 202601031816-7F3K2Q --commit <git-rev> --author INTEGRATOR --body "Verified: ..."
 ```
-For batch finishes, include all task IDs in the commit subject, e.g. `✅ 202601031816-7F3K2Q 202601031817-1A9Z5C close ...`.
+For batch finishes, include all task IDs in the commit subject (full id or suffix after the last dash), e.g. `✅ 7F3K2Q 1A9Z5C close ...`.
 
 ## Guardrails and Git Hygiene
 ```bash

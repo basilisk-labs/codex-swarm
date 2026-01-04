@@ -26,7 +26,7 @@ Install dependencies inside the venv only.
 ## Sanity Checks
 - `python .codex-swarm/agentctl.py quickstart`
 - `python .codex-swarm/agentctl.py task list`
-- `python .codex-swarm/agentctl.py task lint`
+- `python .codex-swarm/agentctl.py task lint` (or `--lint` on read-only commands)
 
 ## Backend Setup
 1. Choose a backend plugin config in `.codex-swarm/backends/`.

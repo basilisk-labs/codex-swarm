@@ -130,7 +130,7 @@ For each task `<task-id>`:
 
 1. Work from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).
 2. Validate: `python .codex-swarm/agentctl.py pr check <task-id>`.
-3. Integrate (includes verify + finish + task lint): `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`.
+3. Integrate (includes verify + finish + task lint on snapshot write): `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`.
 4. Commit closure on the pinned base branch: stage `.codex-swarm/tasks.json` (+ docs/artifacts) and commit `✅ <task-id> close ...`.
 
 # SHARED_STATE
@@ -173,7 +173,7 @@ Schema (JSON):
 - `verify` (optional) is a list of local shell commands that must pass before marking `DONE` (typically run by INTEGRATOR via `verify`/`integrate`, or allowed to run automatically inside `finish`).
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
 - `commit` is required when a task is `DONE`.
-- `meta` is maintained by `agentctl`; manual edits to `.codex-swarm/tasks.json` will break the checksum and fail `agentctl task lint`.
+- `meta` is maintained by `agentctl`; manual edits to `.codex-swarm/tasks.json` will break the checksum. Use `agentctl task lint` or `--lint` when validating read-only state (writes auto-lint).
 
 ### Status Transition Protocol
 
