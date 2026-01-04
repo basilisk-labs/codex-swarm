@@ -15,7 +15,9 @@
         "message": "Create README.md"
       },
       "comments": [],
-      "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly."
+      "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly.",
+      "dirty": false,
+      "redmine_id": 281
     },
     {
       "id": "202601041253-00002",
@@ -32,7 +34,9 @@
         "message": "Dynamic Agents"
       },
       "comments": [],
-      "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance."
+      "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
+      "dirty": false,
+      "redmine_id": 282
     },
     {
       "id": "202601041253-00003",
@@ -49,7 +53,9 @@
         "message": "Dynamic Agents"
       },
       "comments": [],
-      "description": "Ensure task state is available in a machine-readable JSON file for Codex automation."
+      "description": "Ensure task state is available in a machine-readable JSON file for Codex automation.",
+      "dirty": false,
+      "redmine_id": 283
     },
     {
       "id": "202601041253-00004",
@@ -66,7 +72,9 @@
         "message": "T-004: enforce per-task commits"
       },
       "comments": [],
-      "description": "Document the rule that every plan item must end with its own git commit for traceability."
+      "description": "Document the rule that every plan item must end with its own git commit for traceability.",
+      "dirty": false,
+      "redmine_id": 284
     },
     {
       "id": "202601041253-00005",
@@ -82,6 +90,7 @@
         "hash": "fa8627b7e1cb31047987216d42f6664cd1fe8767",
         "message": "T-005: document commit workflow"
       },
+      "dirty": true,
       "comments": [],
       "description": "Expand the README with details on emoji commits and atomic task tracking."
     },
@@ -99,6 +108,7 @@
         "hash": "3a9cc7dcbf8d8ada931d5318ce04ed855254888c",
         "message": "Mark T-006 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Describe how new specialist agents are proposed, reviewed, and added to the registry."
     },
@@ -116,6 +126,7 @@
         "hash": "6e8c80e12a6127ec040d1148cee1bfe1e0e41772",
         "message": "Mark T-007 and T-008 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Tighten the instructions around writing meaningful, emoji-prefixed commit messages."
     },
@@ -133,6 +144,7 @@
         "hash": "6e8c80e12a6127ec040d1148cee1bfe1e0e41772",
         "message": "Mark T-007 and T-008 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Add a quick-start tour of key files and directories so contributors know where to work."
     },
@@ -150,6 +162,7 @@
         "hash": "bb1d0296309f47bcfe7b541b9157a92306cb8543",
         "message": "Mark T-009 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED."
     },
@@ -167,6 +180,7 @@
         "hash": "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1",
         "message": "Mark T-010 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list."
     },
@@ -184,6 +198,7 @@
         "hash": "d9572ab9f3738eced63f4d13f9d149d1d6af6517",
         "message": "Docs T-011 workflow analysis"
       },
+      "dirty": true,
       "comments": [],
       "description": "Review the end-to-end authoring flow and capture improvement ideas inside the docs."
     },
@@ -201,6 +216,7 @@
         "hash": "e92c42039af7d566e79e2d7651c718e1fdaa8b88",
         "message": "Review T-012 generalize AGENTS spec"
       },
+      "dirty": true,
       "comments": [],
       "description": "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions."
     },
@@ -218,6 +234,7 @@
         "hash": "a70b1319af38ab8f8cc3d04d002a01aa4ef70e92",
         "message": "Mark T-013 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Update every agent spec so prompts match the GPT-5.1 best practices."
     },
@@ -235,6 +252,7 @@
         "hash": "db8902599b40ae42ed97c009f1c17e3402664783",
         "message": "Mark T-014 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Add environment assumptions for local-only workflows without remote runtimes."
     },
@@ -252,6 +270,7 @@
         "hash": "9358629edcbdb575b58a9903e647d765b5dfe03f",
         "message": "Mark T-015 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools."
     },
@@ -269,6 +288,7 @@
         "hash": "d5b3e2eac2dc04098d97248ddba1dcca271311fa",
         "message": "Mark T-016 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Strip references to unsupported helper tools to keep instructions aligned with the local stack."
     },
@@ -286,6 +306,7 @@
         "hash": "6ed438a36b77e1ae7ca742ce4ace0fd4391c978e",
         "message": "Mark T-017 done"
       },
+      "dirty": true,
       "comments": [],
       "description": "Reword prompts so agents do not assume access to external search or commands."
     },
@@ -303,6 +324,7 @@
         "hash": "673ff98d3b5efdba4cf81a4ce4b5558748d8ed3e",
         "message": "Mark T-018 complete"
       },
+      "dirty": true,
       "comments": [],
       "description": "Trim redundant English-language instructions and keep the doc crisp."
     },
@@ -320,6 +342,7 @@
         "hash": "4cf2f07b1c9c8dddeb76cd85aa9cdff07cf4bb07",
         "message": "Add T-019 translator agent"
       },
+      "dirty": true,
       "comments": [],
       "description": "Introduce a translator agent that respects glossary entries when localizing README content."
     },
@@ -337,6 +360,7 @@
         "hash": "631c837f044c2f8ff5a3a785cca6d695a990b3a2",
         "message": "Mark T-020 done after README.es review"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -359,6 +383,7 @@
         "hash": "e19258da08620b2b494932ebaa96c806ada33699",
         "message": "Mark T-021 done"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -381,6 +406,7 @@
         "hash": "934d327f0938d4b76760cb585073b6d69b223e6d",
         "message": "Mark T-022 done after translation review"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -403,6 +429,7 @@
         "hash": "1f58561634734d0e73374ccd1264d15d57f7c251",
         "message": "T-023: mark Spanish README translation done"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -426,6 +453,7 @@
         "hash": "eb5a18530947e3387e401f9539595db257492b0c",
         "message": "T-024: finalize glossary schema work"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -448,6 +476,7 @@
         "hash": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
         "message": "✅ Mark T-025 done"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -470,6 +499,7 @@
         "hash": "851c576b97b52541b3cab13ed3555c97d4d1f475",
         "message": "🧩 T-026 enforce atomic planning"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -492,6 +522,7 @@
         "hash": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
         "message": "✅ Review UPDATER agent deliverable (T-027)"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -514,6 +545,7 @@
         "hash": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
         "message": "✅ mark T-028 done"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -536,6 +568,7 @@
         "hash": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
         "message": "🧭 T-029 finish agent audit"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "UPDATER",
@@ -558,6 +591,7 @@
         "hash": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
         "message": "🧩 T-030 revise coder agent"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -580,6 +614,7 @@
         "hash": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
         "message": "✅ T-031 finish README sync task"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -602,6 +637,7 @@
         "hash": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
         "message": "📝 T-032 stylize README"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -625,6 +661,7 @@
         "hash": "2f93325a23837b89b0431b3219cee725b6902583",
         "message": "🛠️ T-033 style tasks board"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -648,6 +685,7 @@
         "hash": "f52008459f7415f33a7d3064d064ec841718d00e",
         "message": "🛠️ T-034 bold label headers"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -670,6 +708,7 @@
         "hash": "6c5bc662a3f71b8e206a48133cc401033142ccd2",
         "message": "🛠️ T-035 remove description italic"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -693,6 +732,7 @@
         "hash": "463a8853f38d3b9f3ebd9f6a191f3f7c81db0aa7",
         "message": "🛠️ T-036 beautify summary table"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "reviewer",
@@ -715,6 +755,7 @@
         "hash": "ec13d916bfc5d0e577b757d2a16dd8380ca3861d",
         "message": "📝 T-037 add contributing guidelines"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -737,6 +778,7 @@
         "hash": "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc",
         "message": "📝 T-038 update README local dev"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -759,6 +801,7 @@
         "hash": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
         "message": "🛠️ T-039 update cleanup script to remove CONTRIBUTING.md and self"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -781,6 +824,7 @@
         "hash": "f9c3e6c1e4bb906895811443799ef70faf18c7a3",
         "message": "📘 T-040 add README onboarding"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -803,6 +847,7 @@
         "hash": "21ddede356590745546962fedebbead23b2edae2",
         "message": "📝 T-041 document framework guideline"
       },
+      "dirty": true,
       "comments": [],
       "description": "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework."
     },
@@ -821,6 +866,7 @@
         "hash": "18a62ee44d660dd7d7e8590329edb92194e4eba6",
         "message": "📝 T-042 expand framework guideline"
       },
+      "dirty": true,
       "comments": [],
       "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear."
     },
@@ -838,6 +884,7 @@
         "hash": "a63694f182aff97ce18b5b9458bf54982e787120",
         "message": "🛠️ T-043 update .gitignore to include .env files"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -860,6 +907,7 @@
         "hash": "5e3b74a497ada1b723813b416747ccc47ca6ddbc",
         "message": "✨ T-044 add sync_tasks.py script to synchronize tasks.json with GitHub Issues"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -882,6 +930,7 @@
         "hash": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
         "message": "✨ T-045 add GitHub Actions workflow to sync tasks.json with GitHub Issues"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -905,6 +954,7 @@
         "hash": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
         "message": "✨ T-046 enhance sync_tasks.py to integrate ProjectV2 status updates and update workflow with project number"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -927,6 +977,7 @@
         "hash": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
         "message": "📌 T-047 start Code of Conduct task"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -950,6 +1001,7 @@
         "hash": "759a800bde828ebb252bac2bb8f24fb7531989de",
         "message": "🧹 T-048 remove markdown task board"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -973,6 +1025,7 @@
         "hash": "5cc30b601bb86f224a984851dae8137374db7ded",
         "message": "✨ T-049 add tasks.html tasks viewer"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "docs",
@@ -999,6 +1052,7 @@
         "hash": "8f6ecd8bd1a461e52243f90732530069652a45c1",
         "message": "🛠️ T-050 Adopt agentctl workflow"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "PLANNER",
@@ -1034,6 +1088,7 @@
         "hash": "d6517d61191b4d80e80acc63117b6e55ba02c557",
         "message": "🧹 T-051 Remove tasks.py; migrate docs to agentctl"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "PLANNER",
@@ -1068,6 +1123,7 @@
         "hash": "cc0a0a73dd2d3864f6d2cb9619d8837465046887",
         "message": "🧪 T-052 Add TESTER agent and enforce post-CODER tests"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CREATOR",
@@ -1099,6 +1155,7 @@
         "hash": "3fb0eb1971185bbd96efed13e037218cde291800",
         "message": "🧾 T-053 Add workflow artifacts to DOCS"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CREATOR",
@@ -1129,6 +1186,7 @@
         "hash": "b1ff627216f332cc34652d0a2968c78e89c68d2d",
         "message": "🧹 T-054 Clean docs and framework artifacts"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -1160,6 +1218,7 @@
         "hash": "20b580ff017d997987112ec3bd46597cd7efe8db",
         "message": "🧭 T-055 Reduce commits with 3-phase workflow"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CREATOR",
@@ -1191,6 +1250,7 @@
         "hash": "ebe53cd0a06d96bba5b1973375dbcbba2b65c917",
         "message": "🧩 T-056 Add Mermaid workflow diagram"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1218,6 +1278,7 @@
         "hash": "c7391edebc5a0ed392178ee311dba25cee93bf78",
         "message": "🧬 T-057 Add detailed Mermaid sequence diagram"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1244,6 +1305,7 @@
         "hash": "9bf8bdf414163bd3818b8d29075e19a4a87539ff",
         "message": "✨ T-058 Add agentctl quickstart + docs"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1274,6 +1336,7 @@
         "hash": "ba1828365b51d415ed3decea1053fd62060c34ff",
         "message": "✨ T-059 Add agentctl ergonomics commands"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1300,6 +1363,7 @@
         "hash": "c735c4c5202296b00105c46e73cc23ddd9b7d203",
         "message": "✨ T-060 Make agents follow agentctl quickstart"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1327,6 +1391,7 @@
         "hash": "dca6297f9226447c57df14fb9f6090a679b535f3",
         "message": "🛡️ T-061 Require user approval before closure commit"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1354,6 +1419,7 @@
         "hash": "c4d8084771dabcdb57353f5e7792322010f648ed",
         "message": "📝 T-062 Refresh docs and cleanup"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "PLANNER",
@@ -1384,6 +1450,7 @@
         "hash": "5e6efe85aa351635d1592525f06ad824f14b3d2c",
         "message": "✨ T-063 simplify tasks.html + dependency map"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1412,6 +1479,7 @@
         "hash": "eb7cf5363ce55ec602fb9cc078069bc8d262a130",
         "message": "🧱 T-064 move framework into .codex-swarm"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1437,6 +1505,7 @@
         "hash": "6b22130b391becfada866dfc8136dbe1decff850",
         "message": "📝 T-065 embed architecture docs in README"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "REVIEWER",
@@ -1464,6 +1533,7 @@
         "hash": "9fd7273c23ae3490637588e158ff485627d93e4a",
         "message": "🧩 T-066 add task-branch + worktree workflow"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1491,6 +1561,7 @@
         "hash": "91b3760239846f01443b8550c9402dcc99c12c74",
         "message": "🛠️ T-067 enforce branch_pr workflow in agentctl"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -1522,6 +1593,7 @@
         "hash": "324e74e5f3bcb4ad1bb239eb1e02bac645553721",
         "message": "🧾 T-068 update PR verify artifacts"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -1556,6 +1628,7 @@
         "hash": "771cdf260f496ee5fb1a2e2e4f291141c455785f",
         "message": "✨ T-069 pr note helper"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -1594,6 +1667,7 @@
         "hash": "26eabcc06d63db1b67637df7bc84b849c27e789e",
         "message": "✨ T-070 guard commit auto-allow"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -1625,6 +1699,7 @@
         "hash": "dea6792a39f57fd3f842a06efa198525afc7271d",
         "message": "📝 T-071 require explicit depends_on"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1655,6 +1730,7 @@
         "hash": "10b4ffcce3069a858b32580fe7247a1bb8a824a5",
         "message": "🛠️ T-072 default depends_on on task add"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1683,6 +1759,7 @@
         "hash": "6ee132fca0297c6909cdb6b2b60fa5e3f83bcc28",
         "message": "✨ T-073 integrate meta head_sha sync"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "CODER",
@@ -1714,6 +1791,7 @@
         "hash": "77a7ec17750368061351c416f1aebafadf2903aa",
         "message": "🗂️ T-074 unify workflow artifacts into per-task folders"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1748,6 +1826,7 @@
         "hash": "2a76efc28ea31c69c13e9c13e2494036db931d6c",
         "message": "🧩 T-075 integrate work start"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1778,6 +1857,7 @@
         "hash": "5ad82c70456333dacda8ff88d5daf15060253536",
         "message": "🧪 T-076 default verify log to per-task PR"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1808,6 +1888,7 @@
         "hash": "cedb50251e77482aecf066e0fe5e2baa2c3d4078",
         "message": "🧹 T-077 add cleanup merged command"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1838,6 +1919,7 @@
         "hash": "1d665885edb4a478f1e627e75e0cceb8d34b569e",
         "message": "🧾 T-078 pr check points to README"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1866,6 +1948,7 @@
         "hash": "6b04b9b75b7c783b4beb33fac5d6a2fc3a95ce36",
         "message": "🧾 T-079 remove legacy prs path mentions"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1896,6 +1979,7 @@
         "hash": "62171a9bb6b56469b6209f2d5b29f053096a1d6f",
         "message": "🔧 T-080 fix auto-summary block selection"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1926,6 +2010,7 @@
         "hash": "0df88f39f6bb08d5fac2dabf5e113687135295a4",
         "message": "🧪 T-081 refresh PR artifacts after verify"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1956,6 +2041,7 @@
         "hash": "c881605fdfef8585816e845648c826acf0c0ee6f",
         "message": "🧪 T-082 refresh PR artifacts"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1985,6 +2071,7 @@
         "hash": "8a70c8e2413945ec564c82f13766421adf15514f",
         "message": "🧾 T-083 refresh PR artifacts"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2015,6 +2102,7 @@
         "hash": "95358c3c7df46275d7afccb5e2556aa52cdb4c39",
         "message": "🧾 T-084 fill workflow README"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2046,6 +2134,7 @@
         "hash": "e6d312e0b441b0deedf3c89c159fca9d9b4c09cb",
         "message": "🧾 T-085 refresh PR artifacts"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2073,6 +2162,7 @@
         "hash": "2b93d6297c22494b1cbc0805952a6f81b3461153",
         "message": "🧾 T-086 update PR artifacts"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2097,6 +2187,7 @@
         "hash": "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d",
         "message": "🛡️ T-087 integrate readiness + no-op handling"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2121,6 +2212,7 @@
         "hash": "780f1d05339296b8840b004e866e35fc74c67e32",
         "message": "✨ T-088 clean.sh interactive workflow_mode + prompt scrubbing"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "ORCHESTRATOR",
@@ -2144,6 +2236,7 @@
         "hash": "644b1fedd0789160916655344eb5ce49ed10f3e1",
         "message": "✨ T-089 Move config + tasks paths"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2167,7 +2260,8 @@
         "hash": "b3ab2947a02cb1a0779e680d0784ae9f79255d2f",
         "message": "🧭 T-090 move ORCHESTRATOR spec to JSON"
       },
-      "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit."
+      "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
+      "dirty": true
     },
     {
       "id": "202601041253-0002V",
@@ -2184,7 +2278,8 @@
         "hash": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
         "message": "🧭 T-091 add explicit orchestrator start line"
       },
-      "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR."
+      "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
+      "dirty": true
     },
     {
       "id": "202601041253-0002W",
@@ -2200,7 +2295,8 @@
         "hash": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
         "message": "📝 T-092 align batch finish docs"
       },
-      "description": "Document commit subject conventions for batch finish in agentctl quickstart."
+      "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
+      "dirty": true
     },
     {
       "id": "202601041253-0002X",
@@ -2214,6 +2310,7 @@
         "hash": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
         "message": "📝 T-093 write docs content"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2234,6 +2331,7 @@
         "hash": "9900d029d4f831d920a82e58869c7d7ec8b28623",
         "message": "📝 T-094 update docs index"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2254,6 +2352,7 @@
         "hash": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
         "message": "📝 T-095 align README docs"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2276,6 +2375,7 @@
         "hash": "7eb0068599e887d0ceda3f427e413b1a7505d6dc",
         "message": "🛠️ T-096 centralize agentctl guidance"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2296,6 +2396,7 @@
         "hash": "cc0ae159d12d582dbaec8d916b8e936fed08a02a",
         "message": "📝 T-097 rename docs index"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2318,6 +2419,7 @@
         "hash": "ba44ab30139e35d29edb1337a1c56d2a4d4e9566",
         "message": "📝 T-098 reinforce no-manual-edits rule"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2340,6 +2442,7 @@
         "hash": "be41f3b5cdebf6a1d18b4562e722b6c4041733b4",
         "message": "🛠️ T-099 enforce doc completion + fill T-096"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2360,6 +2463,7 @@
         "hash": "1094b0af329012963648b1405b49eb5d17479c1b",
         "message": "📝 T-100 update README docs links"
       },
+      "dirty": true,
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2383,7 +2487,8 @@
         "hash": "5912c9c7a818350820e56e37830ff34a7daceb87",
         "message": "✨ T-101 update README badges"
       },
-      "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation."
+      "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
+      "dirty": true
     },
     {
       "id": "202601041253-00036",
@@ -2400,7 +2505,8 @@
         "hash": "0b222dfbd26ac511935b4a3026686a4685280d4f",
         "message": "🔧 T-102 harden depends_on parsing"
       },
-      "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse."
+      "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
+      "dirty": true
     },
     {
       "id": "202601041253-00037",
@@ -2418,7 +2524,8 @@
         "hash": "a6e47cab956e1b39d5f10ca6ddc02024cc92fe6c",
         "message": "🔧 T-103 align GitHub sync paths"
       },
-      "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout."
+      "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
+      "dirty": true
     },
     {
       "id": "202601041253-00038",
@@ -2435,7 +2542,8 @@
         "hash": "fbc029009285cf68d7730f23156fce5572b52d96",
         "message": "📝 T-104 update README layout"
       },
-      "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation."
+      "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
+      "dirty": true
     },
     {
       "id": "202601041253-00039",
@@ -2451,7 +2559,8 @@
         "hash": "9d6cf15ab9c6bdf76abee921795806b19bc16f2e",
         "message": "📝 T-105 merge docs index sections"
       },
-      "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md."
+      "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003A",
@@ -2467,12 +2576,13 @@
         "hash": "fe29281d02dadd4154586cbd088361ba54174a97",
         "message": "📝 T-106 align docs links and wording"
       },
-      "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow."
+      "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003B",
       "title": "Link file references in docs",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [],
@@ -2484,7 +2594,8 @@
         "message": "📝 T-107 link doc file references"
       },
       "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 264
     },
     {
       "id": "202601041253-0003C",
@@ -2498,7 +2609,8 @@
         "hash": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
         "message": "📝 T-108 T-109 update docs for backends + numbering"
       },
-      "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior."
+      "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003D",
@@ -2512,7 +2624,8 @@
         "hash": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
         "message": "📝 T-108 T-109 update docs for backends + numbering"
       },
-      "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order."
+      "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003E",
@@ -2526,7 +2639,8 @@
         "hash": "edf60000edb0b50cc9195328d3053157714fc200",
         "message": "🧩 T-110 add backend plugin loader"
       },
-      "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring."
+      "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003F",
@@ -2543,7 +2657,8 @@
         "message": "🧩 T-111 add local ID generator"
       },
       "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 265
     },
     {
       "id": "202601041253-0003G",
@@ -2560,7 +2675,8 @@
         "message": "🧩 T-112 route tasks to backend"
       },
       "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 266
     },
     {
       "id": "202601041253-0003H",
@@ -2577,7 +2693,8 @@
         "message": "🧩 T-113 add redmine backend"
       },
       "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 267
     },
     {
       "id": "202601041253-0003J",
@@ -2594,7 +2711,8 @@
         "message": "🧩 T-114 migrate workflow paths to tasks"
       },
       "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 268
     },
     {
       "id": "202601041253-0003K",
@@ -2611,7 +2729,8 @@
         "message": "🧩 T-115 add tasks.json migration"
       },
       "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 269
     },
     {
       "id": "202601041253-0003M",
@@ -2623,7 +2742,8 @@
         "202601041253-0003K"
       ],
       "tags": [],
-      "description": "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model."
+      "description": "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003N",
@@ -2640,7 +2760,8 @@
         "message": "🧩 T-117 remove legacy workspace"
       },
       "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 270
     },
     {
       "id": "202601041253-0003P",
@@ -2661,7 +2782,8 @@
         }
       ],
       "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 271
     },
     {
       "id": "202601041253-0003Q",
@@ -2682,7 +2804,8 @@
         }
       ],
       "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 272
     },
     {
       "id": "202601041253-0003R",
@@ -2703,7 +2826,8 @@
         }
       ],
       "description": "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 279
     },
     {
       "id": "202601041253-0003S",
@@ -2724,7 +2848,8 @@
         }
       ],
       "description": "Keep the frontmatter block intact when overwriting task README scaffolds.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 280
     },
     {
       "id": "202601041300-00040",
@@ -2748,7 +2873,8 @@
         }
       ],
       "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 273
     },
     {
       "id": "202601041311-D7Q7D",
@@ -2769,7 +2895,8 @@
         }
       ],
       "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 274
     },
     {
       "id": "202601041331-Q11MC",
@@ -2780,7 +2907,8 @@
       "depends_on": [],
       "tags": [],
       "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 275
     },
     {
       "id": "202601041346-YM3R8",
@@ -2809,7 +2937,8 @@
         }
       ],
       "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 276
     },
     {
       "id": "202601042107-TAG01",
@@ -2823,7 +2952,8 @@
         "workflow"
       ],
       "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 277
     },
     {
       "id": "202601042147-CMT01",
@@ -2847,13 +2977,14 @@
         }
       ],
       "description": "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion.",
-      "dirty": true
+      "dirty": true,
+      "redmine_id": 278
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9861ed70b23f282aab16434655cca7f18715fa380db055b84901cc7376b64a72"
+    "checksum": "4c305d767d030741cefd1ea91bd08ff2e15dee9acf86487053087bbbaa5c074f"
   }
 }

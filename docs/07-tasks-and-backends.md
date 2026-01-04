@@ -1,7 +1,7 @@
 # Tasks and Backends
 
 ## Summary
-Tasks are routed through `agentctl`, which uses the active backend plugin to decide the source of truth. When `backend=local`, the canonical store is `.codex-swarm/tasks/`. When `backend=redmine`, Redmine is canonical and the local folder acts as a cache/offline layer.
+Tasks are routed through `agentctl`, which uses the active backend plugin to decide the source of truth. When `backend=local`, the canonical store is [`.codex-swarm/tasks/`](../.codex-swarm/tasks/). When `backend=redmine`, Redmine is canonical and the local folder acts as a cache/offline layer.
 
 ## Task Identity
 - Canonical task ID format: `YYYYMMDDHHMM-<RAND>`
@@ -10,10 +10,11 @@ Tasks are routed through `agentctl`, which uses the active backend plugin to dec
 - `agentctl` checks for collisions when generating new IDs.
 
 ## Local Storage Layout
-Each task lives in a dedicated folder:
+Each task lives in a dedicated folder (see [`.codex-swarm/tasks/`](../.codex-swarm/tasks/)):
 ```
 .codex-swarm/tasks/<task-id>/README.md
 ```
+Use [`.codex-swarm/tasks/<task-id>/README.md`](../.codex-swarm/tasks/) as the canonical file path when linking from docs.
 
 The `README.md` begins with frontmatter:
 ```yaml
@@ -35,7 +36,7 @@ created_at: "2026-01-03T18:16:00Z"
 
 ## Backend Model
 ### local
-- Canonical source: `.codex-swarm/tasks/`.
+- Canonical source: [`.codex-swarm/tasks/`](../.codex-swarm/tasks/).
 - `agentctl` reads/writes frontmatter directly.
 - `tasks.json` is generated from local tasks for browsing and integrations.
 
@@ -54,12 +55,13 @@ created_at: "2026-01-03T18:16:00Z"
   - `--conflict=fail`
 
 ## Backend Plugins
-Backends are packaged as shareable plugin folders:
+Backends are packaged as shareable plugin folders (see [`.codex-swarm/backends/`](../.codex-swarm/backends/)):
 ```
 .codex-swarm/backends/<backend-id>/
   backend.json
   backend.py
 ```
+When linking a backend path, point to [`.codex-swarm/backends/`](../.codex-swarm/backends/).
 
 `backend.json` points to the implementation and settings:
 ```json
@@ -78,7 +80,7 @@ Backends are packaged as shareable plugin folders:
 }
 ```
 
-The active backend is selected in `.codex-swarm/config.json`:
+The active backend is selected in [`.codex-swarm/config.json`](../.codex-swarm/config.json):
 ```json
 "tasks_backend": {
   "config_path": ".codex-swarm/backends/redmine/backend.json"
@@ -86,12 +88,12 @@ The active backend is selected in `.codex-swarm/config.json`:
 ```
 
 ## Exported JSON Snapshot
-`tasks.json` is generated from the canonical backend:
+[`tasks.json`](../.codex-swarm/tasks.json) is generated from the canonical backend:
 ```bash
 python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tasks.json
 ```
 
-`.codex-swarm/viewer/tasks.html` reads the exported snapshot only.
+[`.codex-swarm/viewer/tasks.html`](../.codex-swarm/viewer/tasks.html) reads the exported snapshot only.
 
 ## Core Commands
 ```bash
