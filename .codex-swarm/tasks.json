@@ -2577,14 +2577,19 @@
     {
       "id": "202601041253-0003J",
       "title": "agentctl: migrate workspace paths to tasks/ + PR artifacts",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [
         "202601041253-0003G"
       ],
       "tags": [],
-      "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly."
+      "commit": {
+        "hash": "9f593fed6fb24d0eec8912eda970708241e955a9",
+        "message": "🧩 T-114 migrate workflow paths to tasks"
+      },
+      "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
+      "dirty": true
     },
     {
       "id": "202601041253-0003K",
@@ -2810,6 +2815,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7c47e42d4d2271565cc2efe1426dfce2c3125e744bc05a2ecc87c44a772d3001"
+    "checksum": "bda8daa6a138ab574d827250f54950a4c930e0f87e2cc6995350a620636fd1c5"
   }
 }
