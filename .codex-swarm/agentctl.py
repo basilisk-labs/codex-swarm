@@ -242,6 +242,7 @@ def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
 LEGACY_TASK_ID_RE = re.compile(r"^T-(\d+)$")
+_TASK_CACHE: Optional[List[Dict]] = None
 
 
 def normalize_slug(value: str) -> str:
@@ -296,6 +297,20 @@ def task_id_variants(task_id: str) -> Set[str]:
     if "-" in raw:
         variants.add(raw.split("-")[-1])
     return variants
+
+
+def task_digest(task: Dict) -> str:
+    return json.dumps(task, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def commit_subject_mentions_task(task_id: str, subject: str) -> bool:
+    return any(token in subject for token in task_id_variants(task_id))
+
+
+def commit_subject_missing_error(task_ids: List[str], subject: str, *, context: Optional[str] = None) -> str:
+    suffix = " (or their suffixes)" if len(task_ids) > 1 else " (or its suffix)"
+    prefix = f"{context}: " if context else ""
+    return f"{prefix}Commit subject does not mention {', '.join(task_ids)}{suffix}: {subject!r}"
 
 
 def require_structured_comment(body: str, *, prefix: str, min_chars: int) -> None:
@@ -424,7 +439,6 @@ TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
 BACKEND_CONFIG = load_backend_config()
 BACKEND_CLASS = load_backend_class(BACKEND_CONFIG) if BACKEND_CONFIG else None
 _BACKEND_INSTANCE: Optional[object] = None
-LEGACY_WORKFLOW_DIR = SWARM_DIR / "workspace"
 
 
 def backend_enabled() -> bool:
@@ -471,8 +485,6 @@ DEFAULT_BASE_BRANCH = "main"
 GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
 WORKTREES_DIR = SWARM_DIR / "worktrees"
-# Legacy PR artifacts directory (pre per-task layout).
-LEGACY_PRS_DIR = LEGACY_WORKFLOW_DIR / "prs"
 
 
 def config_base_branch() -> str:
@@ -573,14 +585,26 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
     write_task = getattr(backend, "write_task", None)
     if not callable(list_tasks) or not callable(write_task):
         die("Configured backend must implement list_tasks() and write_task()", code=2)
-    tasks = list_tasks()
+    global _TASK_CACHE
+    tasks = _TASK_CACHE if _TASK_CACHE is not None else list_tasks()
     if not isinstance(tasks, list):
         die("Backend list_tasks() must return a list of tasks", code=2)
+    tasks_by_id = {str(task.get("id") or ""): task for task in tasks if isinstance(task, dict)}
 
     def save(updated_tasks: List[Dict]) -> None:
+        global _TASK_CACHE
         for task in updated_tasks:
-            if isinstance(task, dict):
-                write_task(task)
+            if not isinstance(task, dict):
+                continue
+            task_id = str(task.get("id") or "").strip()
+            if not task_id:
+                continue
+            existing = tasks_by_id.get(task_id)
+            if existing is not None and task_digest(existing) == task_digest(task):
+                continue
+            write_task(task)
+            tasks_by_id[task_id] = task
+        _TASK_CACHE = updated_tasks
 
     return tasks, save
 
@@ -743,9 +767,6 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
         title = str(task.get("title") or "").strip()
 
     target = workflow_task_readme_path(task_id)
-    legacy = legacy_workflow_task_doc_path(task_id)
-    if legacy.exists() and not args.overwrite:
-        die(f"Legacy task doc exists: {legacy} (migrate it to {target} or re-run with --overwrite)", code=2)
     if target.exists() and not args.overwrite:
         die(f"File already exists: {target}", code=2)
 
@@ -817,10 +838,41 @@ def cmd_task_export(args: argparse.Namespace) -> None:
         die(f"Unsupported export format: {fmt}", code=2)
     out_raw = str(args.out or TASKS_PATH_REL).strip()
     out_path = _resolve_repo_relative_path(out_raw, label="task export output")
-    tasks, _ = load_task_store()
-    write_tasks_json_to_path(out_path, {"tasks": tasks})
+    backend = backend_instance()
+    export_tasks_json = getattr(backend, "export_tasks_json", None) if backend else None
+    if callable(export_tasks_json):
+        export_tasks_json(out_path)
+    else:
+        tasks, _ = load_task_store()
+        write_tasks_json_to_path(out_path, {"tasks": tasks})
     if not args.quiet:
         print(f"✅ exported tasks to {out_path.relative_to(ROOT)}")
+
+
+def cmd_task_normalize(args: argparse.Namespace) -> None:
+    require_tasks_json_write_context(force=bool(args.force))
+    backend = backend_instance()
+    if backend is None:
+        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+    normalize = getattr(backend, "normalize_tasks", None)
+    if callable(normalize):
+        count = normalize()
+    else:
+        list_tasks = getattr(backend, "list_tasks", None)
+        write_task = getattr(backend, "write_task", None)
+        if not callable(list_tasks) or not callable(write_task):
+            die("Configured backend does not support normalize_tasks()", code=2)
+        tasks = list_tasks()
+        if not isinstance(tasks, list):
+            die("Backend list_tasks() must return a list of tasks", code=2)
+        for task in tasks:
+            if isinstance(task, dict):
+                write_task(task)
+        count = len(tasks)
+    global _TASK_CACHE
+    _TASK_CACHE = None
+    if not args.quiet:
+        print(f"✅ normalized {count} task(s)")
 
 
 def cmd_task_migrate(args: argparse.Namespace) -> None:
@@ -1233,9 +1285,8 @@ def guard_commit_check(
     quiet: bool,
     cwd: Path,
 ) -> None:
-    variants = task_id_variants(task_id)
-    if not variants or not any(token in message for token in variants):
-        die(f"Commit message must include {task_id} (or its suffix)", code=2)
+    if not commit_subject_mentions_task(task_id, message):
+        die(commit_subject_missing_error([task_id], message), code=2)
     if not commit_message_has_meaningful_summary(task_id, message):
         die(
             "Commit message is too generic; include a short summary (and constraints when relevant), "
@@ -1825,27 +1876,21 @@ def cmd_verify(args: argparse.Namespace) -> None:
     else:
         # Convenience default: if a tracked PR artifact exists, write into its verify.log.
         pr_root = pr_dir(task_id)
-        legacy_pr_root = legacy_pr_dir(task_id)
         if pr_root.exists():
             log_path = (pr_root / "verify.log").resolve()
-        elif legacy_pr_root.exists():
-            log_path = (legacy_pr_root / "verify.log").resolve()
 
     if log_path:
         if ROOT.resolve() not in log_path.parents and log_path.resolve() != ROOT.resolve():
             die(f"--log must stay under repo root: {log_path}", code=2)
 
-    pr_meta_path_new = pr_dir(task_id) / "meta.json"
-    pr_meta_path_legacy = legacy_pr_dir(task_id) / "meta.json"
-    pr_meta_path = pr_meta_path_new if pr_meta_path_new.exists() else pr_meta_path_legacy
+    pr_meta_path = pr_dir(task_id) / "meta.json"
     pr_meta: Optional[Dict] = pr_load_meta(pr_meta_path) if pr_meta_path.exists() else None
 
     head_sha = git_rev_parse("HEAD", cwd=cwd)
     current_sha = head_sha
     if log_path and pr_meta:
         log_parent_chain = log_path.resolve().parents
-        pr_roots = [pr_dir(task_id).resolve(), legacy_pr_dir(task_id).resolve()]
-        if any(root in log_parent_chain for root in pr_roots):
+        if pr_dir(task_id).resolve() in log_parent_chain:
             meta_head = str(pr_meta.get("head_sha") or "").strip()
             if meta_head:
                 current_sha = meta_head
@@ -1966,15 +2011,11 @@ def cmd_finish(args: argparse.Namespace) -> None:
     commit_info = get_commit_info(args.commit)
     if args.require_task_id_in_commit and not args.force:
         message = commit_info.get("message", "")
-        missing = [
-            task_id
-            for task_id in task_ids
-            if not any(token in message for token in task_id_variants(task_id))
-        ]
+        missing = [task_id for task_id in task_ids if not commit_subject_mentions_task(task_id, message)]
         if missing:
             die(
-                f"Commit subject does not mention {', '.join(missing)}: {commit_info.get('message')!r} "
-                "(use --force or --no-require-task-id-in-commit)"
+                commit_subject_missing_error(missing, message)
+                + " (use --force or --no-require-task-id-in-commit)"
             )
 
     tasks, save = load_task_store()
@@ -2587,42 +2628,9 @@ def workflow_task_readme_path(task_id: str) -> Path:
     return workflow_task_dir(task_id) / "README.md"
 
 
-def legacy_workflow_task_dir(task_id: str) -> Path:
-    return LEGACY_WORKFLOW_DIR / task_id
-
-
-def legacy_workflow_task_readme_path(task_id: str) -> Path:
-    return legacy_workflow_task_dir(task_id) / "README.md"
-
-
-def legacy_workflow_task_doc_path(task_id: str) -> Path:
-    return LEGACY_WORKFLOW_DIR / f"{task_id}.md"
-
-
 def pr_dir(task_id: str) -> Path:
     # New layout (T-074+): .codex-swarm/tasks/<task-id>/pr/
     return workflow_task_dir(task_id) / "pr"
-
-
-def legacy_pr_dir(task_id: str) -> Path:
-    return LEGACY_PRS_DIR / task_id
-
-
-def legacy_task_pr_dir(task_id: str) -> Path:
-    return legacy_workflow_task_dir(task_id) / "pr"
-
-
-def pr_dir_any(task_id: str) -> Path:
-    new = pr_dir(task_id)
-    if new.exists():
-        return new
-    legacy_task_pr = legacy_task_pr_dir(task_id)
-    if legacy_task_pr.exists():
-        return legacy_task_pr
-    legacy_prs = legacy_pr_dir(task_id)
-    if legacy_prs.exists():
-        return legacy_prs
-    return new
 
 
 PR_DESCRIPTION_REQUIRED_SECTIONS: Tuple[str, ...] = (
@@ -2805,11 +2813,7 @@ def pr_load_meta_text(text: str, *, source: str) -> Dict:
 
 
 def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> Optional[str]:
-    candidates = [
-        pr_dir(task_id) / filename,
-        legacy_task_pr_dir(task_id) / filename,
-        legacy_pr_dir(task_id) / filename,
-    ]
+    candidates = [pr_dir(task_id) / filename]
     for path in candidates:
         if path.exists():
             return path.read_text(encoding="utf-8", errors="replace")
@@ -2826,8 +2830,7 @@ def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str])
 def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str]:
     """
     PR "description" doc:
-      - New layout: .codex-swarm/tasks/<task-id>/README.md
-      - Legacy layout: .codex-swarm/workspace/prs/T-###/description.md
+      - .codex-swarm/tasks/<task-id>/README.md
     """
     readme = workflow_task_readme_path(task_id)
     if branch:
@@ -2837,15 +2840,6 @@ def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str
             return text
     if readme.exists():
         return readme.read_text(encoding="utf-8", errors="replace")
-    legacy_readme = legacy_workflow_task_readme_path(task_id)
-    if legacy_readme.exists():
-        return legacy_readme.read_text(encoding="utf-8", errors="replace")
-    legacy_description = legacy_pr_dir(task_id) / "description.md"
-    if legacy_description.exists():
-        return legacy_description.read_text(encoding="utf-8", errors="replace")
-    if branch:
-        rel = legacy_description.relative_to(ROOT).as_posix()
-        return git_show_text(branch, rel, cwd=ROOT)
     return None
 
 
@@ -2854,8 +2848,6 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
     if text is not None:
         return text
     target = pr_dir(task_id)
-    legacy_task = legacy_task_pr_dir(task_id)
-    legacy = legacy_pr_dir(task_id)
     if not branch:
         die(
             "\n".join(
@@ -2865,8 +2857,6 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
                     f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR artifacts from that branch",
                     "  2) Or check out the task branch that contains the PR artifact files",
                     f"Expected (new): {target.relative_to(ROOT)}",
-                    f"Fallback (legacy): {legacy_task.relative_to(ROOT)}",
-                    f"Fallback (older): {legacy.relative_to(ROOT)}",
                     f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
                 ]
             ),
@@ -2874,12 +2864,10 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
         )
 
     rel = (target / filename).relative_to(ROOT).as_posix()
-    legacy_task_rel = (legacy_task / filename).relative_to(ROOT).as_posix()
-    legacy_rel = (legacy / filename).relative_to(ROOT).as_posix()
     die(
         "\n".join(
             [
-                f"Missing PR artifact file in {branch!r}: {rel} (or legacy {legacy_task_rel}, {legacy_rel})",
+                f"Missing PR artifact file in {branch!r}: {rel}",
                 "Fix:",
                 f"  1) Ensure the task branch contains `{rel}` (run `python .codex-swarm/agentctl.py pr open {task_id}` in the branch)",
                 "  2) Commit the PR artifact files to the task branch",
@@ -2961,10 +2949,8 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         die(f"Unknown branch: {branch}", code=2)
 
     target = pr_dir(task_id)
-    legacy_target = legacy_pr_dir(task_id)
-    if target.exists() or legacy_target.exists():
-        existing = target if target.exists() else legacy_target
-        die(f"PR artifact dir already exists: {existing} (use `pr update`)", code=2)
+    if target.exists():
+        die(f"PR artifact dir already exists: {target} (use `pr update`)", code=2)
 
     target = pr_ensure_skeleton(task_id=task_id, branch=branch, author=author, base_branch=base)
     cmd_pr_update(argparse.Namespace(task_id=task_id, branch=branch, base=base, quiet=True))
@@ -3007,7 +2993,7 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     if not task_id:
         die("task_id must be non-empty", code=2)
 
-    target = pr_dir_any(task_id)
+    target = pr_dir(task_id)
     if not target.exists():
         die(f"Missing PR artifact dir: {target}", code=2)
 
@@ -3080,8 +3066,7 @@ def pr_check(
     pr_doc = pr_try_read_doc_text(task_id, branch=artifact_branch)
     if pr_doc is None:
         readme_rel = workflow_task_readme_path(task_id).relative_to(ROOT).as_posix()
-        legacy_rel = (legacy_pr_dir(task_id) / "description.md").relative_to(ROOT).as_posix()
-        die(f"Missing PR doc: {readme_rel} (or legacy {legacy_rel})", code=2)
+        die(f"Missing PR doc: {readme_rel}", code=2)
     missing_sections, empty_sections = pr_validate_description(pr_doc)
     doc_hint = workflow_task_readme_path(task_id).relative_to(ROOT).as_posix()
     if missing_sections:
@@ -3092,9 +3077,9 @@ def pr_check(
     subjects = git_log_subjects(base_ref, pr_branch, limit=200)
     if not subjects:
         die(f"No commits found on {pr_branch!r} compared to {base_ref!r}", code=2)
-    variants = task_id_variants(task_id)
-    if not any(any(token in subject for token in variants) for subject in subjects):
-        die(f"Branch {pr_branch!r} has no commit subject mentioning {task_id} (or its suffix)", code=2)
+    if not any(commit_subject_mentions_task(task_id, subject) for subject in subjects):
+        sample = "; ".join(subjects[:3])
+        die(commit_subject_missing_error([task_id], sample, context=f"Branch {pr_branch!r}"), code=2)
 
     changed = git_diff_names(base_ref, pr_branch)
     if TASKS_PATH_REL in changed:
@@ -3738,6 +3723,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_export.add_argument("--out", default=TASKS_PATH_REL, help="Output path (repo-relative)")
     p_export.add_argument("--quiet", action="store_true", help="Minimal output")
     p_export.set_defaults(func=cmd_task_export)
+
+    p_normalize = task_sub.add_parser("normalize", help="Normalize task READMEs via backend re-write")
+    p_normalize.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_normalize.add_argument("--force", action="store_true", help="Bypass base-branch checks")
+    p_normalize.set_defaults(func=cmd_task_normalize)
 
     p_migrate = task_sub.add_parser("migrate", help="Migrate tasks.json into the configured backend")
     p_migrate.add_argument("--source", default=TASKS_PATH_REL, help="Source tasks.json path (repo-relative)")

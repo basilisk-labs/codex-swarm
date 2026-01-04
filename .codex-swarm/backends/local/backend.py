@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import secrets
 from dataclasses import dataclass
@@ -289,4 +290,17 @@ class LocalBackend:
     def export_tasks_json(self, output_path: Path) -> None:
         tasks = self.list_tasks()
         payload = {"tasks": tasks}
+        canonical = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        payload["meta"] = {
+            "schema_version": 1,
+            "managed_by": "agentctl",
+            "checksum_algo": "sha256",
+            "checksum": hashlib.sha256(canonical).hexdigest(),
+        }
         output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    def normalize_tasks(self) -> int:
+        tasks = self.list_tasks()
+        for task in tasks:
+            self.write_task(task)
+        return len(tasks)

@@ -32,6 +32,9 @@ python .codex-swarm/agentctl.py task show <task-id>
 # validate .codex-swarm/tasks.json (schema/deps/checksum)
 python .codex-swarm/agentctl.py task lint
 
+# normalize task READMEs via backend rewrite
+python .codex-swarm/agentctl.py task normalize
+
 # readiness gate (deps DONE)
 python .codex-swarm/agentctl.py ready <task-id>
 
