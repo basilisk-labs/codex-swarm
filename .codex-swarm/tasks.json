@@ -2570,12 +2570,36 @@
       ],
       "tags": [],
       "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
+    },
+    {
+      "id": "T-116",
+      "title": "Agents: export tasks.json on close",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [
+        "T-115"
+      ],
+      "tags": [],
+      "description": "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model."
+    },
+    {
+      "id": "T-117",
+      "title": "Remove legacy workspace directory",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [
+        "T-115"
+      ],
+      "tags": [],
+      "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0d477713c58bcff2ca56aa3993f66563a67f3a444c295fe9b66fbf2d24966dde"
+    "checksum": "f819218315909a5621c02f34d7bb04ac6208b9d12649e0b32fcee019aaed3a64"
   }
 }
