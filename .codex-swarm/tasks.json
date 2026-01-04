@@ -2558,12 +2558,24 @@
       "depends_on": [
         "T-112"
       ]
+    },
+    {
+      "id": "T-115",
+      "title": "agentctl: migrate tasks.json to local backend",
+      "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [],
+      "depends_on": [
+        "T-112"
+      ]
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0524e5665fc5537f3d1371ee3cc4ad5574a091fd1fcb5f944cb6175a2eacc238"
+    "checksum": "a21997c93b115ebb7cc1bf4da99be644a9bd262aae9b148cb0a58a9a130d2351"
   }
 }
