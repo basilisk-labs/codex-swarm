@@ -2472,13 +2472,17 @@
     {
       "id": "202601041253-0003B",
       "title": "Link file references in docs",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [],
       "tags": [
         "docs"
       ],
+      "commit": {
+        "hash": "7e88f9df016c340dbf314d6f687473f2f955ea6c",
+        "message": "📝 T-107 link doc file references"
+      },
       "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks."
     },
     {
@@ -2678,7 +2682,7 @@
     {
       "id": "202601041300-00040",
       "title": "tasks.html kanban viewer with local server",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "med",
       "owner": "codex",
       "depends_on": [],
@@ -2686,6 +2690,10 @@
         "tasks-ui",
         "kanban"
       ],
+      "commit": {
+        "hash": "8ebac65cf3df403807155f58e430ba30e925692b",
+        "message": "🛠️ 202601041300-00040 tasks viewer"
+      },
       "comments": [
         {
           "author": "codex",
@@ -2770,6 +2778,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "8b2c40d547515b84c3b040f3525e9b2c43059457e6ba4205c4322d10085c7029"
+    "checksum": "af997338e0cafad2c8df40f7dc07ffd98c4ad1ef492a61f6473550c5568ae83f"
   }
 }
