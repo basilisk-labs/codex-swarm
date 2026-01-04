@@ -1,0 +1,16 @@
+---
+id: "202601041253-00025"
+title: "agentctl pr note: append handoff notes"
+status: "DONE"
+priority: "med"
+owner: "CODER"
+depends_on: ["202601041253-00024"]
+tags: ["agentctl", "workflow", "pipeline"]
+verify: ["python -m compileall scripts/agentctl.py", "python scripts/agentctl.py task lint"]
+commit: { hash: "771cdf260f496ee5fb1a2e2e4f291141c455785f", message: "✨ T-069 pr note helper" }
+comments:
+  - { author: "CODER", body: "Start: add agentctl pr note to append '- ROLE: TEXT' under ## Handoff Notes in docs/workflow/prs/T-###/review.md; update .codex-swarm/agentctl.md; verify via task lint and a manual note append smoke." }
+  - { author: "CODER", body: "Implemented pr note helper; ready for review." }
+  - { author: "INTEGRATOR", body: "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-069." }
+description: "Add a convenience command to append correctly formatted bullets under the '## Handoff Notes' section in docs/workflow/prs/T-###/review.md. Acceptance: (1) python scripts/agentctl.py pr note T-### --author ROLE --body TEXT adds a '- ROLE: TEXT' entry under Handoff Notes; (2) preserves existing content and keeps formatting stable; (3) emits clear errors/fixes when the PR artifact is missing; (4) update .codex-swarm/agentctl.md with the new command."
+---

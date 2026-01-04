@@ -1,0 +1,13 @@
+---
+id: "202601041253-0002Q"
+title: "Pin current git branch as base branch"
+status: "DONE"
+priority: "med"
+owner: "human"
+depends_on: []
+tags: ["workflow", "git", "branching"]
+commit: { hash: "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d", message: "🛡️ T-087 integrate readiness + no-op handling" }
+comments:
+  - { author: "INTEGRATOR", body: "Verified: Base branch now pins to local git config (codexswarm.baseBranch); integrate/guard/cleanup use it; no-op integrates fail fast." }
+description: "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main."
+---
