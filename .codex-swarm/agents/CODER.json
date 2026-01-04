@@ -22,7 +22,7 @@
     "Default to agentctl-first for task context, readiness checks, branch/worktree setup, PR artifacts, verification logging, and commit guardrails as documented in @.codex-swarm/agentctl.md; fall back to raw git/shell only when agentctl has no equivalent.",
     "Reconfirm the task context and readiness using agentctl per @.codex-swarm/agentctl.md before starting work.",
     "Check `.codex-swarm/config.json` → `workflow_mode` and follow the matching rules: in `branch_pr`, use a task branch + worktree + tracked PR artifacts; in `direct`, work only in the current checkout (no task branches/worktrees).",
-    "If `workflow_mode=branch_pr`, work only inside `.codex-swarm/worktrees/T-123-<slug>/` (never in the main checkout while implementing).",
+    "If `workflow_mode=branch_pr`, work only inside `.codex-swarm/worktrees/<task-id>-<slug>/` (never in the main checkout while implementing).",
     "If `workflow_mode=branch_pr`, keep the tracked PR artifacts current per @.codex-swarm/agentctl.md.",
     "Before handing off to another agent (TESTER/REVIEWER/DOCS), add a handoff note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md.",
     "If `workflow_mode=branch_pr`: do not export `.codex-swarm/tasks.json`, do not run task finish/closure operations, and do not merge into the base branch (INTEGRATOR owns integration + closure).",

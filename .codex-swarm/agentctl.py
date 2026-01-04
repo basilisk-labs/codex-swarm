@@ -1227,7 +1227,7 @@ def guard_commit_check(
     if not commit_message_has_meaningful_summary(task_id, message):
         die(
             "Commit message is too generic; include a short summary (and constraints when relevant), "
-            'e.g. "✨ T-123 Add X (no network)"',
+            'e.g. "✨ <task-id> Add X (no network)"',
             code=2,
         )
 
@@ -1363,13 +1363,13 @@ def cmd_quickstart(_: argparse.Namespace) -> None:
                 "",
                 "Common commands:",
                 "  python .codex-swarm/agentctl.py task list",
-                "  python .codex-swarm/agentctl.py task show T-123",
+                "  python .codex-swarm/agentctl.py task show <task-id>",
                 "  python .codex-swarm/agentctl.py task lint",
-                "  python .codex-swarm/agentctl.py ready T-123",
-                "  python .codex-swarm/agentctl.py start T-123 --author CODER --body \"Start: ...\"",
-                "  python .codex-swarm/agentctl.py verify T-123",
-                "  python .codex-swarm/agentctl.py guard commit T-123 -m \"✨ T-123 ...\" --allow <path-prefix>",
-                "  python .codex-swarm/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body \"Verified: ...\"",
+                "  python .codex-swarm/agentctl.py ready <task-id>",
+                "  python .codex-swarm/agentctl.py start <task-id> --author CODER --body \"Start: ...\"",
+                "  python .codex-swarm/agentctl.py verify <task-id>",
+                "  python .codex-swarm/agentctl.py guard commit <task-id> -m \"✨ <task-id> ...\" --allow <path-prefix>",
+                "  python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author REVIEWER --body \"Verified: ...\"",
                 "",
                 f"Tip: create {AGENTCTL_DOCS_PATH.as_posix()} to override this output.",
             ]
@@ -1891,7 +1891,7 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
     if nxt not in ALLOWED_STATUSES:
         die(f"Invalid status: {args.status} (allowed: {', '.join(sorted(ALLOWED_STATUSES))})")
     if nxt == "DONE" and not args.force:
-        die("Use `python .codex-swarm/agentctl.py finish T-123` to mark DONE (use --force to override)", code=2)
+        die("Use `python .codex-swarm/agentctl.py finish <task-id>` to mark DONE (use --force to override)", code=2)
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)
 

@@ -28,8 +28,8 @@ description: "Keep the frontmatter block intact when overwriting task README sca
 
 ## Verify Steps
 
-- `python3 .codex-swarm/agentctl.py task scaffold T-121 --overwrite`
-- Confirm the frontmatter block remains at the top of `.codex-swarm/tasks/T-121/README.md`.
+- `python3 .codex-swarm/agentctl.py task scaffold 202601041253-0003S --overwrite`
+- Confirm the frontmatter block remains at the top of `.codex-swarm/tasks/202601041253-0003S/README.md`.
 
 ## Rollback Plan
 
