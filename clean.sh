@@ -45,8 +45,15 @@ rm -rf \
   CODE_OF_CONDUCT.md \
   GUIDELINE.md
 
-# Recreate an empty tasks file so the framework is usable after cleanup.
-python - <<'PY' > .codex-swarm/tasks.json
+# Reset local task storage while keeping the framework task directory.
+if [[ -d ".codex-swarm/tasks" ]]; then
+  find .codex-swarm/tasks -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+else
+  mkdir -p .codex-swarm/tasks
+fi
+
+# Recreate an empty tasks snapshot so the framework is usable after cleanup.
+python3 - <<'PY' > .codex-swarm/tasks.json
 import hashlib
 import json
 
