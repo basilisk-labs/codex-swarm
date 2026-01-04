@@ -54,8 +54,16 @@ def run(cmd: List[str], *, cwd: Path = ROOT, check: bool = True) -> subprocess.C
     )
 
 
+def error_context() -> Dict[str, object]:
+    return {"cwd": str(Path.cwd().resolve()), "argv": sys.argv[1:]}
+
+
 def die(message: str, code: int = 1) -> None:
-    print(message, file=sys.stderr)
+    if GLOBAL_JSON:
+        payload = {"error": {"code": code, "message": message, "context": error_context()}}
+        print(json.dumps(payload, ensure_ascii=False), file=sys.stdout)
+    else:
+        print(message, file=sys.stderr)
     raise SystemExit(code)
 
 
@@ -243,6 +251,13 @@ def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
 LEGACY_TASK_ID_RE = re.compile(r"^T-(\d+)$")
 _TASK_CACHE: Optional[List[Dict]] = None
+_TASK_INDEX_CACHE: Optional[Tuple[str, Dict[str, Dict], List[str]]] = None
+_TASK_DEP_CACHE: Optional[Tuple[str, Dict[str, Dict[str, List[str]]], List[str]]] = None
+GLOBAL_QUIET = False
+GLOBAL_VERBOSE = False
+GLOBAL_JSON = False
+GLOBAL_LINT = False
+AUTO_LINT_ON_WRITE = True
 
 
 def normalize_slug(value: str) -> str:
@@ -311,6 +326,27 @@ def commit_subject_missing_error(task_ids: List[str], subject: str, *, context: 
     suffix = " (or their suffixes)" if len(task_ids) > 1 else " (or its suffix)"
     prefix = f"{context}: " if context else ""
     return f"{prefix}Commit subject does not mention {', '.join(task_ids)}{suffix}: {subject!r}"
+
+
+def load_task_index() -> Tuple[List[Dict], Dict[str, Dict], List[str], str]:
+    tasks, _ = load_task_store()
+    key = tasks_cache_key(tasks)
+    global _TASK_INDEX_CACHE
+    if _TASK_INDEX_CACHE and _TASK_INDEX_CACHE[0] == key:
+        tasks_by_id, warnings = _TASK_INDEX_CACHE[1], _TASK_INDEX_CACHE[2]
+        return tasks, tasks_by_id, warnings, key
+    tasks_by_id, warnings = index_tasks_by_id(tasks)
+    _TASK_INDEX_CACHE = (key, tasks_by_id, warnings)
+    return tasks, tasks_by_id, warnings, key
+
+
+def load_dependency_state_for(tasks_by_id: Dict[str, Dict], *, key: str) -> Tuple[Dict[str, Dict[str, List[str]]], List[str]]:
+    global _TASK_DEP_CACHE
+    if _TASK_DEP_CACHE and _TASK_DEP_CACHE[0] == key:
+        return _TASK_DEP_CACHE[1], _TASK_DEP_CACHE[2]
+    dep_state, dep_warnings = compute_dependency_state(tasks_by_id)
+    _TASK_DEP_CACHE = (key, dep_state, dep_warnings)
+    return dep_state, dep_warnings
 
 
 def require_structured_comment(body: str, *, prefix: str, min_chars: int) -> None:
@@ -527,6 +563,10 @@ def canonical_tasks_payload(tasks: List[Dict]) -> str:
     return json.dumps({"tasks": tasks}, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
+def tasks_cache_key(tasks: List[Dict]) -> str:
+    return hashlib.sha256(canonical_tasks_payload(tasks).encode("utf-8")).hexdigest()
+
+
 def compute_tasks_checksum(tasks: List[Dict]) -> str:
     payload = canonical_tasks_payload(tasks).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
@@ -549,11 +589,23 @@ def update_tasks_meta(data: Dict) -> None:
 def write_tasks_json(data: Dict) -> None:
     update_tasks_meta(data)
     write_json(TASKS_PATH, data)
+    if GLOBAL_LINT or AUTO_LINT_ON_WRITE:
+        result = lint_tasks_json()
+        if result["errors"]:
+            for message in result["errors"]:
+                print(f"❌ {message}", file=sys.stderr)
+            raise SystemExit(2)
 
 
 def write_tasks_json_to_path(path: Path, data: Dict) -> None:
     update_tasks_meta(data)
     write_json(path, data)
+    if (GLOBAL_LINT or AUTO_LINT_ON_WRITE) and path.resolve() == TASKS_PATH.resolve():
+        result = lint_tasks_json()
+        if result["errors"]:
+            for message in result["errors"]:
+                print(f"❌ {message}", file=sys.stderr)
+            raise SystemExit(2)
 
 
 def load_tasks() -> List[Dict]:
@@ -583,6 +635,7 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
 
     list_tasks = getattr(backend, "list_tasks", None)
     write_task = getattr(backend, "write_task", None)
+    write_tasks = getattr(backend, "write_tasks", None)
     if not callable(list_tasks) or not callable(write_task):
         die("Configured backend must implement list_tasks() and write_task()", code=2)
     global _TASK_CACHE
@@ -593,6 +646,7 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
 
     def save(updated_tasks: List[Dict]) -> None:
         global _TASK_CACHE
+        changed: List[Dict] = []
         for task in updated_tasks:
             if not isinstance(task, dict):
                 continue
@@ -602,9 +656,17 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
             existing = tasks_by_id.get(task_id)
             if existing is not None and task_digest(existing) == task_digest(task):
                 continue
-            write_task(task)
             tasks_by_id[task_id] = task
+            changed.append(task)
+        if changed:
+            if callable(write_tasks):
+                write_tasks(changed)
+            else:
+                for task in changed:
+                    write_task(task)
         _TASK_CACHE = updated_tasks
+        _TASK_INDEX_CACHE = None
+        _TASK_DEP_CACHE = None
 
     return tasks, save
 
@@ -617,8 +679,7 @@ def format_task_line(task: Dict) -> str:
 
 
 def cmd_task_list(args: argparse.Namespace) -> None:
-    tasks, _ = load_task_store()
-    tasks_by_id, warnings = index_tasks_by_id(tasks)
+    tasks, tasks_by_id, warnings, _ = load_task_index()
     if warnings and not args.quiet:
         for warning in warnings:
             print(f"⚠️ {warning}")
@@ -642,9 +703,8 @@ def cmd_task_list(args: argparse.Namespace) -> None:
 
 
 def cmd_task_next(args: argparse.Namespace) -> None:
-    tasks, _ = load_task_store()
-    tasks_by_id, warnings = index_tasks_by_id(tasks)
-    dep_state, dep_warnings = compute_dependency_state(tasks_by_id)
+    tasks, tasks_by_id, warnings, key = load_task_index()
+    dep_state, dep_warnings = load_dependency_state_for(tasks_by_id, key=key)
     warnings = warnings + dep_warnings
     if warnings and not args.quiet:
         for warning in warnings:
@@ -716,8 +776,7 @@ def cmd_task_search(args: argparse.Namespace) -> None:
     if not query:
         die("Query must be non-empty", code=2)
 
-    tasks, _ = load_task_store()
-    tasks_by_id, warnings = index_tasks_by_id(tasks)
+    _, tasks_by_id, warnings, _ = load_task_index()
     if warnings and not args.quiet:
         for warning in warnings:
             print(f"⚠️ {warning}")
@@ -789,8 +848,7 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
 
 
 def cmd_task_show(args: argparse.Namespace) -> None:
-    tasks, _ = load_task_store()
-    tasks_by_id, warnings = index_tasks_by_id(tasks)
+    _, tasks_by_id, warnings, _ = load_task_index()
     if warnings and not args.quiet:
         for warning in warnings:
             print(f"⚠️ {warning}")
@@ -860,15 +918,19 @@ def cmd_task_normalize(args: argparse.Namespace) -> None:
     else:
         list_tasks = getattr(backend, "list_tasks", None)
         write_task = getattr(backend, "write_task", None)
+        write_tasks = getattr(backend, "write_tasks", None)
         if not callable(list_tasks) or not callable(write_task):
             die("Configured backend does not support normalize_tasks()", code=2)
         tasks = list_tasks()
         if not isinstance(tasks, list):
             die("Backend list_tasks() must return a list of tasks", code=2)
-        for task in tasks:
-            if isinstance(task, dict):
+        normalized = [task for task in tasks if isinstance(task, dict)]
+        if callable(write_tasks):
+            write_tasks(normalized)
+        else:
+            for task in normalized:
                 write_task(task)
-        count = len(tasks)
+        count = len(normalized)
     global _TASK_CACHE
     _TASK_CACHE = None
     if not args.quiet:
@@ -1185,9 +1247,8 @@ def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Di
 
 
 def readiness(task_id: str) -> Tuple[bool, List[str]]:
-    tasks, _ = load_task_store()
-    tasks_by_id, index_warnings = index_tasks_by_id(tasks)
-    dep_state, dep_warnings = compute_dependency_state(tasks_by_id)
+    _, tasks_by_id, index_warnings, key = load_task_index()
+    dep_state, dep_warnings = load_dependency_state_for(tasks_by_id, key=key)
     warnings = index_warnings + dep_warnings
 
     task = tasks_by_id.get(task_id)
@@ -3792,10 +3853,64 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def extract_global_flags(argv: List[str]) -> Tuple[Dict[str, bool], List[str]]:
+    flags = {"quiet": False, "verbose": False, "json": False, "lint": False}
+    remaining: List[str] = []
+    for arg in argv:
+        if arg == "--quiet":
+            flags["quiet"] = True
+            continue
+        if arg == "--verbose":
+            flags["verbose"] = True
+            continue
+        if arg == "--json":
+            flags["json"] = True
+            continue
+        if arg == "--lint":
+            flags["lint"] = True
+            continue
+        remaining.append(arg)
+    if flags["verbose"]:
+        flags["quiet"] = False
+    return flags, remaining
+
+
+def apply_global_flags(args: argparse.Namespace, flags: Dict[str, bool]) -> None:
+    global GLOBAL_QUIET, GLOBAL_VERBOSE, GLOBAL_JSON, GLOBAL_LINT
+    GLOBAL_QUIET = bool(flags.get("quiet"))
+    GLOBAL_VERBOSE = bool(flags.get("verbose"))
+    GLOBAL_JSON = bool(flags.get("json"))
+    GLOBAL_LINT = bool(flags.get("lint"))
+    if hasattr(args, "quiet"):
+        if GLOBAL_QUIET:
+            setattr(args, "quiet", True)
+    else:
+        setattr(args, "quiet", GLOBAL_QUIET)
+    if hasattr(args, "verbose"):
+        if GLOBAL_VERBOSE:
+            setattr(args, "verbose", True)
+    else:
+        setattr(args, "verbose", GLOBAL_VERBOSE)
+
+
+def maybe_lint_tasks_json() -> None:
+    if not GLOBAL_LINT:
+        return
+    result = lint_tasks_json()
+    if result["errors"]:
+        for message in result["errors"]:
+            print(f"❌ {message}", file=sys.stderr)
+        raise SystemExit(2)
+
+
 def main(argv: Optional[List[str]] = None) -> None:
     maybe_pin_base_branch(cwd=ROOT)
+    raw_argv = list(argv) if argv is not None else sys.argv[1:]
+    flags, filtered = extract_global_flags(raw_argv)
     parser = build_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(filtered)
+    apply_global_flags(args, flags)
+    maybe_lint_tasks_json()
     func = getattr(args, "func", None)
     if not func:
         parser.print_help()

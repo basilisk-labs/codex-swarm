@@ -22,6 +22,13 @@ INTEGRATOR: integrate task | `python .codex-swarm/agentctl.py integrate <task-id
 INTEGRATOR: finish task(s) | `python .codex-swarm/agentctl.py finish <task-id> [<task-id> ...] --commit <git-rev> --author INTEGRATOR --body \"Verified: ...\"`
 INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -m \"✅ <task-id> close ...\" --auto-allow --allow-tasks --require-clean`
 
+## Global flags
+
+- `--quiet`: suppress non-essential output.
+- `--verbose`: enable extra logging (when available).
+- `--json`: emit JSON-formatted errors (for CI/integrations).
+- `--lint`: force tasks.json lint at command start (useful for read-only commands).
+
 ## Common commands
 
 ```bash

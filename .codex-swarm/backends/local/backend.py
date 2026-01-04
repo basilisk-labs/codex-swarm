@@ -287,6 +287,11 @@ class LocalBackend:
             content += body.lstrip("\n") + "\n"
         readme.write_text(content, encoding="utf-8")
 
+    def write_tasks(self, tasks: List[Dict[str, object]]) -> None:
+        for task in tasks:
+            if isinstance(task, dict):
+                self.write_task(task)
+
     def export_tasks_json(self, output_path: Path) -> None:
         tasks = self.list_tasks()
         payload = {"tasks": tasks}
@@ -301,6 +306,5 @@ class LocalBackend:
 
     def normalize_tasks(self) -> int:
         tasks = self.list_tasks()
-        for task in tasks:
-            self.write_task(task)
+        self.write_tasks(tasks)
         return len(tasks)
