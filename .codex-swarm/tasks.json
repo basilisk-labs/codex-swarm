@@ -2828,13 +2828,23 @@
     {
       "id": "202601042147-CMT01",
       "title": "Clarify commit message suffix usage",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [],
       "tags": [
         "agents",
         "workflow"
+      ],
+      "commit": {
+        "hash": "f1568e3460bd7e7a293bca7448b9e81348b8a575",
+        "message": "✨ CMT01 update agent commit message rule"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: not applicable (documentation-only); no tests or runtime behavior changed."
+        }
       ],
       "description": "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion.",
       "dirty": true
@@ -2844,6 +2854,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0d5d85133aadd2e69da22e635323f0d27125a91906bae1a765c1c826fa6fd014"
+    "checksum": "9861ed70b23f282aab16434655cca7f18715fa380db055b84901cc7376b64a72"
   }
 }
