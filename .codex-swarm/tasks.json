@@ -2751,12 +2751,25 @@
         }
       ],
       "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
+    },
+    {
+      "id": "202601042107-TAG01",
+      "title": "Clarify planner task tags + deps",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "workflow"
+      ],
+      "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "fe8f03d8c128631eb985c6fe77e0aa602e56842ed6015639b189db9f75dcfd0c"
+    "checksum": "8b2c40d547515b84c3b040f3525e9b2c43059457e6ba4205c4322d10085c7029"
   }
 }
