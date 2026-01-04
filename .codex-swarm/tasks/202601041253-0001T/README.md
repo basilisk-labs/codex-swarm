@@ -11,4 +11,6 @@ comments:
   - { author: "REVIEWER", body: "Verified: Ran agentctl lint and confirmed  prints ;  includes the new command; clean.sh preserves  while removing other docs." }
   - { author: "REVIEWER", body: "Verified: Ran python scripts/agentctl.py task lint; checked python scripts/agentctl.py quickstart output; checked python scripts/agentctl.py --help; confirmed clean.sh preserves docs/agentctl.md while removing other docs." }
 description: "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster."
+dirty: false
+redmine_id: 338
 ---

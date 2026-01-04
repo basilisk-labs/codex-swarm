@@ -9,4 +9,6 @@ commit: { hash: "1f58561634734d0e73374ccd1264d15d57f7c251", message: "T-023: mar
 comments:
   - { author: "reviewer", body: "Created README.es.md and updated GLOSSARY.json with Spanish equivalents for existing terms." }
 description: "Deliver another Spanish README update incorporating the refined glossary process."
+dirty: false
+redmine_id: 303
 ---

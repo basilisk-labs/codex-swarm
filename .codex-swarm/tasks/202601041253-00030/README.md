@@ -10,4 +10,6 @@ commit: { hash: "7eb0068599e887d0ceda3f427e413b1a7505d6dc", message: "🛠️ T-
 comments:
   - { author: "INTEGRATOR", body: "Verified: docs-only update in agentctl.md and agent JSONs; no tests required." }
 description: "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations."
+dirty: false
+redmine_id: 376
 ---

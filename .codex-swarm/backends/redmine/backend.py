@@ -3,6 +3,8 @@ from __future__ import annotations
 import difflib
 import importlib.util
 import json
+import os
+import sys
 from pathlib import Path
 from typing import Dict, List, Optional
 from urllib import error as urlerror
@@ -20,6 +22,7 @@ def _load_local_backend_class() -> type:
     if not spec or not spec.loader:
         raise RuntimeError(f"Unable to load local backend from {local_path}")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)  # type: ignore[call-arg]
     backend_cls = getattr(module, "LocalBackend", None)
     if backend_cls is None:
@@ -30,9 +33,15 @@ def _load_local_backend_class() -> type:
 class RedmineBackend:
     def __init__(self, settings: Optional[Dict[str, object]] = None) -> None:
         settings = settings if isinstance(settings, dict) else {}
-        self.base_url = str(settings.get("url") or "").rstrip("/")
-        self.api_key = str(settings.get("api_key") or "").strip()
-        self.project_id = str(settings.get("project_id") or "").strip()
+        env_url = os.environ.get("CODEXSWARM_REDMINE_URL", "").strip()
+        env_api_key = os.environ.get("CODEXSWARM_REDMINE_API_KEY", "").strip()
+        env_project_id = os.environ.get("CODEXSWARM_REDMINE_PROJECT_ID", "").strip()
+        env_assignee = os.environ.get("CODEXSWARM_REDMINE_ASSIGNEE_ID", "").strip()
+
+        self.base_url = (env_url or str(settings.get("url") or "")).rstrip("/")
+        self.api_key = env_api_key or str(settings.get("api_key") or "").strip()
+        self.project_id = env_project_id or str(settings.get("project_id") or "").strip()
+        self.assignee_id = int(env_assignee) if env_assignee.isdigit() else None
         self.status_map = settings.get("status_map") or {}
         self.custom_fields = settings.get("custom_fields") or {}
         cache_dir = str(settings.get("cache_dir") or ".codex-swarm/tasks")
@@ -48,6 +57,26 @@ class RedmineBackend:
             for key, value in self.status_map.items():
                 if isinstance(value, int):
                     self._reverse_status_map[value] = str(key)
+
+    def generate_task_id(self, *, length: int = 6, attempts: int = 1000) -> str:
+        existing_ids: set[str] = set()
+        try:
+            existing_ids = {
+                str(task.get("id") or "")
+                for task in self._list_tasks_remote()
+                if isinstance(task, dict)
+            }
+        except RedmineUnavailable:
+            existing_ids = {
+                str(task.get("id") or "")
+                for task in self.cache.list_tasks()
+                if isinstance(task, dict)
+            }
+        for _ in range(attempts):
+            candidate = self.cache.generate_task_id(length=length, attempts=1)
+            if candidate not in existing_ids:
+                return candidate
+        raise RuntimeError("Failed to generate a unique task id")
 
     def list_tasks(self) -> List[Dict[str, object]]:
         try:
@@ -196,6 +225,10 @@ class RedmineBackend:
         if not isinstance(issue, dict):
             return None
         task_id = self._custom_field_value(issue, self.custom_fields.get("task_id"))
+        id_source = "custom"
+        if not task_id:
+            task_id = issue.get("id")
+            id_source = "redmine"
         if not task_id:
             return None
         status_id = ((issue.get("status") or {}).get("id") if isinstance(issue.get("status"), dict) else None)
@@ -215,6 +248,7 @@ class RedmineBackend:
             "commit": self._maybe_parse_json(commit_val),
             "comments": [],
             "redmine_id": issue.get("id"),
+            "id_source": id_source,
         }
         return task
 
@@ -229,6 +263,14 @@ class RedmineBackend:
         priority = task.get("priority")
         if isinstance(priority, int):
             payload["priority_id"] = priority
+        if self.assignee_id:
+            payload["assigned_to_id"] = self.assignee_id
+        start_date = self._start_date_from_task_id(str(task.get("id") or ""))
+        if start_date:
+            payload["start_date"] = start_date
+        done_ratio = self._done_ratio_for_status(status)
+        if done_ratio is not None:
+            payload["done_ratio"] = done_ratio
         custom_fields: List[Dict[str, object]] = []
         self._append_custom_field(custom_fields, "task_id", task.get("id"))
         self._append_custom_field(custom_fields, "verify", task.get("verify"))
@@ -246,6 +288,24 @@ class RedmineBackend:
         if isinstance(value, (dict, list)):
             value = json.dumps(value, ensure_ascii=False)
         fields.append({"id": field_id, "value": value})
+
+    def _start_date_from_task_id(self, task_id: str) -> Optional[str]:
+        if not task_id or "-" not in task_id:
+            return None
+        prefix = task_id.split("-", 1)[0]
+        if len(prefix) < 8 or not prefix[:8].isdigit():
+            return None
+        year = prefix[0:4]
+        month = prefix[4:6]
+        day = prefix[6:8]
+        return f"{year}-{month}-{day}"
+
+    def _done_ratio_for_status(self, status: str) -> Optional[int]:
+        if not status:
+            return None
+        if status == "DONE":
+            return 100
+        return 0
 
     def _custom_field_value(self, issue: Dict[str, object], field_id: object) -> Optional[str]:
         if not field_id:

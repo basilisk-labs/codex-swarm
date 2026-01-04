@@ -11,4 +11,6 @@ commit: { hash: "10b4ffcce3069a858b32580fe7247a1bb8a824a5", message: "🛠️ T-
 comments:
   - { author: "INTEGRATOR", body: "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-072." }
 description: "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated)."
+dirty: false
+redmine_id: 352
 ---

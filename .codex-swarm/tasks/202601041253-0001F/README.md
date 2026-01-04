@@ -9,4 +9,6 @@ commit: { hash: "113c748a1f5c9bd56bc96ccb5616930310f7776d", message: "📌 T-047
 comments:
   - { author: "docs", body: "Added CODE_OF_CONDUCT.md covering standards, unacceptable behaviors, and reporting guidance." }
 description: "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles."
+dirty: false
+redmine_id: 327
 ---

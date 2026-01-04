@@ -10,4 +10,6 @@ commit: { hash: "6b22130b391becfada866dfc8136dbe1decff850", message: "📝 T-065
 comments:
   - { author: "REVIEWER", body: "Verified: Ran python scripts/agentctl.py verify T-065 (task lint) and reviewed README/architecture pointer consistency." }
 description: "Move the full contents of docs/architecture.md into README.md for easier discovery; leave docs/architecture.md as a thin pointer to avoid duplication."
+dirty: false
+redmine_id: 345
 ---

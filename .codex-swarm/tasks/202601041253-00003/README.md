@@ -8,4 +8,6 @@ tags: ["state", "persistence"]
 commit: { hash: "645a960e59145717d77f4bfab367c2a14234cc03", message: "Dynamic Agents" }
 comments: []
 description: "Ensure task state is available in a machine-readable JSON file for Codex automation."
+dirty: false
+redmine_id: 283
 ---

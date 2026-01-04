@@ -8,7 +8,8 @@ depends_on: ["202601041253-0003G"]
 tags: []
 commit: { hash: "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6", message: "🧩 T-115 add tasks.json migration" }
 description: "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
-dirty: true
+dirty: false
+redmine_id: 269
 ---
 # 202601041253-0003K: agentctl: migrate tasks.json to local backend
 

@@ -10,6 +10,8 @@ commit: { hash: "8ebac65cf3df403807155f58e430ba30e925692b", message: "🛠️ 20
 comments:
   - { author: "codex", body: "Started viewer/server refactor to move UI into .codex-swarm/viewer." }
 description: "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes."
+dirty: false
+redmine_id: 273
 ---
 # Summary
 

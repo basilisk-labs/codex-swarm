@@ -10,6 +10,8 @@ commit: { hash: "e571744e288fc0f63599967eae460d290d4c97ef", message: "🛠️ T-
 comments:
   - { author: "INTEGRATOR", body: "Verified: python3 .codex-swarm/agentctl.py task scaffold 202601041253-0003S --overwrite preserved frontmatter." }
 description: "Keep the frontmatter block intact when overwriting task README scaffolds."
+dirty: false
+redmine_id: 280
 ---
 # 202601041253-0003S: agentctl: preserve frontmatter on scaffold overwrite
 

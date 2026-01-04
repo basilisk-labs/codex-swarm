@@ -9,4 +9,6 @@ commit: { hash: "25d2b916ec4f2fbdf3caa0553c6271974acffdab", message: "🛠️ T-
 comments:
   - { author: "docs", body: "clean.sh now removes CONTRIBUTING.md and deletes itself after repository cleanup." }
 description: "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo."
+dirty: false
+redmine_id: 319
 ---

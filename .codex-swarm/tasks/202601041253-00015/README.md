@@ -9,4 +9,6 @@ commit: { hash: "ec13d916bfc5d0e577b757d2a16dd8380ca3861d", message: "📝 T-037
 comments:
   - { author: "docs", body: "Added CONTRIBUTING.md with the requested contribution guidance." }
 description: "Document the recommended contribution workflow and behavioral expectations for Codex Swarm."
+dirty: false
+redmine_id: 317
 ---

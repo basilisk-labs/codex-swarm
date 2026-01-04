@@ -9,4 +9,6 @@ commit: { hash: "f6eecde89e99f7a3c31413e3a173620bd64331c9", message: "📝 T-032
 comments:
   - { author: "docs", body: "README now shows ASCII art, icons, and refreshed formatting so it feels more polished." }
 description: "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact."
+dirty: false
+redmine_id: 312
 ---

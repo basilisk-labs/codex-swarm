@@ -9,4 +9,6 @@ commit: { hash: "8b9cb04780d1d21ba8016303cbb79754c5931b94", message: "✅ Mark T
 comments:
   - { author: "reviewer", body: "Updated AGENTS.md and README.md so commit messages start with meaningful emojis referencing the finished plan item." }
 description: "Clarify how commits should start with emojis and summarize completed plan items."
+dirty: false
+redmine_id: 305
 ---

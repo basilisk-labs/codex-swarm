@@ -10,4 +10,6 @@ commit: { hash: "1094b0af329012963648b1405b49eb5d17479c1b", message: "📝 T-100
 comments:
   - { author: "INTEGRATOR", body: "Verified: docs-only changes; manual review only (no automated checks)." }
 description: "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find."
+dirty: false
+redmine_id: 380
 ---

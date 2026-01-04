@@ -8,4 +8,6 @@ tags: ["docs", "guideline"]
 commit: { hash: "21ddede356590745546962fedebbead23b2edae2", message: "📝 T-041 document framework guideline" }
 comments: []
 description: "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework."
+dirty: false
+redmine_id: 321
 ---

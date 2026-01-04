@@ -8,4 +8,6 @@ depends_on: []
 tags: ["docs", "readme"]
 commit: { hash: "5912c9c7a818350820e56e37830ff34a7daceb87", message: "✨ T-101 update README badges" }
 description: "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation."
+dirty: false
+redmine_id: 381
 ---

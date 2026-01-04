@@ -8,5 +8,6 @@ depends_on: ["202601041253-0003E"]
 tags: []
 commit: { hash: "9066ff9431b53406ad4a42fc9323260f58f1011a", message: "🧩 T-111 add local ID generator" }
 description: "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json."
-dirty: true
+dirty: false
+redmine_id: 265
 ---

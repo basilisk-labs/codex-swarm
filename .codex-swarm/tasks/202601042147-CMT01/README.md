@@ -10,7 +10,8 @@ commit: { hash: "f1568e3460bd7e7a293bca7448b9e81348b8a575", message: "✨ CMT01 
 comments:
   - { author: "INTEGRATOR", body: "Verified: not applicable (documentation-only); no tests or runtime behavior changed." }
 description: "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion."
-dirty: true
+dirty: false
+redmine_id: 278
 ---
 # Summary
 

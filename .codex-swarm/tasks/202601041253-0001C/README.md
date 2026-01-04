@@ -9,4 +9,6 @@ commit: { hash: "5e3b74a497ada1b723813b416747ccc47ca6ddbc", message: "✨ T-044 
 comments:
   - { author: "docs", body: "Recorded completion of sync_tasks.py so tasks.json stays aligned with GitHub Issues." }
 description: "Ensure the local tasks.json reflects the completed synchronization script and the GitHub Issues mirror."
+dirty: false
+redmine_id: 324
 ---

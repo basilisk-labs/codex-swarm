@@ -9,4 +9,6 @@ commit: { hash: "a63694f182aff97ce18b5b9458bf54982e787120", message: "🛠️ T-
 comments:
   - { author: "docs", body: ".gitignore now ignores `.env` variants following the cleanup." }
 description: "Ignore `.env*` so sensitive environment overrides stay out of the repo."
+dirty: false
+redmine_id: 323
 ---

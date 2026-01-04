@@ -12,4 +12,6 @@ comments:
   - { author: "CODER", body: "Start: update AGENTS.md and .AGENTS/*.json to use agentctl; add scripts/agentctl.py; make tasks.json lint-clean; Constraints: no manual tasks.json edits." }
   - { author: "REVIEWER", body: "Verified: agentctl task lint passes; AGENTS.md/.AGENTS now require agentctl for task ops; scripts/agentctl.py is tracked; Limitations: existing CODEX owner warnings remain." }
 description: "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata)."
+dirty: false
+redmine_id: 330
 ---

@@ -8,4 +8,6 @@ tags: ["docs", "agents"]
 commit: { hash: "d5b3e2eac2dc04098d97248ddba1dcca271311fa", message: "Mark T-016 done" }
 comments: []
 description: "Strip references to unsupported helper tools to keep instructions aligned with the local stack."
+dirty: false
+redmine_id: 296
 ---

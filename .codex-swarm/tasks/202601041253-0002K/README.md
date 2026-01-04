@@ -11,4 +11,6 @@ commit: { hash: "8a70c8e2413945ec564c82f13766421adf15514f", message: "🧾 T-083
 comments:
   - { author: "INTEGRATOR", body: "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-083/pr." }
 description: "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility)."
+dirty: false
+redmine_id: 363
 ---

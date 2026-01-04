@@ -11,4 +11,6 @@ comments:
   - { author: "CODER", body: "Start: extend clean.sh to remove framework dev artifacts (including docs) while keeping cleanup idempotent and repo-root scoped." }
   - { author: "REVIEWER", body: "Verified: clean.sh now removes docs/ and other framework-development artifacts (tasks.html, .DS_Store) during cleanup; script syntax checks pass and tasks.json lints clean." }
 description: "Update @clean.sh so cleanup removes framework-development artifacts (including @docs/) when preparing a reusable snapshot.\\\\n\\\\nAcceptance criteria:\\\\n- Running clean.sh removes @docs/ and other framework-specific files/directories it currently leaves behind.\\\\n- Script remains idempotent and safe (no unscoped rm outside repo root)."
+dirty: false
+redmine_id: 334
 ---

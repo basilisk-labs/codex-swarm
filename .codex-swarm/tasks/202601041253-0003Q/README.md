@@ -10,6 +10,8 @@ commit: { hash: "1939744c7df301f0a9b1533a7ff7025624d45a3c", message: "🔁 T-119
 comments:
   - { author: "INTEGRATOR", body: "Verified: python3 -m py_compile .github/scripts/sync_tasks.py; export step documented." }
 description: "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
+dirty: false
+redmine_id: 272
 ---
 # 202601041253-0003Q: Fix GitHub sync scripts for snapshot backend
 

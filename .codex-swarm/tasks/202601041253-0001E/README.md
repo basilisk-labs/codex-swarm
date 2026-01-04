@@ -9,4 +9,6 @@ commit: { hash: "ef12528c6ce74b53ca93b8f83a872ede49b81e26", message: "✨ T-046 
 comments:
   - { author: "docs", body: "ProjectV2 integration is wired up, and the workflow now provides the project number." }
 description: "The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion."
+dirty: false
+redmine_id: 326
 ---

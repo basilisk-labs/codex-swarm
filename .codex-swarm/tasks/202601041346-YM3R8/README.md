@@ -12,6 +12,8 @@ comments:
   - { author: "INTEGRATOR", body: "Verified: documentation updated for lint/flags and agent guidance." }
   - { author: "INTEGRATOR", body: "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes." }
 description: "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
+dirty: false
+redmine_id: 276
 ---
 # 202601041346-YM3R8: Agentctl performance and UX improvements
 

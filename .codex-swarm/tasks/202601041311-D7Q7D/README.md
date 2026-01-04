@@ -10,6 +10,8 @@ commit: { hash: "ea9ed7a50d1789d452abb61c00987e0925c76ecb", message: "🛠️ D7
 comments:
   - { author: "INTEGRATOR", body: "Verified: normalized frontmatter parsing, commit-id suffix checks updated, and docs refreshed." }
 description: "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
+dirty: false
+redmine_id: 274
 ---
 # 202601041311-D7Q7D: Fix frontmatter parsing and commit id rules
 

@@ -10,6 +10,8 @@ commit: { hash: "04fdd37dca3c7541e1d957e263b473547c94d6ad", message: "🧹 T-118
 comments:
   - { author: "INTEGRATOR", body: "Verified: bash -n clean.sh; cleanup resets .codex-swarm/tasks and snapshot." }
 description: "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
+dirty: false
+redmine_id: 271
 ---
 # 202601041253-0003P: Update clean.sh for new structure
 
