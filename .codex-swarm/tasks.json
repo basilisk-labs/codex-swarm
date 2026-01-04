@@ -2500,12 +2500,62 @@
       "owner": "DOCS",
       "tags": [],
       "depends_on": []
+    },
+    {
+      "id": "T-110",
+      "title": "agentctl: backend plugin loader + config support",
+      "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "tags": [],
+      "depends_on": []
+    },
+    {
+      "id": "T-111",
+      "title": "local backend: tasks/ storage + ID generation",
+      "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [],
+      "depends_on": []
+    },
+    {
+      "id": "T-112",
+      "title": "agentctl: route task commands to backend + new sync/export commands",
+      "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [],
+      "depends_on": []
+    },
+    {
+      "id": "T-113",
+      "title": "redmine backend: canonical source + offline fallback",
+      "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [],
+      "depends_on": []
+    },
+    {
+      "id": "T-114",
+      "title": "agentctl: migrate workspace paths to tasks/ + PR artifacts",
+      "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [],
+      "depends_on": []
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "c7615bbde6bacfa2c1cfcce0519969bdb6f239539a3d80bfe8a3414010f49f6c"
+    "checksum": "a99bec233fef13d4b5a7d60342834e8a10db433bb4c7e8c22e8f64b52f8d38f9"
   }
 }
