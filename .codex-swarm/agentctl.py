@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -289,6 +290,71 @@ def load_json(path: Path) -> Dict:
         die(f"Invalid JSON in {path}: {exc}")
 
 
+def _resolve_optional_repo_relative_path(value: str, *, label: str) -> Optional[Path]:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    path = Path(raw)
+    if path.is_absolute():
+        die(f"Config path for {label!r} must be repo-relative (got absolute path: {raw})")
+    resolved = (ROOT / path).resolve()
+    root_resolved = ROOT.resolve()
+    if root_resolved not in resolved.parents and resolved != root_resolved:
+        die(f"Config path for {label!r} must stay under repo root (got: {raw})")
+    return resolved
+
+
+def load_backend_config() -> Dict:
+    backend = _SWARM_CONFIG.get("tasks_backend") or {}
+    if not isinstance(backend, dict):
+        die(f"{SWARM_CONFIG_PATH} tasks_backend must be a JSON object", code=2)
+    config_path = _resolve_optional_repo_relative_path(
+        backend.get("config_path"), label="tasks_backend.config_path"
+    )
+    if not config_path:
+        return {}
+    data = load_json(config_path)
+    if not isinstance(data, dict):
+        die(f"{config_path} must contain a JSON object", code=2)
+    for key in ("id", "version", "module", "class"):
+        value = data.get(key)
+        if not isinstance(value, str) or not value.strip():
+            die(f"{config_path} is missing required field {key!r}", code=2)
+    settings = data.get("settings")
+    if settings is None:
+        data["settings"] = {}
+    elif not isinstance(settings, dict):
+        die(f"{config_path} settings must be a JSON object", code=2)
+    module_path = (config_path.parent / str(data["module"])).resolve()
+    root_resolved = ROOT.resolve()
+    if root_resolved not in module_path.parents and module_path != root_resolved:
+        die(f"Backend module must stay under repo root (got: {module_path})", code=2)
+    data["_config_path"] = str(config_path)
+    data["_module_path"] = str(module_path)
+    return data
+
+
+def load_backend_class(backend_config: Dict) -> Optional[type]:
+    if not backend_config:
+        return None
+    module_path = Path(str(backend_config.get("_module_path") or "")).resolve()
+    if not module_path.exists():
+        die(f"Missing backend module: {module_path}", code=2)
+    backend_id = str(backend_config.get("id") or "backend").strip()
+    spec = importlib.util.spec_from_file_location(f"codexswarm_backend_{backend_id}", module_path)
+    if not spec or not spec.loader:
+        die(f"Failed to load backend module: {module_path}", code=2)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)  # type: ignore[call-arg]
+    class_name = str(backend_config.get("class") or "").strip()
+    if not class_name:
+        die(f"Backend class name missing in {backend_config.get('_config_path')}", code=2)
+    backend_cls = getattr(module, class_name, None)
+    if backend_cls is None:
+        die(f"Backend class {class_name!r} not found in {module_path}", code=2)
+    return backend_cls
+
+
 
 def _resolve_repo_relative_path(value: str, *, label: str) -> Path:
     raw = str(value or "").strip()
@@ -326,6 +392,8 @@ AGENTS_DIR = _resolve_repo_relative_path(_PATHS.get("agents_dir"), label="agents
 AGENTCTL_DOCS_PATH = _resolve_repo_relative_path(_PATHS.get("agentctl_docs_path"), label="agentctl_docs_path")
 WORKFLOW_DIR = _resolve_repo_relative_path(_PATHS.get("workflow_dir"), label="workflow_dir")
 TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
+BACKEND_CONFIG = load_backend_config()
+BACKEND_CLASS = load_backend_class(BACKEND_CONFIG) if BACKEND_CONFIG else None
 
 
 def workflow_mode() -> str:
