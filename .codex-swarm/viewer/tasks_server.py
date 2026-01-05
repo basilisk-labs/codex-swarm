@@ -40,15 +40,23 @@ def run_agentctl(*args: str) -> subprocess.CompletedProcess:
     )
 
 
-def export_tasks_json() -> None:
+def export_tasks_json() -> tuple[bool, str]:
     proc = run_agentctl("task", "export", "--format", "json", "--out", ".codex-swarm/tasks.json")
     if proc.returncode != 0:
-        raise RuntimeError(proc.stderr.strip() or "Failed to export tasks.json")
+        return False, (proc.stderr.strip() or "Failed to export tasks.json")
+    return True, ""
 
 
 def load_tasks_json() -> dict:
     with TASKS_JSON.open("r", encoding="utf-8") as fh:
         return json.load(fh)
+
+def mask(value: str, keep: int = 4) -> str:
+    if not value:
+        return ""
+    if len(value) <= keep:
+        return "*" * len(value)
+    return "*" * (len(value) - keep) + value[-keep:]
 
 
 class TasksHandler(BaseHTTPRequestHandler):
@@ -116,10 +124,39 @@ class TasksHandler(BaseHTTPRequestHandler):
         if parsed.path == "/api/health":
             self._send_json({"ok": True})
             return
+        if parsed.path == "/api/diag":
+            env_url = os.environ.get("CODEXSWARM_REDMINE_URL", "").strip()
+            env_api_key = os.environ.get("CODEXSWARM_REDMINE_API_KEY", "").strip()
+            env_project_id = os.environ.get("CODEXSWARM_REDMINE_PROJECT_ID", "").strip()
+            payload = {
+                "ok": True,
+                "repo_root": str(REPO_ROOT),
+                "tasks_json": {
+                    "exists": TASKS_JSON.exists(),
+                    "path": str(TASKS_JSON),
+                    "bytes": TASKS_JSON.stat().st_size if TASKS_JSON.exists() else 0,
+                },
+                "redmine_env": {
+                    "url_set": bool(env_url),
+                    "api_key_set": bool(env_api_key),
+                    "project_id_set": bool(env_project_id),
+                    "url": env_url,
+                    "project_id": env_project_id,
+                    "api_key_masked": mask(env_api_key),
+                },
+            }
+            self._send_json(payload)
+            return
         if parsed.path == "/api/tasks":
             try:
-                export_tasks_json()
+                ok, err = export_tasks_json()
+                if not ok and not TASKS_JSON.exists():
+                    raise RuntimeError(err)
                 data = load_tasks_json()
+                if not ok:
+                    meta = data.get("meta") if isinstance(data.get("meta"), dict) else {}
+                    meta["warning"] = err
+                    data["meta"] = meta
             except Exception as exc:  # pragma: no cover - simple runtime guard
                 self._send_json({"error": str(exc)}, status=500)
                 return

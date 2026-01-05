@@ -366,6 +366,41 @@
         color: var(--muted);
       }
 
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        font-size: 10px;
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+      }
+
+      .status-badge.status-todo {
+        color: var(--muted);
+        background: rgba(148, 163, 184, 0.16);
+        border-color: rgba(148, 163, 184, 0.36);
+      }
+
+      .status-badge.status-doing {
+        color: var(--accent);
+        background: rgba(59, 130, 246, 0.14);
+        border-color: rgba(59, 130, 246, 0.38);
+      }
+
+      .status-badge.status-blocked {
+        color: var(--bad);
+        background: rgba(239, 68, 68, 0.14);
+        border-color: rgba(239, 68, 68, 0.38);
+      }
+
+      .status-badge.status-done {
+        color: var(--good);
+        background: rgba(34, 197, 94, 0.14);
+        border-color: rgba(34, 197, 94, 0.38);
+      }
+
       .empty {
         font-size: 12px;
         color: var(--muted);
@@ -498,6 +533,59 @@
 
       .dep-dot.done {
         background: var(--good);
+      }
+
+      .dep-graph {
+        width: 100%;
+        height: 140px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        display: block;
+        transition: transform 0.12s ease;
+      }
+
+      .dep-graph-wrap {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+
+      .graph-controls {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        margin-top: 8px;
+      }
+
+      .graph-btn {
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 11px;
+        cursor: pointer;
+      }
+
+      .tooltip {
+        position: fixed;
+        z-index: 40;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text);
+        font-size: 11px;
+        box-shadow: 0 8px 20px var(--shadow);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.12s ease;
+        max-width: 260px;
+      }
+
+      .tooltip.show {
+        opacity: 1;
       }
 
       .view-toggle {
@@ -705,6 +793,7 @@
         <button class="btn btn-primary" id="drawerSave">Update status</button>
       </div>
     </aside>
+    <div class="tooltip" id="tooltip"></div>
 
     <script>
       const STATUS_ORDER = ["TODO", "DOING", "BLOCKED", "DONE"];
@@ -723,6 +812,7 @@
       };
       let SELECTED_ID = "";
       let VIEW_MODE = localStorage.getItem("view-mode") || "kanban";
+      let GRAPH_SCALE = 1;
 
       const statusLine = document.getElementById("statusLine");
 
@@ -738,6 +828,69 @@
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#39;");
+      }
+
+      function displayId(id) {
+        return String(id || "").replace(/^[0-9]{12}-/, "");
+      }
+
+      function statusBadge(status) {
+        const key = String(status || "TODO").toLowerCase();
+        return `<span class="status-badge status-${key}">${escapeHtml(status || "TODO")}</span>`;
+      }
+
+      function tagHue(tag) {
+        let hash = 0;
+        for (let i = 0; i < tag.length; i++) {
+          hash = (hash * 31 + tag.charCodeAt(i)) | 0;
+        }
+        return Math.abs(hash) % 360;
+      }
+
+      function tagStyle(tag) {
+        const h = tagHue(tag);
+        return `background: hsla(${h}, 45%, 45%, 0.18); border-color: hsla(${h}, 45%, 55%, 0.45);`;
+      }
+
+      function renderTags(tags, clickable) {
+        if (!tags.length) return "-";
+        return tags
+          .map(
+            (t) =>
+              `<span class="tag ${clickable ? "tag-btn" : ""}" data-tag="${escapeHtml(t)}" style="${tagStyle(t)}">${escapeHtml(t)}</span>`,
+          )
+          .join(" ");
+      }
+
+      function tooltipHtml(task) {
+        const tags = renderTags(task.tags, false);
+        const idShort = displayId(task.id);
+        const idLine = idShort === task.id ? idShort : `${idShort} (full: ${escapeHtml(task.id)})`;
+        return `
+          <div style="font-weight:600; margin-bottom:4px;">${escapeHtml(task.title)}</div>
+          <div class="table-sub">${escapeHtml(idLine)} ${statusBadge(task.status)}</div>
+          <div class="table-sub">Owner: ${escapeHtml(task.owner || "-")} - Priority: ${escapeHtml(task.priority || "-")}</div>
+          <div style="margin-top:6px;">${tags}</div>
+        `;
+      }
+
+      function showTooltip(content, x, y) {
+        const tip = document.getElementById("tooltip");
+        tip.innerHTML = content;
+        tip.style.left = `${x + 12}px`;
+        tip.style.top = `${y + 12}px`;
+        tip.classList.add("show");
+      }
+
+      function hideTooltip() {
+        document.getElementById("tooltip").classList.remove("show");
+      }
+
+      function addTooltipHandlers(el, task) {
+        if (!el || !task) return;
+        el.addEventListener("mousemove", (ev) => showTooltip(tooltipHtml(task), ev.clientX, ev.clientY));
+        el.addEventListener("mouseenter", (ev) => showTooltip(tooltipHtml(task), ev.clientX, ev.clientY));
+        el.addEventListener("mouseleave", hideTooltip);
       }
 
       function normalizeTask(task) {
@@ -922,14 +1075,15 @@
           row.innerHTML = `
             <td>
               <div class="table-title">${escapeHtml(task.title)}</div>
-              <div class="table-id">${escapeHtml(task.id)}</div>
+              <div class="table-id">${escapeHtml(displayId(task.id))}</div>
             </td>
-            <td>${escapeHtml(task.status)}</td>
+            <td>${statusBadge(task.status)}</td>
             <td>${escapeHtml(task.owner || "-")}</td>
             <td>${escapeHtml(task.priority || "-")}</td>
-            <td>${task.tags.length ? task.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ") : "-"}</td>
+            <td>${renderTags(task.tags, false)}</td>
           `;
           tbody.appendChild(row);
+          addTooltipHandlers(row, task);
         });
       }
 
@@ -973,23 +1127,25 @@
           openDrawer(task.id);
         });
 
-        const meta = [task.id];
+        const meta = [displayId(task.id)];
         if (task.owner) meta.push(task.owner);
         if (task.priority) meta.push(task.priority);
 
         card.innerHTML = `
           <div class="card-title">${escapeHtml(task.title)}</div>
-          <div class="card-meta">${meta.map((m) => `<span>${escapeHtml(m)}</span>`).join(" - ")}</div>
+          <div class="card-meta">
+            ${meta.map((m) => `<span>${escapeHtml(m)}</span>`).join(" - ")}
+            ${statusBadge(task.status)}
+          </div>
           ${
             task.description
               ? `<div class="card-desc">${escapeHtml(task.description.slice(0, 160))}${task.description.length > 160 ? "..." : ""}</div>`
               : ""
           }
-          <div class="card-tags">${task.tags
-            .map((t) => `<span class="tag tag-btn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}</span>`)
-            .join("")}</div>
+          <div class="card-tags">${renderTags(task.tags, true)}</div>
         `;
 
+        addTooltipHandlers(card, task);
         card.addEventListener("dragstart", (ev) => {
           ev.dataTransfer?.setData("text/plain", task.id);
           ev.dataTransfer.effectAllowed = "move";
@@ -1069,11 +1225,92 @@
             (id) => `
             <span class="drawer-pill" data-task-id="${escapeHtml(id)}">
               <span class="dep-dot ${statusClassFor(id)}"></span>
-              <span>${escapeHtml(id)}</span>
+              <span>${escapeHtml(displayId(id))}</span>
             </span>
           `,
           )
           .join("");
+      }
+
+      function renderDepGraph(centerId, dependsOn, dependents) {
+        const width = 320;
+        const height = 140;
+        const cx = width / 2;
+        const cy = height / 2;
+        const nodeW = 86;
+        const nodeH = 22;
+        const leftX = 12;
+        const rightX = width - nodeW - 12;
+        const leftY = dependsOn.length ? cy - ((dependsOn.length - 1) * (nodeH + 6)) / 2 : cy;
+        const rightY = dependents.length ? cy - ((dependents.length - 1) * (nodeH + 6)) / 2 : cy;
+
+        function node(id, x, y, statusClass, selected) {
+          const fill = "var(--panel-2)";
+          const stroke = selected ? "var(--accent)" : "var(--border)";
+          const text = escapeHtml(displayId(id));
+          const dotColor =
+            statusClass === "doing"
+              ? "var(--accent)"
+              : statusClass === "blocked"
+                ? "var(--bad)"
+                : statusClass === "done"
+                  ? "var(--good)"
+                  : "var(--muted)";
+          return `
+            <g data-task-id="${escapeHtml(id)}">
+              <rect x="${x}" y="${y}" rx="6" ry="6" width="${nodeW}" height="${nodeH}" fill="${fill}" stroke="${stroke}" stroke-width="1" />
+              <circle cx="${x + 10}" cy="${y + nodeH / 2}" r="3" fill="${dotColor}" />
+              <text x="${x + 18}" y="${y + 14}" font-size="10" fill="var(--text)" font-family="var(--mono)">${text}</text>
+            </g>
+          `;
+        }
+
+        function edge(x1, y1, x2, y2) {
+          const dx = Math.max(18, Math.abs(x2 - x1) * 0.4);
+          const d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+          return `<path d="${d}" fill="none" stroke="var(--border)" stroke-width="1" marker-end="url(#arrow)" />`;
+        }
+
+        const leftNodes = dependsOn.slice(0, 4);
+        const rightNodes = dependents.slice(0, 4);
+        const leftExtra = Math.max(0, dependsOn.length - leftNodes.length);
+        const rightExtra = Math.max(0, dependents.length - rightNodes.length);
+
+        let svg = `<svg class="dep-graph" viewBox="0 0 ${width} ${height}" role="img">
+          <defs>
+            <marker id="arrow" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--border)" />
+            </marker>
+          </defs>
+        `;
+        leftNodes.forEach((id, i) => {
+          const y = leftY + i * (nodeH + 6);
+          svg += edge(leftX + nodeW, y + nodeH / 2, cx - nodeW / 2, cy);
+        });
+        rightNodes.forEach((id, i) => {
+          const y = rightY + i * (nodeH + 6);
+          svg += edge(cx + nodeW / 2, cy, rightX, y + nodeH / 2);
+        });
+
+        svg += node(centerId, cx - nodeW / 2, cy - nodeH / 2, statusClassFor(centerId), true);
+        leftNodes.forEach((id, i) => {
+          const y = leftY + i * (nodeH + 6);
+          svg += node(id, leftX, y, statusClassFor(id), false);
+        });
+        rightNodes.forEach((id, i) => {
+          const y = rightY + i * (nodeH + 6);
+          svg += node(id, rightX, y, statusClassFor(id), false);
+        });
+
+        if (leftExtra) {
+          svg += `<text x="${leftX}" y="${height - 8}" font-size="10" fill="var(--muted)">+${leftExtra} more</text>`;
+        }
+        if (rightExtra) {
+          svg += `<text x="${rightX}" y="${height - 8}" font-size="10" fill="var(--muted)">+${rightExtra} more</text>`;
+        }
+
+        svg += "</svg>";
+        return svg;
       }
 
       function openDrawer(taskId) {
@@ -1082,8 +1319,8 @@
         SELECTED_ID = taskId;
         const drawer = document.getElementById("drawer");
         const overlay = document.getElementById("drawerOverlay");
-        document.getElementById("drawerTitle").textContent = `${task.id} - ${task.title}`;
-        document.getElementById("drawerSubtitle").textContent = task.status;
+        document.getElementById("drawerTitle").textContent = `${displayId(task.id)} - ${task.title}`;
+        document.getElementById("drawerSubtitle").innerHTML = statusBadge(task.status);
         const body = document.getElementById("drawerBody");
         const dependents = STATE.dependentsById.get(task.id) || [];
         const dependsOn = task.dependsOn || [];
@@ -1107,13 +1344,19 @@
             </div>
             <div class="drawer-section drawer-meta">
               <div class="drawer-label">Tags</div>
-              <div class="drawer-value">${
-                task.tags.length ? task.tags.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ") : "-"
-              }</div>
+              <div class="drawer-value">${renderTags(task.tags, false)}</div>
             </div>
           </div>
           <div class="drawer-section">
             <div class="drawer-label">Dependencies</div>
+            <div class="dep-graph-wrap" id="depGraphWrap">
+              ${renderDepGraph(task.id, dependsOn, dependents)}
+            </div>
+            <div class="graph-controls">
+              <button class="graph-btn" id="graphZoomOut" type="button">-</button>
+              <button class="graph-btn" id="graphZoomReset" type="button">100%</button>
+              <button class="graph-btn" id="graphZoomIn" type="button">+</button>
+            </div>
             <div class="drawer-meta">
               <div class="drawer-label">Depends on (${dependsOn.length})</div>
               <div class="drawer-pills">${renderDepPills(dependsOn)}</div>
@@ -1146,12 +1389,31 @@
         drawer.classList.add("open");
         overlay.classList.add("open");
 
-        body.querySelectorAll(".drawer-pill").forEach((pill) => {
+        body.querySelectorAll("[data-task-id]").forEach((pill) => {
+          const id = pill.getAttribute("data-task-id") || "";
           pill.addEventListener("click", () => {
-            const id = pill.getAttribute("data-task-id") || "";
             if (id) openDrawer(id);
           });
+          const taskForTip = STATE.byId.get(id);
+          addTooltipHandlers(pill, taskForTip);
         });
+
+        const graphWrap = document.getElementById("depGraphWrap");
+        const zoomLabel = document.getElementById("graphZoomReset");
+        function setGraphScale(scale) {
+          GRAPH_SCALE = Math.max(0.6, Math.min(1.6, scale));
+          const svg = graphWrap?.querySelector("svg");
+          if (svg) {
+            svg.style.transform = `scale(${GRAPH_SCALE})`;
+            svg.style.transformOrigin = "center center";
+          }
+          if (zoomLabel) zoomLabel.textContent = `${Math.round(GRAPH_SCALE * 100)}%`;
+        }
+
+        setGraphScale(1);
+        document.getElementById("graphZoomOut")?.addEventListener("click", () => setGraphScale(GRAPH_SCALE - 0.1));
+        document.getElementById("graphZoomIn")?.addEventListener("click", () => setGraphScale(GRAPH_SCALE + 0.1));
+        document.getElementById("graphZoomReset")?.addEventListener("click", () => setGraphScale(1));
       }
 
       function closeDrawer() {
@@ -1194,7 +1456,13 @@
           const data = await loadTasks();
           applyData(data);
           document.getElementById("loadMeta").textContent = `Loaded ${STATE.tasks.length} tasks - ${new Date().toLocaleString()}`;
-          setStatusLine("Ready for drag-and-drop status updates.");
+          if (data?.meta?.warning) {
+            setStatusLine(`Warning: ${data.meta.warning}`, "var(--warn)");
+          } else if (!STATE.tasks.length) {
+            setStatusLine("No tasks returned - check Redmine project_id or filters.", "var(--warn)");
+          } else {
+            setStatusLine("Ready for drag-and-drop status updates.");
+          }
           document.getElementById("drawerClose").addEventListener("click", closeDrawer);
           document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
           document.getElementById("drawerSave").addEventListener("click", async () => {
