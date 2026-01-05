@@ -1,16 +1,14 @@
 ---
 id: "202601051359-RHBKA4"
 title: "Fix GitHub sync commit parsing and README sequence diagram"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: ["github", "docs"]
+commit: { hash: "a91551597ef49af43b45d2fe57814a0b378450b9", message: "🛠️ RHBKA4 fix github sync parsing" }
 description: "Handle commit fields stored as strings in sync_tasks.py and fix the Mermaid sequence diagram participant list so it renders."
 ---
-
-# 202601051359-RHBKA4: Fix GitHub sync commit parsing and README sequence diagram
-
 ## Summary
 
 - Make GitHub sync handle commit hashes stored as strings.
@@ -32,3 +30,4 @@ description: "Handle commit fields stored as strings in sync_tasks.py and fix th
 ## Rollback Plan
 
 - Revert the commit and re-run sync if needed.
+

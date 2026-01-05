@@ -2536,12 +2536,30 @@
       },
       "description": "Enforce suffix-only task IDs in commit subjects, remove non-English text from tracked files, update clean.sh to purge non-framework files, and refresh docs and snapshots.",
       "doc": "## Summary\n\n- Enforce suffix-only task IDs in commit subjects and update docs.\n- Remove non-English text from tracked files and refresh snapshots.\n- Tighten clean.sh cleanup to remove non-framework files.\n\n## Scope\n\n- Update commit subject matching and related docs to require suffix-only IDs.\n- Normalize priorities and remove Cyrillic text from tracked files.\n- Adjust clean.sh cleanup targets and keep it Python 3 only.\n\n## Risks\n\n- Bulk text normalization touches many task README files and the tasks snapshot.\n- Stricter commit checks might reject previously acceptable commit subjects.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task list --quiet`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the prior state."
+    },
+    {
+      "id": "202601051359-RHBKA4",
+      "title": "Fix GitHub sync commit parsing and README sequence diagram",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [
+        "github",
+        "docs"
+      ],
+      "commit": {
+        "hash": "a91551597ef49af43b45d2fe57814a0b378450b9",
+        "message": "🛠️ RHBKA4 fix github sync parsing"
+      },
+      "description": "Handle commit fields stored as strings in sync_tasks.py and fix the Mermaid sequence diagram participant list so it renders.",
+      "doc": "## Summary\n\n- Make GitHub sync handle commit hashes stored as strings.\n- Fix the Mermaid sequence diagram so it renders correctly.\n\n## Scope\n\n- `.github/scripts/sync_tasks.py`: accept string commit values in task payloads.\n- `README.md`: add missing participant in Mermaid sequence.\n\n## Risks\n\n- Minimal; logic change is localized to formatting.\n\n## Verify Steps\n\n- `python3 .github/scripts/sync_tasks.py`\n\n## Rollback Plan\n\n- Revert the commit and re-run sync if needed."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "ddd9268ebdd07ead108b18abb434357e3e40e075d30baf1e8cdd1780c8ac1515"
+    "checksum": "e9d0370111e18d45aea373a08ba8804d47a5793163bb3bd6f270db116f4b36f1"
   }
 }
