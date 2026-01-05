@@ -240,6 +240,7 @@ sequenceDiagram
   participant TB as "Canonical backend"
   participant WF as ".codex-swarm/tasks/<task-id>/README.md"
   participant PR as ".codex-swarm/tasks/<task-id>/pr/"
+  participant TJ as ".codex-swarm/tasks.json"
   participant CR as CREATOR
   participant UP as UPDATER
 
@@ -277,7 +278,7 @@ sequenceDiagram
     O->>I: Verify + merge + close (main only)
     I->>A: pr check <task-id>
     I->>A: integrate <task-id> (verify → merge → refresh artifacts → finish → task lint on snapshot write)
-    A->>TJ: Set DONE, persist commit hash/message (+ append handoff notes)
+    A->>TJ: Export snapshot after finish
 
     O-->>U: Summary + commit link(s)
   else Edit plan

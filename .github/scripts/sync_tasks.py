@@ -93,11 +93,18 @@ def build_body(task: Dict[str, Any]) -> str:
     lines.append(f"- Tags: `{tags}`")
 
     commit = task.get("commit")
-    if commit:
-        h = commit["hash"]
-        msg = commit["message"]
-        url = f"https://github.com/{OWNER}/{REPO}/commit/{h}"
-        lines.append(f"- Commit: [`{h[:7]}`]({url}) — {msg}")
+    if isinstance(commit, dict):
+        h = str(commit.get("hash") or "").strip()
+        msg = str(commit.get("message") or "").strip()
+        if h:
+            url = f"https://github.com/{OWNER}/{REPO}/commit/{h}"
+            suffix = f" — {msg}" if msg else ""
+            lines.append(f"- Commit: [`{h[:7]}`]({url}){suffix}")
+    elif isinstance(commit, str):
+        h = commit.strip()
+        if h:
+            url = f"https://github.com/{OWNER}/{REPO}/commit/{h}"
+            lines.append(f"- Commit: [`{h[:7]}`]({url})")
 
     lines.append(
         "\n_This issue is synced from `.codex-swarm/tasks.json` (exported snapshot). "
