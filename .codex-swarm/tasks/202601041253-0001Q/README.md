@@ -6,7 +6,7 @@ priority: "med"
 owner: "CREATOR"
 tags: ["workflow", "git", "agents"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents"]
-commit: { hash: "20b580ff017d997987112ec3bd46597cd7efe8db", message: "🧭 T-055 Reduce commits with 3-phase workflow" }
+commit: "20b580ff017d997987112ec3bd46597cd7efe8db"
 comments:
   - { author: "CREATOR", body: "Start: align agent prompts and commit workflow to a default 3-phase commit cadence (plan/docs, implementation, verification/finish) and avoid extra start/status commits." }
   - { author: "REVIEWER", body: "Verified: agent workflows now target a minimal 3-phase commit cadence (plan+artifact, implementation, verification/closure) and avoid extra status-only commits; agent registry and tasks lint pass." }

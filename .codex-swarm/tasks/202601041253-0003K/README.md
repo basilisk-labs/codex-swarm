@@ -2,13 +2,16 @@
 id: "202601041253-0003K"
 title: "agentctl: migrate tasks.json to local backend"
 status: "DONE"
-priority: "med"
-owner: "CODER"
-depends_on: ["202601041253-0003G"]
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
+depends_on: []
 tags: []
-commit: { hash: "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6", message: "🧩 T-115 add tasks.json migration" }
+verify: null
+commit: "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6"
+comments: []
 description: "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
 dirty: false
+id_source: "custom"
 redmine_id: 269
 ---
 # 202601041253-0003K: agentctl: migrate tasks.json to local backend

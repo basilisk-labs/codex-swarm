@@ -2,13 +2,15 @@
 id: "202601041253-0000M"
 title: "Add Spanish README translation"
 status: "DONE"
-priority: "med"
-owner: "CODER"
-tags: ["docs", "localization"]
-commit: { hash: "631c837f044c2f8ff5a3a785cca6d695a990b3a2", message: "Mark T-020 done after README.es review" }
-comments:
-  - { author: "reviewer", body: "Added README.es.md and ensured glossary coverage for Spanish terminology." }
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
+depends_on: []
+tags: []
+verify: null
+commit: "13721c623fd186abbaee48456aa242f7e4561119"
+comments: []
 description: "Provide a Spanish version of the README while keeping glossary terms consistent."
 dirty: false
+id_source: "custom"
 redmine_id: 300
 ---

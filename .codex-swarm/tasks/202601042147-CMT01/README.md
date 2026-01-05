@@ -2,15 +2,16 @@
 id: "202601042147-CMT01"
 title: "Clarify commit message suffix usage"
 status: "DONE"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["agents", "workflow"]
-commit: { hash: "f1568e3460bd7e7a293bca7448b9e81348b8a575", message: "✨ CMT01 update agent commit message rule" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: not applicable (documentation-only); no tests or runtime behavior changed." }
+tags: []
+verify: null
+commit: "f1568e3460bd7e7a293bca7448b9e81348b8a575"
+comments: []
 description: "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion."
 dirty: false
+id_source: "custom"
 redmine_id: 278
 ---
 # Summary

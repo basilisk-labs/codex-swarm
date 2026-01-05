@@ -1,13 +1,17 @@
 ---
 id: "202601041529-CYHJZB"
 title: "Redmine sync: enrich metadata"
-status: "TODO"
-priority: "med"
-owner: "codex"
+status: "DONE"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["redmine", "sync"]
+tags: []
+verify: null
+commit: "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0"
+comments: []
 description: "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks."
 dirty: false
+id_source: "custom"
 redmine_id: 391
 ---
 ## Summary

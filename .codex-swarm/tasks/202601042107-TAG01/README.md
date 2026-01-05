@@ -2,12 +2,16 @@
 id: "202601042107-TAG01"
 title: "Clarify planner task tags + deps"
 status: "TODO"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["agents", "workflow"]
+tags: []
+verify: null
+commit: null
+comments: []
 description: "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible."
 dirty: false
+id_source: "custom"
 redmine_id: 277
 ---
 # Summary

@@ -2,13 +2,16 @@
 id: "202601041253-0003M"
 title: "Agents: export tasks.json on close"
 status: "DONE"
-priority: "med"
-owner: "DOCS"
-depends_on: ["202601041253-0003K"]
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
+depends_on: []
 tags: []
-commit: { hash: "188350307b487d91a3ef004847f87f8b6d1a3995", message: "🛠️ 0003M export tasks.json on close" }
+verify: null
+commit: "188350307b487d91a3ef004847f87f8b6d1a3995"
+comments: []
 description: "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model."
 dirty: false
+id_source: "custom"
 redmine_id: 390
 ---
 # 202601041253-0003M: Agents: export tasks.json on close

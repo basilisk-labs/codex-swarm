@@ -2,14 +2,15 @@
 id: "202601041253-00033"
 title: "Fill T-096 artifact and enforce doc completion"
 status: "DONE"
-priority: "low"
-owner: "DOCS"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["docs"]
-commit: { hash: "be41f3b5cdebf6a1d18b4562e722b6c4041733b4", message: "🛠️ T-099 enforce doc completion + fill T-096" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: docs-only updates to workflow artifacts and guardrails; no tests required." }
+tags: []
+verify: null
+commit: "13721c623fd186abbaee48456aa242f7e4561119"
+comments: []
 description: "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs."
 dirty: false
+id_source: "custom"
 redmine_id: 379
 ---

@@ -2,16 +2,15 @@
 id: "202601041253-0002A"
 title: "Unify workflow artifact layout (single per-task folder)"
 status: "DONE"
-priority: "high"
-owner: "PLANNER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["workflow", "docs", "agentctl"]
-verify: ["python scripts/agentctl.py task lint"]
-commit: { hash: "77a7ec17750368061351c416f1aebafadf2903aa", message: "🗂️ T-074 unify workflow artifacts into per-task folders" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-074." }
-  - { author: "INTEGRATOR", body: "Artifacts moved to docs/workflow/T-074/pr/ (legacy docs/workflow/prs/ is deprecated)." }
+tags: []
+verify: null
+commit: "77a7ec17750368061351c416f1aebafadf2903aa"
+comments: []
 description: "Eliminate duplication between docs/workflow/T-###.md and docs/workflow/prs/T-###/description.md by moving to a single per-task folder layout under docs/workflow/T-###/. New canonical doc: docs/workflow/T-###/README.md. PR artifacts live at docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}. Update agentctl commands (task scaffold/add, pr open/update/check/note, verify --log, integrate meta sync) to use the new layout, while keeping backward compatibility for the old paths. Migrate existing tracked artifacts (T-055..T-073 and docs/workflow/prs/T-067..T-073) to the new layout and update all docs/agent texts that reference the old pipeline."
 dirty: false
+id_source: "custom"
 redmine_id: 354
 ---

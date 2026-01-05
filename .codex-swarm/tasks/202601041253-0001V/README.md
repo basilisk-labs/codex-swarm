@@ -2,14 +2,15 @@
 id: "202601041253-0001V"
 title: "Add agentctl git/task ergonomics"
 status: "DONE"
-priority: "med"
-owner: "CODER"
-tags: ["agentctl", "git"]
-verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py guard --help"]
-commit: { hash: "ba1828365b51d415ed3decea1053fd62060c34ff", message: "✨ T-059 Add agentctl ergonomics commands" }
-comments:
-  - { author: "REVIEWER", body: "Verified: Ran python scripts/agentctl.py task lint and python scripts/agentctl.py guard --help; spot-checked python scripts/agentctl.py task next and python scripts/agentctl.py task search agentctl." }
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
+depends_on: []
+tags: []
+verify: null
+commit: "13721c623fd186abbaee48456aa242f7e4561119"
+comments: []
 description: "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit)."
 dirty: false
+id_source: "custom"
 redmine_id: 339
 ---

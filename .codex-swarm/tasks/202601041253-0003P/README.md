@@ -2,15 +2,16 @@
 id: "202601041253-0003P"
 title: "Update clean.sh for new structure"
 status: "DONE"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
-commit: { hash: "04fdd37dca3c7541e1d957e263b473547c94d6ad", message: "🧹 T-118 update clean.sh for tasks layout" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: bash -n clean.sh; cleanup resets .codex-swarm/tasks and snapshot." }
+verify: null
+commit: "04fdd37dca3c7541e1d957e263b473547c94d6ad"
+comments: []
 description: "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
 dirty: false
+id_source: "custom"
 redmine_id: 271
 ---
 # 202601041253-0003P: Update clean.sh for new structure

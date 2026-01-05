@@ -2,14 +2,15 @@
 id: "202601041253-00032"
 title: "Verify agentctl task writes + clarify no-manual-edits"
 status: "DONE"
-priority: "med"
-owner: "DOCS"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["docs"]
-commit: { hash: "ba44ab30139e35d29edb1337a1c56d2a4d4e9566", message: "📝 T-098 reinforce no-manual-edits rule" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: agentctl task add produced tasks.json entry; task lint OK; docs update only." }
+tags: []
+verify: null
+commit: "13721c623fd186abbaee48456aa242f7e4561119"
+comments: []
 description: "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually."
 dirty: false
+id_source: "custom"
 redmine_id: 378
 ---

@@ -2,12 +2,16 @@
 id: "202601041331-Q11MC"
 title: "Prune legacy paths and optimize agentctl"
 status: "TODO"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
+verify: null
+commit: null
+comments: []
 description: "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl."
 dirty: false
+id_source: "custom"
 redmine_id: 275
 ---
 # 202601041331-Q11MC: Prune legacy paths and optimize agentctl

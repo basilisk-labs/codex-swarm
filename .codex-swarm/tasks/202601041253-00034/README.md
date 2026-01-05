@@ -2,14 +2,15 @@
 id: "202601041253-00034"
 title: "Update README docs links"
 status: "DONE"
-priority: "med"
-owner: "DOCS"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
-commit: { hash: "1094b0af329012963648b1405b49eb5d17479c1b", message: "📝 T-100 update README docs links" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: docs-only changes; manual review only (no automated checks)." }
+verify: null
+commit: "13721c623fd186abbaee48456aa242f7e4561119"
+comments: []
 description: "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find."
 dirty: false
+id_source: "custom"
 redmine_id: 380
 ---

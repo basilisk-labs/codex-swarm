@@ -2,15 +2,16 @@
 id: "202601041253-0003S"
 title: "agentctl: preserve frontmatter on scaffold overwrite"
 status: "DONE"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
-commit: { hash: "e571744e288fc0f63599967eae460d290d4c97ef", message: "🛠️ T-121 preserve scaffold frontmatter" }
-comments:
-  - { author: "INTEGRATOR", body: "Verified: python3 .codex-swarm/agentctl.py task scaffold 202601041253-0003S --overwrite preserved frontmatter." }
+verify: null
+commit: "e571744e288fc0f63599967eae460d290d4c97ef"
+comments: []
 description: "Keep the frontmatter block intact when overwriting task README scaffolds."
 dirty: false
+id_source: "custom"
 redmine_id: 280
 ---
 # 202601041253-0003S: agentctl: preserve frontmatter on scaffold overwrite

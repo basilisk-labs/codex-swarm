@@ -6,7 +6,7 @@ priority: "high"
 owner: "CODER"
 tags: ["docs", "workflow", "tooling"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents"]
-commit: { hash: "d6517d61191b4d80e80acc63117b6e55ba02c557", message: "🧹 T-051 Remove tasks.py; migrate docs to agentctl" }
+commit: "d6517d61191b4d80e80acc63117b6e55ba02c557"
 comments:
   - { author: "PLANNER", body: "Planned: remove legacy tasks.py + update docs to agentctl; Constraints: no manual tasks.json edits; keep guidance consistent across repo." }
   - { author: "CODER", body: "Start: remove scripts/tasks.py; update README + other docs to new agentctl workflow; Constraints: no manual tasks.json edits; keep changes minimal and consistent." }

@@ -6,7 +6,7 @@ priority: "med"
 owner: "CODER"
 tags: ["cleanup", "workflow"]
 verify: ["bash -n clean.sh", "python scripts/agentctl.py task lint"]
-commit: { hash: "b1ff627216f332cc34652d0a2968c78e89c68d2d", message: "🧹 T-054 Clean docs and framework artifacts" }
+commit: "b1ff627216f332cc34652d0a2968c78e89c68d2d"
 comments:
   - { author: "CODER", body: "Start: extend clean.sh to remove framework dev artifacts (including docs) while keeping cleanup idempotent and repo-root scoped." }
   - { author: "REVIEWER", body: "Verified: clean.sh now removes docs/ and other framework-development artifacts (tasks.html, .DS_Store) during cleanup; script syntax checks pass and tasks.json lints clean." }

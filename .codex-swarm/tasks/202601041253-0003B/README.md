@@ -2,12 +2,15 @@
 id: "202601041253-0003B"
 title: "Link file references in docs"
 status: "DONE"
-priority: "med"
-owner: "DOCS"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["docs"]
-commit: { hash: "7e88f9df016c340dbf314d6f687473f2f955ea6c", message: "📝 T-107 link doc file references" }
+tags: []
+verify: null
+commit: "7e88f9df016c340dbf314d6f687473f2f955ea6c"
+comments: []
 description: "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks."
 dirty: false
+id_source: "custom"
 redmine_id: 264
 ---

@@ -2,12 +2,15 @@
 id: "202601041253-00007"
 title: "Improve commit message guidance"
 status: "DONE"
-priority: "high"
-owner: "CODER"
-tags: ["workflow", "git"]
-commit: { hash: "6e8c80e12a6127ec040d1148cee1bfe1e0e41772", message: "Mark T-007 and T-008 done" }
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
+depends_on: []
+tags: []
+verify: null
+commit: "13721c623fd186abbaee48456aa242f7e4561119"
 comments: []
 description: "Tighten the instructions around writing meaningful, emoji-prefixed commit messages."
 dirty: false
+id_source: "custom"
 redmine_id: 287
 ---

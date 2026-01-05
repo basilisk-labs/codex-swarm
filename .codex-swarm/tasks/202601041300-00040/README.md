@@ -2,15 +2,16 @@
 id: "202601041300-00040"
 title: "tasks.html kanban viewer with local server"
 status: "DONE"
-priority: "med"
-owner: "codex"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["tasks-ui", "kanban"]
-commit: { hash: "8ebac65cf3df403807155f58e430ba30e925692b", message: "🛠️ 202601041300-00040 tasks viewer" }
-comments:
-  - { author: "codex", body: "Started viewer/server refactor to move UI into .codex-swarm/viewer." }
+tags: []
+verify: null
+commit: "8ebac65cf3df403807155f58e430ba30e925692b"
+comments: []
 description: "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes."
 dirty: false
+id_source: "custom"
 redmine_id: 273
 ---
 # Summary
