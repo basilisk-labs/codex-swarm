@@ -115,6 +115,10 @@ class RedmineBackend:
                 payload["project_id"] = self.project_id
                 created = self._request_json("POST", "issues.json", payload={"issue": payload})
                 issue_id = (created.get("issue") or {}).get("id") if isinstance(created, dict) else None
+                if issue_id:
+                    update_payload = dict(payload)
+                    update_payload.pop("project_id", None)
+                    self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": update_payload})
             if issue_id:
                 task["redmine_id"] = issue_id
             task["dirty"] = False
@@ -197,7 +201,12 @@ class RedmineBackend:
             payload = self._request_json(
                 "GET",
                 "issues.json",
-                params={"project_id": self.project_id, "limit": limit, "offset": offset},
+                params={
+                    "project_id": self.project_id,
+                    "limit": limit,
+                    "offset": offset,
+                    "status_id": "*",
+                },
             )
             issues = payload.get("issues") if isinstance(payload, dict) else None
             if not isinstance(issues, list):

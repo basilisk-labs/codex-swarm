@@ -1,13 +1,17 @@
 ---
 id: "202601041544-253P5B"
-title: "Load .env for Redmine settings"
+title: "Auto-generate task IDs + load .env for Redmine"
 status: "TODO"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["agentctl", "redmine", "env"]
-description: "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored."
+tags: ["agentctl", "redmine", "tasks", "docs", "env"]
+verify: null
+commit: null
+comments: []
+description: "Add agentctl auto-ID creation, load repo .env before backend initialization, and document task_id vs redmine_id."
 dirty: false
+id_source: "custom"
 redmine_id: 392
 ---
 # Summary
