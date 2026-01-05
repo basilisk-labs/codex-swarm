@@ -3,7 +3,7 @@ id: "202601051338-8DGWPT"
 title: "Redmine doc metadata + task_id enforcement"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: ["redmine", "backend", "docs"]
 commit: { hash: "095a9428549afe10ccf9d4e078cdc6c48d78b0f9", message: "🧩 8DGWPT redmine doc metadata" }

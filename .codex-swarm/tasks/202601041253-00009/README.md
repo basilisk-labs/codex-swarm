@@ -3,7 +3,7 @@ id: "202601041253-00009"
 title: "Define status transition protocol"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

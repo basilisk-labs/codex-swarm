@@ -3,7 +3,7 @@ id: "202601041253-0000K"
 title: "Add glossary-aware translation agent"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

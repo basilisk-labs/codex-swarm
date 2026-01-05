@@ -3,7 +3,7 @@ id: "202601041253-0001V"
 title: "Add agentctl git/task ergonomics"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

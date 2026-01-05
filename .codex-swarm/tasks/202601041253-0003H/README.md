@@ -3,7 +3,7 @@ id: "202601041253-0003H"
 title: "redmine backend: canonical source + offline fallback"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

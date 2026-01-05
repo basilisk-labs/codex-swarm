@@ -3,7 +3,7 @@ id: "202601041253-00033"
 title: "Fill T-096 artifact and enforce doc completion"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

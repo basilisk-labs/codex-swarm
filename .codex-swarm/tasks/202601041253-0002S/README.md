@@ -3,7 +3,7 @@ id: "202601041253-0002S"
 title: "Refactor workflow paths"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

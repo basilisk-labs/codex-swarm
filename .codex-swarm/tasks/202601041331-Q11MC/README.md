@@ -3,7 +3,7 @@ id: "202601041331-Q11MC"
 title: "Prune legacy paths and optimize agentctl"
 status: "TODO"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

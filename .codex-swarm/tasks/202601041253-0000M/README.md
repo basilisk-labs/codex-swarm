@@ -3,7 +3,7 @@ id: "202601041253-0000M"
 title: "Add Spanish README translation"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

@@ -3,7 +3,7 @@ id: "202601041253-00007"
 title: "Improve commit message guidance"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

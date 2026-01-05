@@ -3,7 +3,7 @@ id: "202601041253-00032"
 title: "Verify agentctl task writes + clarify no-manual-edits"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

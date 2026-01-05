@@ -3,7 +3,7 @@ id: "202601051359-RHBKA4"
 title: "Fix GitHub sync commit parsing and README sequence diagram"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: ["github", "docs"]
 commit: { hash: "a91551597ef49af43b45d2fe57814a0b378450b9", message: "🛠️ RHBKA4 fix github sync parsing" }

@@ -3,7 +3,7 @@ id: "202601041253-0000W"
 title: "Add virtualenv installation reminder"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

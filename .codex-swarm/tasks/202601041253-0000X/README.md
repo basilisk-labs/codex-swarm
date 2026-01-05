@@ -3,7 +3,7 @@ id: "202601041253-0000X"
 title: "Audit agents for optimization opportunities"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

@@ -3,7 +3,7 @@ id: "202601041253-0003G"
 title: "agentctl: route task commands to backend + new sync/export commands"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

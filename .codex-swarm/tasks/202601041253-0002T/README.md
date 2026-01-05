@@ -3,7 +3,7 @@ id: "202601041253-0002T"
 title: "Move ORCHESTRATOR spec into JSON"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null

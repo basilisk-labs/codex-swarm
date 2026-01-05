@@ -3,7 +3,7 @@ id: "202601041544-253P5B"
 title: "Load .env for Redmine settings"
 status: "DONE"
 priority: "normal"
-owner: "Via Mentis Assistant"
+owner: "automation"
 depends_on: []
 tags: []
 verify: null
