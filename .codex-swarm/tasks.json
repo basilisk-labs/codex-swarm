@@ -2392,13 +2392,16 @@
     {
       "id": "202601041331-Q11MC",
       "title": "Prune legacy paths and optimize agentctl",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "automation",
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": null,
+      "commit": {
+        "hash": "a13b7c8bf9ce6143bad33fb58ac0fed49089c83c",
+        "message": "✅ P7AMW3 close task"
+      },
       "comments": [],
       "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl.",
       "dirty": false,
@@ -2470,13 +2473,16 @@
     {
       "id": "202601042107-TAG01",
       "title": "Clarify planner task tags + deps",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "automation",
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": null,
+      "commit": {
+        "hash": "a13b7c8bf9ce6143bad33fb58ac0fed49089c83c",
+        "message": "✅ P7AMW3 close task"
+      },
       "comments": [],
       "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible.",
       "dirty": false,
@@ -2578,6 +2584,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b05697b7951b51253e03fa63294564c013db7ab2ff941a9f5b4e988d6f573b65"
+    "checksum": "9bbea074f6fdecb80c73f22d35beea74f8a30da93d39267fa292057da2bb1d1e"
   }
 }

@@ -1,13 +1,13 @@
 ---
 id: "202601042107-TAG01"
 title: "Clarify planner task tags + deps"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: null
+commit: { hash: "a13b7c8bf9ce6143bad33fb58ac0fed49089c83c", message: "✅ P7AMW3 close task" }
 comments: []
 description: "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible."
 dirty: false
