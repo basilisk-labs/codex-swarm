@@ -1,16 +1,14 @@
 ---
 id: "202601051417-P7AMW3"
 title: "Remove Via Mentis ownership references"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "automation"
 depends_on: []
 tags: ["cleanup", "policy"]
+commit: { hash: "944d0b90f177d0515866112cfb2b2a037ff6dccd", message: "🧹 P7AMW3 neutralize task owners" }
 description: "Replace Via Mentis owner values with a neutral owner label across tasks and export the updated snapshot."
 ---
-
-# 202601051417-P7AMW3: Remove Via Mentis ownership references
-
 ## Summary
 
 - Replace Via Mentis owner values with a neutral owner label in task frontmatter.
@@ -32,3 +30,4 @@ description: "Replace Via Mentis owner values with a neutral owner label across 
 ## Rollback Plan
 
 - Revert the commit and re-export tasks.json from the previous state.
+

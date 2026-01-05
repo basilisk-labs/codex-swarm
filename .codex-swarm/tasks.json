@@ -2554,12 +2554,30 @@
       },
       "description": "Handle commit fields stored as strings in sync_tasks.py and fix the Mermaid sequence diagram participant list so it renders.",
       "doc": "## Summary\n\n- Make GitHub sync handle commit hashes stored as strings.\n- Fix the Mermaid sequence diagram so it renders correctly.\n\n## Scope\n\n- `.github/scripts/sync_tasks.py`: accept string commit values in task payloads.\n- `README.md`: add missing participant in Mermaid sequence.\n\n## Risks\n\n- Minimal; logic change is localized to formatting.\n\n## Verify Steps\n\n- `python3 .github/scripts/sync_tasks.py`\n\n## Rollback Plan\n\n- Revert the commit and re-run sync if needed."
+    },
+    {
+      "id": "202601051417-P7AMW3",
+      "title": "Remove Via Mentis ownership references",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "automation",
+      "depends_on": [],
+      "tags": [
+        "cleanup",
+        "policy"
+      ],
+      "commit": {
+        "hash": "944d0b90f177d0515866112cfb2b2a037ff6dccd",
+        "message": "🧹 P7AMW3 neutralize task owners"
+      },
+      "description": "Replace Via Mentis owner values with a neutral owner label across tasks and export the updated snapshot.",
+      "doc": "## Summary\n\n- Replace Via Mentis owner values with a neutral owner label in task frontmatter.\n- Refresh the exported tasks snapshot.\n\n## Scope\n\n- `.codex-swarm/tasks/*/README.md`: update owner fields.\n- `.codex-swarm/tasks.json`: re-export snapshot.\n\n## Risks\n\n- Bulk edit touches many task records; ensure no other fields change.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the previous state."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "27a4d6f4a30d5f8a1ed263b157ed7deedaa0a38666aaec1fc7476c88bf979185"
+    "checksum": "b05697b7951b51253e03fa63294564c013db7ab2ff941a9f5b4e988d6f573b65"
   }
 }
