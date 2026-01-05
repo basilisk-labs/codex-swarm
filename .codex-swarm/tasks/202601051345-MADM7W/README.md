@@ -1,16 +1,14 @@
 ---
 id: "202601051345-MADM7W"
 title: "Suffix-only commit policy, cleanup, and English-only text"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: ["workflow", "cleanup", "policy"]
+commit: { hash: "c9a25a5a7d02119017ef6fff74de6d1d63d29b7e", message: "🧹 MADM7W suffix-only commit policy" }
 description: "Enforce suffix-only task IDs in commit subjects, remove non-English text from tracked files, update clean.sh to purge non-framework files, and refresh docs and snapshots."
 ---
-
-# 202601051345-MADM7W: Suffix-only commit policy, cleanup, and English-only text
-
 ## Summary
 
 - Enforce suffix-only task IDs in commit subjects and update docs.
@@ -36,3 +34,4 @@ description: "Enforce suffix-only task IDs in commit subjects, remove non-Englis
 ## Rollback Plan
 
 - Revert the commit and re-export tasks.json from the prior state.
+

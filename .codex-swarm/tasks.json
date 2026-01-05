@@ -2521,7 +2521,7 @@
     {
       "id": "202601051345-MADM7W",
       "title": "Suffix-only commit policy, cleanup, and English-only text",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "Via Mentis Assistant",
       "depends_on": [],
@@ -2530,6 +2530,10 @@
         "cleanup",
         "policy"
       ],
+      "commit": {
+        "hash": "c9a25a5a7d02119017ef6fff74de6d1d63d29b7e",
+        "message": "🧹 MADM7W suffix-only commit policy"
+      },
       "description": "Enforce suffix-only task IDs in commit subjects, remove non-English text from tracked files, update clean.sh to purge non-framework files, and refresh docs and snapshots.",
       "doc": "## Summary\n\n- Enforce suffix-only task IDs in commit subjects and update docs.\n- Remove non-English text from tracked files and refresh snapshots.\n- Tighten clean.sh cleanup to remove non-framework files.\n\n## Scope\n\n- Update commit subject matching and related docs to require suffix-only IDs.\n- Normalize priorities and remove Cyrillic text from tracked files.\n- Adjust clean.sh cleanup targets and keep it Python 3 only.\n\n## Risks\n\n- Bulk text normalization touches many task README files and the tasks snapshot.\n- Stricter commit checks might reject previously acceptable commit subjects.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task list --quiet`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the prior state."
     }
@@ -2538,6 +2542,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f28999ace1c8b2a35e9d280b7aa492dd6d87d2bd0d933ea44b9e8e0b3afe4956"
+    "checksum": "ddd9268ebdd07ead108b18abb434357e3e40e075d30baf1e8cdd1780c8ac1515"
   }
 }
