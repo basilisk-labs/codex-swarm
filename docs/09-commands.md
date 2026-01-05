@@ -9,6 +9,7 @@ python .codex-swarm/agentctl.py quickstart
 ```bash
 python .codex-swarm/agentctl.py task list
 python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q
+python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner CODER
 python .codex-swarm/agentctl.py task add 202601031816-7F3K2Q --title "..." --description "..."
 python .codex-swarm/agentctl.py task lint
 # or run read-only commands with --lint

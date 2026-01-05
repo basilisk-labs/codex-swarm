@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
@@ -42,6 +43,27 @@ GENERIC_COMMIT_TOKENS: Set[str] = {
     "tasks",
     "task",
 }
+
+
+def load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[len("export ") :].lstrip()
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if not key or key in os.environ:
+            continue
+        value = value.strip()
+        if value and value[0] == value[-1] and value[0] in ("\"", "'"):
+            value = value[1:-1]
+        os.environ[key] = value
 
 
 def run(cmd: List[str], *, cwd: Path = ROOT, check: bool = True) -> subprocess.CompletedProcess:
@@ -472,6 +494,7 @@ AGENTS_DIR = _resolve_repo_relative_path(_PATHS.get("agents_dir"), label="agents
 AGENTCTL_DOCS_PATH = _resolve_repo_relative_path(_PATHS.get("agentctl_docs_path"), label="agentctl_docs_path")
 WORKFLOW_DIR = _resolve_repo_relative_path(_PATHS.get("workflow_dir"), label="workflow_dir")
 TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
+load_env_file(ROOT / ".env")
 BACKEND_CONFIG = load_backend_config()
 BACKEND_CLASS = load_backend_class(BACKEND_CONFIG) if BACKEND_CONFIG else None
 _BACKEND_INSTANCE: Optional[object] = None
@@ -1800,6 +1823,49 @@ def _ensure_task_object(container: object, task_id: str) -> Dict:
     die(f"Unknown task id: {task_id}")
 
 
+def _generate_task_id_via_local_backend(
+    existing_ids: Set[str],
+    *,
+    length: int = 6,
+    attempts: int = 1000,
+) -> str:
+    local_path = SWARM_DIR / "backends" / "local" / "backend.py"
+    if not local_path.exists():
+        die(f"Local backend module not found: {local_path}", code=2)
+    module = load_backend_module("local", local_path)
+    backend_cls = getattr(module, "LocalBackend", None)
+    if backend_cls is None:
+        die("LocalBackend class not found", code=2)
+    local_backend = backend_cls({"dir": str(SWARM_DIR / "tasks")})
+    generator = getattr(local_backend, "generate_task_id", None)
+    if not callable(generator):
+        die("Local backend does not support generate_task_id()", code=2)
+    for _ in range(attempts):
+        candidate = generator(length=length, attempts=1)
+        if candidate not in existing_ids:
+            return candidate
+    raise RuntimeError("Failed to generate a unique task id")
+
+
+def generate_task_id_for(
+    existing_ids: Set[str],
+    *,
+    length: int = 6,
+    attempts: int = 1000,
+) -> str:
+    backend = backend_instance()
+    if backend is None:
+        return _generate_task_id_via_local_backend(existing_ids, length=length, attempts=attempts)
+    generator = getattr(backend, "generate_task_id", None)
+    if not callable(generator):
+        die("Configured backend does not support generate_task_id()", code=2)
+    for _ in range(attempts):
+        candidate = generator(length=length, attempts=1)
+        if candidate not in existing_ids:
+            return candidate
+    raise RuntimeError("Failed to generate a unique task id")
+
+
 def cmd_task_add(args: argparse.Namespace) -> None:
     require_tasks_json_write_context()
     tasks, save = load_task_store()
@@ -1837,6 +1903,44 @@ def cmd_task_add(args: argparse.Namespace) -> None:
             task["comments"] = [{"author": args.comment_author, "body": args.comment_body}]
         tasks.append(task)
     save(tasks)
+
+
+def cmd_task_new(args: argparse.Namespace) -> None:
+    require_tasks_json_write_context()
+    tasks, save = load_task_store()
+    existing_ids = {
+        str(task.get("id") or "").strip()
+        for task in tasks
+        if isinstance(task, dict) and str(task.get("id") or "").strip()
+    }
+    status = (args.status or "TODO").strip().upper()
+    if status not in ALLOWED_STATUSES:
+        die(f"Invalid status: {status}")
+    raw_depends_on = [dep for dep in (args.depends_on or []) if isinstance(dep, str)]
+    normalized_depends_on = list(
+        dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
+    )
+    task_id = generate_task_id_for(existing_ids, length=args.id_length)
+    task: Dict = {
+        "id": task_id,
+        "title": args.title,
+        "description": args.description,
+        "status": status,
+        "priority": args.priority,
+        "owner": args.owner,
+        "tags": list(dict.fromkeys((args.tag or []))),
+        "depends_on": normalized_depends_on,
+    }
+    if args.verify:
+        task["verify"] = list(dict.fromkeys(args.verify))
+    if args.comment_author and args.comment_body:
+        task["comments"] = [{"author": args.comment_author, "body": args.comment_body}]
+    tasks.append(task)
+    save(tasks)
+    if args.quiet:
+        print(task_id)
+    else:
+        print(f"✅ created {task_id}")
 
 
 def cmd_task_update(args: argparse.Namespace) -> None:
@@ -3716,7 +3820,22 @@ def build_parser() -> argparse.ArgumentParser:
     p_lint.add_argument("--quiet", action="store_true", help="Suppress warnings")
     p_lint.set_defaults(func=cmd_task_lint)
 
-    p_add = task_sub.add_parser("add", help="Add new task(s) to tasks.json (no manual edits)")
+    p_new = task_sub.add_parser("new", help="Create a task with an auto-generated ID")
+    p_new.add_argument("--title", required=True)
+    p_new.add_argument("--description", required=True)
+    p_new.add_argument("--status", default="TODO", help="Default: TODO")
+    p_new.add_argument("--priority", required=True)
+    p_new.add_argument("--owner", required=True)
+    p_new.add_argument("--tag", action="append", help="Repeatable")
+    p_new.add_argument("--depends-on", action="append", dest="depends_on", help="Repeatable")
+    p_new.add_argument("--verify", action="append", help="Repeatable: shell command")
+    p_new.add_argument("--comment-author", dest="comment_author")
+    p_new.add_argument("--comment-body", dest="comment_body")
+    p_new.add_argument("--id-length", type=int, default=6, help="ID suffix length (default: 6)")
+    p_new.add_argument("--quiet", action="store_true", help="Print only the task id")
+    p_new.set_defaults(func=cmd_task_new)
+
+    p_add = task_sub.add_parser("add", help="Add new task(s) with explicit IDs (no manual edits)")
     p_add.add_argument("task_id", nargs="+", help="One or more task IDs")
     p_add.add_argument("--title", required=True)
     p_add.add_argument("--description", required=True)

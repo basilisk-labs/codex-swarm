@@ -7,7 +7,7 @@ Tasks are routed through `agentctl`, which uses the active backend plugin to dec
 - Canonical task ID format: `YYYYMMDDHHMM-<RAND>`
 - Example: `202601031816-7F3K2Q`
 - IDs are immutable once created.
-- `agentctl` checks for collisions when generating new IDs.
+- `agentctl` generates IDs via `task new` and checks for collisions.
 
 ## Local Storage Layout
 Each task lives in a dedicated folder (see [`.codex-swarm/tasks/`](../.codex-swarm/tasks/)):
@@ -42,6 +42,7 @@ created_at: "2026-01-03T18:16:00Z"
 
 ### redmine
 - Canonical source: Redmine issues with a `task_id` custom field.
+- The local task ID maps to the Redmine `task_id` custom field; the Redmine issue id is stored separately as `redmine_id`.
 - Local tasks are a cache/offline layer.
 - `agentctl` auto-falls back to local when Redmine is unavailable.
 - When connectivity returns, `agentctl sync redmine` reconciles changes.
