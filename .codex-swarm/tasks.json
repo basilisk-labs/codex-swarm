@@ -1,7 +1,7 @@
 {
   "tasks": [
     {
-      "id": "392",
+      "id": "202601041544-253P5B",
       "title": "Load .env for Redmine settings",
       "description": "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored.",
       "status": "TODO",
@@ -13,46 +13,13 @@
       "commit": null,
       "comments": [],
       "redmine_id": 392,
-      "id_source": "redmine",
-      "dirty": false
-    },
-    {
-      "id": "277",
-      "title": "Clarify planner task tags + deps",
-      "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible.",
-      "status": "TODO",
-      "priority": "Нормальный",
-      "owner": "Via Mentis Assistant",
-      "tags": [],
-      "depends_on": [],
-      "verify": null,
-      "commit": null,
-      "comments": [],
-      "redmine_id": 277,
-      "id_source": "redmine",
-      "dirty": false
-    },
-    {
-      "id": "275",
-      "title": "Prune legacy paths and optimize agentctl",
-      "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl.",
-      "status": "TODO",
-      "priority": "Нормальный",
-      "owner": "Via Mentis Assistant",
-      "tags": [],
-      "depends_on": [],
-      "verify": null,
-      "commit": null,
-      "comments": [],
-      "redmine_id": 275,
-      "id_source": "redmine",
-      "dirty": false
+      "id_source": "custom"
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "441abf981f4f22e472080e059ff01f034de37fab6fb3b4841bc4204496f01cba"
+    "checksum": "61403ef52de93ce8a63b52007f9a27ad079d84b4f2d7d83a7077e4340d5fb632"
   }
 }
