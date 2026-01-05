@@ -1,25 +1,2543 @@
 {
   "tasks": [
     {
-      "id": "202601041544-253P5B",
-      "title": "Load .env for Redmine settings",
-      "description": "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored.",
-      "status": "TODO",
-      "priority": "Нормальный",
+      "id": "202601041253-00001",
+      "title": "Document framework in README",
+      "status": "DONE",
+      "priority": "normal",
       "owner": "Via Mentis Assistant",
-      "tags": [],
       "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "76d362097fa5d7237d78e4142d9d4ce7f9511513",
+      "comments": [],
+      "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 281
+    },
+    {
+      "id": "202601041253-00002",
+      "title": "Restructure agent registry into JSON files",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "645a960e59145717d77f4bfab367c2a14234cc03",
+      "comments": [],
+      "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 282
+    },
+    {
+      "id": "202601041253-00003",
+      "title": "Move tasks data into .AGENTS/TASKS.json",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "645a960e59145717d77f4bfab367c2a14234cc03",
+      "comments": [],
+      "description": "Ensure task state is available in a machine-readable JSON file for Codex automation.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 283
+    },
+    {
+      "id": "202601041253-00004",
+      "title": "Enforce per-task git commits in AGENTS spec",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "fb9f40ff9b294361cf2d6322d4b68d220ebbf1c6",
+      "comments": [],
+      "description": "Document the rule that every plan item must end with its own git commit for traceability.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 284
+    },
+    {
+      "id": "202601041253-00005",
+      "title": "Document commit workflow in README",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "fa8627b7e1cb31047987216d42f6664cd1fe8767",
+      "comments": [],
+      "description": "Expand the README with details on emoji commits and atomic task tracking.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 285
+    },
+    {
+      "id": "202601041253-00006",
+      "title": "Add Agent Creator workflow",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Describe how new specialist agents are proposed, reviewed, and added to the registry.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 286
+    },
+    {
+      "id": "202601041253-00007",
+      "title": "Improve commit message guidance",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Tighten the instructions around writing meaningful, emoji-prefixed commit messages.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 287
+    },
+    {
+      "id": "202601041253-00008",
+      "title": "Document repository structure in README",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Add a quick-start tour of key files and directories so contributors know where to work.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 288
+    },
+    {
+      "id": "202601041253-00009",
+      "title": "Define status transition protocol",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 289
+    },
+    {
+      "id": "202601041253-0000A",
+      "title": "Automate agent registry updates",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agents",
+        "automation"
+      ],
+      "commit": "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1",
+      "comments": [],
+      "description": "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list.",
+      "dirty": false,
+      "redmine_id": 290
+    },
+    {
+      "id": "202601041253-0000B",
+      "title": "Evaluate workflow and suggest improvements",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Review the end-to-end authoring flow and capture improvement ideas inside the docs.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 291
+    },
+    {
+      "id": "202601041253-0000C",
+      "title": "Generalize AGENTS.md to remove agent-specific guidance",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 292
+    },
+    {
+      "id": "202601041253-0000D",
+      "title": "Align agent prompts with GPT-5.1 guide",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Update every agent spec so prompts match the GPT-5.1 best practices.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 293
+    },
+    {
+      "id": "202601041253-0000E",
+      "title": "Document Cursor + Codex local workflow in AGENTS.md",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Add environment assumptions for local-only workflows without remote runtimes.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 294
+    },
+    {
+      "id": "202601041253-0000F",
+      "title": "Align agent prompts with Cursor + Codex constraints",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 295
+    },
+    {
+      "id": "202601041253-0000G",
+      "title": "Remove tool references from AGENTS.md for Codex-only workflow",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "commit": "d5b3e2eac2dc04098d97248ddba1dcca271311fa",
+      "comments": [],
+      "description": "Strip references to unsupported helper tools to keep instructions aligned with the local stack.",
+      "dirty": false,
+      "redmine_id": 296
+    },
+    {
+      "id": "202601041253-0000H",
+      "title": "Update agent prompts for tool-less Codex context",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "prompting",
+        "agents"
+      ],
+      "commit": "6ed438a36b77e1ae7ca742ce4ace0fd4391c978e",
+      "comments": [],
+      "description": "Reword prompts so agents do not assume access to external search or commands.",
+      "dirty": false,
+      "redmine_id": 297
+    },
+    {
+      "id": "202601041253-0000J",
+      "title": "Streamline AGENTS.md English guidelines",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Trim redundant English-language instructions and keep the doc crisp.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 298
+    },
+    {
+      "id": "202601041253-0000K",
+      "title": "Add glossary-aware translation agent",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Introduce a translator agent that respects glossary entries when localizing README content.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 299
+    },
+    {
+      "id": "202601041253-0000M",
+      "title": "Add Spanish README translation",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Provide a Spanish version of the README while keeping glossary terms consistent.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 300
+    },
+    {
+      "id": "202601041253-0000N",
+      "title": "Enhance translator glossary workflow",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Teach the translator agent how to maintain glossary metadata and usage counts automatically.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 301
+    },
+    {
+      "id": "202601041253-0000P",
+      "title": "Add Russian README translation",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Add a Russian localization of the README plus supporting glossary entries.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 302
+    },
+    {
+      "id": "202601041253-0000Q",
+      "title": "Add Spanish README translation",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Deliver another Spanish README update incorporating the refined glossary process.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 303
+    },
+    {
+      "id": "202601041253-0000R",
+      "title": "Revise glossary schema for translations",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "docs",
+        "localization",
+        "glossary"
+      ],
+      "commit": "eb5a18530947e3387e401f9539595db257492b0c",
+      "comments": [
+        {
+          "author": "reviewer",
+          "body": "Updated the TRANSLATOR workflow and converted GLOSSARY.json so languages own their preferred terms and descriptions."
+        }
+      ],
+      "description": "Restructure the glossary so English remains canonical while localized entries store metadata per language.",
+      "dirty": false,
+      "redmine_id": 304
+    },
+    {
+      "id": "202601041253-0000S",
+      "title": "Clarify emoji commit workflow",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "workflow",
+        "git"
+      ],
+      "commit": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
+      "comments": [
+        {
+          "author": "reviewer",
+          "body": "Updated AGENTS.md and README.md so commit messages start with meaningful emojis referencing the finished plan item."
+        }
+      ],
+      "description": "Clarify how commits should start with emojis and summarize completed plan items.",
+      "dirty": false,
+      "redmine_id": 305
+    },
+    {
+      "id": "202601041253-0000T",
+      "title": "Enforce atomic task planning",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "851c576b97b52541b3cab13ed3555c97d4d1f475",
+      "comments": [],
+      "description": "Ensure the PLANNER splits every request into single-owner tasks with unique commits.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 306
+    },
+    {
+      "id": "202601041253-0000V",
+      "title": "Add UPDATER optimization agent",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
+      "comments": [],
+      "description": "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 307
+    },
+    {
+      "id": "202601041253-0000W",
+      "title": "Add virtualenv installation reminder",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
+      "comments": [],
+      "description": "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 308
+    },
+    {
+      "id": "202601041253-0000X",
+      "title": "Audit agents for optimization opportunities",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
+      "comments": [],
+      "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 309
+    },
+    {
+      "id": "202601041253-0000Y",
+      "title": "Clarify CODER agent permissions",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
+      "comments": [],
+      "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 310
+    },
+    {
+      "id": "202601041253-0000Z",
+      "title": "Sync README with current agent lineup",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "commit": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "README now mentions the UPDATER optimization agent and lifecycle so the doc mirrors the current codebase."
+        }
+      ],
+      "description": "Refresh README.md so it describes the existing agents (including UPDATER), workflow rules, and repository layout that reflect the latest codebase.",
+      "dirty": false,
+      "redmine_id": 311
+    },
+    {
+      "id": "202601041253-00010",
+      "title": "Stylize README with icons and ASCII art",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
+      "comments": [],
+      "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 312
+    },
+    {
+      "id": "202601041253-00011",
+      "title": "Style tasks board markdown output",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "2f93325a23837b89b0431b3219cee725b6902583",
+      "comments": [],
+      "description": "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 313
+    },
+    {
+      "id": "202601041253-00012",
+      "title": "Bold status, description, commit labels",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "docs",
+        "workflow",
+        "formatting"
+      ],
+      "commit": "f52008459f7415f33a7d3064d064ec841718d00e",
+      "comments": [
+        {
+          "author": "reviewer",
+          "body": "Confirmed the label prefixes are bold while the italics remain on the suffix, so the board matches the request."
+        }
+      ],
+      "description": "Render the `_Status`, `_Description`, and `_Commit` prefixes as bold text while leaving their italic suffixes intact.",
+      "dirty": false,
+      "redmine_id": 314
+    },
+    {
+      "id": "202601041253-00013",
+      "title": "Remove italic on description label",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "docs",
+        "workflow"
+      ],
+      "commit": "6c5bc662a3f71b8e206a48133cc401033142ccd2",
+      "comments": [
+        {
+          "author": "reviewer",
+          "body": "Confirmed the description label is no longer italicized yet still stands out via bold styling."
+        }
+      ],
+      "description": "Render the description label without italics so only the bold text shows.",
+      "dirty": false,
+      "redmine_id": 315
+    },
+    {
+      "id": "202601041253-00014",
+      "title": "Beautify summary table",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "docs",
+        "workflow",
+        "formatting"
+      ],
+      "commit": "463a8853f38d3b9f3ebd9f6a191f3f7c81db0aa7",
+      "comments": [
+        {
+          "author": "reviewer",
+          "body": "Confirmed the summary section is now a table with playful emoji notes and the `_Status` italic text stays intact."
+        }
+      ],
+      "description": "Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is.",
+      "dirty": false,
+      "redmine_id": 316
+    },
+    {
+      "id": "202601041253-00015",
+      "title": "Add CONTRIBUTING guidelines",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "workflow"
+      ],
+      "commit": "ec13d916bfc5d0e577b757d2a16dd8380ca3861d",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Added CONTRIBUTING.md with the requested contribution guidance."
+        }
+      ],
+      "description": "Document the recommended contribution workflow and behavioral expectations for Codex Swarm.",
+      "dirty": false,
+      "redmine_id": 317
+    },
+    {
+      "id": "202601041253-00016",
+      "title": "Document README usage guidance",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "commit": "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Extended README with code breakdown and local dev steps (download zip, run clean.sh)."
+        }
+      ],
+      "description": "Ensure README describes the codebase and includes local development steps (download Zip, run clean.sh).",
+      "dirty": false,
+      "redmine_id": 318
+    },
+    {
+      "id": "202601041253-00017",
+      "title": "Update cleanup script to remove CONTRIBUTING.md and itself",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "automation",
+        "cleanup"
+      ],
+      "commit": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "clean.sh now removes CONTRIBUTING.md and deletes itself after repository cleanup."
+        }
+      ],
+      "description": "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo.",
+      "dirty": false,
+      "redmine_id": 319
+    },
+    {
+      "id": "202601041253-00018",
+      "title": "Add README onboarding sections",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "commit": "f9c3e6c1e4bb906895811443799ef70faf18c7a3",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Refreshed README intro, added a concrete Getting Started path with clean.sh guidance, an example session, and a Limitations/Non-goals section."
+        }
+      ],
+      "description": "Add a focused Getting Started path, example session log, and limitations/non-goals to README with a simpler intro.",
+      "dirty": false,
+      "redmine_id": 320
+    },
+    {
+      "id": "202601041253-00019",
+      "title": "Document framework guideline",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "guideline"
+      ],
+      "commit": "21ddede356590745546962fedebbead23b2edae2",
+      "comments": [],
+      "description": "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework.",
+      "dirty": false,
+      "redmine_id": 321
+    },
+    {
+      "id": "202601041253-0001A",
+      "title": "Expand framework guideline",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "18a62ee44d660dd7d7e8590329edb92194e4eba6",
+      "comments": [],
+      "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 322
+    },
+    {
+      "id": "202601041253-0001B",
+      "title": "Update .gitignore to include .env files",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "git",
+        "workflow"
+      ],
+      "commit": "a63694f182aff97ce18b5b9458bf54982e787120",
+      "comments": [
+        {
+          "author": "docs",
+          "body": ".gitignore now ignores `.env` variants following the cleanup."
+        }
+      ],
+      "description": "Ignore `.env*` so sensitive environment overrides stay out of the repo.",
+      "dirty": false,
+      "redmine_id": 323
+    },
+    {
+      "id": "202601041253-0001C",
+      "title": "Add sync_tasks.py script to synchronize tasks.json with GitHub Issues",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "automation",
+        "sync"
+      ],
+      "commit": "5e3b74a497ada1b723813b416747ccc47ca6ddbc",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Recorded completion of sync_tasks.py so tasks.json stays aligned with GitHub Issues."
+        }
+      ],
+      "description": "Ensure the local tasks.json reflects the completed synchronization script and the GitHub Issues mirror.",
+      "dirty": false,
+      "redmine_id": 324
+    },
+    {
+      "id": "202601041253-0001D",
+      "title": "Add GitHub Actions workflow to sync tasks.json with GitHub Issues",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "automation",
+        "workflow"
+      ],
+      "commit": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Workflow file exists and ensures tasks.json is kept in sync via GitHub Actions."
+        }
+      ],
+      "description": "Document the new `.github/workflows/sync-tasks.yml` workflow that keeps tasks.json and GitHub Issues synchronized.",
+      "dirty": false,
+      "redmine_id": 325
+    },
+    {
+      "id": "202601041253-0001E",
+      "title": "Enhance sync_tasks.py to integrate ProjectV2 status updates and project number",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "automation",
+        "project",
+        "sync"
+      ],
+      "commit": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "ProjectV2 integration is wired up, and the workflow now provides the project number."
+        }
+      ],
+      "description": "The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion.",
+      "dirty": false,
+      "redmine_id": 326
+    },
+    {
+      "id": "202601041253-0001F",
+      "title": "Create Code of Conduct",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "policy"
+      ],
+      "commit": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Added CODE_OF_CONDUCT.md covering standards, unacceptable behaviors, and reporting guidance."
+        }
+      ],
+      "description": "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.",
+      "dirty": false,
+      "redmine_id": 327
+    },
+    {
+      "id": "202601041253-0001G",
+      "title": "Remove markdown task board references",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "workflow",
+        "tasks"
+      ],
+      "commit": "759a800bde828ebb252bac2bb8f24fb7531989de",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Removed the markdown task board and updated docs/scripts; verified the repo contains no remaining references to it."
+        }
+      ],
+      "description": "Remove references to the markdown task board and stop generating it; tasks.json remains the single source of truth.",
+      "dirty": false,
+      "redmine_id": 328
+    },
+    {
+      "id": "202601041253-0001H",
+      "title": "Add tasks.html UI for browsing tasks.json",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "ui",
+        "tasks",
+        "workflow"
+      ],
+      "commit": "5cc30b601bb86f224a984851dae8137374db7ded",
+      "comments": [
+        {
+          "author": "docs",
+          "body": "Added tasks.html as a local-first viewer for tasks.json (auto-load over HTTP, plus file picker/drag-drop when opened via file://)."
+        }
+      ],
+      "description": "Add a standalone HTML interface to view and filter tasks.json (search, status/owner/priority/tag filters, sorting, and file:// fallback via file picker).",
+      "dirty": false,
+      "redmine_id": 329
+    },
+    {
+      "id": "202601041253-0001J",
+      "title": "Adopt agentctl-based agent workflow",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata).",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 330
+    },
+    {
+      "id": "202601041253-0001K",
+      "title": "Remove legacy tasks.py + migrate docs to agentctl",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "tags": [
+        "docs",
+        "workflow",
+        "tooling"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents"
+      ],
+      "commit": "d6517d61191b4d80e80acc63117b6e55ba02c557",
+      "comments": [
+        {
+          "author": "PLANNER",
+          "body": "Planned: remove legacy tasks.py + update docs to agentctl; Constraints: no manual tasks.json edits; keep guidance consistent across repo."
+        },
+        {
+          "author": "CODER",
+          "body": "Start: remove scripts/tasks.py; update README + other docs to new agentctl workflow; Constraints: no manual tasks.json edits; keep changes minimal and consistent."
+        },
+        {
+          "author": "REVIEWER",
+          "body": "Verified: scripts/tasks.py removed; README.md and GUIDELINE.md updated to agentctl-based task lifecycle (ready/start/block/task/verify/guard/finish); agentctl task lint passes; Limitations: existing CODEX owner warnings remain."
+        }
+      ],
+      "description": "Delete scripts/tasks.py and update README.md + any other docs/configs that mention the old tasks.py/status-board flow, replacing it with the agentctl CLI workflow (ready/start/block/task/verify/guard/finish).",
+      "dirty": false,
+      "redmine_id": 331
+    },
+    {
+      "id": "202601041253-0001M",
+      "title": "Add TESTER agent + enforce post-CODER testing",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CREATOR",
+      "tags": [
+        "agents",
+        "testing"
+      ],
+      "verify": [
+        "python scripts/agentctl.py agents",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "cc0a0a73dd2d3864f6d2cb9619d8837465046887",
+      "comments": [
+        {
+          "author": "CREATOR",
+          "body": "Start: add TESTER agent JSON + update CODER/AGENTS/README to enforce post-CODER test coverage."
+        },
+        {
+          "author": "REVIEWER",
+          "body": "Verified: agent registry lists TESTER, JSON prompts validate, and tasks.json lints clean (workflow now defaults to CODER -> TESTER -> REVIEWER for dev work)."
+        }
+      ],
+      "description": "Add a new TESTER specialist agent responsible for adding automated test coverage for code changes. Wire the workflow so development-oriented plans always schedule TESTER after CODER before REVIEWER, and update CODER instructions to explicitly hand off to TESTER after implementation/self-check.\\\\n\\\\nAcceptance criteria:\\\\n- New @.AGENTS/TESTER.json exists (id=TESTER) with clear inputs/outputs/permissions/workflow for adding/maintaining tests.\\\\n- @.AGENTS/CODER.json explicitly hands off to TESTER for test coverage after implementation and local checks.\\\\n- @AGENTS.md updates ORCHESTRATOR rules so dev tasks plan CODER -> TESTER -> REVIEWER by default (unless justified).\\\\n- @README.md reflects the new agent in the lineup and repository layout.\\\\n\\\\nNotes:\\\\n- Prefer existing test framework; if none, propose a dedicated task to introduce test infrastructure rather than inventing one ad-hoc.",
+      "dirty": false,
+      "redmine_id": 332
+    },
+    {
+      "id": "202601041253-0001N",
+      "title": "Require DOCS workflow artifact before finishing tasks",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Change DOCS agent behavior so it runs before finishing any task and produces an atomic documentation artifact under @docs/workflow (e.g., @docs/workflow/T-025.md) describing what was implemented. Update orchestration guidance so plans include DOCS before REVIEWER marks tasks DONE.\\\\n\\\\nAcceptance criteria:\\\\n- @docs/workflow directory exists and is committed (with a short README describing artifact convention).\\\\n- @.AGENTS/DOCS.json instructs producing @docs/workflow/T-###.md artifacts (English, atomic, task-scoped).\\\\n- @AGENTS.md ORCHESTRATOR guidance schedules DOCS before finishing any task (DOCS before REVIEWER finish).\\\\n\\\\nNotes:\\\\n- Artifacts must be task-ID named, contain summary + changed files + verification commands (when available).",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 333
+    },
+    {
+      "id": "202601041253-0001P",
+      "title": "Extend clean.sh to remove framework dev files",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "cleanup",
+        "workflow"
+      ],
+      "verify": [
+        "bash -n clean.sh",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "b1ff627216f332cc34652d0a2968c78e89c68d2d",
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: extend clean.sh to remove framework dev artifacts (including docs) while keeping cleanup idempotent and repo-root scoped."
+        },
+        {
+          "author": "REVIEWER",
+          "body": "Verified: clean.sh now removes docs/ and other framework-development artifacts (tasks.html, .DS_Store) during cleanup; script syntax checks pass and tasks.json lints clean."
+        }
+      ],
+      "description": "Update @clean.sh so cleanup removes framework-development artifacts (including @docs/) when preparing a reusable snapshot.\\\\n\\\\nAcceptance criteria:\\\\n- Running clean.sh removes @docs/ and other framework-specific files/directories it currently leaves behind.\\\\n- Script remains idempotent and safe (no unscoped rm outside repo root).",
+      "dirty": false,
+      "redmine_id": 334
+    },
+    {
+      "id": "202601041253-0001Q",
+      "title": "Reduce per-task commits to 3-phase workflow",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CREATOR",
+      "tags": [
+        "workflow",
+        "git",
+        "agents"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents"
+      ],
+      "commit": "20b580ff017d997987112ec3bd46597cd7efe8db",
+      "comments": [
+        {
+          "author": "CREATOR",
+          "body": "Start: align agent prompts and commit workflow to a default 3-phase commit cadence (plan/docs, implementation, verification/finish) and avoid extra start/status commits."
+        },
+        {
+          "author": "REVIEWER",
+          "body": "Verified: agent workflows now target a minimal 3-phase commit cadence (plan+artifact, implementation, verification/closure) and avoid extra status-only commits; agent registry and tasks lint pass."
+        }
+      ],
+      "description": "Update agent workflows so they avoid extra commits beyond what is necessary. Target a default 3-commit cadence per task:\\\\n1) Planning: add the task + create initial workflow artifact @docs/workflow/T-###.md (skeleton/spec).\\\\n2) Implementation: implement the change set (preferably including tests) in a single work commit.\\\\n3) Verification/closure: run tests + review, update the workflow artifact with what was implemented, and mark the task DONE (tasks.json) in one final commit.\\\\n\\\\nAcceptance criteria:\\\\n- @AGENTS.md COMMIT_WORKFLOW reflects the 3-commit default and explicitly discourages extra 'start/status' commits.\\\\n- Agent prompts (.AGENTS/*.json) align: TESTER does not commit by default; DOCS artifacts are committed as part of planning/closure; REVIEWER closes tasks with a single final commit; CODER bundles implementation+tests into one work commit where practical.\\\\n- Existing guardrails (agentctl) remain usable (finish may reference the implementation commit hash).",
+      "dirty": false,
+      "redmine_id": 335
+    },
+    {
+      "id": "202601041253-0001R",
+      "title": "Add Mermaid agent workflow diagram to README",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Update @README.md to include a short description and a Mermaid diagram (flowchart) showing the default agent workflow and handoffs (ORCHESTRATOR, PLANNER, CODER, TESTER, DOCS, REVIEWER).\\\\n\\\\nAcceptance criteria:\\\\n- README includes a Mermaid flowchart block describing the typical flow (plan -> implement -> test -> docs -> review -> finish).\\\\n- Diagram matches current agent rules (3-phase commits, DOCS artifact before DONE, CODER -> TESTER for dev work).",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 336
+    },
+    {
+      "id": "202601041253-0001S",
+      "title": "Fix Mermaid workflow diagram for GitHub rendering",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\\\n\\\\nAcceptance criteria:\\\\n- Mermaid block renders on GitHub README view.\\\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits).",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 337
+    },
+    {
+      "id": "202601041253-0001T",
+      "title": "Agentctl quickstart + docs pointer",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 338
+    },
+    {
+      "id": "202601041253-0001V",
+      "title": "Add agentctl git/task ergonomics",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit).",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 339
+    },
+    {
+      "id": "202601041253-0001W",
+      "title": "Update agents to use agentctl docs + helpers",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "PLANNER",
+      "tags": [
+        "agentctl",
+        "agents"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents"
+      ],
+      "commit": "c735c4c5202296b00105c46e73cc23ddd9b7d203",
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Ran python scripts/agentctl.py task lint and python scripts/agentctl.py agents; confirmed .AGENTS workflows now start with python scripts/agentctl.py quickstart and reference docs/agentctl.md and helper commands."
+        }
+      ],
+      "description": "Update .AGENTS/*.json workflows to explicitly reference docs/agentctl.md (via # agentctl quickstart\\n\\n`python scripts/agentctl.py` is the only supported way to inspect/update `tasks.json` (manual edits break the checksum).\\n\\n## Common commands\\n\\n```bash\\n# list/show\\npython scripts/agentctl.py task list\\npython scripts/agentctl.py task show T-123\\n\\n# validate tasks.json (schema/deps/checksum)\\npython scripts/agentctl.py task lint\\n\\n# readiness gate (deps DONE)\\npython scripts/agentctl.py ready T-123\\n\\n# status transitions that require structured comments\\npython scripts/agentctl.py start T-123 --author CODER --body \\\"Start: ... (why, scope, plan, risks)\\\"\\npython scripts/agentctl.py block T-123 --author CODER --body \\\"Blocked: ... (what blocks, next step, owner)\\\"\\n\\n# run per-task verify commands (declared on the task)\\npython scripts/agentctl.py verify T-123\\n\\n# before committing, validate staged allowlist + message quality\\npython scripts/agentctl.py guard commit T-123 -m \\\"✨ T-123 Short meaningful summary\\\" --allow <path-prefix>\\n\\n# if you want a safe wrapper that also runs `git commit`\\npython scripts/agentctl.py commit T-123 -m \\\"✨ T-123 Short meaningful summary\\\" --allow <path-prefix>\\n\\n# when closing a task: mark DONE + attach commit metadata (typically after implementation commit)\\npython scripts/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body \\\"Verified: ... (what ran, results, caveats)\\\"\\n```\\n\\n## Ergonomics helpers\\n\\n```bash\\n# find tasks that are ready to start (deps DONE)\\npython scripts/agentctl.py task next\\n\\n# search tasks by text (title/description/tags/comments)\\npython scripts/agentctl.py task search agentctl\\n\\n# scaffold a workflow artifact (docs/workflow/T-###.md)\\npython scripts/agentctl.py task scaffold T-123\\n\\n# suggest minimal --allow prefixes based on staged files\\npython scripts/agentctl.py guard suggest-allow\\npython scripts/agentctl.py guard suggest-allow --format args\\n```\\n\\n## Workflow reminders\\n\\n- `tasks.json` is canonical; do not edit it by hand.\\n- Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).\\n- Prefer `start/block/finish` over `task set-status`.\\n- Keep allowlists tight: pass only the path prefixes you intend to commit.) and prefer the new helper commands (task next/search/scaffold, guard suggest-allow, commit wrapper) where applicable.",
+      "dirty": false,
+      "redmine_id": 340
+    },
+    {
+      "id": "202601041253-0001X",
+      "title": "Require user approval before final task-closing commit",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "REVIEWER",
+      "tags": [
+        "workflow",
+        "agents",
+        "git"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents"
+      ],
+      "commit": "dca6297f9226447c57df14fb9f6090a679b535f3",
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: AGENTS.md and REVIEWER workflow now require explicit user approval before the final task-closing commit; task lint and agents registry checks pass."
+        }
+      ],
+      "description": "Update agent workflows so that before creating the final closure commit for a task (the commit that marks the task DONE in tasks.json, typically together with docs/workflow/T-###.md updates), the agent must explicitly request user confirmation and wait for approval.\\\\n\\\\nAcceptance criteria:\\\\n- AGENTS.md COMMIT_WORKFLOW states that the final closure commit requires explicit user approval.\\\\n- ORCHESTRATOR guidance includes a pause/confirmation request before the closing commit.\\\\n- REVIEWER workflow requires asking the user before running agentctl finish + committing tasks.json (and any workflow artifact updates).",
+      "dirty": false,
+      "redmine_id": 341
+    },
+    {
+      "id": "202601041253-0001Y",
+      "title": "Refresh project documentation + cleanup",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "cleanup",
+        "readme"
+      ],
+      "verify": [
+        "bash -n clean.sh",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "c4d8084771dabcdb57353f5e7792322010f648ed",
+      "comments": [
+        {
+          "author": "PLANNER",
+          "body": "Plan: refresh root docs + reorganize supporting docs under docs/, then tighten clean.sh so a cleanup leaves only the framework runtime files."
+        },
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Ran bash -n clean.sh and python scripts/agentctl.py task lint; docs refreshed and docs/architecture.md added; clean.sh now removes dev artifacts, preserves docs/agentctl.md when present, and recreates checksum-valid tasks.json."
+        }
+      ],
+      "description": "Update the repo documentation to match the current codebase and workflow (agentctl-driven tasks, JSON agent registry, commit/verification cadence).\\\\n\\\\nScope:\\\\n- Refresh @README.md, @GUIDELINE.md, @CONTRIBUTING.md, @CODE_OF_CONDUCT.md to reflect current scripts and file layout.\\\\n- Restructure docs where helpful (move deep/auxiliary content into @docs/ and keep root docs as entrypoints with links).\\\\n- Update @clean.sh so it removes framework-development artifacts, leaving only what is necessary to *use* the framework (e.g., @AGENTS.md, @.AGENTS/, @scripts/, @.gitignore, and optionally @docs/agentctl.md).\\\\n\\\\nAcceptance criteria:\\\\n- Root docs are accurate and non-duplicative; links resolve.\\\\n- clean.sh is repo-root scoped, idempotent, and leaves only the minimal runtime files listed above.\\\\n- Verification commands pass.",
+      "dirty": false,
+      "redmine_id": 342
+    },
+    {
+      "id": "202601041253-0001Z",
+      "title": "Redesign tasks.html (Codex Swarm) + dependency visualization",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "ui",
+        "tasks",
+        "deps"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "5e6efe85aa351635d1592525f06ad824f14b3d2c",
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: python scripts/agentctl.py task lint; manual check of tasks.html dependency inspector (lists + SVG graph + navigation)"
+        }
+      ],
+      "description": "Refresh @tasks.html to be simpler/lighter and clearly show task dependencies.\\n\\nScope:\\n- Update UI styling to a minimal, airy Codex Swarm-branded layout.\\n- Add a dependency inspector that makes it easy to see \\\"depends_on\\\" and reverse dependencies (tasks that depend on the selected task).\\n- Include a small visual graph (SVG) for the selected task to make upstream/downstream relationships obvious.\\n\\nAcceptance criteria:\\n- @tasks.html header is branded as Codex Swarm.\\n- Dependencies are visible both as lists and as a small graph for the selected task.\\n- Clicking a dependency navigates/updates the selection.\\n- No server required: keep file picker + drag/drop fallback for file://.\\n",
+      "dirty": false,
+      "redmine_id": 343
+    },
+    {
+      "id": "202601041253-00020",
+      "title": "Restructure framework folders into .codex-swarm",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "framework",
+        "refactor"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python scripts/agentctl.py agents",
+        "python scripts/agentctl.py quickstart > /dev/null",
+        "bash -n clean.sh"
+      ],
+      "commit": "eb7cf5363ce55ec602fb9cc078069bc8d262a130",
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Ran python scripts/agentctl.py verify T-064 (task lint, agents, quickstart, bash -n clean.sh); framework paths now live under .codex-swarm."
+        }
+      ],
+      "description": "Move all framework-specific artifacts under .codex-swarm (agents + agentctl docs + config), update references/docs, and update clean.sh accordingly.",
+      "dirty": false,
+      "redmine_id": 344
+    },
+    {
+      "id": "202601041253-00021",
+      "title": "Move architecture.md content into README",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "tags": [
+        "docs",
+        "refactor"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "6b22130b391becfada866dfc8136dbe1decff850",
+      "comments": [
+        {
+          "author": "REVIEWER",
+          "body": "Verified: Ran python scripts/agentctl.py verify T-065 (task lint) and reviewed README/architecture pointer consistency."
+        }
+      ],
+      "description": "Move the full contents of docs/architecture.md into README.md for easier discovery; leave docs/architecture.md as a thin pointer to avoid duplication.",
+      "dirty": false,
+      "redmine_id": 345
+    },
+    {
+      "id": "202601041253-00022",
+      "title": "Branch workflow: task branches + worktrees + local PR artifacts",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "tags": [
+        "workflow",
+        "git",
+        "agentctl"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python -m compileall scripts/agentctl.py"
+      ],
+      "commit": "9fd7273c23ae3490637588e158ff485627d93e4a",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Ran python scripts/agentctl.py task lint; python -m compileall scripts/agentctl.py; checked agentctl branch/pr/integrate help output."
+        }
+      ],
+      "description": "Introduce a branching workflow to enable parallel agent work without tasks.json conflicts: task branch per T-###, required git worktree under .codex-swarm/worktrees, PR-like artifacts under docs/workflow/prs, and an INTEGRATOR role responsible for merge + finish on main.",
+      "dirty": false,
+      "redmine_id": 346
+    },
+    {
+      "id": "202601041253-00023",
+      "title": "Align agentctl with branch_pr spec (worktrees, PR checks, integrate)",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "PLANNER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "git"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint",
+        "python -m compileall scripts/agentctl.py"
+      ],
+      "commit": "91b3760239846f01443b8550c9402dcc99c12c74",
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Implemented branch_pr enforcement + new commands; please run `python -m compileall scripts/agentctl.py` and spot-check `integrate --dry-run` output."
+        },
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: merged commit 91b3760 on main; pr check and verify T-067 passed; handoff notes captured from PR review."
+        }
+      ],
+      "description": "Implement the stricter branch_pr workflow spec: worktrees under .codex-swarm/worktrees, branch naming task/T-###/<slug>, new branch status, stricter pr open/update/check, integrate dry-run + verify in branch worktree, workflow_mode config in .codex-swarm/swarm.config.json, and stronger finish/guard/verify guardrails + standardized outputs.",
+      "dirty": false,
+      "redmine_id": 347
+    },
+    {
+      "id": "202601041253-00024",
+      "title": "agentctl verify: log output + skip if unchanged",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "tags": [
+        "agentctl",
+        "workflow",
+        "pipeline"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "324e74e5f3bcb4ad1bb239eb1e02bac645553721",
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: Implement agentctl verify --log + --skip-if-unchanged; update PR meta.json with last_verified_sha/at and refresh .codex-swarm/agentctl.md. Plan: implement flags, add smoke steps, ensure branch_pr behavior. Risks: PR meta may be missing; keep safe fallbacks."
+        },
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-068."
+        }
+      ],
+      "description": "Add flags to python scripts/agentctl.py verify to reduce manual PR bookkeeping and redundant runs. Acceptance: (1) verify T-### --log PATH appends a timestamped entry per verify command with combined stdout+stderr; (2) --skip-if-unchanged skips when current SHA (prefer PR meta.json head_sha when log path is under docs/workflow/prs/T-###, else git rev-parse HEAD in --cwd) matches last recorded verified SHA; (3) after success, record last_verified_sha and last_verified_at in PR meta.json when available; (4) document the new flow in .codex-swarm/agentctl.md.",
+      "dirty": false,
+      "redmine_id": 348
+    },
+    {
+      "id": "202601041253-00025",
+      "title": "agentctl pr note: append handoff notes",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-00024"
+      ],
+      "tags": [
+        "agentctl",
+        "workflow",
+        "pipeline"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "771cdf260f496ee5fb1a2e2e4f291141c455785f",
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: add agentctl pr note to append '- ROLE: TEXT' under ## Handoff Notes in docs/workflow/prs/T-###/review.md; update .codex-swarm/agentctl.md; verify via task lint and a manual note append smoke."
+        },
+        {
+          "author": "CODER",
+          "body": "Implemented pr note helper; ready for review."
+        },
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-069."
+        }
+      ],
+      "description": "Add a convenience command to append correctly formatted bullets under the '## Handoff Notes' section in docs/workflow/prs/T-###/review.md. Acceptance: (1) python scripts/agentctl.py pr note T-### --author ROLE --body TEXT adds a '- ROLE: TEXT' entry under Handoff Notes; (2) preserves existing content and keeps formatting stable; (3) emits clear errors/fixes when the PR artifact is missing; (4) update .codex-swarm/agentctl.md with the new command.",
+      "dirty": false,
+      "redmine_id": 349
+    },
+    {
+      "id": "202601041253-00026",
+      "title": "agentctl guard commit: add --auto-allow",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "26eabcc06d63db1b67637df7bc84b849c27e789e",
+      "comments": [],
+      "description": "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 350
+    },
+    {
+      "id": "202601041253-00027",
+      "title": "Require explicit depends_on on task add",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "PLANNER",
+      "tags": [
+        "workflow",
+        "tasks",
+        "dependencies"
+      ],
+      "verify": [
+        "python scripts/agentctl.py agents",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "dea6792a39f57fd3f842a06efa198525afc7271d",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-071."
+        }
+      ],
+      "description": "Update the agent pipeline instructions so every task added to tasks.json includes an explicit depends_on list (use [] when there are no dependencies). Update AGENTS.md schema/docs and PLANNER workflow to require setting dependencies (and to ask for clarification when dependencies are unknown).",
+      "dirty": false,
+      "redmine_id": 351
+    },
+    {
+      "id": "202601041253-00028",
+      "title": "agentctl task add: default depends_on to []",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "10b4ffcce3069a858b32580fe7247a1bb8a824a5",
+      "comments": [],
+      "description": "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated).",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 352
+    },
+    {
+      "id": "202601041253-00029",
+      "title": "Reduce integrate noise: auto-sync PR meta head_sha",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "6ee132fca0297c6909cdb6b2b60fa5e3f83bcc28",
+      "comments": [],
+      "description": "Speed up the pipeline by removing the common integrate warning about stale PR meta head_sha. Acceptance: (1) python scripts/agentctl.py integrate no longer prints \\\"PR meta head_sha differs\\\" in normal usage; (2) integrate uses the actual task branch HEAD SHA for verify and writes it into docs/workflow/prs/T-###/meta.json on main (head_sha + last_verified_sha) so artifacts stay consistent; (3) safe in workflow_mode=branch_pr and never writes to the task branch; (4) meta.json ends up correct after integration.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 353
+    },
+    {
+      "id": "202601041253-0002A",
+      "title": "Unify workflow artifact layout (single per-task folder)",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "77a7ec17750368061351c416f1aebafadf2903aa",
+      "comments": [],
+      "description": "Eliminate duplication between docs/workflow/T-###.md and docs/workflow/prs/T-###/description.md by moving to a single per-task folder layout under docs/workflow/T-###/. New canonical doc: docs/workflow/T-###/README.md. PR artifacts live at docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}. Update agentctl commands (task scaffold/add, pr open/update/check/note, verify --log, integrate meta sync) to use the new layout, while keeping backward compatibility for the old paths. Migrate existing tracked artifacts (T-055..T-073 and docs/workflow/prs/T-067..T-073) to the new layout and update all docs/agent texts that reference the old pipeline.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 354
+    },
+    {
+      "id": "202601041253-0002B",
+      "title": "agentctl: add work start (branch+pr+scaffold)",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-0002A"
+      ],
+      "tags": [
+        "agentctl",
+        "workflow",
+        "ergonomics"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "2a76efc28ea31c69c13e9c13e2494036db931d6c",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Squash-merged task/T-075/work-start; verify will be recorded via agentctl verify log in this closure; PR artifacts + README updated."
+        }
+      ],
+      "description": "Add a single command to reduce startup friction for a task branch in workflow_mode=branch_pr.\\n\\nAcceptance:\\n- New command: `python scripts/agentctl.py work start T-123 --agent CODER --slug x --worktree`.\\n- Performs the equivalent of:\\n  - `python scripts/agentctl.py branch create T-123 --agent CODER --slug x --worktree`\\n  - `python scripts/agentctl.py pr open T-123 --author CODER --branch task/T-123/x`\\n  - `python scripts/agentctl.py task scaffold T-123` (writes `docs/workflow/T-123/README.md`)\\n- Creates PR artifacts at `docs/workflow/T-123/pr/` (meta/diffstat/verify.log/review.md).\\n- Idempotent with `--reuse`; does not clobber existing artifacts unless `--overwrite` is passed through to scaffold.\\n- Prints clear NEXT steps.\\n- Never writes `tasks.json`.\\n- Update `.codex-swarm/agentctl.md` to document the new command.",
+      "dirty": false,
+      "redmine_id": 355
+    },
+    {
+      "id": "202601041253-0002C",
+      "title": "agentctl: verify auto-log to per-task pr/verify.log",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-0002A"
+      ],
+      "tags": [
+        "agentctl",
+        "workflow",
+        "ergonomics"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "5ad82c70456333dacda8ff88d5daf15060253536",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-076/pr."
+        }
+      ],
+      "description": "Make `agentctl verify` faster by defaulting the log file when a PR artifact exists.\\n\\nAcceptance:\\n- `python scripts/agentctl.py verify T-123` appends to `docs/workflow/T-123/pr/verify.log` when that PR dir exists.\\n- `--log` still overrides.\\n- Supports legacy `docs/workflow/prs/T-123/verify.log` during migration.\\n- `--skip-if-unchanged` continues to work and uses PR `meta.json:head_sha` when the effective log path is under the PR directory.\\n- Update `.codex-swarm/agentctl.md` to document the new default.",
+      "dirty": false,
+      "redmine_id": 356
+    },
+    {
+      "id": "202601041253-0002D",
+      "title": "agentctl: cleanup merged task branches/worktrees",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-0002A"
+      ],
+      "tags": [
+        "agentctl",
+        "workflow",
+        "cleanup"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "cedb50251e77482aecf066e0fe5e2baa2c3d4078",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-077/pr."
+        }
+      ],
+      "description": "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\\n\\nAcceptance:\\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\\n- Deletes only when:\\n  - task is `DONE` in `tasks.json`, AND\\n  - `git diff --name-only main...<branch>` is empty.\\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\\n- Never writes `tasks.json`.",
+      "dirty": false,
+      "redmine_id": 357
+    },
+    {
+      "id": "202601041253-0002E",
+      "title": "agentctl: pr check validates README completeness",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-0002A"
+      ],
+      "tags": [
+        "agentctl",
+        "workflow",
+        "quality"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "1d665885edb4a478f1e627e75e0cceb8d34b569e",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-078/pr."
+        }
+      ],
+      "description": "Reduce review ping-pong by making `pr check` fail fast on placeholder docs.\\n\\nAcceptance:\\n- `python scripts/agentctl.py pr check T-123` validates `docs/workflow/T-123/README.md` exists and required sections are present and non-placeholder.\\n- Error message points to missing/empty section names.\\n- Supports legacy `docs/workflow/prs/T-123/description.md` during migration.\\n- Update `.codex-swarm/agentctl.md` to reflect the README-based PR doc.",
+      "dirty": false,
+      "redmine_id": 358
+    },
+    {
+      "id": "202601041253-0002F",
+      "title": "Docs: remove remaining legacy prs/ mentions",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "6b04b9b75b7c783b4beb33fac5d6a2fc3a95ce36",
+      "comments": [],
+      "description": "Finish migration documentation cleanup.\\n\\nAcceptance:\\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 359
+    },
+    {
+      "id": "202601041253-0002G",
+      "title": "agentctl: integrate auto-updates PR diffstat + README auto-summary",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-0002A"
+      ],
+      "tags": [
+        "agentctl",
+        "workflow",
+        "ergonomics"
+      ],
+      "verify": [
+        "python -m compileall scripts/agentctl.py",
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "62171a9bb6b56469b6209f2d5b29f053096a1d6f",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-080/pr."
+        }
+      ],
+      "description": "Reduce manual PR bookkeeping by having `agentctl integrate` refresh the tracked PR artifacts on main.\\n\\nAcceptance:\\n- During `python scripts/agentctl.py integrate T-123 ...` (workflow_mode=branch_pr), after merge it updates:\\n  - `docs/workflow/T-123/pr/diffstat.txt` (recomputed for the task branch vs base), and\\n  - `docs/workflow/T-123/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->` / `<!-- END AUTO SUMMARY -->`) using the changed files list.\\n- No writes happen to the task branch; updates are only in the main checkout after merge.\\n- Works with `--merge-strategy squash|merge|rebase`.\\n- Update `.codex-swarm/agentctl.md` to state `integrate` refreshes these artifacts automatically.",
+      "dirty": false,
+      "redmine_id": 360
+    },
+    {
+      "id": "202601041253-0002H",
+      "title": "agentctl integrate: skip verify if already verified",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "0df88f39f6bb08d5fac2dabf5e113687135295a4",
+      "comments": [],
+      "description": "Speed up branch_pr integration by skipping redundant verify runs when the task branch HEAD SHA is already recorded as verified (via PR meta last_verified_sha or pr/verify.log). Keep --run-verify as a force-rerun escape hatch. Also ensure rebase strategy runs rebase before verify so the verified SHA matches what gets merged.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 361
+    },
+    {
+      "id": "202601041253-0002J",
+      "title": "Docs: update README and fix Mermaid diagram",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "PLANNER",
+      "depends_on": [
+        "202601041253-0002A",
+        "202601041253-0002H"
+      ],
+      "tags": [
+        "docs",
+        "workflow",
+        "mermaid"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "c881605fdfef8585816e845648c826acf0c0ee6f",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-082/pr."
+        }
+      ],
+      "description": "Update root README.md to reflect latest branch_pr workflow and agentctl behavior (integrate auto-refresh artifacts; integrate may skip verify when SHA already verified). Fix Mermaid diagram so it renders correctly on GitHub.",
+      "dirty": false,
+      "redmine_id": 362
+    },
+    {
+      "id": "202601041253-0002K",
+      "title": "Docs: fix README Mermaid parse on GitHub",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "PLANNER",
+      "depends_on": [
+        "202601041253-0002J"
+      ],
+      "tags": [
+        "docs",
+        "mermaid",
+        "workflow"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "8a70c8e2413945ec564c82f13766421adf15514f",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-083/pr."
+        }
+      ],
+      "description": "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility).",
+      "dirty": false,
+      "redmine_id": 363
+    },
+    {
+      "id": "202601041253-0002M",
+      "title": "Agents: prefer agentctl CLI for supported operations",
+      "status": "DONE",
+      "priority": "high",
+      "owner": "PLANNER",
+      "depends_on": [
+        "202601041253-0002A",
+        "202601041253-0002K"
+      ],
+      "tags": [
+        "agents",
+        "agentctl",
+        "workflow"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "95358c3c7df46275d7afccb5e2556aa52cdb4c39",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-084/pr."
+        }
+      ],
+      "description": "Audit scripts/agentctl.py capabilities and update .codex-swarm/agents/*.json prompts so each agent uses agentctl for any supported operation (tasks.json ops, branch/worktree management, PR artifacts, verify logs, commit guardrails, integrate/cleanup). Only fall back to raw git/shell commands when agentctl has no equivalent.",
+      "dirty": false,
+      "redmine_id": 364
+    },
+    {
+      "id": "202601041253-0002N",
+      "title": "agentctl work start: idempotent scaffold",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "e6d312e0b441b0deedf3c89c159fca9d9b4c09cb",
+      "comments": [],
+      "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \\\"File already exists\\\" errors now that agents default to work start.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 365
+    },
+    {
+      "id": "202601041253-0002P",
+      "title": "Define workflow_mode variants (direct vs branch_pr)",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "workflow",
+        "docs",
+        "agents"
+      ],
+      "verify": [
+        "python scripts/agentctl.py task lint"
+      ],
+      "commit": "2b93d6297c22494b1cbc0805952a6f81b3461153",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-086/pr."
+        }
+      ],
+      "description": "Add a clear, unambiguous definition of workflow_mode values \\\"direct\\\" and \\\"branch_pr\\\" across agent instructions and documentation. Document the operational differences (where work happens, whether task branches/worktrees are required, who can write tasks.json, required PR artifacts under docs/workflow/T-###/pr, and which agent is allowed to integrate/finish). Update AGENTS.md and .codex-swarm/agentctl.md accordingly.",
+      "dirty": false,
+      "redmine_id": 366
+    },
+    {
+      "id": "202601041253-0002Q",
+      "title": "Pin current git branch as base branch",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "human",
+      "depends_on": [],
+      "tags": [
+        "workflow",
+        "git",
+        "branching"
+      ],
+      "commit": "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: Base branch now pins to local git config (codexswarm.baseBranch); integrate/guard/cleanup use it; no-op integrates fail fast."
+        }
+      ],
+      "description": "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main.",
+      "dirty": false,
+      "redmine_id": 367
+    },
+    {
+      "id": "202601041253-0002R",
+      "title": "Backfill task tracking for clean.sh interactive workflow_mode",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "clean",
+        "workflow",
+        "agents"
+      ],
+      "commit": "780f1d05339296b8840b004e866e35fc74c67e32",
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: tasks/workflow artifact added; clean.sh already includes interactive mode selection + prompt scrubbing."
+        }
+      ],
+      "description": "Record the clean.sh interactive workflow_mode selection + prompt scrubbing feature in tasks.json and add the per-task workflow README artifact.",
+      "dirty": false,
+      "redmine_id": 368
+    },
+    {
+      "id": "202601041253-0002S",
+      "title": "Refactor workflow paths",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 369
+    },
+    {
+      "id": "202601041253-0002T",
+      "title": "Move ORCHESTRATOR spec into JSON",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 370
+    },
+    {
+      "id": "202601041253-0002V",
+      "title": "Add end-of-file ORCHESTRATOR start rule",
+      "status": "DONE",
+      "priority": "low",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs",
+        "agents"
+      ],
+      "commit": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
+      "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
+      "dirty": false,
+      "redmine_id": 371
+    },
+    {
+      "id": "202601041253-0002W",
+      "title": "Align batch finish commit naming docs",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs"
+      ],
+      "commit": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
+      "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
+      "dirty": false,
+      "redmine_id": 372
+    },
+    {
+      "id": "202601041253-0002X",
+      "title": "Write docs content for new templates",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [],
+      "commit": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
+      ],
+      "description": "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs.",
+      "dirty": false,
+      "redmine_id": 373
+    },
+    {
+      "id": "202601041253-0002Y",
+      "title": "Add docs index links and reading order",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [],
+      "commit": "9900d029d4f831d920a82e58869c7d7ec8b28623",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
+      ],
+      "description": "Update docs/index.md with a document map, reading order, and links to the new docs set.",
+      "dirty": false,
+      "redmine_id": 374
+    },
+    {
+      "id": "202601041253-0002Z",
+      "title": "Align README docs index with new docs",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [],
+      "commit": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only changes; manual review only (no automated checks)."
+        }
+      ],
+      "description": "Update README.md and related references so the documentation structure matches the new docs/ files.",
+      "dirty": false,
+      "redmine_id": 375
+    },
+    {
+      "id": "202601041253-00030",
+      "title": "Centralize agentctl guidance",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs"
+      ],
+      "commit": "7eb0068599e887d0ceda3f427e413b1a7505d6dc",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: docs-only update in agentctl.md and agent JSONs; no tests required."
+        }
+      ],
+      "description": "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations.",
+      "dirty": false,
+      "redmine_id": 376
+    },
+    {
+      "id": "202601041253-00031",
+      "title": "Rename docs index and update references",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 377
+    },
+    {
+      "id": "202601041253-00032",
+      "title": "Verify agentctl task writes + clarify no-manual-edits",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 378
+    },
+    {
+      "id": "202601041253-00033",
+      "title": "Fill T-096 artifact and enforce doc completion",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 379
+    },
+    {
+      "id": "202601041253-00034",
+      "title": "Update README docs links",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 380
+    },
+    {
+      "id": "202601041253-00035",
+      "title": "Refresh README badges and quickstart callout",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs",
+        "readme"
+      ],
+      "commit": "5912c9c7a818350820e56e37830ff34a7daceb87",
+      "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
+      "dirty": false,
+      "redmine_id": 381
+    },
+    {
+      "id": "202601041253-00036",
+      "title": "Harden agentctl depends_on parsing",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "agentctl",
+        "tasks"
+      ],
+      "commit": "0b222dfbd26ac511935b4a3026686a4685280d4f",
+      "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
+      "dirty": false,
+      "redmine_id": 382
+    },
+    {
+      "id": "202601041253-00037",
+      "title": "Update GitHub sync scripts for new .codex-swarm structure",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 383
+    },
+    {
+      "id": "202601041253-00038",
+      "title": "Align README repository layout with current structure",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "readme",
+        "docs"
+      ],
+      "commit": "fbc029009285cf68d7730f23156fce5572b52d96",
+      "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
+      "dirty": false,
+      "redmine_id": 384
+    },
+    {
+      "id": "202601041253-00039",
+      "title": "Merge docs index sections",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "comments": [],
+      "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 385
+    },
+    {
+      "id": "202601041253-0003A",
+      "title": "Audit docs for clarity and consistency",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs"
+      ],
+      "commit": "fe29281d02dadd4154586cbd088361ba54174a97",
+      "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
+      "dirty": false,
+      "redmine_id": 386
+    },
+    {
+      "id": "202601041253-0003B",
+      "title": "Link file references in docs",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "7e88f9df016c340dbf314d6f687473f2f955ea6c",
+      "comments": [],
+      "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 264
+    },
+    {
+      "id": "202601041253-0003C",
+      "title": "Docs: modular backends + local tasks model",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
+      "comments": [],
+      "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 387
+    },
+    {
+      "id": "202601041253-0003D",
+      "title": "Docs: modularize + numbered docs",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [],
+      "commit": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
+      "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order.",
+      "dirty": false,
+      "redmine_id": 388
+    },
+    {
+      "id": "202601041253-0003E",
+      "title": "agentctl: backend plugin loader + config support",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "PLANNER",
+      "depends_on": [],
+      "tags": [],
+      "commit": "edf60000edb0b50cc9195328d3053157714fc200",
+      "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring.",
+      "dirty": false,
+      "redmine_id": 389
+    },
+    {
+      "id": "202601041253-0003F",
+      "title": "local backend: tasks/ storage + ID generation",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [
+        "202601041253-0003E"
+      ],
+      "tags": [],
+      "commit": "9066ff9431b53406ad4a42fc9323260f58f1011a",
+      "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json.",
+      "dirty": false,
+      "redmine_id": 265
+    },
+    {
+      "id": "202601041253-0003G",
+      "title": "agentctl: route task commands to backend + new sync/export commands",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "bf73519e146bf3c6cf68f73acc46be5a319e7182",
+      "comments": [],
+      "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 266
+    },
+    {
+      "id": "202601041253-0003H",
+      "title": "redmine backend: canonical source + offline fallback",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "7cafeace14cd6f307a5137f3ae94eb74080afcd0",
+      "comments": [],
+      "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 267
+    },
+    {
+      "id": "202601041253-0003J",
+      "title": "agentctl: migrate workspace paths to tasks/ + PR artifacts",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "9f593fed6fb24d0eec8912eda970708241e955a9",
+      "comments": [],
+      "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 268
+    },
+    {
+      "id": "202601041253-0003K",
+      "title": "agentctl: migrate tasks.json to local backend",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6",
+      "comments": [],
+      "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 269,
+      "doc": "## Summary\n\n- Add a migration command to seed `.codex-swarm/tasks/` from `.codex-swarm/tasks.json`.\n- Point `tasks_backend.config_path` to the local backend plugin.\n\n## Goal\n\n- Make local backend the default canonical store while keeping a one-time migration path from tasks.json.\n\n## Scope\n\n- Add `agentctl task migrate` (reads tasks.json, writes via configured backend).\n- Update `.codex-swarm/config.json` to use `.codex-swarm/backends/local/backend.json`.\n\n## Risks\n\n- Migration may overwrite tasks if run repeatedly without checks.\n- Tasks with unexpected schemas may fail to serialize into frontmatter.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task migrate`\n- `python3 .codex-swarm/agentctl.py task list`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert `.codex-swarm/config.json` and remove the migrate command."
+    },
+    {
+      "id": "202601041253-0003M",
+      "title": "Agents: export tasks.json on close",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "188350307b487d91a3ef004847f87f8b6d1a3995",
+      "comments": [],
+      "description": "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 390,
+      "doc": "## Summary\n\n- Update agent prompts so closures regenerate `tasks.json`.\n- Align task source-of-truth wording with backend routing.\n\n## Goal\n\n- Ensure the closing agent exports `tasks.json` after `finish`, keeping snapshots in sync.\n\n## Scope\n\n- Update agent JSON prompts and `AGENTS.md` where they mention `tasks.json` as canonical.\n- Add a closure checklist entry to export the snapshot.\n\n## Risks\n\n- Prompt drift if docs and agent JSONs are not updated together.\n\n## Verify Steps\n\n- `rg -n \\\"tasks.json\\\" .codex-swarm/agents AGENTS.md`\n\n## Rollback Plan\n\n- Revert prompt updates in `.codex-swarm/agents/*.json` and `AGENTS.md`.\n\n## Changes Summary\n\n- Updated agent prompts to treat `tasks.json` as a snapshot and export it after closure.\n- Aligned backend wording across AGENTS and agent JSONs."
+    },
+    {
+      "id": "202601041253-0003N",
+      "title": "Remove legacy workspace directory",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [
+        "202601041253-0003K"
+      ],
+      "tags": [],
+      "commit": "25a6c054b1b513003186c6b337437547c6fb4a79",
+      "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references.",
+      "dirty": false,
+      "redmine_id": 270,
+      "doc": "## Summary\n\n- Remove the legacy `.codex-swarm/workspace/` directory after migration.\n- Update references that still point to `workspace`.\n\n## Goal\n\n- Fully retire the old workspace layout and prevent future use.\n\n## Scope\n\n- Delete `.codex-swarm/workspace/`.\n- Update any remaining references in docs and prompts.\n\n## Risks\n\n- Legacy artifacts might be lost; ensure migration is complete first.\n\n## Verify Steps\n\n- `rg -n \\\"workspace\\\" .codex-swarm docs README.md`\n\n## Rollback Plan\n\n- Restore `.codex-swarm/workspace/` from git history if needed.\n\n## Changes Summary\n\n- Removed `.codex-swarm/workspace/` from the repo.\n- Updated references to `.codex-swarm/tasks/` in agent prompts, docs, and scripts."
+    },
+    {
+      "id": "202601041253-0003P",
+      "title": "Update clean.sh for new structure",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "04fdd37dca3c7541e1d957e263b473547c94d6ad",
+      "comments": [],
+      "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 271,
+      "doc": "## Summary\n\n- Refresh `clean.sh` to align with the new tasks directory layout.\n- Reset `.codex-swarm/tasks/` contents during cleanup while preserving the folder itself.\n- Recreate an empty `.codex-swarm/tasks.json` snapshot after cleanup using Python 3.\n\n## Goal\n\n- Ensure cleanup removes non-framework artifacts but keeps the local tasks backend structure consistent.\n\n## Scope\n\n- Update `clean.sh` cleanup behavior for `.codex-swarm/tasks/`.\n- Keep snapshot regeneration logic in place for `.codex-swarm/tasks.json`.\n\n## Risks\n\n- Cleanup will delete local task data under `.codex-swarm/tasks/` unless preserved externally.\n\n## Verify Steps\n\n- `bash -n clean.sh`\n\n## Rollback Plan\n\n- `git checkout -- clean.sh`"
+    },
+    {
+      "id": "202601041253-0003Q",
+      "title": "Fix GitHub sync scripts for snapshot backend",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "1939744c7df301f0a9b1533a7ff7025624d45a3c",
+      "comments": [],
+      "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 272,
+      "doc": "## Summary\n\n- Export a fresh tasks snapshot before syncing to GitHub.\n- Update sync script text to clarify tasks.json is an exported snapshot.\n- Expand workflow triggers to include backend/task changes.\n\n## Goal\n\n- Keep GitHub issues in sync with the backend by exporting `.codex-swarm/tasks.json` on each sync.\n\n## Scope\n\n- `.github/workflows/sync-tasks.yml`: add export step and additional trigger paths.\n- `.github/scripts/sync_tasks.py`: update source-of-truth messaging and snapshot guard.\n\n## Risks\n\n- Sync will fail if the backend export command errors in CI.\n\n## Verify Steps\n\n- `python3 -m py_compile .github/scripts/sync_tasks.py`\n\n## Rollback Plan\n\n- `git checkout -- .github/workflows/sync-tasks.yml .github/scripts/sync_tasks.py`"
+    },
+    {
+      "id": "202601041253-0003R",
+      "title": "Migrate legacy task IDs to new format",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": "f84ae1546f3077d674c659dce3ce9bf690160894",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: python3 .codex-swarm/agentctl.py task list --quiet; ids migrated."
+        }
+      ],
+      "description": "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies.",
+      "dirty": false,
+      "redmine_id": 279,
+      "doc": "## Summary\n\n- Added `task reid` to migrate legacy `T-###` folders into the new timestamp+suffix ID format.\n- Updated docs and prompts to use `<task-id>` placeholders instead of legacy numbering.\n- Rewrote task folders/IDs and exported the updated `.codex-swarm/tasks.json` snapshot.\n\n## Goal\n\n- Transition the repository to the new task ID scheme while keeping dependencies and ordering intact.\n\n## Scope\n\n- `.codex-swarm/agentctl.py`: implement `task reid` for the local backend and update user-facing examples.\n- `.codex-swarm/tasks/`: rename task directories, update frontmatter and headings.\n- `.codex-swarm/tasks.json`: export the new snapshot after migration.\n\n## Risks\n\n- Task IDs change permanently; external references to legacy `T-###` IDs will be stale.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task list --quiet`\n- `python3 .codex-swarm/agentctl.py task show 202601041253-0003R`\n\n## Rollback Plan\n\n- Restore `.codex-swarm/tasks/` and `.codex-swarm/tasks.json` from git history."
+    },
+    {
+      "id": "202601041253-0003S",
+      "title": "agentctl: preserve frontmatter on scaffold overwrite",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "e571744e288fc0f63599967eae460d290d4c97ef",
+      "comments": [],
+      "description": "Keep the frontmatter block intact when overwriting task README scaffolds.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 280,
+      "doc": "## Summary\n\n- Preserve frontmatter when `task scaffold --overwrite` rewrites task READMEs.\n\n## Goal\n\n- Avoid losing the frontmatter block in `.codex-swarm/tasks/<task-id>/README.md` during overwrite scaffolds.\n\n## Scope\n\n- Update `agentctl` scaffold to retain existing frontmatter and reapply the template body.\n\n## Risks\n\n- Edge-case frontmatter parsing might miss malformed headers.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task scaffold 202601041253-0003S --overwrite`\n- Confirm the frontmatter block remains at the top of `.codex-swarm/tasks/202601041253-0003S/README.md`.\n\n## Rollback Plan\n\n- Revert the scaffold changes in `.codex-swarm/agentctl.py`."
+    },
+    {
+      "id": "202601041300-00040",
+      "title": "tasks.html kanban viewer with local server",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "8ebac65cf3df403807155f58e430ba30e925692b",
+      "comments": [],
+      "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 273
+    },
+    {
+      "id": "202601041311-D7Q7D",
+      "title": "Fix frontmatter parsing and commit id rules",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "ea9ed7a50d1789d452abb61c00987e0925c76ecb",
+      "comments": [],
+      "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 274,
+      "doc": "## Summary\n\n- Fix frontmatter parsing to avoid double-escaped strings in task metadata.\n- Normalize existing task READMEs after parsing changes.\n- Allow commit subjects to reference the short task id suffix.\n\n## Goal\n\n- Make task storage stable and human-readable while keeping commit checks aligned with shorter IDs.\n\n## Scope\n\n- `.codex-swarm/backends/local/backend.py`: parse JSON-quoted scalars to avoid re-escaping.\n- `.codex-swarm/agentctl.py`: accept task-id suffix in commit subject checks.\n- Normalize existing task files in `.codex-swarm/tasks/`.\n\n## Risks\n\n- Normalization rewrites task READMEs; ensure no content loss before commit.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task list --quiet`\n\n## Rollback Plan\n\n- Restore `.codex-swarm/backends/local/backend.py` and task READMEs from git history."
+    },
+    {
+      "id": "202601041331-Q11MC",
+      "title": "Prune legacy paths and optimize agentctl",
+      "status": "TODO",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
       "verify": null,
       "commit": null,
       "comments": [],
-      "redmine_id": 392,
-      "id_source": "custom"
+      "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 275,
+      "doc": "## Summary\n\n- Remove legacy workspace and PR fallback paths from agentctl.\n- Add `task normalize` to rewrite task READMEs via the backend.\n- Use backend fast-path export when available.\n- Reduce redundant backend writes on save/finish.\n- Add per-run task cache for repeated reads.\n- Unify repeated error messaging helpers.\n\n## Goal\n\n- Simplify agentctl by removing old path support and make core operations faster and less noisy.\n\n## Scope\n\n- `.codex-swarm/agentctl.py`: remove legacy path helpers, add normalize, cache, fast export, helper errors.\n- `.codex-swarm/backends/local/backend.py`: helpers for normalization or hash comparison.\n\n## Risks\n\n- Removing legacy paths may break old repos without migration.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task normalize`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Restore `.codex-swarm/agentctl.py` and backend files from git history."
+    },
+    {
+      "id": "202601041346-YM3R8",
+      "title": "Agentctl performance and UX improvements",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd",
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: batch writes, caching, JSON errors, lazy lint, and logging flags implemented."
+        },
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: documentation updated for lint/flags and agent guidance."
+        },
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes."
+        }
+      ],
+      "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags.",
+      "dirty": false,
+      "redmine_id": 276,
+      "doc": "## Summary\n\n- Add backend batch writes and use them for normalize/finish.\n- Cache task index/dependency state during a run.\n- Add structured JSON error output for CI and integrations.\n- Make linting lazy and opt-in for read-only commands.\n- Add global logging flags for consistent verbosity.\n\n## Goal\n\n- Improve agentctl performance and automation ergonomics without changing core behavior.\n\n## Scope\n\n- `.codex-swarm/agentctl.py`: batch writes, caching, JSON error mode, lazy lint, global logging flags.\n- `.codex-swarm/backends/local/backend.py`: `write_tasks()` implementation.\n- `.codex-swarm/agentctl.md`: document new flags and behaviors.\n\n## Risks\n\n- Logging and linting behavior changes may surprise existing automation.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task normalize`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Restore `.codex-swarm/agentctl.py` and backend files from git history."
+    },
+    {
+      "id": "202601041529-CYHJZB",
+      "title": "Redmine sync: enrich metadata",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0",
+      "comments": [],
+      "description": "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 391,
+      "doc": "## Summary\n\nImprove Redmine sync to include more local metadata when pushing tasks, such as done ratio, start date, and optional assignee mapping.\n\n## Scope\n\n- Map local DONE status to `done_ratio` in Redmine.\n- Derive `start_date` from task id timestamp.\n- Allow optional assignee via env var to map local owner to Redmine user id.\n- Update `.env.example` with any new env vars.\n\n## Risks\n\n- Incorrect mapping could overwrite existing issue fields in Redmine.\n- Assignee id mismatch may cause API errors or assign to the wrong user.\n\n## Verify Steps\n\n- `bash check_redmine.sh`\n- `set -a; source .env; set +a; python3 .codex-swarm/agentctl.py sync redmine --direction push`\n\n## Rollback Plan\n\n- Revert the commit for this task and re-sync from local cache if needed."
+    },
+    {
+      "id": "202601041544-253P5B",
+      "title": "Load .env for Redmine settings",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "decbfa9574e7df7e160329e92a7882763ba6ce16",
+      "comments": [],
+      "description": "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 392
+    },
+    {
+      "id": "202601042107-TAG01",
+      "title": "Clarify planner task tags + deps",
+      "status": "TODO",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": null,
+      "comments": [],
+      "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 277
+    },
+    {
+      "id": "202601042147-CMT01",
+      "title": "Clarify commit message suffix usage",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": "f1568e3460bd7e7a293bca7448b9e81348b8a575",
+      "comments": [],
+      "description": "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 278
+    },
+    {
+      "id": "202601051338-8DGWPT",
+      "title": "Redmine doc metadata + task_id enforcement",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [
+        "redmine",
+        "backend",
+        "docs"
+      ],
+      "commit": {
+        "hash": "095a9428549afe10ccf9d4e078cdc6c48d78b0f9",
+        "message": "🧩 8DGWPT redmine doc metadata"
+      },
+      "description": "Add doc metadata storage via custom field, enforce valid task_id on Redmine, export tasks.json deterministically, and document new commands/behavior.",
+      "doc": "## Summary\n\n- Store task doc metadata in Redmine via a dedicated custom field and expose read/write commands.\n- Enforce valid `task_id` values in Redmine and export a deterministic `tasks.json`.\n\n## Scope\n\n- Add `doc` storage for Redmine and local backends, plus agentctl `task doc show|set`.\n- Require valid `task_id` for Redmine issues, auto-fill missing/invalid IDs, and detect duplicates.\n- Update docs for backend behavior and new commands.\n\n## Risks\n\n- Redmine custom fields must be configured correctly or doc updates will fail.\n- Auto-filled `task_id` values in Redmine could surprise users if they expected manual IDs.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task doc show 202601051338-8DGWPT`\n- `python3 .codex-swarm/agentctl.py task doc set 202601051338-8DGWPT --text \"## Summary\\n\\n- doc sync check\"`\n\n## Rollback Plan\n\n- Revert the commit and remove the Redmine `doc` custom field mapping if needed."
+    },
+    {
+      "id": "202601051345-MADM7W",
+      "title": "Suffix-only commit policy, cleanup, and English-only text",
+      "status": "TODO",
+      "priority": "normal",
+      "owner": "Via Mentis Assistant",
+      "depends_on": [],
+      "tags": [
+        "workflow",
+        "cleanup",
+        "policy"
+      ],
+      "description": "Enforce suffix-only task IDs in commit subjects, remove non-English text from tracked files, update clean.sh to purge non-framework files, and refresh docs and snapshots.",
+      "doc": "## Summary\n\n- Enforce suffix-only task IDs in commit subjects and update docs.\n- Remove non-English text from tracked files and refresh snapshots.\n- Tighten clean.sh cleanup to remove non-framework files.\n\n## Scope\n\n- Update commit subject matching and related docs to require suffix-only IDs.\n- Normalize priorities and remove Cyrillic text from tracked files.\n- Adjust clean.sh cleanup targets and keep it Python 3 only.\n\n## Risks\n\n- Bulk text normalization touches many task README files and the tasks snapshot.\n- Stricter commit checks might reject previously acceptable commit subjects.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task list --quiet`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the prior state."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "61403ef52de93ce8a63b52007f9a27ad079d84b4f2d7d83a7077e4340d5fb632"
+    "checksum": "f28999ace1c8b2a35e9d280b7aa492dd6d87d2bd0d933ea44b9e8e0b3afe4956"
   }
 }

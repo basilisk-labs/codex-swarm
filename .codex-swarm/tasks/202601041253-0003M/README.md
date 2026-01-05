@@ -2,7 +2,7 @@
 id: "202601041253-0003M"
 title: "Agents: export tasks.json on close"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

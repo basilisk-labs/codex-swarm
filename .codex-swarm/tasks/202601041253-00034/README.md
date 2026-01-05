@@ -2,7 +2,7 @@
 id: "202601041253-00034"
 title: "Update README docs links"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

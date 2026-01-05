@@ -2,7 +2,7 @@
 id: "202601041253-00010"
 title: "Stylize README with icons and ASCII art"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

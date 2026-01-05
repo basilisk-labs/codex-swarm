@@ -2,7 +2,7 @@
 id: "202601041253-0001T"
 title: "Agentctl quickstart + docs pointer"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

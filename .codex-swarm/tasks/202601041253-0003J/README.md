@@ -2,7 +2,7 @@
 id: "202601041253-0003J"
 title: "agentctl: migrate workspace paths to tasks/ + PR artifacts"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

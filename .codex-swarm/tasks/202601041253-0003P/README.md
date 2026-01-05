@@ -2,7 +2,7 @@
 id: "202601041253-0003P"
 title: "Update clean.sh for new structure"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

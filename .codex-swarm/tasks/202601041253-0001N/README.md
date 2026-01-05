@@ -2,7 +2,7 @@
 id: "202601041253-0001N"
 title: "Require DOCS workflow artifact before finishing tasks"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

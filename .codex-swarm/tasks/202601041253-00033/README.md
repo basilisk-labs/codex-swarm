@@ -2,7 +2,7 @@
 id: "202601041253-00033"
 title: "Fill T-096 artifact and enforce doc completion"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

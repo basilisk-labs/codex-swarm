@@ -2,7 +2,7 @@
 id: "202601041253-0000N"
 title: "Enhance translator glossary workflow"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

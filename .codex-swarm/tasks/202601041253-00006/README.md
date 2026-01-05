@@ -2,7 +2,7 @@
 id: "202601041253-00006"
 title: "Add Agent Creator workflow"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

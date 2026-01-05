@@ -2,7 +2,7 @@
 id: "202601041253-00031"
 title: "Rename docs index and update references"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

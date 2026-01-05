@@ -2,7 +2,7 @@
 id: "202601041253-00003"
 title: "Move tasks data into .AGENTS/TASKS.json"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

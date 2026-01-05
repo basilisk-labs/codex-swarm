@@ -2,7 +2,7 @@
 id: "202601041253-0000F"
 title: "Align agent prompts with Cursor + Codex constraints"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

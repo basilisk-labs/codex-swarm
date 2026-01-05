@@ -321,7 +321,7 @@ def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
     if not task_token:
         return True
     task_suffix = task_token.split("-")[-1] if "-" in task_token else task_token
-    tokens = re.findall(r"[0-9A-Za-zА-Яа-яЁё]+(?:-[0-9A-Za-zА-Яа-яЁё]+)*", message.lower())
+    tokens = re.findall(r"[0-9A-Za-z]+(?:-[0-9A-Za-z]+)*", message.lower())
     meaningful = [t for t in tokens if t not in {task_token, task_suffix} and t not in GENERIC_COMMIT_TOKENS]
     return bool(meaningful)
 
@@ -330,10 +330,9 @@ def task_id_variants(task_id: str) -> Set[str]:
     raw = task_id.strip()
     if not raw:
         return set()
-    variants = {raw}
     if "-" in raw:
-        variants.add(raw.split("-")[-1])
-    return variants
+        return {raw.split("-")[-1]}
+    return {raw}
 
 
 def task_digest(task: Dict) -> str:
@@ -345,9 +344,8 @@ def commit_subject_mentions_task(task_id: str, subject: str) -> bool:
 
 
 def commit_subject_missing_error(task_ids: List[str], subject: str, *, context: Optional[str] = None) -> str:
-    suffix = " (or their suffixes)" if len(task_ids) > 1 else " (or its suffix)"
     prefix = f"{context}: " if context else ""
-    return f"{prefix}Commit subject does not mention {', '.join(task_ids)}{suffix}: {subject!r}"
+    return f"{prefix}Commit subject does not mention task suffix(es) for {', '.join(task_ids)}: {subject!r}"
 
 
 def load_task_index() -> Tuple[List[Dict], Dict[str, Dict], List[str], str]:

@@ -62,7 +62,7 @@ shared_state:
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Do not finish a task until `.codex-swarm/tasks/<task-id>/README.md` is fully filled in (no placeholder `...`).
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
-- Commit messages start with a meaningful emoji, stay short and human friendly, and include the relevant task ID (full id or suffix after the last dash) when possible.
+- Commit messages start with a meaningful emoji, stay short and human friendly, and include only the task ID suffix (after the last dash) when possible.
 - Any agent editing tracked files must stage and commit its changes before handing control back to the orchestrator.
 - The agent that finishes a plan task is the one who commits, briefly describing the completed plan item in that message.
 - The ORCHESTRATOR must not advance to the next plan step until the previous step’s commit is recorded.

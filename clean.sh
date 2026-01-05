@@ -44,7 +44,8 @@ rm -rf \
   .codex-swarm/tasks.json \
   CONTRIBUTING.md \
   CODE_OF_CONDUCT.md \
-  GUIDELINE.md
+  GUIDELINE.md \
+  viewer.sh
 
 # Reset local task storage while keeping the framework task directory.
 if [[ -d ".codex-swarm/tasks" ]]; then
@@ -76,7 +77,7 @@ print(json.dumps(data, indent=2, ensure_ascii=False))
 PY
 
 # Apply the selected workflow_mode and scrub agent prompts for the unused mode.
-python - <<'PY'
+python3 - <<'PY'
 import json
 import os
 import re

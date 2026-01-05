@@ -2,7 +2,7 @@
 id: "202601041253-0002F"
 title: "Docs: remove remaining legacy prs/ mentions"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

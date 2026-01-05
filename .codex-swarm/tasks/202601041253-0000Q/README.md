@@ -2,7 +2,7 @@
 id: "202601041253-0000Q"
 title: "Add Spanish README translation"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

@@ -1,16 +1,14 @@
 ---
 id: "202601051338-8DGWPT"
 title: "Redmine doc metadata + task_id enforcement"
-status: "TODO"
-priority: "Нормальный"
+status: "DONE"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: ["redmine", "backend", "docs"]
+commit: { hash: "095a9428549afe10ccf9d4e078cdc6c48d78b0f9", message: "🧩 8DGWPT redmine doc metadata" }
 description: "Add doc metadata storage via custom field, enforce valid task_id on Redmine, export tasks.json deterministically, and document new commands/behavior."
 ---
-
-# 202601051338-8DGWPT: Redmine doc metadata + task_id enforcement
-
 ## Summary
 
 - Store task doc metadata in Redmine via a dedicated custom field and expose read/write commands.
@@ -35,3 +33,4 @@ description: "Add doc metadata storage via custom field, enforce valid task_id o
 ## Rollback Plan
 
 - Revert the commit and remove the Redmine `doc` custom field mapping if needed.
+

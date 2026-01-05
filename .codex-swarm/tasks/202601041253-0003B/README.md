@@ -2,7 +2,7 @@
 id: "202601041253-0003B"
 title: "Link file references in docs"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

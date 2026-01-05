@@ -2,7 +2,7 @@
 id: "202601042107-TAG01"
 title: "Clarify planner task tags + deps"
 status: "TODO"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

@@ -38,7 +38,7 @@ python .codex-swarm/agentctl.py pr check 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py verify 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py finish 202601031816-7F3K2Q --commit <git-rev> --author INTEGRATOR --body "Verified: ..."
 ```
-For batch finishes, include all task IDs in the commit subject (full id or suffix after the last dash), e.g. `✅ 7F3K2Q 1A9Z5C close ...`.
+For batch finishes, include all task ID suffixes in the commit subject, e.g. `✅ 7F3K2Q 1A9Z5C close ...`.
 
 ## Guardrails and Git Hygiene
 ```bash

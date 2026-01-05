@@ -2,7 +2,7 @@
 id: "202601041253-0001J"
 title: "Adopt agentctl-based agent workflow"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

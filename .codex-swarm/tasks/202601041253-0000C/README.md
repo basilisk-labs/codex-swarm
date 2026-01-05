@@ -2,7 +2,7 @@
 id: "202601041253-0000C"
 title: "Generalize AGENTS.md to remove agent-specific guidance"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601041253-0000D"
 title: "Align agent prompts with GPT-5.1 guide"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

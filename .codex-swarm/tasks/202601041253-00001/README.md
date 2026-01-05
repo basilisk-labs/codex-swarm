@@ -2,7 +2,7 @@
 id: "202601041253-00001"
 title: "Document framework in README"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

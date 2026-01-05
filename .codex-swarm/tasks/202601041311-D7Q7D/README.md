@@ -2,7 +2,7 @@
 id: "202601041311-D7Q7D"
 title: "Fix frontmatter parsing and commit id rules"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

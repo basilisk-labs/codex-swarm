@@ -2,7 +2,7 @@
 id: "202601041253-00026"
 title: "agentctl guard commit: add --auto-allow"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601041253-0002A"
 title: "Unify workflow artifact layout (single per-task folder)"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

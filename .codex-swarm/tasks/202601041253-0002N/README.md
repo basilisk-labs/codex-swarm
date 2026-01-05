@@ -2,7 +2,7 @@
 id: "202601041253-0002N"
 title: "agentctl work start: idempotent scaffold"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

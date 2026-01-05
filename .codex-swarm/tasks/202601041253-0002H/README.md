@@ -2,7 +2,7 @@
 id: "202601041253-0002H"
 title: "agentctl integrate: skip verify if already verified"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

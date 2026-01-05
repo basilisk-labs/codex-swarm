@@ -2,7 +2,7 @@
 id: "202601041253-0000T"
 title: "Enforce atomic task planning"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

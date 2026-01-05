@@ -2,7 +2,7 @@
 id: "202601041253-00037"
 title: "Update GitHub sync scripts for new .codex-swarm structure"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601041253-0003C"
 title: "Docs: modular backends + local tasks model"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

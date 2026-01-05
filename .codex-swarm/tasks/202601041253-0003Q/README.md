@@ -2,7 +2,7 @@
 id: "202601041253-0003Q"
 title: "Fix GitHub sync scripts for snapshot backend"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

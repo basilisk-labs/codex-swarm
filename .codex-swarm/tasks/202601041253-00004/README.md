@@ -2,7 +2,7 @@
 id: "202601041253-00004"
 title: "Enforce per-task git commits in AGENTS spec"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

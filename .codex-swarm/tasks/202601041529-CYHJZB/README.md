@@ -2,7 +2,7 @@
 id: "202601041529-CYHJZB"
 title: "Redmine sync: enrich metadata"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

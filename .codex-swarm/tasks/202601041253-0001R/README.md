@@ -2,7 +2,7 @@
 id: "202601041253-0001R"
 title: "Add Mermaid agent workflow diagram to README"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

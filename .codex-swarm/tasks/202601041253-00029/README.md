@@ -2,7 +2,7 @@
 id: "202601041253-00029"
 title: "Reduce integrate noise: auto-sync PR meta head_sha"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601041253-0001S"
 title: "Fix Mermaid workflow diagram for GitHub rendering"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

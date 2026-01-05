@@ -2,7 +2,7 @@
 id: "202601041253-0003S"
 title: "agentctl: preserve frontmatter on scaffold overwrite"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

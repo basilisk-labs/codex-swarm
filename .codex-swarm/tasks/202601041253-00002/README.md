@@ -2,7 +2,7 @@
 id: "202601041253-00002"
 title: "Restructure agent registry into JSON files"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

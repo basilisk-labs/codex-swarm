@@ -2,7 +2,7 @@
 id: "202601041253-00028"
 title: "agentctl task add: default depends_on to []"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

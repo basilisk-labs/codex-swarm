@@ -271,7 +271,7 @@ def set_project_status(
     options_by_name: Dict[str, str],
 ):
     """
-    status_name — это имя опции поля Status в проекте (например "Todo").
+    status_name is the Status field option name in the project (for example, "Todo").
     """
     option_id = options_by_name.get(status_name)
     if not option_id:

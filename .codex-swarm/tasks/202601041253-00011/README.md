@@ -2,7 +2,7 @@
 id: "202601041253-00011"
 title: "Style tasks board markdown output"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []

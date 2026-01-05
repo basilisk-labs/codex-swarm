@@ -2,7 +2,7 @@
 id: "202601041253-0000V"
 title: "Add UPDATER optimization agent"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
