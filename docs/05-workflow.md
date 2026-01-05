@@ -11,14 +11,18 @@
 ## Planning and Tasks
 - Every task is atomic and tracked by ID (`YYYYMMDDHHMM-<RAND>`).
 - The canonical task source depends on the backend:
-  - `local`: `.codex-swarm/tasks/` is canonical.
-  - `redmine`: Redmine is canonical; `.codex-swarm/tasks/` is a cache/offline layer.
+  - `local`: [`.codex-swarm/tasks/`](../.codex-swarm/tasks/) is canonical.
+  - `redmine`: Redmine is canonical; [`.codex-swarm/tasks/`](../.codex-swarm/tasks/) is a cache/offline layer.
 - Task changes are done only via `python .codex-swarm/agentctl.py`.
 
 ## Implementation
 - CODER implements changes with tight diffs and clear validation notes.
 - TESTER adds or updates tests when behavior changes.
 - DOCS updates user-facing docs and task artifacts.
+- Before handoff, update the task doc metadata (Summary/Scope/Risks/Verify Steps/Rollback Plan).
+- Each agent leaving a task must leave a handoff comment:
+  - `workflow_mode=branch_pr`: add notes under `## Handoff Notes` in `.codex-swarm/tasks/<task-id>/pr/review.md`.
+  - `workflow_mode=direct`: use `python .codex-swarm/agentctl.py task comment <task-id> --author <ROLE> --body "..."`
 
 ## Verification and Closure
 - Use `python .codex-swarm/agentctl.py verify 202601031816-7F3K2Q` to run declared checks.

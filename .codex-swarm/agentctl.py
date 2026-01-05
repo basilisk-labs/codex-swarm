@@ -918,6 +918,46 @@ def cmd_task_show(args: argparse.Namespace) -> None:
             print(f"- {author}: {body}")
 
 
+def cmd_task_doc_show(args: argparse.Namespace) -> None:
+    backend = backend_instance()
+    if backend is None:
+        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+    get_doc = getattr(backend, "get_task_doc", None)
+    if not callable(get_doc):
+        die("Configured backend does not support task docs", code=2)
+    doc = str(get_doc(args.task_id) or "")
+    if doc:
+        print(doc.rstrip())
+        return
+    if not args.quiet:
+        print("ℹ️ no task doc metadata")
+
+
+def cmd_task_doc_set(args: argparse.Namespace) -> None:
+    backend = backend_instance()
+    if backend is None:
+        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+    set_doc = getattr(backend, "set_task_doc", None)
+    if not callable(set_doc):
+        die("Configured backend does not support task docs", code=2)
+    if args.text and args.file:
+        die("Use only one of --text or --file", code=2)
+    if args.text:
+        doc = args.text
+    elif args.file:
+        source = args.file
+        if source == "-":
+            doc = sys.stdin.read()
+        else:
+            path = _resolve_repo_relative_path(source, label="task doc source")
+            doc = path.read_text(encoding="utf-8")
+    else:
+        die("Provide --text or --file to set task docs", code=2)
+    set_doc(args.task_id, doc)
+    if not args.quiet:
+        print(f"✅ updated task doc for {args.task_id}")
+
+
 def export_tasks_snapshot(out_path: Optional[Path] = None, *, quiet: bool = False) -> None:
     target_path = out_path or _resolve_repo_relative_path(TASKS_PATH_REL, label="task export output")
     backend = backend_instance()
@@ -3890,6 +3930,21 @@ def build_parser() -> argparse.ArgumentParser:
     p_show.add_argument("--last-comments", type=int, default=5, help="How many latest comments to print")
     p_show.add_argument("--quiet", action="store_true", help="Suppress warnings")
     p_show.set_defaults(func=cmd_task_show)
+
+    p_doc = task_sub.add_parser("doc", help="Read or update task doc metadata")
+    doc_sub = p_doc.add_subparsers(dest="doc_cmd", required=True)
+
+    p_doc_show = doc_sub.add_parser("show", help="Show task doc metadata")
+    p_doc_show.add_argument("task_id")
+    p_doc_show.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_doc_show.set_defaults(func=cmd_task_doc_show)
+
+    p_doc_set = doc_sub.add_parser("set", help="Update task doc metadata")
+    p_doc_set.add_argument("task_id")
+    p_doc_set.add_argument("--text", help="Doc body text")
+    p_doc_set.add_argument("--file", help="Read doc body from file (use '-' for stdin)")
+    p_doc_set.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_doc_set.set_defaults(func=cmd_task_doc_set)
 
     p_search = task_sub.add_parser("search", help="Search tasks by text (title/description/tags/comments)")
     p_search.add_argument("query")

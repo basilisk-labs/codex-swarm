@@ -8,6 +8,7 @@ Tasks are routed through `agentctl`, which uses the active backend plugin to dec
 - Example: `202601031816-7F3K2Q`
 - IDs are immutable once created.
 - `agentctl` generates IDs via `task new` and checks for collisions.
+- Redmine requires a valid `task_id` custom field for every issue; missing/invalid values are auto-filled on read.
 
 ## Local Storage Layout
 Each task lives in a dedicated folder (see [`.codex-swarm/tasks/`](../.codex-swarm/tasks/)):
@@ -34,6 +35,12 @@ created_at: "2026-01-03T18:16:00Z"
 ---
 ```
 
+## Task Doc Metadata
+The per-task README includes structured sections (`Summary`, `Scope`, `Risks`, `Verify Steps`, `Rollback Plan`).
+- When backend=local, these sections are stored in the README body and exported as `doc`.
+- When backend=redmine, the same `doc` payload is stored in a Redmine custom field.
+- Use `python .codex-swarm/agentctl.py task doc show|set` to read/update the `doc` metadata without editing files directly.
+
 ## Backend Model
 ### local
 - Canonical source: [`.codex-swarm/tasks/`](../.codex-swarm/tasks/).
@@ -43,9 +50,10 @@ created_at: "2026-01-03T18:16:00Z"
 ### redmine
 - Canonical source: Redmine issues with a `task_id` custom field.
 - The local task ID maps to the Redmine `task_id` custom field; the Redmine issue id is stored separately as `redmine_id`.
-- Local tasks are a cache/offline layer.
-- `agentctl` auto-falls back to local when Redmine is unavailable.
+- Local tasks are a cache/offline layer (optional).
+- `agentctl` auto-falls back to local when Redmine is unavailable (only when cache is enabled).
 - When connectivity returns, `agentctl sync redmine` reconciles changes.
+- Set `cache_dir` to an empty value to disable local cache completely (sync and offline fallback are unavailable).
 
 ## Offline Fallback and Conflicts
 - Auto fallback happens whenever Redmine is unreachable.
@@ -76,7 +84,8 @@ When linking a backend path, point to [`.codex-swarm/backends/`](../.codex-swarm
     "api_key": "REDACTED",
     "project_id": "my-project",
     "status_map": { "TODO": 1, "DOING": 2, "BLOCKED": 3, "DONE": 4 },
-    "custom_fields": { "task_id": 12, "verify": 13, "commit": 14 }
+    "custom_fields": { "task_id": 12, "verify": 13, "commit": 14, "doc": 15 },
+    "cache_dir": ".codex-swarm/tasks"
   }
 }
 ```

@@ -11,6 +11,8 @@ python .codex-swarm/agentctl.py task list
 python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q
 python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner CODER
 python .codex-swarm/agentctl.py task add 202601031816-7F3K2Q --title "..." --description "..."
+python .codex-swarm/agentctl.py task doc show 202601031816-7F3K2Q
+python .codex-swarm/agentctl.py task doc set 202601031816-7F3K2Q --file .codex-swarm/tasks/202601031816-7F3K2Q/README.md
 python .codex-swarm/agentctl.py task lint
 # or run read-only commands with --lint
 python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tasks.json

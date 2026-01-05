@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import secrets
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -12,6 +13,9 @@ from typing import Dict, Iterable, List, Optional, Tuple
 FRONTMATTER_BOUNDARY = "---"
 DEFAULT_TASKS_DIR = Path(".codex-swarm/tasks")
 ID_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+TASK_ID_RE = re.compile(rf"^\d{{12}}-[{ID_ALPHABET}]{{4,}}$")
+DOC_SECTION_HEADER = "## Summary"
+AUTO_SUMMARY_HEADER = "## Changes Summary (auto)"
 
 
 @dataclass
@@ -224,6 +228,52 @@ def format_frontmatter(frontmatter: Dict[str, object]) -> str:
     return "\n".join(lines)
 
 
+def validate_task_id(task_id: str, *, source: Optional[Path] = None) -> None:
+    if not TASK_ID_RE.match(task_id):
+        hint = f" in {source}" if source else ""
+        raise ValueError(f"Invalid task id{hint}: {task_id}")
+
+
+def extract_task_doc(body: str) -> str:
+    if not body:
+        return ""
+    lines = body.splitlines()
+    start_idx = None
+    for idx, line in enumerate(lines):
+        if line.strip() == DOC_SECTION_HEADER:
+            start_idx = idx
+            break
+    if start_idx is None:
+        return ""
+    end_idx = len(lines)
+    for idx in range(start_idx + 1, len(lines)):
+        if lines[idx].strip() == AUTO_SUMMARY_HEADER:
+            end_idx = idx
+            break
+    doc = "\n".join(lines[start_idx:end_idx]).rstrip()
+    return doc
+
+
+def merge_task_doc(body: str, doc: str) -> str:
+    doc_text = str(doc or "").strip("\n")
+    if not doc_text:
+        return body
+    lines = body.splitlines() if body else []
+    auto_idx = None
+    for idx, line in enumerate(lines):
+        if line.strip() == AUTO_SUMMARY_HEADER:
+            auto_idx = idx
+            break
+    auto_block = ""
+    if auto_idx is not None:
+        auto_block = "\n".join(lines[auto_idx:]).rstrip()
+    parts = [doc_text.rstrip()]
+    if auto_block:
+        parts.append("")
+        parts.append(auto_block)
+    return "\n".join(parts).rstrip() + "\n"
+
+
 class LocalBackend:
     def __init__(self, settings: Optional[Dict[str, object]] = None) -> None:
         raw_dir = (settings or {}).get("dir") if isinstance(settings, dict) else None
@@ -253,35 +303,74 @@ class LocalBackend:
         if not self.root.exists():
             return []
         tasks: List[Dict[str, object]] = []
+        seen_ids: set[str] = set()
         for entry in sorted(self.root.iterdir()):
             if not entry.is_dir():
                 continue
             readme = entry / "README.md"
             if not readme.exists():
                 continue
-            doc = parse_frontmatter(readme.read_text(encoding="utf-8"))
-            if doc.frontmatter:
-                tasks.append(doc.frontmatter)
+            parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+            if parsed.frontmatter:
+                task = dict(parsed.frontmatter)
+                task_id = str(task.get("id") or "").strip()
+                if task_id:
+                    validate_task_id(task_id, source=readme)
+                    if task_id in seen_ids:
+                        raise ValueError(f"Duplicate task id in local backend: {task_id}")
+                    seen_ids.add(task_id)
+                doc = extract_task_doc(parsed.body)
+                if doc:
+                    task["doc"] = doc
+                tasks.append(task)
         return tasks
 
     def get_task(self, task_id: str) -> Optional[Dict[str, object]]:
         readme = self.task_readme_path(task_id)
         if not readme.exists():
             return None
-        doc = parse_frontmatter(readme.read_text(encoding="utf-8"))
-        return doc.frontmatter
+        parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+        task = dict(parsed.frontmatter)
+        doc = extract_task_doc(parsed.body)
+        if doc:
+            task["doc"] = doc
+        return task
+
+    def get_task_doc(self, task_id: str) -> str:
+        readme = self.task_readme_path(task_id)
+        if not readme.exists():
+            raise FileNotFoundError(f"Missing task README: {readme}")
+        parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+        return extract_task_doc(parsed.body)
 
     def write_task(self, task: Dict[str, object]) -> None:
         task_id = str(task.get("id") or "").strip()
         if not task_id:
             raise ValueError("Task id is required")
+        validate_task_id(task_id)
+        task_payload = dict(task)
+        doc = task_payload.pop("doc", None)
         readme = self.task_readme_path(task_id)
         body = ""
         if readme.exists():
-            doc = parse_frontmatter(readme.read_text(encoding="utf-8"))
-            body = doc.body
+            parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+            body = parsed.body
+        if doc is not None:
+            body = merge_task_doc(body, str(doc))
         readme.parent.mkdir(parents=True, exist_ok=True)
-        frontmatter_text = format_frontmatter(task)
+        frontmatter_text = format_frontmatter(task_payload)
+        content = frontmatter_text + "\n"
+        if body:
+            content += body.lstrip("\n") + "\n"
+        readme.write_text(content, encoding="utf-8")
+
+    def set_task_doc(self, task_id: str, doc: str) -> None:
+        readme = self.task_readme_path(task_id)
+        if not readme.exists():
+            raise FileNotFoundError(f"Missing task README: {readme}")
+        parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+        body = merge_task_doc(parsed.body, doc)
+        frontmatter_text = format_frontmatter(parsed.frontmatter)
         content = frontmatter_text + "\n"
         if body:
             content += body.lstrip("\n") + "\n"
@@ -293,7 +382,7 @@ class LocalBackend:
                 self.write_task(task)
 
     def export_tasks_json(self, output_path: Path) -> None:
-        tasks = self.list_tasks()
+        tasks = sorted(self.list_tasks(), key=lambda item: str(item.get("id") or ""))
         payload = {"tasks": tasks}
         canonical = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         payload["meta"] = {
