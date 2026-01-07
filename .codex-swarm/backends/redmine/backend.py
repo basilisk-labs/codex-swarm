@@ -244,11 +244,15 @@ class RedmineBackend:
         if not task_id:
             raise ValueError("task.id is required")
         try:
+            existing_issue: Optional[Dict[str, object]] = None
             self._ensure_doc_metadata(task, force=False)
             issue_id = task.get("redmine_id")
             if not issue_id:
                 issue = self._find_issue_by_task_id(task_id)
                 issue_id = issue.get("id") if isinstance(issue, dict) else None
+                existing_issue = issue if isinstance(issue, dict) else None
+            if issue_id and existing_issue is None:
+                existing_issue = self._request_json("GET", f"issues/{issue_id}.json").get("issue")
             payload = self._task_to_issue_payload(task)
             if issue_id:
                 self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": payload})
@@ -260,6 +264,14 @@ class RedmineBackend:
                     update_payload = dict(payload)
                     update_payload.pop("project_id", None)
                     self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": update_payload})
+                    existing_issue = self._request_json("GET", f"issues/{issue_id}.json").get("issue")
+            if issue_id:
+                existing_comments: List[Dict[str, object]] = []
+                if isinstance(existing_issue, dict):
+                    comments_val = self._custom_field_value(existing_issue, self.custom_fields.get("comments"))
+                    existing_comments = self._normalize_comments(self._maybe_parse_json(comments_val))
+                desired_comments = self._normalize_comments(task.get("comments"))
+                self._append_comment_notes(issue_id, existing_comments=existing_comments, desired_comments=desired_comments)
             if issue_id:
                 task["redmine_id"] = issue_id
             task["dirty"] = False
@@ -541,6 +553,46 @@ class RedmineBackend:
         if isinstance(value, str) and value.strip():
             return [{"author": "redmine", "body": value.strip()}]
         return []
+
+    def _comments_to_pairs(self, comments: List[Dict[str, object]]) -> List[tuple[str, str]]:
+        pairs: List[tuple[str, str]] = []
+        for comment in comments:
+            if not isinstance(comment, dict):
+                continue
+            author = str(comment.get("author") or "").strip()
+            body = str(comment.get("body") or "").strip()
+            if not author and not body:
+                continue
+            pairs.append((author, body))
+        return pairs
+
+    def _format_comment_note(self, author: str, body: str) -> str:
+        author_text = author or "unknown"
+        body_text = body or ""
+        return f"[comment] {author_text}: {body_text}".strip()
+
+    def _append_comment_notes(
+        self,
+        issue_id: object,
+        *,
+        existing_comments: List[Dict[str, object]],
+        desired_comments: List[Dict[str, object]],
+    ) -> None:
+        if not issue_id:
+            return
+        existing_pairs = self._comments_to_pairs(existing_comments)
+        desired_pairs = self._comments_to_pairs(desired_comments)
+        if not desired_pairs:
+            return
+        if len(desired_pairs) < len(existing_pairs):
+            return
+        if existing_pairs and desired_pairs[: len(existing_pairs)] != existing_pairs:
+            return
+        new_pairs = desired_pairs[len(existing_pairs) :]
+        for author, body in new_pairs:
+            note = self._format_comment_note(author, body)
+            if note:
+                self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": {"notes": note}})
 
     def _start_date_from_task_id(self, task_id: str) -> Optional[str]:
         if not task_id or "-" not in task_id:

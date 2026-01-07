@@ -57,7 +57,7 @@ The per-task README includes structured sections (`Summary`, `Context`, `Scope`,
 - `agentctl` auto-falls back to local when Redmine is unavailable (only when cache is enabled).
 - When connectivity returns, `agentctl sync redmine` reconciles changes.
 - Set `cache_dir` to an empty value to disable local cache completely (sync and offline fallback are unavailable).
-- Comments and task doc metadata can be stored in Redmine custom fields (`comments`, `doc_version`, `doc_updated_at`, `doc_updated_by`) to keep parity with local.
+- Comments and task doc metadata can be stored in Redmine custom fields (`comments`, `doc_version`, `doc_updated_at`, `doc_updated_by`) to keep parity with local; new comments are also mirrored into Redmine journals as notes.
 
 ## Offline Fallback and Conflicts
 - Auto fallback happens whenever Redmine is unreachable.
