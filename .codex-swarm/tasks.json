@@ -2721,12 +2721,54 @@
       ],
       "description": "Align README diagrams and badges with 'task export' wording, ensuring tasks.json references are consistent and minimal.",
       "doc": "## Summary\n\n- Normalized diagram wording in README to refer to the task export/view consistently.\n\n## Goal\n\n- Keep diagrams and badges aligned with export terminology without overusing tasks.json.\n\n## Scope\n\n- @README.md\n\n## Risks\n\n- Low: diagram text change only.\n\n## Verify Steps\n\n- None (doc-only change).\n\n## Rollback Plan\n\n- Revert commit `918e384d381c`."
+    },
+    {
+      "id": "202601071400-697Z41",
+      "title": "Standardize task README format + agentctl-only updates",
+      "status": "TODO",
+      "priority": "normal",
+      "owner": "automation",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-07T14:29:03+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Refine task README.md format for human/agent readability and enforce updates via agentctl commands only.",
+      "doc": "## Summary\n\n- Add Context/Notes sections to task README template.\n- Add agentctl doc section updates + metadata guard for README changes.\n- Update local backend to stamp doc metadata.\n\n## Context\n\n- Agents should not edit task READMEs by hand; agentctl must own updates.\n- README structure should balance required metadata with readable guidance.\n\n## Scope\n\n- Update agentctl README template and doc section commands.\n- Add guardrails that require agentctl doc metadata for staged task READMEs.\n- Update local backend to maintain doc metadata and docs/instructions.\n- Extend Redmine backend field mapping to store doc metadata and comments.\n- Mirror new Redmine comments into issue journals as notes.\n- Document Redmine custom fields and notes behavior (separate doc).\n\n## Risks\n\n- Guard may block commits that touch legacy task READMEs missing doc metadata until updated via agentctl.\n- Section parsing is heading-based; unusual heading formats may be ignored.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py\n\n## Rollback Plan\n\n- Revert the commit and re-run agentctl if needed.\n\n## Notes\n\n- Existing READMEs keep their content; metadata is added on first agentctl update.\n- Redmine needs custom fields for comments/doc metadata to keep parity with local.\n- Journal notes are appended only when comment list grows in order."
+    },
+    {
+      "id": "202601071438-C7W2GE",
+      "title": "Update Redmine custom field IDs",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "redmine",
+        "backend",
+        "docs"
+      ],
+      "commit": {
+        "hash": "a31d27a72cba9e89cd51ea3e90533df52bac35d4",
+        "message": "✨ C7W2GE update redmine custom field IDs in docs"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: not run (docs-only update). Redmine IDs assumed sequential 1-8."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-07T14:44:07+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update Redmine backend config and docs to use sequential custom field IDs 1-8 for task metadata.",
+      "doc": "## Summary\n\nUpdate Redmine custom field ID mapping to use sequential IDs 1-8 for task metadata.\n\n## Context\n\nUser requested sequential Redmine custom field IDs; admin API access was unavailable so we aligned docs to IDs 1-8.\n\n## Scope\n\n- Update Redmine docs/examples to use sequential custom field IDs 1..8.\\n- Keep backend config aligned with the same mapping.\n\n## Risks\n\n- If Redmine custom field IDs differ, sync will fail until corrected.\n\n## Verify Steps\n\n- (Optional) Confirm custom field IDs in Redmine admin.\\n- Run  after configuration.\n\n## Rollback Plan\n\nRevert the Redmine backend config and docs to the previous custom field IDs.\n\n## Notes\n\nBackend config already uses IDs 1-8; only docs needed updates.\n\n## Changes Summary\n\n- Updated Redmine docs examples to match sequential custom field IDs 1-8."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "24707cfbd1c9f6c452ec36dd9344bb9547078a5e5ba89302d92f59a90b81a621"
+    "checksum": "3fe2f6d2a41f52fb4d0589270503c26d5ed894e227c211c4f4c82ccbc9961de3"
   }
 }
