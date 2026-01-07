@@ -2698,12 +2698,25 @@
       ],
       "description": "Update README, docs, and CONTRIBUTING to minimize repeated 'snapshot/tasks.json' phrasing, while preserving rules: do not edit exports by hand and use agentctl for task export.",
       "doc": "## Summary\n\n- Reduced snapshot wording in README, docs, CONTRIBUTING, and cleanup notes.\n- Kept tasks.json references only where needed for export/viewer guidance.\n\n## Goal\n\n- Minimize repeated snapshot phrasing while preserving export rules and commands.\n\n## Scope\n\n- @README.md\n- @CONTRIBUTING.md\n- @clean.sh\n- @docs/01-overview.md\n- @docs/03-setup.md\n- @docs/04-architecture.md\n- @docs/07-tasks-and-backends.md\n- @docs/09-commands.md\n- @docs/10-troubleshooting.md\n\n## Risks\n\n- Low: wording changes could hide explicit snapshot terminology some users expect.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `c8cc07f9a242`."
+    },
+    {
+      "id": "202601071339-TNJY7P",
+      "title": "Normalize diagram/badge wording for task export",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "depends_on": [],
+      "tags": [
+        "docs"
+      ],
+      "description": "Align README diagrams and badges with 'task export' wording, ensuring tasks.json references are consistent and minimal.",
+      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "d82551858760d7b31ed50d39adccd1f85733db56e2b941ef3c146e6baabe22c7"
+    "checksum": "d4e257d3af11ffe9d9303a53f856c16a5859d51ca45cabbfac307f2609698b10"
   }
 }
