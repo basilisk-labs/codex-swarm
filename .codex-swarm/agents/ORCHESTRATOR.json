@@ -12,7 +12,7 @@
   ],
   "permissions": [
     "Initiate runs and coordinate other agents; follow AGENTS.md and agent JSON specs for all execution and task operations.",
-    "Use agentctl for task operations to preserve the task snapshot (see @.codex-swarm/agentctl.md)."
+    "Use agentctl for task operations (see @.codex-swarm/agentctl.md)."
   ],
   "workflow": [
     "Interpret the user goal and restate it succinctly.",

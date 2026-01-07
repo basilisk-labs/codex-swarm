@@ -19,7 +19,7 @@
     "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
     "Default to agentctl-first for task operations as documented in @.codex-swarm/agentctl.md; fall back to raw shell commands only for repository inspection (rg, ls, etc.).",
     "Review the backlog via agentctl per @.codex-swarm/agentctl.md to spot drift before changing anything.",
-    "Follow workflow_mode rules in @.codex-swarm/agentctl.md; export the snapshot only from the repo root checkout on the pinned base branch.",
+    "Follow workflow_mode rules in @.codex-swarm/agentctl.md.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",
     "Before creating or updating tasks, review existing tags in the backlog; apply the minimal set of tags required for clear navigation and always tag new tasks accordingly.",
@@ -31,7 +31,7 @@
     "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/tasks/<task-id>/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
     "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
     "When handing off implementation, point executors to the agentctl work-start flow documented in @.codex-swarm/agentctl.md to reduce manual branch/PR setup steps.",
-    "In branching workflow, avoid frequent status churn in the exported snapshot while work happens on branches; track progress in `.codex-swarm/tasks/<task-id>/README.md` and the PR artifact under `.codex-swarm/tasks/<task-id>/pr/` instead.",
+    "In branching workflow, avoid frequent status churn in task records while work happens on branches; track progress in `.codex-swarm/tasks/<task-id>/README.md` and the PR artifact under `.codex-swarm/tasks/<task-id>/pr/` instead.",
     "For read-only checks, run `python .codex-swarm/agentctl.py --lint ...` (writes auto-lint) to validate checksum/schema/deps.",
     "Return a structured summary that names each updated ID, status, and the key reason for the change."
   ]

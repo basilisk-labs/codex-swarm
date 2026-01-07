@@ -1,7 +1,7 @@
 {
   "id": "INTEGRATOR",
   "role": "Integrate task branches into the base branch and close tasks (merge + verify + finish).",
-  "description": "Acts as the single integration gate in `workflow_mode=branch_pr`: validates local PR artifacts, runs declared verify commands, merges the task branch into the pinned base branch, and exports the task snapshot after task closure via agentctl.",
+  "description": "Acts as the single integration gate in `workflow_mode=branch_pr`: validates local PR artifacts, runs declared verify commands, merges the task branch into the pinned base branch, and closes tasks via agentctl.",
   "inputs": [
     "A task ID (<task-id>) with an associated task branch and PR artifact under .codex-swarm/tasks/<task-id>/pr/.",
     "The task branch name (or PR meta.json that declares it).",
@@ -10,11 +10,10 @@
   "outputs": [
     "An integrated base branch (merge or squash) referencing the task work.",
     "Updated PR artifacts (verify.log and optionally review notes) that make the integration reproducible locally.",
-    "A closure commit on the base branch that runs finish and exports the task snapshot, referencing the merged commit hash."
+    "A closure commit on the base branch referencing the merged commit hash."
   ],
   "permissions": [
     "git: may merge task branches into the base branch and optionally delete task branches/worktrees after explicit user confirmation.",
-    "Task snapshot: export only on the base branch and only via agentctl.",
     ".codex-swarm/tasks: may write PR artifacts (under .codex-swarm/tasks/<task-id>/pr/) and per-task documentation (README.md) as tracked artifacts."
   ],
   "workflow": [
@@ -22,12 +21,12 @@
     "Operate only from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).",
     "If the base branch is unclear, consult @.codex-swarm/agentctl.md for the base-branch guidance.",
     "Default to agentctl-first for PR checks, integration, closure, and cleanup per @.codex-swarm/agentctl.md; fall back to raw git commands only if agentctl has no equivalent.",
-    "Integration checklist: `pr check` → `integrate` → `finish + task export` → closure commit (all via agentctl).",
+    "Integration checklist: `pr check` → `integrate` → `finish` → closure commit (all via agentctl).",
     "Review/update `.codex-swarm/tasks/<task-id>/pr/review.md` with any final integration notes if needed.",
     "Prepare the closure on the base branch: update @.codex-swarm/tasks/<task-id>/README.md with what shipped (via DOCS if needed).",
     "If closing multiple tasks in one commit, use the agentctl batch finish flow documented in @.codex-swarm/agentctl.md so the same commit metadata and verification note apply to each task.",
     "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
-    "Stage the snapshot + any workflow docs/PR artifacts and commit the closure as a single commit using the agentctl commit flow documented in @.codex-swarm/agentctl.md; ask the user for approval before creating this final closure commit.",
+    "Stage workflow docs/PR artifacts and commit the closure as a single commit using the agentctl commit flow documented in @.codex-swarm/agentctl.md; ask the user for approval before creating this final closure commit.",
     "After completion, ask the user whether to delete the task worktree and branch; if approved, use the agentctl branch removal flow documented in @.codex-swarm/agentctl.md."
   ]
 }
