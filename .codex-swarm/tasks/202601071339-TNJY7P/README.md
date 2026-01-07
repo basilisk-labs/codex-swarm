@@ -1,15 +1,16 @@
 ---
 id: "202601071339-TNJY7P"
 title: "Normalize diagram/badge wording for task export"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "PLANNER"
 depends_on: []
 tags: ["docs"]
+commit: { hash: "918e384d381c85c237c936bde01954fa7a193268", message: "🪄 TNJY7P normalize diagram wording: update export label in README sequence diagram; align task export phrasing" }
+comments:
+  - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
 description: "Align README diagrams and badges with 'task export' wording, ensuring tasks.json references are consistent and minimal."
 ---
-# 202601071339-TNJY7P: Normalize diagram/badge wording for task export
-
 ## Summary
 
 - Normalized diagram wording in README to refer to the task export/view consistently.
@@ -32,4 +33,5 @@ description: "Align README diagrams and badges with 'task export' wording, ensur
 
 ## Rollback Plan
 
-- Revert commit `TBD`.
+- Revert commit `918e384d381c`.
+
