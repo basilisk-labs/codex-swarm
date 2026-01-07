@@ -12,24 +12,24 @@ description: "Align README diagrams and badges with 'task export' wording, ensur
 
 ## Summary
 
-- TBD during implementation.
+- Normalized diagram wording in README to refer to the task export/view consistently.
 
 ## Goal
 
-- TBD during implementation.
+- Keep diagrams and badges aligned with export terminology without overusing tasks.json.
 
 ## Scope
 
-- TBD during implementation.
+- @README.md
 
 ## Risks
 
-- TBD during implementation.
+- Low: diagram text change only.
 
 ## Verify Steps
 
-- TBD during implementation.
+- None (doc-only change).
 
 ## Rollback Plan
 
-- TBD during implementation.
+- Revert commit `TBD`.

@@ -278,7 +278,7 @@ sequenceDiagram
     O->>I: Verify + merge + close (main only)
     I->>A: pr check <task-id>
     I->>A: integrate <task-id> (verify → merge → refresh artifacts → finish → task lint on export write)
-    A->>TJ: Export tasks.json after finish
+    A->>TJ: Export task view after finish
 
     O-->>U: Summary + commit link(s)
   else Edit plan
