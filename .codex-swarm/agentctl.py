@@ -697,15 +697,69 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
     return tasks, save
 
 
-def format_task_line(task: Dict) -> str:
+def _format_list_short(items: List[str], *, max_items: int = 3) -> str:
+    if len(items) <= max_items:
+        return ", ".join(items)
+    shown = ", ".join(items[:max_items])
+    return f"{shown}, +{len(items) - max_items}"
+
+
+def _format_deps_summary(task_id: str, dep_state: Optional[Dict[str, Dict[str, List[str]]]]) -> Optional[str]:
+    if not dep_state:
+        return None
+    info = dep_state.get(task_id) or {}
+    depends_on = info.get("depends_on") or []
+    missing = info.get("missing") or []
+    incomplete = info.get("incomplete") or []
+    if not depends_on:
+        return "deps=none"
+    if missing or incomplete:
+        parts: List[str] = []
+        if missing:
+            parts.append(f"missing:{_format_list_short(missing)}")
+        if incomplete:
+            parts.append(f"wait:{_format_list_short(incomplete)}")
+        return "deps=" + ",".join(parts)
+    return "deps=ready"
+
+
+def _format_task_extras(task: Dict, dep_state: Optional[Dict[str, Dict[str, List[str]]]]) -> str:
+    extras: List[str] = []
+    owner = str(task.get("owner") or "").strip()
+    if owner:
+        extras.append(f"owner={owner}")
+    priority = str(task.get("priority") or "").strip()
+    if priority:
+        extras.append(f"prio={priority}")
+    deps_summary = _format_deps_summary(str(task.get("id") or "").strip(), dep_state)
+    if deps_summary:
+        extras.append(deps_summary)
+    tags = [t for t in (task.get("tags") or []) if isinstance(t, str) and t.strip()]
+    if tags:
+        extras.append(f"tags={','.join(tags)}")
+    verify = task.get("verify")
+    if isinstance(verify, list):
+        commands = [cmd for cmd in verify if isinstance(cmd, str) and cmd.strip()]
+        if commands:
+            extras.append(f"verify={len(commands)}")
+    return ", ".join(extras)
+
+
+def format_task_line(task: Dict, dep_state: Optional[Dict[str, Dict[str, List[str]]]] = None) -> str:
     task_id = str(task.get("id") or "").strip()
     title = str(task.get("title") or "").strip() or "(untitled task)"
     status = str(task.get("status") or "TODO").strip().upper()
-    return f"{task_id} [{status}] {title}"
+    line = f"{task_id} [{status}] {title}"
+    extras = _format_task_extras(task, dep_state)
+    if extras:
+        line += f" ({extras})"
+    return line
 
 
 def cmd_task_list(args: argparse.Namespace) -> None:
-    tasks, tasks_by_id, warnings, _ = load_task_index()
+    tasks, tasks_by_id, warnings, key = load_task_index()
+    dep_state, dep_warnings = load_dependency_state_for(tasks_by_id, key=key)
+    warnings = warnings + dep_warnings
     if warnings and not args.quiet:
         for warning in warnings:
             print(f"⚠️ {warning}")
@@ -725,7 +779,15 @@ def cmd_task_list(args: argparse.Namespace) -> None:
                 filtered.append(task)
         tasks_sorted = filtered
     for task in tasks_sorted:
-        print(format_task_line(task))
+        print(format_task_line(task, dep_state=dep_state))
+    if not args.quiet:
+        counts: Dict[str, int] = {}
+        for task in tasks_sorted:
+            status = str(task.get("status") or "TODO").strip().upper()
+            counts[status] = counts.get(status, 0) + 1
+        total = len(tasks_sorted)
+        summary = ", ".join(f"{k}={counts[k]}" for k in sorted(counts))
+        print(f"Total: {total} ({summary})")
 
 
 def cmd_task_next(args: argparse.Namespace) -> None:
@@ -765,7 +827,9 @@ def cmd_task_next(args: argparse.Namespace) -> None:
     if args.limit is not None and args.limit >= 0:
         ready_tasks = ready_tasks[: args.limit]
     for task in ready_tasks:
-        print(format_task_line(task))
+        print(format_task_line(task, dep_state=dep_state))
+    if not args.quiet:
+        print(f"Ready: {len(ready_tasks)} / {len(tasks_sorted)}")
 
 
 def _task_text_blob(task: Dict) -> str:
@@ -802,7 +866,9 @@ def cmd_task_search(args: argparse.Namespace) -> None:
     if not query:
         die("Query must be non-empty", code=2)
 
-    _, tasks_by_id, warnings, _ = load_task_index()
+    _, tasks_by_id, warnings, key = load_task_index()
+    dep_state, dep_warnings = load_dependency_state_for(tasks_by_id, key=key)
+    warnings = warnings + dep_warnings
     if warnings and not args.quiet:
         for warning in warnings:
             print(f"⚠️ {warning}")
@@ -836,7 +902,7 @@ def cmd_task_search(args: argparse.Namespace) -> None:
     if args.limit is not None and args.limit >= 0:
         matches = matches[: args.limit]
     for task in matches:
-        print(format_task_line(task))
+        print(format_task_line(task, dep_state=dep_state))
 
 
 def cmd_task_scaffold(args: argparse.Namespace) -> None:
@@ -875,7 +941,9 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
 
 
 def cmd_task_show(args: argparse.Namespace) -> None:
-    _, tasks_by_id, warnings, _ = load_task_index()
+    _, tasks_by_id, warnings, key = load_task_index()
+    dep_state, dep_warnings = load_dependency_state_for(tasks_by_id, key=key)
+    warnings = warnings + dep_warnings
     if warnings and not args.quiet:
         for warning in warnings:
             print(f"⚠️ {warning}")
@@ -886,20 +954,58 @@ def cmd_task_show(args: argparse.Namespace) -> None:
     task_id = str(task.get("id") or "").strip()
     print(f"ID: {task_id}")
     print(f"Title: {str(task.get('title') or '').strip()}")
-    print(f"Status: {str(task.get('status') or 'TODO').strip().upper()}")
+    status = str(task.get("status") or "TODO").strip().upper()
+    print(f"Status: {status}")
     print(f"Priority: {str(task.get('priority') or '-').strip()}")
     owner = str(task.get("owner") or "-").strip()
     print(f"Owner: {owner if owner else '-'}")
+    redmine_id = task.get("redmine_id")
+    if redmine_id is not None:
+        print(f"Redmine ID: {redmine_id}")
     depends_on, _ = normalize_depends_on(task.get("depends_on"))
     print(f"Depends on: {', '.join(depends_on) if depends_on else '-'}")
+    info = dep_state.get(task_id) or {}
+    missing = info.get("missing") or []
+    incomplete = info.get("incomplete") or []
+    ready = not missing and not incomplete
+    print(f"Ready: {'yes' if ready else 'no'}")
+    if missing:
+        print(f"Missing deps: {', '.join(missing)}")
+    if incomplete:
+        print(f"Incomplete deps: {', '.join(incomplete)}")
     tags = task.get("tags") or []
     tags_str = ", ".join(t for t in tags if isinstance(t, str))
     print(f"Tags: {tags_str if tags_str else '-'}")
+    doc_version = task.get("doc_version")
+    doc_updated_at = task.get("doc_updated_at")
+    doc_updated_by = task.get("doc_updated_by")
+    if doc_version or doc_updated_at or doc_updated_by:
+        doc_parts: List[str] = []
+        if doc_version:
+            doc_parts.append(f"v{doc_version}")
+        if doc_updated_at:
+            doc_parts.append(f"updated_at={doc_updated_at}")
+        if doc_updated_by:
+            doc_parts.append(f"updated_by={doc_updated_by}")
+        print(f"Doc: {', '.join(doc_parts)}")
+    readme_path = workflow_task_readme_path(task_id)
+    if readme_path.exists():
+        print(f"Doc file: {readme_path.relative_to(ROOT)}")
     description = str(task.get("description") or "").strip()
     if description:
         print("")
         print("Description:")
         print(description)
+    verify = task.get("verify")
+    if isinstance(verify, list):
+        commands = [cmd.strip() for cmd in verify if isinstance(cmd, str) and cmd.strip()]
+        print("")
+        print(f"Verify ({len(commands)}):")
+        if commands:
+            for cmd in commands:
+                print(f"- {cmd}")
+        else:
+            print("- (none)")
     commit = task.get("commit") or {}
     if isinstance(commit, dict) and commit.get("hash"):
         print("")
@@ -908,7 +1014,7 @@ def cmd_task_show(args: argparse.Namespace) -> None:
     comments = task.get("comments") or []
     if isinstance(comments, list) and comments:
         print("")
-        print("Comments:")
+        print(f"Comments (total {len(comments)}, showing last {args.last_comments}):")
         for comment in comments[-args.last_comments :]:
             if not isinstance(comment, dict):
                 continue
@@ -1792,6 +1898,25 @@ def cmd_ready(args: argparse.Namespace) -> None:
     ok, warnings = readiness(args.task_id)
     for warning in warnings:
         print(f"⚠️ {warning}")
+    _, tasks_by_id, _, key = load_task_index()
+    dep_state, _ = load_dependency_state_for(tasks_by_id, key=key)
+    task = tasks_by_id.get(args.task_id)
+    if task:
+        task_id = str(task.get("id") or "").strip()
+        title = str(task.get("title") or "").strip()
+        status = str(task.get("status") or "TODO").strip().upper()
+        owner = str(task.get("owner") or "-").strip()
+        info = dep_state.get(task_id) or {}
+        missing = info.get("missing") or []
+        incomplete = info.get("incomplete") or []
+        print(f"Task: {task_id} [{status}] {title}")
+        print(f"Owner: {owner if owner else '-'}")
+        depends_on = info.get("depends_on") or []
+        print(f"Depends on: {', '.join(depends_on) if depends_on else '-'}")
+        if missing:
+            print(f"Missing deps: {', '.join(missing)}")
+        if incomplete:
+            print(f"Incomplete deps: {', '.join(incomplete)}")
     print("✅ ready" if ok else "⛔ not ready")
     raise SystemExit(0 if ok else 2)
 
@@ -1896,9 +2021,19 @@ def cmd_start(args: argparse.Namespace) -> None:
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
     save(tasks)
+    if not args.quiet:
+        commit_hash = str(commit_info.get("hash") or "")[:12]
+        for task_id in task_ids:
+            task = _ensure_task_object(tasks, task_id)
+            line = format_task_line(task, dep_state=dep_state)
+            suffix = f" (commit={commit_hash})" if commit_hash else ""
+            print(f"✅ finished: {line}{suffix}")
     export_tasks_snapshot(quiet=bool(args.quiet))
     if not args.quiet:
-        print(f"✅ {args.task_id} is DOING")
+        _, tasks_by_id, _, key = load_task_index()
+        dep_state, _ = load_dependency_state_for(tasks_by_id, key=key)
+        task = tasks_by_id.get(args.task_id) or target
+        print(f"✅ started: {format_task_line(task, dep_state=dep_state)}")
 
 
 def cmd_block(args: argparse.Namespace) -> None:
@@ -1920,7 +2055,10 @@ def cmd_block(args: argparse.Namespace) -> None:
     target["comments"] = comments
     save(tasks)
     if not args.quiet:
-        print(f"✅ {args.task_id} is BLOCKED")
+        _, tasks_by_id, _, key = load_task_index()
+        dep_state, _ = load_dependency_state_for(tasks_by_id, key=key)
+        task = tasks_by_id.get(args.task_id) or target
+        print(f"✅ blocked: {format_task_line(task, dep_state=dep_state)}")
 
 
 def cmd_task_comment(args: argparse.Namespace) -> None:
