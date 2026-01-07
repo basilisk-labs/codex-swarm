@@ -2650,12 +2650,26 @@
       ],
       "description": "Tighten CODER/TESTER/DOCS rules to always commit via agentctl guard/commit and standardize handoff via pr note; simplify INTEGRATOR to a short checklist; add ORCHESTRATOR reminder to invoke UPDATER for agent-optimization requests.",
       "doc": "## Summary\n\n- Required CODER/TESTER/DOCS to use agentctl commit wrappers.\n- Simplified INTEGRATOR workflow to a short checklist.\n- Added ORCHESTRATOR trigger to invoke UPDATER on explicit optimization requests.\n\n## Goal\n\n- Tighten role-specific guardrails around commits and handoffs.\n\n## Scope\n\n- @.codex-swarm/agents/CODER.json\n- @.codex-swarm/agents/TESTER.json\n- @.codex-swarm/agents/DOCS.json\n- @.codex-swarm/agents/INTEGRATOR.json\n- @.codex-swarm/agents/ORCHESTRATOR.json\n\n## Risks\n\n- Low: checklist wording may need adjustment if agentctl commands change.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `e55fa3aa761e`."
+    },
+    {
+      "id": "202601071327-JBDS9R",
+      "title": "Reduce snapshot references in agent instructions",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "docs"
+      ],
+      "description": "Minimize repeated snapshot mentions across AGENTS.md and agent JSONs by centralizing the rule and pointing to agentctl.md for details; keep only a single explicit 'do not edit snapshot' rule.",
+      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "80fdaa1a687a42407952675a1469a8378088a9cadd3c7327d0f8d10e362caffc"
+    "checksum": "469f3215a5bd7265ce0ea9495ff5310ce7e3ec526aea2d527b0a0b92620b2f23"
   }
 }
