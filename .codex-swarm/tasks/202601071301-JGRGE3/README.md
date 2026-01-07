@@ -1,35 +1,41 @@
 ---
 id: "202601071301-JGRGE3"
 title: "Deduplicate workflow_mode, handoff, and terminology rules"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "PLANNER"
 depends_on: []
 tags: ["agents", "docs"]
+commit: { hash: "1b7c1e37569071a725602a2ac9b7a1904de7e834", message: "🧭 JGRGE3 dedupe workflow and terms: unify workflow_mode guidance; standardize task-id references; switch handoff notes to agentctl pr note; remove snapshot filename mentions" }
+comments:
+  - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
 description: "Reduce duplicated workflow_mode and handoff guidance across agent JSONs/AGENTS.md by pointing to agentctl.md. Unify task-id/suffix terminology in agent instructions and docs."
 ---
-# 202601071301-JGRGE3: Deduplicate workflow_mode, handoff, and terminology rules
-
 ## Summary
 
-- TBD during implementation.
+- Consolidated workflow_mode guidance to reference @.codex-swarm/agentctl.md.
+- Standardized task-id placeholders to `<task-id>` across agents and docs.
+- Switched handoff instructions to `agentctl pr note` and removed repeated snapshot filename mentions.
 
 ## Goal
 
-- TBD during implementation.
+- Reduce duplicated workflow rules and normalize terminology across agent instructions.
 
 ## Scope
 
-- TBD during implementation.
+- @AGENTS.md
+- @.codex-swarm/agentctl.md
+- @.codex-swarm/agents/*.json
 
 ## Risks
 
-- TBD during implementation.
+- Low: terminology updates could require follow-up if other docs expect old placeholders.
 
 ## Verify Steps
 
-- TBD during implementation.
+- None (doc/instruction changes only).
 
 ## Rollback Plan
 
-- TBD during implementation.
+- Revert commit `1b7c1e375690`.
+

@@ -1,35 +1,41 @@
 ---
 id: "202601071301-3XK6VD"
 title: "Centralize commit format rules in agentctl"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "PLANNER"
 depends_on: []
 tags: ["agents", "docs"]
+commit: { hash: "3ad71a3bcebb400acf2b8204c490415b406511b4", message: "🧩 3XK6VD centralize commit format: define canonical format in agentctl; replace per-agent format rules with agentctl reference; align AGENTS commit rule to agentctl" }
+comments:
+  - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
 description: "Make agentctl.md the single source of truth for commit format; update AGENTS.md + agent JSONs to reference agentctl instead of duplicating detailed rules/examples. Update any remaining commit examples to follow the new detailed-changelog format."
 ---
-# 202601071301-3XK6VD: Centralize commit format rules in agentctl
-
 ## Summary
 
-- TBD during implementation.
+- Centralized commit format rules in @.codex-swarm/agentctl.md.
+- Replaced per-agent commit format instructions with a single agentctl reference.
+- Aligned AGENTS.md commit guidance to the agentctl format source of truth.
 
 ## Goal
 
-- TBD during implementation.
+- Ensure commit formatting is defined in one place and referenced everywhere else.
 
 ## Scope
 
-- TBD during implementation.
+- @.codex-swarm/agentctl.md
+- @AGENTS.md
+- @.codex-swarm/agents/*.json
 
 ## Risks
 
-- TBD during implementation.
+- Low: format changes now require updates only in agentctl.
 
 ## Verify Steps
 
-- TBD during implementation.
+- None (doc/instruction changes only).
 
 ## Rollback Plan
 
-- TBD during implementation.
+- Revert commit `3ad71a3bcebb`.
+

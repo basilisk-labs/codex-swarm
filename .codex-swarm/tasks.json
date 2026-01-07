@@ -2582,7 +2582,7 @@
     {
       "id": "202601071301-3XK6VD",
       "title": "Centralize commit format rules in agentctl",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "depends_on": [],
@@ -2590,13 +2590,23 @@
         "agents",
         "docs"
       ],
+      "commit": {
+        "hash": "3ad71a3bcebb400acf2b8204c490415b406511b4",
+        "message": "🧩 3XK6VD centralize commit format: define canonical format in agentctl; replace per-agent format rules with agentctl reference; align AGENTS commit rule to agentctl"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: not run; doc/instruction edits only, no runtime impact."
+        }
+      ],
       "description": "Make agentctl.md the single source of truth for commit format; update AGENTS.md + agent JSONs to reference agentctl instead of duplicating detailed rules/examples. Update any remaining commit examples to follow the new detailed-changelog format.",
-      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+      "doc": "## Summary\n\n- Centralized commit format rules in @.codex-swarm/agentctl.md.\n- Replaced per-agent commit format instructions with a single agentctl reference.\n- Aligned AGENTS.md commit guidance to the agentctl format source of truth.\n\n## Goal\n\n- Ensure commit formatting is defined in one place and referenced everywhere else.\n\n## Scope\n\n- @.codex-swarm/agentctl.md\n- @AGENTS.md\n- @.codex-swarm/agents/*.json\n\n## Risks\n\n- Low: format changes now require updates only in agentctl.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `3ad71a3bcebb`."
     },
     {
       "id": "202601071301-JGRGE3",
       "title": "Deduplicate workflow_mode, handoff, and terminology rules",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "depends_on": [],
@@ -2604,13 +2614,23 @@
         "agents",
         "docs"
       ],
+      "commit": {
+        "hash": "1b7c1e37569071a725602a2ac9b7a1904de7e834",
+        "message": "🧭 JGRGE3 dedupe workflow and terms: unify workflow_mode guidance; standardize task-id references; switch handoff notes to agentctl pr note; remove snapshot filename mentions"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: not run; doc/instruction edits only, no runtime impact."
+        }
+      ],
       "description": "Reduce duplicated workflow_mode and handoff guidance across agent JSONs/AGENTS.md by pointing to agentctl.md. Unify task-id/suffix terminology in agent instructions and docs.",
-      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+      "doc": "## Summary\n\n- Consolidated workflow_mode guidance to reference @.codex-swarm/agentctl.md.\n- Standardized task-id placeholders to `<task-id>` across agents and docs.\n- Switched handoff instructions to `agentctl pr note` and removed repeated snapshot filename mentions.\n\n## Goal\n\n- Reduce duplicated workflow rules and normalize terminology across agent instructions.\n\n## Scope\n\n- @AGENTS.md\n- @.codex-swarm/agentctl.md\n- @.codex-swarm/agents/*.json\n\n## Risks\n\n- Low: terminology updates could require follow-up if other docs expect old placeholders.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `1b7c1e375690`."
     },
     {
       "id": "202601071301-QBFVNZ",
       "title": "Role-specific guardrails for commit and handoff",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "depends_on": [],
@@ -2618,14 +2638,24 @@
         "agents",
         "docs"
       ],
+      "commit": {
+        "hash": "e55fa3aa761e778f65518407a0ac13d4fa5a32c7",
+        "message": "🧷 QBFVNZ tighten role guardrails: require agentctl commit wrapper for CODER/TESTER/DOCS; add integrator checklist; add orchestrator UPDATER trigger"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: not run; doc/instruction edits only, no runtime impact."
+        }
+      ],
       "description": "Tighten CODER/TESTER/DOCS rules to always commit via agentctl guard/commit and standardize handoff via pr note; simplify INTEGRATOR to a short checklist; add ORCHESTRATOR reminder to invoke UPDATER for agent-optimization requests.",
-      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+      "doc": "## Summary\n\n- Required CODER/TESTER/DOCS to use agentctl commit wrappers.\n- Simplified INTEGRATOR workflow to a short checklist.\n- Added ORCHESTRATOR trigger to invoke UPDATER on explicit optimization requests.\n\n## Goal\n\n- Tighten role-specific guardrails around commits and handoffs.\n\n## Scope\n\n- @.codex-swarm/agents/CODER.json\n- @.codex-swarm/agents/TESTER.json\n- @.codex-swarm/agents/DOCS.json\n- @.codex-swarm/agents/INTEGRATOR.json\n- @.codex-swarm/agents/ORCHESTRATOR.json\n\n## Risks\n\n- Low: checklist wording may need adjustment if agentctl commands change.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `e55fa3aa761e`."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "ca1ba3d4038da8b592247058edcb7b2bbca9623eed19a6a0c7ce47e889cdd26c"
+    "checksum": "80fdaa1a687a42407952675a1469a8378088a9cadd3c7327d0f8d10e362caffc"
   }
 }
