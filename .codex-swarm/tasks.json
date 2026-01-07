@@ -2834,12 +2834,36 @@
       "doc_updated_by": "agentctl",
       "description": "Add clean.ps1 to repository tracking under the workflow so the cleanup script is managed via agentctl tasks.",
       "doc": "## Summary\n\nTrack clean.ps1 under task workflow and commit it to the repo.\n\n## Context\n\nclean.ps1 existed untracked; this task brings it into the managed workflow.\n\n## Scope\n\n- Add clean.ps1 to git under task KA323M.\\n- No functional edits to the script content.\n\n## Risks\n\nLow. The change only tracks the existing script; no behavior change.\n\n## Verify Steps\n\nNot run (no automated tests for PowerShell scripts in this repo).\n\n## Rollback Plan\n\nRevert commit 556538d91c17 to remove clean.ps1 from tracking.\n\n## Notes\n\nAttempted agentctl start failed due to NameError in cmd_start; proceeded without status transition. PR note not created because PR artifacts are optional in workflow_mode=direct."
+    },
+    {
+      "id": "202601072146-7CZMM7",
+      "title": "Remove clean.ps1 at end of clean.sh",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "67184b29e967919d6c60b058ff6eef0e1f5fe734",
+        "message": "рџ› пёЏ 7CZMM7 remove clean.ps1 at end of clean.sh"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: not run; repo has no automated tests for shell scripts (manual verification not performed)."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-07T21:48:10+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update clean.sh to delete clean.ps1 at the end so cleanup removes both scripts consistently.",
+      "doc": "## Summary\n\nEnsure clean.sh removes clean.ps1 at the end of cleanup.\n\n## Context\n\nclean.ps1 is now tracked; clean.sh should remove it during cleanup.\n\n## Scope\n\n- Update clean.sh to delete clean.ps1 at the end.\\n- No other cleanup behavior changes.\n\n## Risks\n\nLow. Adds one more file removal at script end.\n\n## Verify Steps\n\nNot run (no automated tests for shell scripts in this repo).\n\n## Rollback Plan\n\nRevert commit 67184b29e967 to remove the clean.ps1 deletion line.\n\n## Notes\n\nNo tests run; direct workflow mode in use."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "24ac512976ccf4f54ffcf25c41818502deba2af9658a87e23205acd57e652d7d"
+    "checksum": "6f1f725db9db2e79ad09f944c94dbf02405ac67cb6528dec2519d32c3df6f613"
   }
 }
