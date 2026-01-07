@@ -2678,7 +2678,7 @@
     {
       "id": "202601071333-WRD9N1",
       "title": "Reduce snapshot wording in docs",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "depends_on": [],
@@ -2686,14 +2686,24 @@
         "docs",
         "cleanup"
       ],
+      "commit": {
+        "hash": "c8cc07f9a2424f20a7f2d062494519761f7bf2a5",
+        "message": "🧹 WRD9N1 reduce snapshot wording in docs: switch snapshot phrasing to export/view; update viewer and export descriptions; keep tasks.json references only where needed"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: not run; doc/instruction edits only, no runtime impact."
+        }
+      ],
       "description": "Update README, docs, and CONTRIBUTING to minimize repeated 'snapshot/tasks.json' phrasing, while preserving rules: do not edit exports by hand and use agentctl for task export.",
-      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+      "doc": "## Summary\n\n- Reduced snapshot wording in README, docs, CONTRIBUTING, and cleanup notes.\n- Kept tasks.json references only where needed for export/viewer guidance.\n\n## Goal\n\n- Minimize repeated snapshot phrasing while preserving export rules and commands.\n\n## Scope\n\n- @README.md\n- @CONTRIBUTING.md\n- @clean.sh\n- @docs/01-overview.md\n- @docs/03-setup.md\n- @docs/04-architecture.md\n- @docs/07-tasks-and-backends.md\n- @docs/09-commands.md\n- @docs/10-troubleshooting.md\n\n## Risks\n\n- Low: wording changes could hide explicit snapshot terminology some users expect.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `c8cc07f9a242`."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "2b3d1cf50e60a954a36885231438a3a2ec14eda3df8ac1d61d7a4d03a2f2801e"
+    "checksum": "d82551858760d7b31ed50d39adccd1f85733db56e2b941ef3c146e6baabe22c7"
   }
 }
