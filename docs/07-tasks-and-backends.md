@@ -59,6 +59,22 @@ The per-task README includes structured sections (`Summary`, `Context`, `Scope`,
 - Set `cache_dir` to an empty value to disable local cache completely (sync and offline fallback are unavailable).
 - Comments and task doc metadata can be stored in Redmine custom fields (`comments`, `doc_version`, `doc_updated_at`, `doc_updated_by`) to keep parity with local; new comments are also mirrored into Redmine journals as notes.
 
+#### Redmine custom fields
+Store these fields in Redmine so `agentctl` can maintain parity with the local backend:
+
+- `task_id`: task identifier in `YYYYMMDDHHMM-<RAND>` format.
+- `verify`: JSON list of verify commands (stored as JSON string).
+- `commit`: JSON object `{ hash, message }` for closure tracking (stored as JSON string).
+- `doc`: markdown body containing the task doc sections.
+- `comments`: JSON list of `{ author, body }` comment entries.
+- `doc_version`: integer doc schema version (currently `2`).
+- `doc_updated_at`: ISO-8601 timestamp when doc was last updated by `agentctl`.
+- `doc_updated_by`: source marker for doc updates (defaults to `agentctl`).
+
+#### Redmine notes
+When the `comments` list grows, `agentctl` appends new entries to the issue journals as notes using the format:
+`[comment] <author>: <body>`.
+
 ## Offline Fallback and Conflicts
 - Auto fallback happens whenever Redmine is unreachable.
 - Offline writes are tracked as `dirty` until synced.
