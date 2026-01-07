@@ -6,7 +6,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](docs/02-prerequisites.md)
 [![Workflow: direct/branch_pr](https://img.shields.io/badge/Workflow-direct%20%7C%20branch__pr-2b6cb0.svg)](docs/08-branching-and-pr-artifacts.md)
-[![Tasks: JSON](https://img.shields.io/badge/Tasks-.codex--swarm%2Ftasks.json-0f766e.svg)](.codex-swarm/tasks.json)
+[![Tasks: Export](https://img.shields.io/badge/Tasks-export-0f766e.svg)](.codex-swarm/tasks.json)
 [![Docs](https://img.shields.io/badge/Docs-Start%20Here-6b7280.svg)](docs/README.md)
 [![Last Commit](https://img.shields.io/github/last-commit/basilisk-labs/codex-swarm.svg)](https://github.com/basilisk-labs/codex-swarm/commits/main)
 [![Stars](https://img.shields.io/github/stars/basilisk-labs/codex-swarm.svg?style=social)](https://github.com/basilisk-labs/codex-swarm/stargazers)
@@ -46,7 +46,7 @@ Prerequisites:
 3. Task tracking:
    - The canonical task source depends on the active backend (`local` or `redmine`).
    - Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q` to inspect tasks.
-- Use `python .codex-swarm/agentctl.py task lint` or `--lint` on read-only commands to validate the snapshot; writes auto-lint.
+- Use `python .codex-swarm/agentctl.py task lint` or `--lint` on read-only commands to validate the export; writes auto-lint.
 
 4. Optional (clean slate):
    - Run `./clean.sh` to remove framework-development artifacts and reinitialize git, leaving only the minimal “runtime” files needed to reuse Codex Swarm as your own local project.
@@ -94,7 +94,7 @@ Documentation:
 │   ├── agentctl.md
 │   ├── agentctl.py
 │   ├── config.json
-│   ├── tasks.json
+│   ├── tasks.json (exported view)
 │   ├── tasks
 │   └── agents
 │       ├── ORCHESTRATOR.json
@@ -139,7 +139,7 @@ Documentation:
 | Path | Purpose |
 | --- | --- |
 | `AGENTS.md` | 🌐 Global rules, commit workflow, and the JSON template for new agents. |
-| `.github/scripts/sync_tasks.py` | 🔁 Syncs exported `.codex-swarm/tasks.json` to GitHub Issues and ProjectV2. |
+| `.github/scripts/sync_tasks.py` | 🔁 Syncs exported task data to GitHub Issues and ProjectV2. |
 | `.github/workflows/sync-tasks.yml` | 🤖 GitHub Actions workflow that runs the sync script. |
 | `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python .codex-swarm/agentctl.py` commands + commit guardrails. |
 | `.codex-swarm/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + backend routing. |
@@ -154,7 +154,7 @@ Documentation:
 | `.codex-swarm/agents/DOCS.json` | 🧾 Writes per-task workflow artifacts under `.codex-swarm/tasks/` and keeps docs synchronized. |
 | `.codex-swarm/agents/CREATOR.json` | 🏗️ On-demand agent factory that writes new JSON agents plus registry updates. |
 | `.codex-swarm/agents/UPDATER.json` | 🔍 Audits the repo and agent prompts when explicitly requested to outline concrete optimization opportunities and follow-up tasks. |
-| `.codex-swarm/tasks.json` | 📊 Exported task snapshot for local browsing/integrations. |
+| `.codex-swarm/tasks.json` | 📊 Exported task view for local browsing/integrations. |
 | `.codex-swarm/tasks/` | 🧾 Per-task records, frontmatter, and PR artifacts (canonical for local backend). |
 | `.codex-swarm/worktrees/` | 🧱 Task worktrees used in `workflow_mode=branch_pr`. |
 | `README.md` | 📚 High-level overview and onboarding material for the repository. |
@@ -162,8 +162,8 @@ Documentation:
 | `CODE_OF_CONDUCT.md` | 🤝 Community guidelines and escalation paths. |
 | `CONTRIBUTING.md` | 🧩 Contribution guide and workflow expectations. |
 | `assets/` | 🖼️ Contains the header image shown on this README and any future static visuals. |
-| `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the snapshot as your own local project. |
-| `.codex-swarm/viewer/tasks.html` | 🖥️ A local UI for browsing `.codex-swarm/tasks.json` in a browser (served via `viewer.sh`). |
+| `clean.sh` | 🧹 Cleans the repository copy and restarts `git` so you can reuse the export as your own local project. |
+| `.codex-swarm/viewer/tasks.html` | 🖥️ A local UI for browsing the task export in a browser (served via `viewer.sh`). |
 
 ## 🧾 Commit Workflow
 
@@ -240,7 +240,7 @@ sequenceDiagram
   participant TB as "Canonical backend"
   participant WF as ".codex-swarm/tasks/<task-id>/README.md"
   participant PR as ".codex-swarm/tasks/<task-id>/pr/"
-  participant TJ as ".codex-swarm/tasks.json"
+  participant TJ as ".codex-swarm/tasks.json (export)"
   participant CR as CREATOR
   participant UP as UPDATER
 
@@ -277,8 +277,8 @@ sequenceDiagram
 
     O->>I: Verify + merge + close (main only)
     I->>A: pr check <task-id>
-    I->>A: integrate <task-id> (verify → merge → refresh artifacts → finish → task lint on snapshot write)
-    A->>TJ: Export snapshot after finish
+    I->>A: integrate <task-id> (verify → merge → refresh artifacts → finish → task lint on export write)
+    A->>TJ: Export tasks.json after finish
 
     O-->>U: Summary + commit link(s)
   else Edit plan

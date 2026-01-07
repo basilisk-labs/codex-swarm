@@ -8,7 +8,7 @@ cd codex-swarm
 Open the repo in your IDE with the Codex plugin enabled.
 
 ## Optional Clean Slate
-If you want a minimal snapshot for reuse, run:
+If you want a minimal export for reuse, run:
 ```bash
 ./clean.sh
 ```

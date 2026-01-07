@@ -1,7 +1,7 @@
 # Troubleshooting
 
 ## tasks.json mismatch or stale data
-- Cause: `tasks.json` is an exported snapshot and may be stale.
+- Cause: `tasks.json` is an exported view and may be stale.
 - Fix: re-run `python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tasks.json`.
 
 ## Dirty working tree before commit

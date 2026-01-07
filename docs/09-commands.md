@@ -23,7 +23,7 @@ python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tas
 - `--quiet`: suppress non-essential output.
 - `--verbose`: enable extra logging (when available).
 - `--json`: emit JSON-formatted errors (for CI/integrations).
-- `--lint`: force tasks.json lint at command start (useful for read-only commands).
+- `--lint`: force export lint at command start (useful for read-only commands).
 
 ## Branching and PR Artifacts
 ```bash

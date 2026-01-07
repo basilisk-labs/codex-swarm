@@ -126,7 +126,7 @@ license and provenance.
 
 Some changes (especially documentation and workflow automation) are managed inside the repo via the framework itself:
 
-- `.codex-swarm/tasks.json` is the canonical backlog and must be updated only via `python .codex-swarm/agentctl.py` (manual edits break the checksum).
+- The task export is the canonical backlog for local tooling and must be updated only via `python .codex-swarm/agentctl.py` (manual edits break the checksum).
 - Per-task documentation artifacts live under `.codex-swarm/tasks/`.
 - When a contribution touches task tooling or task data, maintainers may ask you to:
   - run `python .codex-swarm/agentctl.py task lint`

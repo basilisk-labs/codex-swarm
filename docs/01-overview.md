@@ -21,7 +21,7 @@ Codex Swarm is a local, repo-scoped framework that structures how you use the Op
 - [`.codex-swarm/agentctl.py`](../.codex-swarm/agentctl.py): task and workflow helper CLI.
 - [`.codex-swarm/backends/`](../.codex-swarm/backends/): backend plugin configs + implementations.
 - [`.codex-swarm/tasks/`](../.codex-swarm/tasks/): local task storage (canonical when backend=local, cache when backend=redmine).
-- [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json): exported snapshot for local browsing and integrations.
+- [`.codex-swarm/tasks.json`](../.codex-swarm/tasks.json): exported view for local browsing and integrations.
 
 ## Where to Start
 - Read [`AGENTS.md`](../AGENTS.md) for the global rules.

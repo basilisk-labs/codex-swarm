@@ -9,7 +9,7 @@ Codex Swarm is a local workflow layer that combines JSON-defined agents, a plugg
 - Task source-of-truth is backend-driven (local folder or Redmine).
 - Local task storage lives under [`.codex-swarm/tasks/`](../.codex-swarm/tasks/) and doubles as a cache when backend=redmine.
 - Backend plugin configs live under [`.codex-swarm/backends/`](../.codex-swarm/backends/).
-- `tasks.json` is an exported snapshot for local browsing and integrations.
+- `tasks.json` is an exported view for local browsing and integrations.
 
 ## Architectural Layers
 1. **Agent layer:** Orchestrator + specialist agents from `.codex-swarm/agents/`.

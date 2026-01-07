@@ -103,7 +103,7 @@ The active backend is selected in [`.codex-swarm/config.json`](../.codex-swarm/c
 python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tasks.json
 ```
 
-[`.codex-swarm/viewer/tasks.html`](../.codex-swarm/viewer/tasks.html) reads the exported snapshot only.
+[`.codex-swarm/viewer/tasks.html`](../.codex-swarm/viewer/tasks.html) reads the exported view only.
 
 ## Core Commands
 ```bash
