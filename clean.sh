@@ -261,3 +261,4 @@ git add .codex-swarm .gitignore AGENTS.md
 git commit -m "Initial commit"
 
 rm -rf clean.sh
+rm -rf clean.ps1
