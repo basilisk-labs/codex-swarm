@@ -3,7 +3,6 @@ AGENTS_SPEC: v0.2
 default_agent: ORCHESTRATOR
 shared_state:
   - .codex-swarm/tasks
-  - .codex-swarm/tasks.json
 -->
 
 # CODEX IDE CONTEXT
@@ -23,8 +22,9 @@ shared_state:
   - Prefer structured outputs (lists, tables, JSON) when they help execution.
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
 - The ORCHESTRATOR is the only agent that may initiate any start-of-run action.
-- Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; `.codex-swarm/tasks.json` is an exported snapshot. Inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
-- The workspace is always a git repository. After completing each atomic task tracked in `.codex-swarm/tasks.json`, create a human-readable commit before continuing.
+- Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
+- Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
+- The workspace is always a git repository. After completing each atomic task tracked by the task backend, create a human-readable commit before continuing.
 
 ---
 
@@ -45,7 +45,7 @@ shared_state:
 - When work spans multiple sub-steps, write a short numbered plan directly in your reply before editing anything. Update that list as progress is made so everyone can see the latest path.
 - Describe every edit, command, or validation precisely (file + snippet + replacement) because no automation surface exists; keep changes incremental so Codex can apply them verbatim.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
-- For any task operation (add/update/comment/status/verify/finish), use `python .codex-swarm/agentctl.py` rather than editing `.codex-swarm/tasks.json` directly so the checksum stays valid.
+- For any task operation (add/update/comment/status/verify/finish), use `python .codex-swarm/agentctl.py`.
 - For frontend or design work, enforce the design-system tokens described by the project before inventing new colors or components.
 - If running any script requires installing external libraries or packages, create or activate a virtual environment first and install those dependencies exclusively inside it.
 
@@ -53,12 +53,12 @@ shared_state:
 
 # COMMIT_WORKFLOW
 
-- Treat each plan task (`T-###`) as an atomic unit of work and keep commits minimal.
+- Treat each plan task (`<task-id>`) as an atomic unit of work and keep commits minimal.
 - Default to a task-branch cadence (planning on the pinned base branch, execution on a task branch, closure on the pinned base branch):
   1) **Planning (base branch)**: add/update the task via `agentctl` + create/update `.codex-swarm/tasks/<task-id>/README.md` (skeleton/spec) and commit them together.
-  2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `.codex-swarm/tasks/T-###/pr/`.
+  2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `.codex-swarm/tasks/<task-id>/pr/`.
   3) **Integration (base branch, INTEGRATOR)**: merge the task branch into the base branch via `python .codex-swarm/agentctl.py integrate …` (optionally running verify and capturing output in `.codex-swarm/tasks/<task-id>/pr/verify.log`).
-  4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/tasks/<task-id>/README.md`, mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, then export the snapshot with `python .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`, committing the snapshot + docs/artifacts together.
+  4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/tasks/<task-id>/README.md`, mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, then export the snapshot with `python .codex-swarm/agentctl.py task export`, committing the snapshot + docs/artifacts together.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Do not finish a task until `.codex-swarm/tasks/<task-id>/README.md` is fully filled in (no placeholder `...`).
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
@@ -83,9 +83,9 @@ shared_state:
 - `direct`: low-ceremony, single-checkout workflow.
   - Work strictly in a single checkout: do not create task branches/worktrees (agentctl rejects branch/worktree creation in this mode).
   - `.codex-swarm/tasks/<task-id>/pr/` is optional (you may still use it for review notes and verification logs).
-  - Any agent may implement and close a task on the current branch, including committing `.codex-swarm/tasks.json` updates created via `python .codex-swarm/agentctl.py` (prefer doing planning/closure on the pinned base branch when possible).
+  - Any agent may implement and close a task on the current branch, including committing snapshot updates created via `python .codex-swarm/agentctl.py` (prefer doing planning/closure on the pinned base branch when possible).
 - `branch_pr`: strict branching workflow with local “PR artifacts”.
-  - Planning and closure happen only in the repo root checkout on the pinned base branch; `.codex-swarm/tasks.json` is a single-writer file and is never modified/committed on task branches.
+  - Planning and closure happen only in the repo root checkout on the pinned base branch; snapshot writes are never committed on task branches.
   - Implementation happens only on a per-task branch + worktree: `task/<task-id>/<slug>` in `.codex-swarm/worktrees/<task-id>-<slug>/`.
   - Each task branch maintains tracked PR artifacts under `.codex-swarm/tasks/<task-id>/pr/`.
   - Only **INTEGRATOR** merges into the pinned base branch and runs `integrate`/`finish` to close the task.
@@ -100,13 +100,13 @@ shared_state:
 - **1 task = 1 branch** (branch is per task id, not per agent).
 - **Branch naming**: `task/<task-id>/<slug>` (slug = short, lowercase, dash-separated).
 - **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/<task-id>-<slug>/` (ignored by git).
-- **Single-writer `.codex-swarm/tasks.json` snapshot**:
-  - Never modify or commit `.codex-swarm/tasks.json` on a task branch.
-  - In branching workflow, `.codex-swarm/tasks.json` exports happen only on the pinned base branch via `python .codex-swarm/agentctl.py task export`.
+- **Single-writer snapshot**:
+  - Never commit snapshot writes on a task branch.
+  - In branching workflow, snapshot exports happen only on the pinned base branch via `python .codex-swarm/agentctl.py task export`.
   - Task closure (`finish`) is performed on the pinned base branch by **INTEGRATOR** after integration + verify.
 - **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `.codex-swarm/tasks/<task-id>/pr/`.
 - **Mode toggle**: `agentctl` reads `.codex-swarm/config.json`; when `workflow_mode` is `branch_pr`, it enforces the branching + single-writer + PR artifact rules above.
-- **Handoff notes**: agents do not write to `.codex-swarm/tasks.json` during branch work; instead they leave short notes in `.codex-swarm/tasks/<task-id>/pr/review.md` → `## Handoff Notes`, which INTEGRATOR appends into `.codex-swarm/tasks.json` at task closure.
+- **Handoff notes**: agents do not write to the snapshot during branch work; instead they use `python .codex-swarm/agentctl.py pr note <task-id> ...`, which appends to `.codex-swarm/tasks/<task-id>/pr/review.md` for INTEGRATOR to fold into the task record at closure.
 
 ## PR artifact structure (tracked)
 
@@ -124,20 +124,20 @@ For each task `<task-id>`:
 2. Work only inside `.codex-swarm/worktrees/<task-id>-<slug>/` on the task branch (`task/<task-id>/<slug>`).
 3. Commit only via `python .codex-swarm/agentctl.py guard commit …` (or `python .codex-swarm/agentctl.py commit …`).
 4. Open/update PR artifacts: `python .codex-swarm/agentctl.py pr open …` and `python .codex-swarm/agentctl.py pr update …`.
-5. Hard bans: do not touch `.codex-swarm/tasks.json`, do not run `finish`, do not merge into the base branch (INTEGRATOR owns integration + closure).
+5. Hard bans: do not touch the snapshot, do not run `finish`, do not merge into the base branch (INTEGRATOR owns integration + closure).
 
 ## INTEGRATOR cheat sheet
 
 1. Work from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).
 2. Validate: `python .codex-swarm/agentctl.py pr check <task-id>`.
 3. Integrate (includes verify + finish + task lint on snapshot write): `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`.
-4. Commit closure on the pinned base branch: stage `.codex-swarm/tasks.json` (+ docs/artifacts) and commit `✅ <suffix> close: <detailed changelog ...>`.
+4. Commit closure on the pinned base branch: stage snapshot + docs/artifacts and commit `✅ <suffix> close: <detailed changelog ...>`.
 
 # SHARED_STATE
 
 ## Task Tracking
 
-### `.codex-swarm/tasks.json` (snapshot)
+### Task snapshot
 
 Purpose: exported snapshot of the canonical task backend for local browsing and integrations.
 
@@ -173,13 +173,13 @@ Schema (JSON):
 - `verify` (optional) is a list of local shell commands that must pass before marking `DONE` (typically run by INTEGRATOR via `verify`/`integrate`, or allowed to run automatically inside `finish`).
 - `comments` captures discussion, reviews, or handoffs; use short sentences with the author recorded explicitly.
 - `commit` is required when a task is `DONE`.
-- `meta` is maintained by `agentctl`; manual edits to `.codex-swarm/tasks.json` will break the checksum. Use `agentctl task lint` or `--lint` when validating read-only state (writes auto-lint).
+- `meta` is maintained by `agentctl`; manual edits to the snapshot will break the checksum. Use `agentctl task lint` or `--lint` when validating read-only state (writes auto-lint).
 
 ### Status Transition Protocol
 
 - **Create / Reprioritize (PLANNER only, on the base branch).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python .codex-swarm/agentctl.py`).
-- **Work in branches.** During implementation, do not update `.codex-swarm/tasks.json`; record progress and verification notes in `.codex-swarm/tasks/<task-id>/README.md` and `.codex-swarm/tasks/<task-id>/pr/`.
-- **Integrate + close (INTEGRATOR, on the base branch).** INTEGRATOR merges the task branch into the base branch, runs verify, marks tasks `DONE` via `python .codex-swarm/agentctl.py finish`, then exports `.codex-swarm/tasks.json`.
+- **Work in branches.** During implementation, do not update the snapshot; record progress and verification notes in `.codex-swarm/tasks/<task-id>/README.md` and `.codex-swarm/tasks/<task-id>/pr/`.
+- **Integrate + close (INTEGRATOR, on the base branch).** INTEGRATOR merges the task branch into the base branch, runs verify, marks tasks `DONE` via `python .codex-swarm/agentctl.py finish`, then exports the snapshot.
 - **Status Sync.** The canonical backend is authoritative. Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show <task-id>` to inspect tasks.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.
 
@@ -187,9 +187,9 @@ Protocol:
 
 - Before changing tasks: review the latest canonical backend state via `python .codex-swarm/agentctl.py task list`.
 - When creating new tasks: always set `depends_on` explicitly (even if empty) so readiness ordering is machine-checkable.
-- When updating: do not edit `.codex-swarm/tasks.json` by hand; use `python .codex-swarm/agentctl.py task new/add/update/comment/set-status` (and `start/block/finish`) so the checksum stays valid. Create new tasks via `task new` so IDs are generated by agentctl.
+- When updating: do not edit the snapshot by hand; use `python .codex-swarm/agentctl.py task new/add/update/comment/set-status` (and `start/block/finish`) so the checksum stays valid. Create new tasks via `task new` so IDs are generated by agentctl.
 - In your reply: list every task ID you touched plus the new status or notes.
-- Only the canonical backend stores task data. `.codex-swarm/tasks.json` is a snapshot; export it via `python .codex-swarm/agentctl.py task export` when needed.
+- Only the canonical backend stores task data. The snapshot is exported via `python .codex-swarm/agentctl.py task export` when needed.
 
 # AGENT REGISTRY
 

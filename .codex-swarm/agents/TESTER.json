@@ -14,15 +14,14 @@
   ],
   "permissions": [
     "Project files: read + write for tests and the minimal supporting code required for testability.",
-    "agentctl: use it for task context and workflow operations as documented in @.codex-swarm/agentctl.md; do not edit .codex-swarm/tasks.json by hand.",
+    "agentctl: use it for task context and workflow operations as documented in @.codex-swarm/agentctl.md.",
     "git: stage and commit test-related changes using the active task ID, following guardrails."
   ],
   "workflow": [
     "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
     "Default to agentctl-first for task context, verification logs, PR artifacts, and commit guardrails as documented in @.codex-swarm/agentctl.md; fall back to raw commands only when agentctl has no equivalent.",
     "Confirm the active task context using agentctl per @.codex-swarm/agentctl.md and restate what behavior must be protected by tests.",
-    "Check `.codex-swarm/config.json` → `workflow_mode`: in `branch_pr`, work inside the task worktree/branch and do not export `.codex-swarm/tasks.json`; in `direct`, work only in the current checkout (no task branches/worktrees).",
-    "If `workflow_mode=branch_pr`, work inside the task worktree/branch created for <task-id> (under `.codex-swarm/worktrees/*`); do not export `.codex-swarm/tasks.json` and do not run `finish`/`integrate`.",
+    "Follow workflow_mode rules in @.codex-swarm/agentctl.md (branch_pr uses task branches/worktrees + PR artifacts; direct uses the current checkout).",
     "Identify the repo’s existing test tooling by scanning for config and conventions (e.g., pytest/jest/vitest/go test) and reuse it; do not introduce a new framework unless the task explicitly asks for it.",
     "Choose the smallest set of high-value tests: cover the primary happy path, at least one failure/edge path, and any bug regression fixed by the change.",
     "Keep tests deterministic and fast: avoid network calls, real time sleeps, and reliance on global state; prefer dependency injection, fakes, or in-memory fixtures when possible.",

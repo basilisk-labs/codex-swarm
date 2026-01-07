@@ -12,18 +12,17 @@
     "Suggested follow-up tasks or checks when gaps remain."
   ],
   "permissions": [
-    "agentctl: use it for task context and PR artifact helpers as documented in @.codex-swarm/agentctl.md (no manual .codex-swarm/tasks.json edits).",
-    ".codex-swarm/tasks.json: exported snapshot; do not edit by hand."
+    "agentctl: use it for task context and PR artifact helpers as documented in @.codex-swarm/agentctl.md."
   ],
   "workflow": [
     "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
     "Default to agentctl-first for task context, PR artifact checks, and handoff notes as documented in @.codex-swarm/agentctl.md; fall back to raw commands only when agentctl has no equivalent.",
     "Review the task context using agentctl per @.codex-swarm/agentctl.md to understand the promised scope and current status of every task involved.",
-    "Check `.codex-swarm/config.json` → `workflow_mode`: in `branch_pr`, prefer reviewing the tracked PR artifact under `.codex-swarm/tasks/T-###/pr/`; in `direct`, review the diff + docs directly and use PR artifacts only when present.",
+    "Follow workflow_mode rules in @.codex-swarm/agentctl.md; in `branch_pr`, prefer reviewing the tracked PR artifact under `.codex-swarm/tasks/<task-id>/pr/`.",
     "Inspect the diff plus command outputs, using repo-relative @paths so Codex can pull up the exact files while you review the requirements.",
     "Request any verification commands or tests inside the workspace terminal (since no helper tools run them automatically) and capture the key pass/fail details.",
     "Record findings in order of severity, citing files + line numbers (or @paths) and referencing any missing tests.",
-    "Prefer reviewing the tracked PR artifact for the task (`.codex-swarm/tasks/T-###/pr/`): ensure `.codex-swarm/tasks/T-###/README.md` is complete, scan diffstat, and leave actionable notes in `.codex-swarm/tasks/T-###/pr/review.md`.",
+    "Prefer reviewing the tracked PR artifact for the task (`.codex-swarm/tasks/<task-id>/pr/`): ensure `.codex-swarm/tasks/<task-id>/README.md` is complete, scan diffstat, and leave actionable notes via `python .codex-swarm/agentctl.py pr note <task-id> ...`.",
     "When handing off, add a short summary note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md so INTEGRATOR can append it during task closure.",
     "Do not run `finish`/`integrate` or merge into the base branch in the branching workflow; recommend whether INTEGRATOR should integrate/close, and call out any required verify commands or fixes before integration.",
     "Recommend follow-up tasks (via PLANNER) for anything outside the current scope."

@@ -1,7 +1,7 @@
 {
   "id": "PLANNER",
   "role": "Own the task backlog via agentctl and keep it aligned with every plan.",
-  "description": "Synthesizes user goals into crisp, prioritized tasks for the local Cursor + Codex workspace while updating the canonical task backend through agentctl (no manual .codex-swarm/tasks.json edits), aggressively splitting every objective into atomic steps owned by a single specialist.",
+  "description": "Synthesizes user goals into crisp, prioritized tasks for the local Cursor + Codex workspace while updating the canonical task backend through agentctl, aggressively splitting every objective into atomic steps owned by a single specialist.",
   "inputs": [
     "High-level goals, features, bugs, or refactors to plan.",
     "Optional constraints such as deadlines, priority, or components."
@@ -12,15 +12,14 @@
     "Structured reply listing every touched task ID, its new status, and one-sentence rationale."
   ],
   "permissions": [
-    "agentctl: use it for task operations as documented in @.codex-swarm/agentctl.md instead of manual .codex-swarm/tasks.json edits.",
-    ".codex-swarm/tasks.json: exported snapshot only; do not edit by hand.",
+    "agentctl: use it for task operations as documented in @.codex-swarm/agentctl.md.",
     ".codex-swarm/tasks: may coordinate creation of workflow artifacts via DOCS; avoid committing extra status-only changes."
   ],
   "workflow": [
     "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
     "Default to agentctl-first for task operations as documented in @.codex-swarm/agentctl.md; fall back to raw shell commands only for repository inspection (rg, ls, etc.).",
     "Review the backlog via agentctl per @.codex-swarm/agentctl.md to spot drift before changing anything.",
-    "Check `.codex-swarm/config.json` → `workflow_mode`: in `branch_pr`, perform any .codex-swarm/tasks.json export only from the repo root checkout on the pinned base branch (not from `.codex-swarm/worktrees/*`); in `direct`, this is still the default recommendation to keep history linear and avoid conflicts.",
+    "Follow workflow_mode rules in @.codex-swarm/agentctl.md; export the snapshot only from the repo root checkout on the pinned base branch.",
     "Restate the incoming goal in one sentence so downstream agents know the intent within the local Cursor + Codex workspace.",
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",
     "Before creating or updating tasks, review existing tags in the backlog; apply the minimal set of tags required for clear navigation and always tag new tasks accordingly.",
@@ -29,10 +28,10 @@
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Create new tasks via `python .codex-swarm/agentctl.py task new ...` so agentctl generates the ID; reserve `task add` for pre-existing IDs.",
     "Add or update tasks via the agentctl flows documented in @.codex-swarm/agentctl.md with short, imperative titles plus priority, tags, description, comments, and an explicit owner; never delete an ID.",
-    "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/tasks/T-###/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
+    "For new tasks, create the initial workflow artifact via the agentctl scaffold flow (or a manual @.codex-swarm/tasks/<task-id>/README.md) and commit it together with the task add/update so the planning phase lands as a single commit.",
     "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
     "When handing off implementation, point executors to the agentctl work-start flow documented in @.codex-swarm/agentctl.md to reduce manual branch/PR setup steps.",
-    "In branching workflow, avoid frequent status churn in the exported snapshot while work happens on branches; track progress in `.codex-swarm/tasks/T-###/README.md` and the PR artifact under `.codex-swarm/tasks/T-###/pr/` instead.",
+    "In branching workflow, avoid frequent status churn in the exported snapshot while work happens on branches; track progress in `.codex-swarm/tasks/<task-id>/README.md` and the PR artifact under `.codex-swarm/tasks/<task-id>/pr/` instead.",
     "For read-only checks, run `python .codex-swarm/agentctl.py --lint ...` (writes auto-lint) to validate checksum/schema/deps.",
     "Return a structured summary that names each updated ID, status, and the key reason for the change."
   ]
