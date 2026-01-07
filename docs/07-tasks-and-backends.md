@@ -41,7 +41,7 @@ created_at: "2026-01-03T18:16:00Z"
 ## Task Doc Metadata
 The per-task README includes structured sections (`Summary`, `Context`, `Scope`, `Risks`, `Verify Steps`, `Rollback Plan`, `Notes`).
 - When backend=local, these sections are stored in the README body and exported as `doc`.
-- When backend=redmine, the same `doc` payload is stored in a Redmine custom field, along with `doc_version`, `doc_updated_at`, and `doc_updated_by`.
+- When backend=redmine, the same `doc` payload is stored in Redmine custom fields (see [Redmine backend](12-redmine.md)).
 - Use `python .codex-swarm/agentctl.py task doc show|set` to read/update the `doc` metadata without editing files directly.
 
 ## Backend Model
@@ -51,29 +51,7 @@ The per-task README includes structured sections (`Summary`, `Context`, `Scope`,
 - `tasks.json` is generated from local tasks for browsing and integrations.
 
 ### redmine
-- Canonical source: Redmine issues with a `task_id` custom field.
-- The local task ID maps to the Redmine `task_id` custom field; the Redmine issue id is stored separately as `redmine_id`.
-- Local tasks are a cache/offline layer (optional).
-- `agentctl` auto-falls back to local when Redmine is unavailable (only when cache is enabled).
-- When connectivity returns, `agentctl sync redmine` reconciles changes.
-- Set `cache_dir` to an empty value to disable local cache completely (sync and offline fallback are unavailable).
-- Comments and task doc metadata can be stored in Redmine custom fields (`comments`, `doc_version`, `doc_updated_at`, `doc_updated_by`) to keep parity with local; new comments are also mirrored into Redmine journals as notes.
-
-#### Redmine custom fields
-Store these fields in Redmine so `agentctl` can maintain parity with the local backend:
-
-- `task_id`: task identifier in `YYYYMMDDHHMM-<RAND>` format.
-- `verify`: JSON list of verify commands (stored as JSON string).
-- `commit`: JSON object `{ hash, message }` for closure tracking (stored as JSON string).
-- `doc`: markdown body containing the task doc sections.
-- `comments`: JSON list of `{ author, body }` comment entries.
-- `doc_version`: integer doc schema version (currently `2`).
-- `doc_updated_at`: ISO-8601 timestamp when doc was last updated by `agentctl`.
-- `doc_updated_by`: source marker for doc updates (defaults to `agentctl`).
-
-#### Redmine notes
-When the `comments` list grows, `agentctl` appends new entries to the issue journals as notes using the format:
-`[comment] <author>: <body>`.
+See [Redmine backend](12-redmine.md) for field mappings, config, and sync behavior.
 
 ## Offline Fallback and Conflicts
 - Auto fallback happens whenever Redmine is unreachable.
@@ -122,7 +100,7 @@ When linking a backend path, point to [`.codex-swarm/backends/`](../.codex-swarm
 The active backend is selected in [`.codex-swarm/config.json`](../.codex-swarm/config.json):
 ```json
 "tasks_backend": {
-  "config_path": ".codex-swarm/backends/redmine/backend.json"
+  "config_path": ".codex-swarm/backends/<backend-id>/backend.json"
 }
 ```
 
@@ -162,5 +140,4 @@ python .codex-swarm/agentctl.py finish 202601031816-7F3K2Q --commit <git-rev> --
 
 ## Planned Expansions
 - Document the `dirty` flag and cache reconciliation rules in detail.
-- Add examples for Redmine field mappings and status transitions.
 - Provide a template backend plugin for new integrations.
