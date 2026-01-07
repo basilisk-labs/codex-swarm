@@ -83,14 +83,14 @@ When linking a backend path, point to [`.codex-swarm/backends/`](../.codex-swarm
     "project_id": "my-project",
     "status_map": { "TODO": 1, "DOING": 2, "BLOCKED": 3, "DONE": 4 },
     "custom_fields": {
-      "task_id": 12,
-      "verify": 13,
-      "commit": 14,
-      "doc": 15,
-      "comments": 16,
-      "doc_version": 17,
-      "doc_updated_at": 18,
-      "doc_updated_by": 19
+      "task_id": 1,
+      "verify": 2,
+      "commit": 3,
+      "doc": 4,
+      "comments": 5,
+      "doc_version": 6,
+      "doc_updated_at": 7,
+      "doc_updated_by": 8
     },
     "cache_dir": ".codex-swarm/tasks"
   }
