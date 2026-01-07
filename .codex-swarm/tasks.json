@@ -2739,7 +2739,7 @@
     {
       "id": "202601071438-C7W2GE",
       "title": "Update Redmine custom field IDs",
-      "status": "DONE",
+      "Яstatus": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [],
@@ -2791,12 +2791,55 @@
       "doc_updated_by": "agentctl",
       "description": "Enhance agentctl CLI outputs to include richer task context (readiness, deps, metadata) to reduce extra checks.",
       "doc": "## Summary\n\nImprove agentctl CLI outputs to include richer task context (deps, readiness, metadata) so agents need fewer follow-up commands.\n\n## Context\n\nUser asked to make agentctl CLI outputs more informative so agents avoid extra status checks.\n\n## Scope\n\n- Enrich task list/show/ready outputs with dependency readiness and metadata.\\n- Keep outputs compact and stable for CLI use.\n\n## Risks\n\n- More verbose output may affect scripts that parse human-readable CLI output.\n\n## Verify Steps\n\n- Run 'python .codex-swarm/agentctl.py task show <task-id>' and 'python .codex-swarm/agentctl.py task list' to confirm richer context.\n\n## Rollback Plan\n\nRevert agentctl output changes if verbosity breaks downstream scripting.\n\n## Notes\n\nUpdated task list/show/ready/start/block/finish outputs to include deps/readiness/metadata summaries.\n\n## Changes Summary\n\n- Added dependency/owner/priority/tag/verify info to task list/search/next output lines.\\n- Expanded task show output with readiness, doc metadata, verify commands, and comment counts.\\n- Added richer summaries for ready/start/block/finish commands."
+    },
+    {
+      "id": "202601071526-GH5YSV",
+      "title": "Clarify README onboarding guidance",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-07T15:26:28+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Make Getting Started more newcomer-friendly; explain the ORCHESTRATOR prompt and mention clean.sh."
+    },
+    {
+      "id": "202601072135-KA323M",
+      "title": "Track clean.ps1 cleanup script",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "556538d91c172ba5a8948890310d2c0b00115d59",
+        "message": "рџ› пёЏ KA323M add clean.ps1 cleanup script"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: track clean.ps1 in repo; scope: add file to git under task; plan: stage clean.ps1, commit via guard; risks: none."
+        },
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: not run (no automated tests for PowerShell scripts)."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-07T21:43:22+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add clean.ps1 to repository tracking under the workflow so the cleanup script is managed via agentctl tasks.",
+      "doc": "## Summary\n\nTrack clean.ps1 under task workflow and commit it to the repo.\n\n## Context\n\nclean.ps1 existed untracked; this task brings it into the managed workflow.\n\n## Scope\n\n- Add clean.ps1 to git under task KA323M.\\n- No functional edits to the script content.\n\n## Risks\n\nLow. The change only tracks the existing script; no behavior change.\n\n## Verify Steps\n\nNot run (no automated tests for PowerShell scripts in this repo).\n\n## Rollback Plan\n\nRevert commit 556538d91c17 to remove clean.ps1 from tracking.\n\n## Notes\n\nAttempted agentctl start failed due to NameError in cmd_start; proceeded without status transition. PR note not created because PR artifacts are optional in workflow_mode=direct."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4613450cbd099d952e55a09262b827f0122109a099ef25bb527c215efacee816"
+    "checksum": "24ac512976ccf4f54ffcf25c41818502deba2af9658a87e23205acd57e652d7d"
   }
 }
