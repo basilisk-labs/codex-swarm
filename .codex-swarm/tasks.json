@@ -2763,12 +2763,40 @@
       "doc_updated_by": "agentctl",
       "description": "Update Redmine backend config and docs to use sequential custom field IDs 1-8 for task metadata.",
       "doc": "## Summary\n\nUpdate Redmine custom field ID mapping to use sequential IDs 1-8 for task metadata.\n\n## Context\n\nUser requested sequential Redmine custom field IDs; admin API access was unavailable so we aligned docs to IDs 1-8.\n\n## Scope\n\n- Update Redmine docs/examples to use sequential custom field IDs 1..8.\\n- Keep backend config aligned with the same mapping.\n\n## Risks\n\n- If Redmine custom field IDs differ, sync will fail until corrected.\n\n## Verify Steps\n\n- (Optional) Confirm custom field IDs in Redmine admin.\\n- Run  after configuration.\n\n## Rollback Plan\n\nRevert the Redmine backend config and docs to the previous custom field IDs.\n\n## Notes\n\nBackend config already uses IDs 1-8; only docs needed updates.\n\n## Changes Summary\n\n- Updated Redmine docs examples to match sequential custom field IDs 1-8."
+    },
+    {
+      "id": "202601071448-CEVJ6V",
+      "title": "Improve agentctl task output context",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agentctl",
+        "cli",
+        "tasks"
+      ],
+      "commit": {
+        "hash": "8628d112da0784da7ee3bc4acb52ffac72e7221f",
+        "message": "✨ CEVJ6V enrich agentctl task outputs"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "Verified: not run (output-only changes). Context expanded for agent consumption."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-07T14:54:10+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Enhance agentctl CLI outputs to include richer task context (readiness, deps, metadata) to reduce extra checks.",
+      "doc": "## Summary\n\nImprove agentctl CLI outputs to include richer task context (deps, readiness, metadata) so agents need fewer follow-up commands.\n\n## Context\n\nUser asked to make agentctl CLI outputs more informative so agents avoid extra status checks.\n\n## Scope\n\n- Enrich task list/show/ready outputs with dependency readiness and metadata.\\n- Keep outputs compact and stable for CLI use.\n\n## Risks\n\n- More verbose output may affect scripts that parse human-readable CLI output.\n\n## Verify Steps\n\n- Run 'python .codex-swarm/agentctl.py task show <task-id>' and 'python .codex-swarm/agentctl.py task list' to confirm richer context.\n\n## Rollback Plan\n\nRevert agentctl output changes if verbosity breaks downstream scripting.\n\n## Notes\n\nUpdated task list/show/ready/start/block/finish outputs to include deps/readiness/metadata summaries.\n\n## Changes Summary\n\n- Added dependency/owner/priority/tag/verify info to task list/search/next output lines.\\n- Expanded task show output with readiness, doc metadata, verify commands, and comment counts.\\n- Added richer summaries for ready/start/block/finish commands."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "3fe2f6d2a41f52fb4d0589270503c26d5ed894e227c211c4f4c82ccbc9961de3"
+    "checksum": "4613450cbd099d952e55a09262b827f0122109a099ef25bb527c215efacee816"
   }
 }
