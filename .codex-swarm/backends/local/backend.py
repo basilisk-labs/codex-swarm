@@ -16,6 +16,8 @@ ID_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 TASK_ID_RE = re.compile(rf"^\d{{12}}-[{ID_ALPHABET}]{{4,}}$")
 DOC_SECTION_HEADER = "## Summary"
 AUTO_SUMMARY_HEADER = "## Changes Summary (auto)"
+DOC_VERSION = 2
+DOC_UPDATED_BY = "agentctl"
 
 
 @dataclass
@@ -204,6 +206,9 @@ def format_frontmatter(frontmatter: Dict[str, object]) -> str:
         "verify",
         "commit",
         "comments",
+        "doc_version",
+        "doc_updated_at",
+        "doc_updated_by",
         "created_at",
     ]
     remaining = [k for k in frontmatter.keys() if k not in keys]
@@ -226,6 +231,24 @@ def format_frontmatter(frontmatter: Dict[str, object]) -> str:
         lines.append(f"{key}: {_format_scalar(value)}")
     lines.append(FRONTMATTER_BOUNDARY)
     return "\n".join(lines)
+
+
+def now_iso_utc() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def _normalize_doc(text: str) -> str:
+    return "\n".join(line.rstrip() for line in (text or "").splitlines()).strip()
+
+
+def _doc_changed(existing: str, updated: str) -> bool:
+    return _normalize_doc(existing) != _normalize_doc(updated)
+
+
+def _apply_doc_metadata(frontmatter: Dict[str, object], *, updated_by: Optional[str] = None) -> None:
+    frontmatter["doc_version"] = DOC_VERSION
+    frontmatter["doc_updated_at"] = now_iso_utc()
+    frontmatter["doc_updated_by"] = (updated_by or DOC_UPDATED_BY)
 
 
 def validate_task_id(task_id: str, *, source: Optional[Path] = None) -> None:
@@ -259,6 +282,14 @@ def merge_task_doc(body: str, doc: str) -> str:
     if not doc_text:
         return body
     lines = body.splitlines() if body else []
+    prefix_idx = None
+    for idx, line in enumerate(lines):
+        if line.strip() == DOC_SECTION_HEADER:
+            prefix_idx = idx
+            break
+    prefix_text = ""
+    if prefix_idx is not None:
+        prefix_text = "\n".join(lines[:prefix_idx]).rstrip()
     auto_idx = None
     for idx, line in enumerate(lines):
         if line.strip() == AUTO_SUMMARY_HEADER:
@@ -267,7 +298,11 @@ def merge_task_doc(body: str, doc: str) -> str:
     auto_block = ""
     if auto_idx is not None:
         auto_block = "\n".join(lines[auto_idx:]).rstrip()
-    parts = [doc_text.rstrip()]
+    parts: List[str] = []
+    if prefix_text:
+        parts.append(prefix_text)
+        parts.append("")
+    parts.append(doc_text.rstrip())
     if auto_block:
         parts.append("")
         parts.append(auto_block)
@@ -352,11 +387,25 @@ class LocalBackend:
         doc = task_payload.pop("doc", None)
         readme = self.task_readme_path(task_id)
         body = ""
+        existing_frontmatter: Dict[str, object] = {}
+        existing_doc = ""
         if readme.exists():
             parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+            existing_frontmatter = dict(parsed.frontmatter or {})
             body = parsed.body
+            existing_doc = extract_task_doc(parsed.body)
+        for key in ("doc_version", "doc_updated_at", "doc_updated_by"):
+            if key not in task_payload and key in existing_frontmatter:
+                task_payload[key] = existing_frontmatter[key]
         if doc is not None:
-            body = merge_task_doc(body, str(doc))
+            doc_text = str(doc)
+            body = merge_task_doc(body, doc_text)
+            if _doc_changed(existing_doc, doc_text):
+                _apply_doc_metadata(task_payload)
+        if task_payload.get("doc_version") != DOC_VERSION:
+            task_payload["doc_version"] = DOC_VERSION
+        if not task_payload.get("doc_updated_at") or not task_payload.get("doc_updated_by"):
+            _apply_doc_metadata(task_payload)
         readme.parent.mkdir(parents=True, exist_ok=True)
         frontmatter_text = format_frontmatter(task_payload)
         content = frontmatter_text + "\n"
@@ -369,11 +418,30 @@ class LocalBackend:
         if not readme.exists():
             raise FileNotFoundError(f"Missing task README: {readme}")
         parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
-        body = merge_task_doc(parsed.body, doc)
-        frontmatter_text = format_frontmatter(parsed.frontmatter)
+        doc_text = str(doc or "")
+        body = merge_task_doc(parsed.body, doc_text)
+        frontmatter = dict(parsed.frontmatter)
+        if _doc_changed(extract_task_doc(parsed.body), doc_text) or not frontmatter.get("doc_updated_at"):
+            _apply_doc_metadata(frontmatter)
+        if frontmatter.get("doc_version") != DOC_VERSION:
+            frontmatter["doc_version"] = DOC_VERSION
+        frontmatter_text = format_frontmatter(frontmatter)
         content = frontmatter_text + "\n"
         if body:
             content += body.lstrip("\n") + "\n"
+        readme.write_text(content, encoding="utf-8")
+
+    def touch_task_doc_metadata(self, task_id: str, *, updated_by: Optional[str] = None) -> None:
+        readme = self.task_readme_path(task_id)
+        if not readme.exists():
+            raise FileNotFoundError(f"Missing task README: {readme}")
+        parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
+        frontmatter = dict(parsed.frontmatter)
+        _apply_doc_metadata(frontmatter, updated_by=updated_by)
+        frontmatter_text = format_frontmatter(frontmatter)
+        content = frontmatter_text + "\n"
+        if parsed.body:
+            content += parsed.body.lstrip("\n") + "\n"
         readme.write_text(content, encoding="utf-8")
 
     def write_tasks(self, tasks: List[Dict[str, object]]) -> None:

@@ -177,6 +177,7 @@ Schema (JSON):
 
 - **Create / Reprioritize (PLANNER only, on the base branch).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python .codex-swarm/agentctl.py`).
 - **Work in branches.** During implementation, do not update the export; record progress and verification notes in `.codex-swarm/tasks/<task-id>/README.md` and `.codex-swarm/tasks/<task-id>/pr/`.
+- Task README updates must be done via `python .codex-swarm/agentctl.py task doc set ...` (no manual edits).
 - **Integrate + close (INTEGRATOR, on the base branch).** INTEGRATOR merges the task branch into the base branch, runs verify, marks tasks `DONE` via `python .codex-swarm/agentctl.py finish`, then runs `python .codex-swarm/agentctl.py task export`.
 - **Status Sync.** The canonical backend is authoritative. Use `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show <task-id>` to inspect tasks.
 - **Escalations.** Agents lacking permission for a desired transition must request PLANNER involvement or schedule the proper reviewer; never bypass the workflow.

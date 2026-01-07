@@ -865,6 +865,7 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
         frontmatter, _ = split_frontmatter_block(target.read_text(encoding="utf-8", errors="replace"))
     template = task_readme_template(task_id)
     if frontmatter:
+        frontmatter = apply_doc_metadata_to_frontmatter_text(frontmatter)
         content = frontmatter.rstrip() + "\n\n" + template + "\n"
     else:
         content = template + "\n"
@@ -924,6 +925,16 @@ def cmd_task_doc_show(args: argparse.Namespace) -> None:
     if not callable(get_doc):
         die("Configured backend does not support task docs", code=2)
     doc = str(get_doc(args.task_id) or "")
+    if args.section:
+        section_name = normalize_doc_section_name(args.section)
+        sections, _ = parse_doc_sections(doc)
+        content = sections.get(section_name, [])
+        if content:
+            print("\n".join(content).rstrip())
+            return
+        if not args.quiet:
+            print(f"ℹ️ no content for section: {section_name}")
+        return
     if doc:
         print(doc.rstrip())
         return
@@ -951,6 +962,19 @@ def cmd_task_doc_set(args: argparse.Namespace) -> None:
             doc = path.read_text(encoding="utf-8")
     else:
         die("Provide --text or --file to set task docs", code=2)
+    if args.section:
+        get_doc = getattr(backend, "get_task_doc", None)
+        if not callable(get_doc):
+            die("Configured backend does not support task doc reads", code=2)
+        existing = str(get_doc(args.task_id) or "")
+        sections, order = parse_doc_sections(existing)
+        order = ensure_required_doc_sections(sections, order)
+        section_name = normalize_doc_section_name(args.section)
+        if not section_name:
+            die("--section must be non-empty", code=2)
+        sections[section_name] = [line.rstrip() for line in doc.splitlines()]
+        order = _insert_section_order(order, section_name)
+        doc = render_doc_sections(sections, order)
     set_doc(args.task_id, doc)
     if not args.quiet:
         print(f"✅ updated task doc for {args.task_id}")
@@ -1399,6 +1423,70 @@ def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
     return match.group(1)
 
 
+def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]]:
+    backend_id = str(BACKEND_CONFIG.get("id") or "").strip()
+    if backend_id != "local":
+        return None
+    module_path = Path(str(BACKEND_CONFIG.get("_module_path") or "")).resolve()
+    if not module_path.exists():
+        return None
+    module = load_backend_module(backend_id, module_path)
+    parse_frontmatter = getattr(module, "parse_frontmatter", None)
+    format_frontmatter = getattr(module, "format_frontmatter", None)
+    if not callable(parse_frontmatter) or not callable(format_frontmatter):
+        return None
+    expected_version = int(getattr(module, "DOC_VERSION", 2))
+    expected_by = str(getattr(module, "DOC_UPDATED_BY", "agentctl"))
+    return parse_frontmatter, format_frontmatter, expected_version, expected_by
+
+
+def validate_task_readme_metadata(paths: List[str], *, cwd: Path) -> None:
+    readmes = [
+        path for path in paths if path.startswith(".codex-swarm/tasks/") and path.endswith("/README.md")
+    ]
+    if not readmes:
+        return
+    helpers = load_local_frontmatter_helpers()
+    if not helpers:
+        return
+    parse_frontmatter, _, expected_version, expected_by = helpers
+    for path in readmes:
+        target = cwd / path
+        if not target.exists():
+            continue
+        content = target.read_text(encoding="utf-8", errors="replace")
+        doc = parse_frontmatter(content)
+        frontmatter = getattr(doc, "frontmatter", {}) or {}
+        updated_by = str(frontmatter.get("doc_updated_by") or "").strip()
+        updated_at = str(frontmatter.get("doc_updated_at") or "").strip()
+        doc_version = frontmatter.get("doc_version")
+        if updated_by != expected_by or not updated_at or str(doc_version) != str(expected_version):
+            die(
+                "\n".join(
+                    [
+                        f"Task README {path} is missing agentctl doc metadata.",
+                        "Fix:",
+                        "  1) Use `python .codex-swarm/agentctl.py task doc set ...` to update task docs",
+                        "  2) Re-stage the README after agentctl updates it",
+                    ]
+                ),
+                code=2,
+            )
+
+
+def apply_doc_metadata_to_frontmatter_text(frontmatter_text: str) -> str:
+    helpers = load_local_frontmatter_helpers()
+    if not helpers:
+        return frontmatter_text
+    parse_frontmatter, format_frontmatter, expected_version, expected_by = helpers
+    parsed = parse_frontmatter(frontmatter_text)
+    frontmatter = dict(getattr(parsed, "frontmatter", {}) or {})
+    frontmatter["doc_version"] = expected_version
+    frontmatter["doc_updated_at"] = now_iso_utc()
+    frontmatter["doc_updated_by"] = expected_by
+    return format_frontmatter(frontmatter)
+
+
 def extract_last_verified_sha_from_log(text: str) -> Optional[str]:
     for raw_line in reversed((text or "").splitlines()):
         match = _VERIFIED_SHA_RE.search(raw_line)
@@ -1508,6 +1596,8 @@ def guard_commit_check(
             die(f"Staged file is forbidden by default: {path} (use --allow-tasks to override)", code=2)
         if not any(path_is_under(path, allowed) for allowed in allow):
             die(f"Staged file is outside allowlist: {path}", code=2)
+
+    validate_task_readme_metadata(staged, cwd=cwd)
 
     if not quiet:
         print("✅ guard passed")
@@ -2847,13 +2937,23 @@ def pr_dir(task_id: str) -> Path:
     return workflow_task_dir(task_id) / "pr"
 
 
-PR_DESCRIPTION_REQUIRED_SECTIONS: Tuple[str, ...] = (
+TASK_DOC_SECTIONS: Tuple[str, ...] = (
+    "Summary",
+    "Context",
+    "Scope",
+    "Risks",
+    "Verify Steps",
+    "Rollback Plan",
+    "Notes",
+)
+TASK_DOC_REQUIRED_SECTIONS: Tuple[str, ...] = (
     "Summary",
     "Scope",
     "Risks",
     "Verify Steps",
     "Rollback Plan",
 )
+PR_DESCRIPTION_REQUIRED_SECTIONS = TASK_DOC_REQUIRED_SECTIONS
 
 
 def task_readme_template(task_id: str) -> str:
@@ -2867,7 +2967,7 @@ def task_readme_template(task_id: str) -> str:
             "",
             "- ...",
             "",
-            "## Goal",
+            "## Context",
             "",
             "- ...",
             "",
@@ -2884,6 +2984,10 @@ def task_readme_template(task_id: str) -> str:
             "- ...",
             "",
             "## Rollback Plan",
+            "",
+            "- ...",
+            "",
+            "## Notes",
             "",
             "- ...",
             "",
@@ -2994,6 +3098,78 @@ def extract_markdown_sections(text: str) -> Dict[str, List[str]]:
         if current is not None:
             sections[current].append(line)
     return sections
+
+
+def parse_doc_sections(text: str) -> Tuple[Dict[str, List[str]], List[str]]:
+    sections: Dict[str, List[str]] = {}
+    order: List[str] = []
+    current: Optional[str] = None
+    for raw in (text or "").splitlines():
+        line = raw.rstrip()
+        if line.startswith("## "):
+            current = line[3:].strip()
+            if current not in sections:
+                sections[current] = []
+                order.append(current)
+            continue
+        if current is not None:
+            sections[current].append(line)
+    return sections, order
+
+
+def _trim_blank_lines(lines: List[str]) -> List[str]:
+    start = 0
+    end = len(lines)
+    while start < end and not lines[start].strip():
+        start += 1
+    while end > start and not lines[end - 1].strip():
+        end -= 1
+    return lines[start:end]
+
+
+def _insert_section_order(order: List[str], section: str) -> List[str]:
+    if section in order:
+        return order
+    canonical = list(TASK_DOC_SECTIONS)
+    if section in canonical:
+        idx = canonical.index(section)
+        for next_name in canonical[idx + 1 :]:
+            if next_name in order:
+                insert_at = order.index(next_name)
+                return order[:insert_at] + [section] + order[insert_at:]
+    return order + [section]
+
+
+def ensure_required_doc_sections(sections: Dict[str, List[str]], order: List[str]) -> List[str]:
+    for name in TASK_DOC_REQUIRED_SECTIONS:
+        if name not in sections:
+            sections[name] = ["- ..."]
+            order = _insert_section_order(order, name)
+    return order
+
+
+def render_doc_sections(sections: Dict[str, List[str]], order: List[str]) -> str:
+    lines: List[str] = []
+    for name in order:
+        content = _trim_blank_lines(sections.get(name, []))
+        if not content and name in TASK_DOC_SECTIONS:
+            content = ["- ..."]
+        lines.append(f"## {name}")
+        lines.append("")
+        lines.extend(content)
+        lines.append("")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def normalize_doc_section_name(name: str) -> str:
+    raw = (name or "").strip()
+    if not raw:
+        return raw
+    lowered = raw.lower()
+    for section in TASK_DOC_SECTIONS:
+        if section.lower() == lowered:
+            return section
+    return raw
 
 
 def pr_validate_description(text: str) -> Tuple[List[str], List[str]]:
@@ -3200,6 +3376,14 @@ def update_task_readme_auto_summary(task_id: str, *, changed: List[str]) -> None
     new_text = "\n".join(new_lines) + ("\n" if text.endswith("\n") else "")
     if new_text != text:
         readme_path.write_text(new_text, encoding="utf-8")
+        touch_task_doc_metadata(task_id)
+
+
+def touch_task_doc_metadata(task_id: str, *, updated_by: str = "agentctl") -> None:
+    backend = backend_instance()
+    touch = getattr(backend, "touch_task_doc_metadata", None) if backend else None
+    if callable(touch):
+        touch(task_id, updated_by=updated_by)
 
 
 def cmd_pr_update(args: argparse.Namespace) -> None:
@@ -3934,11 +4118,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_doc_show = doc_sub.add_parser("show", help="Show task doc metadata")
     p_doc_show.add_argument("task_id")
+    p_doc_show.add_argument("--section", help="Show a single section by name (e.g., 'Summary')")
     p_doc_show.add_argument("--quiet", action="store_true", help="Minimal output")
     p_doc_show.set_defaults(func=cmd_task_doc_show)
 
     p_doc_set = doc_sub.add_parser("set", help="Update task doc metadata")
     p_doc_set.add_argument("task_id")
+    p_doc_set.add_argument("--section", help="Update a single section by name (e.g., 'Summary')")
     p_doc_set.add_argument("--text", help="Doc body text")
     p_doc_set.add_argument("--file", help="Read doc body from file (use '-' for stdin)")
     p_doc_set.add_argument("--quiet", action="store_true", help="Minimal output")
