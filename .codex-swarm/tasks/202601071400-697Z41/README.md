@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 doc_version: 2
-doc_updated_at: "2026-01-07T14:15:04+00:00"
+doc_updated_at: "2026-01-07T14:21:19+00:00"
 doc_updated_by: "agentctl"
 description: "Refine task README.md format for human/agent readability and enforce updates via agentctl commands only."
 ---
@@ -29,6 +29,7 @@ description: "Refine task README.md format for human/agent readability and enfor
 - Update agentctl README template and doc section commands.
 - Add guardrails that require agentctl doc metadata for staged task READMEs.
 - Update local backend to maintain doc metadata and docs/instructions.
+- Extend Redmine backend field mapping to store doc metadata and comments.
 
 ## Risks
 
@@ -37,7 +38,7 @@ description: "Refine task README.md format for human/agent readability and enfor
 
 ## Verify Steps
 
-- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py
+- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py
 
 ## Rollback Plan
 
@@ -46,6 +47,7 @@ description: "Refine task README.md format for human/agent readability and enfor
 ## Notes
 
 - Existing READMEs keep their content; metadata is added on first agentctl update.
+- Redmine needs custom fields for comments/doc metadata to keep parity with local.
 
 ## Changes Summary (auto)
 

@@ -8,7 +8,16 @@
     "api_key": "",
     "project_id": "",
     "status_map": { "TODO": 1, "DOING": 2, "BLOCKED": 4, "DONE": 5 },
-    "custom_fields": { "task_id": 1, "verify": 2, "commit": 3, "doc": 4 },
+    "custom_fields": {
+      "task_id": 1,
+      "verify": 2,
+      "commit": 3,
+      "doc": 4,
+      "comments": 5,
+      "doc_version": 6,
+      "doc_updated_at": 7,
+      "doc_updated_by": 8
+    },
     "cache_dir": ".codex-swarm/tasks"
   }
 }

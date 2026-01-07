@@ -20,6 +20,10 @@ class RedmineUnavailable(RuntimeError):
     pass
 
 
+def now_iso_utc() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
 def _load_local_backend_class() -> type:
     module = _load_local_backend_module()
     backend_cls = getattr(module, "LocalBackend", None)
@@ -64,6 +68,8 @@ class RedmineBackend:
             raise RuntimeError("LocalBackend class not found")
         self._id_alphabet = getattr(local_module, "ID_ALPHABET", "0123456789ABCDEFGHJKMNPQRSTVWXYZ")
         self._task_id_re = re.compile(rf"^\d{{12}}-[{self._id_alphabet}]{{4,}}$")
+        self._doc_version = int(getattr(local_module, "DOC_VERSION", 2))
+        self._doc_updated_by = str(getattr(local_module, "DOC_UPDATED_BY", "agentctl"))
         self.cache = None
         if cache_dir:
             self.cache = local_backend_cls({"dir": str(cache_dir)})
@@ -168,12 +174,24 @@ class RedmineBackend:
             if not issue_id:
                 raise RuntimeError("Missing Redmine issue id for task")
             field_id = self.custom_fields.get("doc")
+            task_doc = {"doc": doc}
+            self._ensure_doc_metadata(task_doc, force=True)
+            custom_fields: List[Dict[str, object]] = []
+            self._append_custom_field(custom_fields, "doc", task_doc.get("doc"))
+            self._append_custom_field(custom_fields, "doc_version", task_doc.get("doc_version"))
+            self._append_custom_field(custom_fields, "doc_updated_at", task_doc.get("doc_updated_at"))
+            self._append_custom_field(custom_fields, "doc_updated_by", task_doc.get("doc_updated_by"))
             self._request_json(
                 "PUT",
                 f"issues/{issue_id}.json",
-                payload={"issue": {"custom_fields": [{"id": field_id, "value": doc}]}},
+                payload={"issue": {"custom_fields": custom_fields}},
             )
-            self._set_issue_custom_field_value(issue, field_id, doc)
+            if field_id:
+                self._set_issue_custom_field_value(issue, field_id, doc)
+            for key in ("doc_version", "doc_updated_at", "doc_updated_by"):
+                field_id = self.custom_fields.get(key)
+                if field_id:
+                    self._set_issue_custom_field_value(issue, field_id, task_doc.get(key))
             task = self._issue_to_task(issue, task_id_override=str(task_id))
             if task:
                 self._cache_task(task, dirty=False)
@@ -184,6 +202,41 @@ class RedmineBackend:
             if not task:
                 raise KeyError(f"Unknown task id: {task_id}")
             task["doc"] = doc
+            self._ensure_doc_metadata(task, force=True)
+            self._cache_task(task, dirty=True)
+
+    def touch_task_doc_metadata(self, task_id: str) -> None:
+        if not isinstance(self.custom_fields, dict):
+            return
+        try:
+            issue = self._find_issue_by_task_id(task_id)
+            if issue is None:
+                raise KeyError(f"Unknown task id: {task_id}")
+            issue_id = issue.get("id")
+            if not issue_id:
+                raise RuntimeError("Missing Redmine issue id for task")
+            task_doc = {"doc": self._custom_field_value(issue, self.custom_fields.get("doc"))}
+            self._ensure_doc_metadata(task_doc, force=True)
+            custom_fields: List[Dict[str, object]] = []
+            self._append_custom_field(custom_fields, "doc_version", task_doc.get("doc_version"))
+            self._append_custom_field(custom_fields, "doc_updated_at", task_doc.get("doc_updated_at"))
+            self._append_custom_field(custom_fields, "doc_updated_by", task_doc.get("doc_updated_by"))
+            if custom_fields:
+                self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": {"custom_fields": custom_fields}})
+                for key in ("doc_version", "doc_updated_at", "doc_updated_by"):
+                    field_id = self.custom_fields.get(key)
+                    if field_id:
+                        self._set_issue_custom_field_value(issue, field_id, task_doc.get(key))
+                task = self._issue_to_task(issue, task_id_override=str(task_id))
+                if task:
+                    self._cache_task(task, dirty=False)
+        except RedmineUnavailable:
+            if not self.cache:
+                raise
+            task = self.cache.get_task(task_id)
+            if not task:
+                raise KeyError(f"Unknown task id: {task_id}")
+            self._ensure_doc_metadata(task, force=True)
             self._cache_task(task, dirty=True)
 
     def write_task(self, task: Dict[str, object]) -> None:
@@ -191,6 +244,7 @@ class RedmineBackend:
         if not task_id:
             raise ValueError("task.id is required")
         try:
+            self._ensure_doc_metadata(task, force=False)
             issue_id = task.get("redmine_id")
             if not issue_id:
                 issue = self._find_issue_by_task_id(task_id)
@@ -386,6 +440,10 @@ class RedmineBackend:
         verify_val = self._custom_field_value(issue, self.custom_fields.get("verify"))
         commit_val = self._custom_field_value(issue, self.custom_fields.get("commit"))
         doc_val = self._custom_field_value(issue, self.custom_fields.get("doc"))
+        comments_val = self._custom_field_value(issue, self.custom_fields.get("comments"))
+        doc_version_val = self._custom_field_value(issue, self.custom_fields.get("doc_version"))
+        doc_updated_at_val = self._custom_field_value(issue, self.custom_fields.get("doc_updated_at"))
+        doc_updated_by_val = self._custom_field_value(issue, self.custom_fields.get("doc_updated_by"))
         task = {
             "id": str(task_id),
             "title": str(issue.get("subject") or ""),
@@ -397,12 +455,19 @@ class RedmineBackend:
             "depends_on": [],
             "verify": self._maybe_parse_json(verify_val),
             "commit": self._maybe_parse_json(commit_val),
-            "comments": [],
+            "comments": self._normalize_comments(self._maybe_parse_json(comments_val)),
             "redmine_id": issue.get("id"),
             "id_source": "custom",
         }
         if doc_val:
             task["doc"] = doc_val
+        doc_version = self._coerce_doc_version(doc_version_val)
+        if doc_version is not None:
+            task["doc_version"] = doc_version
+        if doc_updated_at_val:
+            task["doc_updated_at"] = doc_updated_at_val
+        if doc_updated_by_val:
+            task["doc_updated_by"] = doc_updated_by_val
         return task
 
     def _task_to_issue_payload(self, task: Dict[str, object]) -> Dict[str, object]:
@@ -425,10 +490,15 @@ class RedmineBackend:
         if done_ratio is not None:
             payload["done_ratio"] = done_ratio
         custom_fields: List[Dict[str, object]] = []
+        self._ensure_doc_metadata(task, force=False)
         self._append_custom_field(custom_fields, "task_id", task.get("id"))
         self._append_custom_field(custom_fields, "verify", task.get("verify"))
         self._append_custom_field(custom_fields, "commit", task.get("commit"))
+        self._append_custom_field(custom_fields, "comments", task.get("comments"))
         self._append_custom_field(custom_fields, "doc", task.get("doc"))
+        self._append_custom_field(custom_fields, "doc_version", task.get("doc_version"))
+        self._append_custom_field(custom_fields, "doc_updated_at", task.get("doc_updated_at"))
+        self._append_custom_field(custom_fields, "doc_updated_by", task.get("doc_updated_by"))
         if custom_fields:
             payload["custom_fields"] = custom_fields
         return payload
@@ -442,6 +512,35 @@ class RedmineBackend:
         if isinstance(value, (dict, list)):
             value = json.dumps(value, ensure_ascii=False)
         fields.append({"id": field_id, "value": value})
+
+    def _ensure_doc_metadata(self, task: Dict[str, object], *, force: bool) -> None:
+        if "doc" not in task and not force:
+            return
+        if force or task.get("doc_version") is None:
+            task["doc_version"] = self._doc_version
+        if force or not task.get("doc_updated_at"):
+            task["doc_updated_at"] = now_iso_utc()
+        if force or not task.get("doc_updated_by"):
+            task["doc_updated_by"] = self._doc_updated_by
+
+    def _coerce_doc_version(self, value: object) -> Optional[int]:
+        if value is None:
+            return None
+        if isinstance(value, int):
+            return value
+        raw = str(value).strip()
+        if raw.isdigit():
+            return int(raw)
+        return None
+
+    def _normalize_comments(self, value: object) -> List[Dict[str, object]]:
+        if isinstance(value, list):
+            return [item for item in value if isinstance(item, dict)]
+        if isinstance(value, dict):
+            return [value]
+        if isinstance(value, str) and value.strip():
+            return [{"author": "redmine", "body": value.strip()}]
+        return []
 
     def _start_date_from_task_id(self, task_id: str) -> Optional[str]:
         if not task_id or "-" not in task_id:

@@ -31,14 +31,17 @@ verify: ["python -m pytest -q"]
 commit: { hash: "...", message: "..." }
 comments:
   - { author: "owner", body: "Context..." }
+doc_version: 2
+doc_updated_at: "2026-01-03T18:16:00Z"
+doc_updated_by: "agentctl"
 created_at: "2026-01-03T18:16:00Z"
 ---
 ```
 
 ## Task Doc Metadata
-The per-task README includes structured sections (`Summary`, `Scope`, `Risks`, `Verify Steps`, `Rollback Plan`).
+The per-task README includes structured sections (`Summary`, `Context`, `Scope`, `Risks`, `Verify Steps`, `Rollback Plan`, `Notes`).
 - When backend=local, these sections are stored in the README body and exported as `doc`.
-- When backend=redmine, the same `doc` payload is stored in a Redmine custom field.
+- When backend=redmine, the same `doc` payload is stored in a Redmine custom field, along with `doc_version`, `doc_updated_at`, and `doc_updated_by`.
 - Use `python .codex-swarm/agentctl.py task doc show|set` to read/update the `doc` metadata without editing files directly.
 
 ## Backend Model
@@ -54,6 +57,7 @@ The per-task README includes structured sections (`Summary`, `Scope`, `Risks`, `
 - `agentctl` auto-falls back to local when Redmine is unavailable (only when cache is enabled).
 - When connectivity returns, `agentctl sync redmine` reconciles changes.
 - Set `cache_dir` to an empty value to disable local cache completely (sync and offline fallback are unavailable).
+- Comments and task doc metadata can be stored in Redmine custom fields (`comments`, `doc_version`, `doc_updated_at`, `doc_updated_by`) to keep parity with local.
 
 ## Offline Fallback and Conflicts
 - Auto fallback happens whenever Redmine is unreachable.
@@ -84,7 +88,16 @@ When linking a backend path, point to [`.codex-swarm/backends/`](../.codex-swarm
     "api_key": "REDACTED",
     "project_id": "my-project",
     "status_map": { "TODO": 1, "DOING": 2, "BLOCKED": 3, "DONE": 4 },
-    "custom_fields": { "task_id": 12, "verify": 13, "commit": 14, "doc": 15 },
+    "custom_fields": {
+      "task_id": 12,
+      "verify": 13,
+      "commit": 14,
+      "doc": 15,
+      "comments": 16,
+      "doc_version": 17,
+      "doc_updated_at": 18,
+      "doc_updated_by": 19
+    },
     "cache_dir": ".codex-swarm/tasks"
   }
 }
