@@ -2654,7 +2654,7 @@
     {
       "id": "202601071327-JBDS9R",
       "title": "Reduce snapshot references in agent instructions",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "PLANNER",
       "depends_on": [],
@@ -2662,14 +2662,24 @@
         "agents",
         "docs"
       ],
+      "commit": {
+        "hash": "7d60d437aba09ecb77ccfa5f895c0401b7479a6c",
+        "message": "🧰 JBDS9R reduce snapshot mentions: centralize export rules in AGENTS; remove snapshot wording from agent roles; simplify export references"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: not run; doc/instruction edits only, no runtime impact."
+        }
+      ],
       "description": "Minimize repeated snapshot mentions across AGENTS.md and agent JSONs by centralizing the rule and pointing to agentctl.md for details; keep only a single explicit 'do not edit snapshot' rule.",
-      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+      "doc": "## Summary\n\n- Centralized snapshot/export rules in @AGENTS.md.\n- Removed snapshot wording from agent role specs, relying on agentctl guidance.\n- Simplified workflow wording to avoid repeated export references.\n\n## Goal\n\n- Keep snapshot handling centralized with a single explicit rule and agentctl references.\n\n## Scope\n\n- @AGENTS.md\n- @.codex-swarm/agents/*.json\n\n## Risks\n\n- Low: reduced wording may require cross-check if new docs add snapshot references.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `7d60d437aba0`."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "469f3215a5bd7265ce0ea9495ff5310ce7e3ec526aea2d527b0a0b92620b2f23"
+    "checksum": "df3a0ed8b11c2e06ce070e96235fc5545cc0bd08a82ce3ab29077de6ca0d790d"
   }
 }
