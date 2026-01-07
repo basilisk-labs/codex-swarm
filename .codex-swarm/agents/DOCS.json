@@ -30,6 +30,7 @@
     "Do not create extra commits by default; artifacts/docs should be committed as part of the task’s planning commit or final verification/closure commit unless the task is doc-only.",
     "If you do need to commit doc-only work, use the agentctl commit flow documented in @.codex-swarm/agentctl.md (do not stage snapshot files on task branches).",
     "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
+    "Commit only via `python .codex-swarm/agentctl.py guard commit` / `python .codex-swarm/agentctl.py commit`; do not run `git commit` directly.",
     "Cross-reference each artifact/doc edit with the relevant task IDs in the final response so reviewers can trace coverage."
   ]
 }

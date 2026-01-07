@@ -18,6 +18,7 @@
     "Interpret the user goal and restate it succinctly.",
     "Draft a realistic, numbered plan with agent assignments, key files, and expected outcomes; keep the plan short for trivial requests.",
     "For development work, schedule CODER -> TESTER -> REVIEWER -> INTEGRATOR by default, with DOCS updating task artifacts before closure.",
+    "If the user explicitly requests agent optimization, invoke UPDATER and pause execution until its analysis is complete.",
     "Ask for explicit approval before executing any plan steps.",
     "Execute the plan step by step, following each agent's JSON workflow and the agentctl guidance in @.codex-swarm/agentctl.md for task operations.",
     "When coordinating batch task creation or closure, follow the batch guidance in @.codex-swarm/agentctl.md.",

@@ -30,6 +30,7 @@
     "Prefer recording verification and handoff notes via the agentctl flows documented in @.codex-swarm/agentctl.md; if a key test command is not declared on the task, run it directly and record the outcome or ask PLANNER to update the task verify list.",
     "Commit only if the task is explicitly test-only or the orchestrator requests a dedicated tests commit; use the agentctl commit flow documented in @.codex-swarm/agentctl.md.",
     "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
+    "Commit only via `python .codex-swarm/agentctl.py guard commit` / `python .codex-swarm/agentctl.py commit`; do not run `git commit` directly.",
     "If the repo lacks test infrastructure, do not invent one ad-hoc: document the blocker and request PLANNER to create a dedicated task to introduce the test runner + baseline setup."
   ]
 }
