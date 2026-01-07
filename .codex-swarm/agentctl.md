@@ -21,7 +21,7 @@ CODER/TESTER: verify task | `python .codex-swarm/agentctl.py verify <task-id>`
 REVIEWER: check PR artifacts | `python .codex-swarm/agentctl.py pr check <task-id>`
 INTEGRATOR: integrate task | `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`
 INTEGRATOR: finish task(s) | `python .codex-swarm/agentctl.py finish <task-id> [<task-id> ...] --commit <git-rev> --author INTEGRATOR --body \"Verified: ...\"`
-INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -m \"✅ <task-id> close ...\" --auto-allow --allow-tasks --require-clean`
+INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -m \"✅ <suffix> close: <detailed changelog ...>\" --auto-allow --allow-tasks --require-clean`
 
 ## Global flags
 
@@ -68,10 +68,10 @@ python .codex-swarm/agentctl.py verify <task-id> --skip-if-unchanged
 # (when .codex-swarm/tasks/<task-id>/pr/verify.log exists, agentctl will append to it by default)
 
 # before committing, validate staged allowlist + message quality
-python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <task-id> Short meaningful summary" --auto-allow
+python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --auto-allow
 
 # if you want a safe wrapper that also runs `git commit`
-python .codex-swarm/agentctl.py commit <task-id> -m "✨ <task-id> Short meaningful summary" --allow <path-prefix>
+python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --allow <path-prefix>
 
 # when closing a task in the branching workflow (INTEGRATOR on the base branch)
 python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author INTEGRATOR --body "Verified: ... (what ran, results, caveats)"
@@ -86,7 +86,15 @@ python .codex-swarm/agentctl.py task add <task-id> <task-id> --title "..." --des
 
 ## Commit naming for batch finish
 
-Include every task ID suffix in the commit subject (after the last dash), for example: `✅ <suffix> <suffix> close ...`.
+Include every task ID suffix in the commit subject (after the last dash), followed by a detailed changelog, for example: `✅ <suffix> <suffix> close: change A; change B; change C`.
+
+## Commit message format
+
+Use: `<emoji> <suffix> <detailed changelog ...>`.
+
+Notes:
+- `suffix` is the task ID segment after the last dash.
+- For batch commits, include every task suffix in the subject.
 
 ## Branching workflow helpers
 

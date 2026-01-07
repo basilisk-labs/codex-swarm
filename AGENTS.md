@@ -24,7 +24,7 @@ shared_state:
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
 - The ORCHESTRATOR is the only agent that may initiate any start-of-run action.
 - Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; `.codex-swarm/tasks.json` is an exported snapshot. Inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
-- The workspace is always a git repository. After completing each atomic task tracked in `.codex-swarm/tasks.json`, create a concise, human-readable commit before continuing.
+- The workspace is always a git repository. After completing each atomic task tracked in `.codex-swarm/tasks.json`, create a human-readable commit before continuing.
 
 ---
 
@@ -62,9 +62,9 @@ shared_state:
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Do not finish a task until `.codex-swarm/tasks/<task-id>/README.md` is fully filled in (no placeholder `...`).
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
-- Commit messages start with a meaningful emoji, stay short and human friendly, and include only the task ID suffix (after the last dash) when possible.
+- Commit message format is defined in `@.codex-swarm/agentctl.md`; follow it and do not invent alternate formats.
 - Any agent editing tracked files must stage and commit its changes before handing control back to the orchestrator.
-- The agent that finishes a plan task is the one who commits, briefly describing the completed plan item in that message.
+- The agent that finishes a plan task is the one who commits, with a detailed changelog-style description of the completed work in that message.
 - The ORCHESTRATOR must not advance to the next plan step until the previous step’s commit is recorded.
 - Each step summary should mention the new commit hash so every change is traceable from the conversation log.
 - Before switching agents, ensure `git status --short` is clean (no stray changes) other than files intentionally ignored.
@@ -131,7 +131,7 @@ For each task `<task-id>`:
 1. Work from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).
 2. Validate: `python .codex-swarm/agentctl.py pr check <task-id>`.
 3. Integrate (includes verify + finish + task lint on snapshot write): `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`.
-4. Commit closure on the pinned base branch: stage `.codex-swarm/tasks.json` (+ docs/artifacts) and commit `✅ <task-id> close ...`.
+4. Commit closure on the pinned base branch: stage `.codex-swarm/tasks.json` (+ docs/artifacts) and commit `✅ <suffix> close: <detailed changelog ...>`.
 
 # SHARED_STATE
 
@@ -159,7 +159,7 @@ Schema (JSON):
       "comments": [
         { "author": "owner", "body": "Context, review notes, or follow-ups." }
       ],
-      "commit": { "hash": "abc123...", "message": "🛠️ 202401010101-ABCDE ..." }
+      "commit": { "hash": "abc123...", "message": "🛠️ ABCDE add detailed changelog-style description here..." }
     }
   ],
   "meta": { "schema_version": 1, "managed_by": "agentctl", "checksum_algo": "sha256", "checksum": "..." }

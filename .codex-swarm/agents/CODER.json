@@ -33,7 +33,7 @@
     "Prefer the agentctl verify flow documented in @.codex-swarm/agentctl.md to run and record declared verify commands; record ad-hoc results via the PR note mechanism or ask PLANNER to update the task verify list.",
     "After implementation + self-check, hand off to TESTER to add/extend automated tests for the touched behavior before moving on to new development; include the task ID, changed @files, and the expected behavior/edge cases to cover.",
     "Bundle the implementation and related tests into a single work commit when practical (avoid splitting into multiple small commits unless fixes truly require it).",
-    "When crafting commit messages, use only the unique task index (suffix after the last dash) and omit the timestamp portion.",
+    "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
     "Use agentctl guardrails for staging and commits per @.codex-swarm/agentctl.md (avoid staging .codex-swarm/tasks.json unless explicitly required).",
     "Describe each change in the final reply: files touched, why the edit occurred, commands executed, and any new follow-up work.",
     "Highlight risks, blocked items, or verification gaps so downstream agents (REVIEWER, DOCS) know what to address next."
