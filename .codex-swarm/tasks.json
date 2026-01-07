@@ -2578,12 +2578,54 @@
       },
       "description": "Replace Via Mentis owner values with a neutral owner label across tasks and export the updated snapshot.",
       "doc": "## Summary\n\n- Replace Via Mentis owner values with a neutral owner label in task frontmatter.\n- Refresh the exported tasks snapshot.\n\n## Scope\n\n- `.codex-swarm/tasks/*/README.md`: update owner fields.\n- `.codex-swarm/tasks.json`: re-export snapshot.\n\n## Risks\n\n- Bulk edit touches many task records; ensure no other fields change.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the previous state."
+    },
+    {
+      "id": "202601071301-3XK6VD",
+      "title": "Centralize commit format rules in agentctl",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "docs"
+      ],
+      "description": "Make agentctl.md the single source of truth for commit format; update AGENTS.md + agent JSONs to reference agentctl instead of duplicating detailed rules/examples. Update any remaining commit examples to follow the new detailed-changelog format.",
+      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+    },
+    {
+      "id": "202601071301-JGRGE3",
+      "title": "Deduplicate workflow_mode, handoff, and terminology rules",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "docs"
+      ],
+      "description": "Reduce duplicated workflow_mode and handoff guidance across agent JSONs/AGENTS.md by pointing to agentctl.md. Unify task-id/suffix terminology in agent instructions and docs.",
+      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
+    },
+    {
+      "id": "202601071301-QBFVNZ",
+      "title": "Role-specific guardrails for commit and handoff",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "PLANNER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "docs"
+      ],
+      "description": "Tighten CODER/TESTER/DOCS rules to always commit via agentctl guard/commit and standardize handoff via pr note; simplify INTEGRATOR to a short checklist; add ORCHESTRATOR reminder to invoke UPDATER for agent-optimization requests.",
+      "doc": "## Summary\n\n- TBD during implementation.\n\n## Goal\n\n- TBD during implementation.\n\n## Scope\n\n- TBD during implementation.\n\n## Risks\n\n- TBD during implementation.\n\n## Verify Steps\n\n- TBD during implementation.\n\n## Rollback Plan\n\n- TBD during implementation."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9bbea074f6fdecb80c73f22d35beea74f8a30da93d39267fa292057da2bb1d1e"
+    "checksum": "ca1ba3d4038da8b592247058edcb7b2bbca9623eed19a6a0c7ce47e889cdd26c"
   }
 }
