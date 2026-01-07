@@ -1,7 +1,7 @@
 ---
 id: "202601071438-C7W2GE"
 title: "Update Redmine custom field IDs"
-status: "DONE"
+Яstatus: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
