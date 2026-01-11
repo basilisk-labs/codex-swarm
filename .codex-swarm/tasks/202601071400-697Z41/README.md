@@ -1,11 +1,14 @@
 ---
 id: "202601071400-697Z41"
 title: "Standardize task README format + agentctl-only updates"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "95bfbb7f4d285be96102403b7946db516fa7358e", message: "✨ 697Z41 harden task README metadata guard across backends" }
+comments:
+  - { author: "CODER", body: "Verified: ran python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py and python .codex-swarm/agentctl.py task lint; README metadata guard now applies across backends and task doc notes updated." }
 doc_version: 2
 doc_updated_at: "2026-01-11T09:52:01+00:00"
 doc_updated_by: "agentctl"
