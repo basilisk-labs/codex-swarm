@@ -8,6 +8,8 @@
     "api_key": "",
     "project_id": "",
     "status_map": { "TODO": 1, "DOING": 2, "BLOCKED": 4, "DONE": 5 },
+    "batch_size": 5,
+    "batch_pause": 0.5,
     "custom_fields": {
       "task_id": 1,
       "verify": 2,
