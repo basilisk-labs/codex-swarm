@@ -8,6 +8,6 @@
     "workflow_dir": ".codex-swarm/tasks"
   },
   "tasks_backend": {
-    "config_path": ".codex-swarm/backends/local/backend.json"
+    "config_path": ".codex-swarm/backends/redmine/backend.json"
   }
 }
