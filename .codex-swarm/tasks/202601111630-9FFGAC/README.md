@@ -1,13 +1,15 @@
 ---
 id: "202601111630-9FFGAC"
 title: "Route git commands via agentctl using comment-derived commits"
-status: "DOING"
+status: "DONE"
 priority: "high"
 owner: "CODER"
 depends_on: []
 tags: ["workflow", "agentctl", "git"]
+commit: { hash: "7d1a7ea8188819b501f932d6cbb0db32a5c04fbb", message: "🚧 9FFGAC Start: Implement comment-driven agentctl commits; forbid direct git in agents/docs; document new flags." }
 comments:
   - { author: "CODER", body: "Start: Implement comment-driven agentctl commits; forbid direct git in agents/docs; document new flags." }
+  - { author: "CODER", body: "Verified: Ran python -m py_compile .codex-swarm/agentctl.py; python .codex-swarm/agentctl.py task lint." }
 doc_version: 2
 doc_updated_at: "2026-01-11T16:46:56+00:00"
 doc_updated_by: "agentctl"
