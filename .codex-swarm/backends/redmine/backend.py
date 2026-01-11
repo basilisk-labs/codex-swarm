@@ -285,16 +285,16 @@ class RedmineBackend:
             task["dirty"] = True
             self._cache_task(task, dirty=True)
 
-    def sync(self, direction: str = "push", conflict: str = "diff", quiet: bool = False) -> None:
+    def sync(self, direction: str = "push", conflict: str = "diff", quiet: bool = False, confirm: bool = False) -> None:
         if direction == "push":
-            self._sync_push(conflict=conflict, quiet=quiet)
+            self._sync_push(conflict=conflict, quiet=quiet, confirm=confirm)
             return
         if direction == "pull":
             self._sync_pull(conflict=conflict, quiet=quiet)
             return
         raise ValueError(f"Unsupported direction: {direction}")
 
-    def _sync_push(self, conflict: str, quiet: bool) -> None:
+    def _sync_push(self, conflict: str, quiet: bool, confirm: bool) -> None:
         if not self.cache:
             raise RuntimeError("Redmine cache is disabled; sync push is unavailable")
         tasks = self.cache.list_tasks()
@@ -303,6 +303,11 @@ class RedmineBackend:
             if not quiet:
                 print("ℹ️ no dirty tasks to push")
             return
+        if not confirm:
+            for task in dirty:
+                task_id = task.get("id")
+                print(f"- pending push: {task_id}")
+            raise RuntimeError("Refusing to push without --yes (preview above)")
         for task in dirty:
             self.write_task(task)
         if not quiet:

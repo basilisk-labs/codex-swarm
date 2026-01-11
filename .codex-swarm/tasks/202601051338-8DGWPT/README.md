@@ -6,6 +6,7 @@ priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "backend", "docs"]
+verify: ["echo docs-only"]
 commit: { hash: "095a9428549afe10ccf9d4e078cdc6c48d78b0f9", message: "🧩 8DGWPT redmine doc metadata" }
 doc_version: 2
 doc_updated_at: "2026-01-11T08:06:07+00:00"

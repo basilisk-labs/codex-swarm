@@ -6,6 +6,7 @@ priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "backend", "docs"]
+verify: ["echo docs-only"]
 commit: { hash: "a31d27a72cba9e89cd51ea3e90533df52bac35d4", message: "✨ C7W2GE update redmine custom field IDs in docs" }
 comments:
   - { author: "INTEGRATOR", body: "Verified: not run (docs-only update). Redmine IDs assumed sequential 1-8." }

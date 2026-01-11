@@ -1169,7 +1169,7 @@ def cmd_sync(args: argparse.Namespace) -> None:
     sync = getattr(backend, "sync", None)
     if not callable(sync):
         die("Configured backend does not support sync()", code=2)
-    sync(direction=args.direction, conflict=args.conflict, quiet=args.quiet)
+    sync(direction=args.direction, conflict=args.conflict, quiet=args.quiet, confirm=bool(getattr(args, "yes", False)))
 
 
 def index_tasks_by_id(tasks: List[Dict]) -> Tuple[Dict[str, Dict], List[str]]:
@@ -1254,6 +1254,10 @@ def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Di
                 missing.append(dep_id)
                 continue
             if dep_task.get("status") != "DONE":
+                incomplete.append(dep_id)
+                continue
+            commit = dep_task.get("commit") or {}
+            if not isinstance(commit, dict) or not str(commit.get("hash") or "").strip() or not str(commit.get("message") or "").strip():
                 incomplete.append(dep_id)
         state[task_id] = {
             "depends_on": depends_on,
@@ -1619,6 +1623,30 @@ def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
         )
 
 
+VERIFY_REQUIRED_TAGS = {"code", "backend", "frontend"}
+
+
+def requires_verify(tags: List[str]) -> bool:
+    tag_set = {t.strip().lower() for t in tags if isinstance(t, str)}
+    return bool(VERIFY_REQUIRED_TAGS & tag_set)
+
+
+def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
+    owner_upper = str(owner or "").strip().upper()
+    if not owner_upper:
+        die("owner must be non-empty", code=2)
+    extras = {"HUMAN", "ORCHESTRATOR"}
+    known = load_agents_index()
+    if owner_upper in extras or allow_missing_agents:
+        return
+    if known and owner_upper not in known:
+        die(
+            "Owner must be an existing agent id. "
+            "If a new agent is required, create it via CREATOR first.",
+            code=2,
+        )
+
+
 def lint_tasks_json() -> Dict[str, List[str]]:
     errors: List[str] = []
     warnings: List[str] = []
@@ -1673,6 +1701,11 @@ def lint_tasks_json() -> Dict[str, List[str]]:
         owner_upper = str(owner or "").strip().upper()
         if owner_upper and known_agents and owner_upper not in known_agents and owner_upper not in {"HUMAN", "ORCHESTRATOR"}:
             errors.append(f"{task_id}: owner {owner_upper!r} is not a known agent id")
+
+        tags = task.get("tags") or []
+        verify = task.get("verify") or []
+        if requires_verify(tags) and not verify:
+            errors.append(f"{task_id}: verify commands are required for tasks with code/backend/frontend tags")
 
         tags = task.get("tags")
         if tags is not None:
@@ -2037,8 +2070,11 @@ def cmd_task_new(args: argparse.Namespace) -> None:
         "tags": list(dict.fromkeys((args.tag or []))),
         "depends_on": normalized_depends_on,
     }
-    if args.verify:
-        task["verify"] = list(dict.fromkeys(args.verify))
+    verify_list = list(dict.fromkeys(args.verify)) if args.verify else []
+    if requires_verify(task.get("tags") or []) and not verify_list:
+        die("verify commands are required for tasks with code/backend/frontend tags", code=2)
+    if verify_list:
+        task["verify"] = verify_list
     if args.comment_author and args.comment_body:
         task["comments"] = [{"author": args.comment_author, "body": args.comment_body}]
     tasks.append(task)
@@ -2086,6 +2122,10 @@ def cmd_task_update(args: argparse.Namespace) -> None:
         existing = [cmd for cmd in (task.get("verify") or []) if isinstance(cmd, str)]
         merged = existing + args.verify
         task["verify"] = list(dict.fromkeys(cmd.strip() for cmd in merged if cmd.strip()))
+    tags_for_check = task.get("tags") or []
+    verify_for_check = task.get("verify") or []
+    if requires_verify(tags_for_check) and not verify_for_check:
+        die("verify commands are required for tasks with code/backend/frontend tags", code=2)
 
     save(tasks)
 
@@ -2331,6 +2371,11 @@ def cmd_finish(args: argparse.Namespace) -> None:
                 if incomplete:
                     print(f"⚠️ {task_id}: incomplete deps: {', '.join(incomplete)}")
                 die(f"Task is not ready: {task_id} (use --force to override)", code=2)
+            target_owner = str((tasks_by_id.get(task_id) or {}).get("owner") or "").strip().upper()
+            author_upper = str(args.author or "").strip().upper()
+            if author_upper and not is_branch_pr_mode() and author_upper not in {target_owner} and not args.force:
+                die(f"--author must match task owner ({target_owner or 'unknown'}) in direct mode (use --force to override)", code=2)
+            validate_task_doc_complete(task_id)
 
     verify_commands: Dict[str, List[str]] = {}
     for task_id in task_ids:
@@ -3166,6 +3211,22 @@ def pr_validate_description(text: str) -> Tuple[List[str], List[str]]:
     return missing_sections, empty_sections
 
 
+def validate_task_doc_complete(task_id: str, *, source_text: Optional[str] = None) -> None:
+    doc_text = source_text
+    if doc_text is None:
+        readme_path = workflow_task_readme_path(task_id)
+        if not readme_path.exists():
+            return
+        doc_text = readme_path.read_text(encoding="utf-8", errors="replace")
+    if doc_text is None:
+        return
+    missing, empty = pr_validate_description(doc_text)
+    if missing:
+        die(f"{task_id}: task doc missing required section(s): {', '.join(missing)}", code=2)
+    if empty:
+        die(f"{task_id}: task doc has placeholder/empty section(s): {', '.join(empty)}", code=2)
+
+
 def pr_load_meta(meta_path: Path) -> Dict:
     if not meta_path.exists():
         return {}
@@ -3450,6 +3511,7 @@ def pr_check(
         die(f"PR doc {doc_hint} missing required section(s): {', '.join(missing_sections)}", code=2)
     if empty_sections:
         die(f"PR doc {doc_hint} has empty section(s): {', '.join(empty_sections)}", code=2)
+    validate_task_doc_complete(task_id, source_text=pr_doc)
 
     subjects = git_log_subjects(base_ref, pr_branch, limit=200)
     if not subjects:
@@ -4187,6 +4249,7 @@ def build_parser() -> argparse.ArgumentParser:
         choices=["diff", "prefer-local", "prefer-remote", "fail"],
         help="Conflict strategy (default: diff)",
     )
+    p_sync.add_argument("--yes", action="store_true", help="Confirm push writes (for backends that require it)")
     p_sync.add_argument("--quiet", action="store_true", help="Minimal output")
     p_sync.set_defaults(func=cmd_sync)
 

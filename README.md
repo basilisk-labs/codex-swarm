@@ -45,6 +45,8 @@ If you need details or troubleshooting, jump into `docs/README.md` for the full 
 - Lint snapshot: `python .codex-swarm/agentctl.py task lint`
 - Optional reset for reuse: `./clean.sh` (removes repo-specific artifacts; rerun quickstart afterwards)
 
+If you're contributing, read `docs/05-workflow.md` for the full workflow expectations (agentctl-only writes, commits, handoffs).
+
 ## Example: auto-doc for a tiny refactor
 
 1. User: “Refactor utils/date.ts and update the README accordingly.”

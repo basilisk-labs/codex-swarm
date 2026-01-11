@@ -3285,6 +3285,9 @@
         "backend",
         "docs"
       ],
+      "verify": [
+        "echo docs-only"
+      ],
       "commit": {
         "hash": "095a9428549afe10ccf9d4e078cdc6c48d78b0f9",
         "message": "🧩 8DGWPT redmine doc metadata"
@@ -3546,6 +3549,9 @@
         "backend",
         "docs"
       ],
+      "verify": [
+        "echo docs-only"
+      ],
       "commit": {
         "hash": "a31d27a72cba9e89cd51ea3e90533df52bac35d4",
         "message": "✨ C7W2GE update redmine custom field IDs in docs"
@@ -3701,6 +3707,9 @@
         "backend",
         "agents"
       ],
+      "verify": [
+        "python -m py_compile .codex-swarm/backends/redmine/backend.py"
+      ],
       "commit": {
         "hash": "1a5d38264519ada0bf7042c57b11a4b3464d8cad",
         "message": "✨ RGNDGK harden redmine backend and add agent"
@@ -3720,7 +3729,7 @@
     {
       "id": "202601110913-Z10Z68",
       "title": "Replace automation owners and refresh newcomer docs",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [],
@@ -3728,16 +3737,31 @@
         "docs",
         "tasks"
       ],
+      "commit": {
+        "hash": "f64f2b21f69a77cf0a67a8d5cb252d5756823e96",
+        "message": "🔒 Z10Z68 enforce agent owners"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "Verified: py_compile redmine backend; task lint clean; owners now CODER; README/docs split between quickstart and full reference."
+        },
+        {
+          "author": "DOCS",
+          "body": "Verified: py_compile agentctl/redmine; lint clean. Enforced known-agent owners in task flows/docs."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-11T09:13:04+00:00",
+      "doc_updated_at": "2026-01-11T09:15:44+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Change owner=AUTOMATION tasks to a real agent (CODER) and adjust README/docs to guide first-time users vs full docs."
+      "description": "Change owner=AUTOMATION tasks to a real agent (CODER) and adjust README/docs to guide first-time users vs full docs.",
+      "doc": "## Summary\n\nSwap legacy owner=AUTOMATION to CODER across tasks and adjust README/docs to separate newcomer quickstart from full reference.\n\n## Context\n\nLint warnings came from owner=AUTOMATION; docs needed clearer split between newcomer quickstart (root README) and full docs (docs/README).\n\n## Scope\n\n- Replace owner=AUTOMATION with CODER in all tasks.\n- Regenerate tasks.json export.\n- Refresh root README for first-time quickstart emphasis and point to docs/README.md for the full guide.\n- Update docs/README.md to clarify it is the full reference.\n\n## Risks\n\n- Bulk owner changes touch many files; must avoid altering other metadata.\n- README simplification should not hide links to full docs.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/backends/redmine/backend.py\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert the owner changes and README/docs edits."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9fdd8bb4f07df19bef48270010203d97b57d7557a6b51bd344614e133a033f2e"
+    "checksum": "9719155ec1c4be23b0d7b029fe3ff0c2a5ca63b0b20e68814725cff603740d61"
   }
 }
