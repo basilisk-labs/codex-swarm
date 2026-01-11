@@ -141,8 +141,15 @@ def scrub_line(line: str) -> Optional[str]:
         if "--worktree" in s:
             s = s.replace("--worktree", "").replace("  ", " ").replace("  ", " ").strip()
             s = s.replace("  ", " ")
-            s = s.replace("`python .codex-swarm/agentctl.py work start T-123 --agent <ROLE> --slug <slug>`", "`python .codex-swarm/agentctl.py work start T-123`")
-            s = s.replace("`python .codex-swarm/agentctl.py work start T-123 --agent CODER --slug <slug>`", "`python .codex-swarm/agentctl.py work start T-123`")
+            example_task = "202601010101-ABCD"
+            s = s.replace(
+                "`python .codex-swarm/agentctl.py work start T-123 --agent <ROLE> --slug <slug>`",
+                f"`python .codex-swarm/agentctl.py work start {example_task}`",
+            )
+            s = s.replace(
+                "`python .codex-swarm/agentctl.py work start T-123 --agent CODER --slug <slug>`",
+                f"`python .codex-swarm/agentctl.py work start {example_task}`",
+            )
         return s or None
 
     # branch_pr

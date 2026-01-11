@@ -1517,7 +1517,9 @@ def path_is_under(path: str, prefix: str) -> bool:
     return p == root or p.startswith(root + "/")
 
 
-_TASK_BRANCH_RE = re.compile(r"^task/(T-[0-9]{3,})/[^/]+$")
+_TASK_BRANCH_RE = re.compile(
+    r"^task/(?:(T-[0-9]{3,})|(\d{12}-[0-9A-Z]{4,}))/[^/]+$"
+)
 _VERIFIED_SHA_RE = re.compile(r"verified_sha=([0-9a-f]{7,40})", re.IGNORECASE)
 
 
@@ -1526,7 +1528,8 @@ def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
     match = _TASK_BRANCH_RE.match(raw)
     if not match:
         return None
-    return match.group(1)
+    legacy, modern = match.group(1), match.group(2)
+    return legacy or modern
 
 
 def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]]:
@@ -2838,7 +2841,7 @@ def cmd_branch_status(args: argparse.Namespace) -> None:
     print_block("RESULT", f"branch={branch} base={base} ahead={ahead} behind={behind} task_id={task_id or '-'}")
     if worktree:
         print_block("RESULT", f"worktree={worktree}")
-    print_block("NEXT", "If you are ready, update PR artifacts via `python .codex-swarm/agentctl.py pr update <T-###>`.")
+    print_block("NEXT", "If you are ready, update PR artifacts via `python .codex-swarm/agentctl.py pr update <task-id>`.")
 
 
 def cmd_branch_remove(args: argparse.Namespace) -> None:
@@ -3071,7 +3074,7 @@ def workflow_task_readme_path(task_id: str) -> Path:
 
 
 def pr_dir(task_id: str) -> Path:
-    # New layout (T-074+): .codex-swarm/tasks/<task-id>/pr/
+    # Layout: .codex-swarm/tasks/<task-id>/pr/
     return workflow_task_dir(task_id) / "pr"
 
 
