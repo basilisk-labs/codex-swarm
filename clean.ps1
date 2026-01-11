@@ -1,23 +1,29 @@
-#!/usr/bin/env bash
-set -euo pipefail
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
 # Interactive workflow mode selection (direct vs branch_pr).
 # - If CODEXSWARM_MODE is set, it wins.
 # - If stdin is a TTY, we prompt.
 # - Otherwise default to direct.
-MODE="${CODEXSWARM_MODE:-}"
-if [[ -z "${MODE}" && -t 0 ]]; then
-  read -r -p "Select workflow_mode (direct/branch_pr) [direct]: " MODE || true
-fi
-MODE="${MODE:-direct}"
-case "${MODE}" in
-  direct|branch_pr) ;;
-  *)
-    echo "Invalid workflow_mode: ${MODE} (expected: direct or branch_pr)" >&2
+$MODE = $env:CODEXSWARM_MODE
+if ([string]::IsNullOrWhiteSpace($MODE) -and -not [Console]::IsInputRedirected) {
+  $inputMode = Read-Host "Select workflow_mode (direct/branch_pr) [direct]"
+  if (-not [string]::IsNullOrWhiteSpace($inputMode)) {
+    $MODE = $inputMode
+  }
+}
+if ([string]::IsNullOrWhiteSpace($MODE)) {
+  $MODE = "direct"
+}
+switch ($MODE) {
+  "direct" { }
+  "branch_pr" { }
+  default {
+    Write-Error "Invalid workflow_mode: $MODE (expected: direct or branch_pr)"
     exit 2
-    ;;
-esac
-export MODE
+  }
+}
+$env:MODE = $MODE
 
 # This script cleans the project folder by removing the root repository links so agents can be used for anything.
 # It removes leftover assets, metadata, and git state that would tie the copy to the original repo.
@@ -25,60 +31,70 @@ export MODE
 #
 # Note: .codex-swarm/agentctl.md and .codex-swarm/tasks stay as part of the framework export.
 
-rm -rf \
-  .DS_Store \
-  .env* \
-  .github \
-  .gitattributes \
-  .git \
-  __pycache__ \
-  .pytest_cache \
-  .venv \
-  assets \
-  docs \
-  scripts \
-  README.md \
-  .codex-swarm/viewer \
-  Makefile \
-  LICENSE \
-  .codex-swarm/tasks.json \
-  CONTRIBUTING.md \
-  CODE_OF_CONDUCT.md \
-  GUIDELINE.md \
-  viewer.sh \
-  clean.ps1
+Get-ChildItem -Force -Path . -Filter ".env*" -ErrorAction SilentlyContinue |
+  Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
 
-# Reset local task storage while keeping the framework task directory.
-if [[ -d ".codex-swarm/tasks" ]]; then
-  find .codex-swarm/tasks -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-else
-  mkdir -p .codex-swarm/tasks
-fi
+$pathsToRemove = @(
+  ".DS_Store",
+  ".github",
+  ".gitattributes",
+  ".git",
+  "__pycache__",
+  ".pytest_cache",
+  ".venv",
+  "assets",
+  "docs",
+  "scripts",
+  "README.md",
+  ".codex-swarm/viewer",
+  "Makefile",
+  "LICENSE",
+  ".codex-swarm/tasks.json",
+  "CONTRIBUTING.md",
+  "CODE_OF_CONDUCT.md",
+  "GUIDELINE.md",
+  "viewer.sh"
+)
 
-# Recreate an empty tasks export so the framework is usable after cleanup.
-python3 - <<'PY' > .codex-swarm/tasks.json
-import hashlib
-import json
-
-tasks = []
-payload = json.dumps({"tasks": tasks}, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
-checksum = hashlib.sha256(payload).hexdigest()
-
-data = {
-    "tasks": tasks,
-    "meta": {
-        "schema_version": 1,
-        "managed_by": "agentctl",
-        "checksum_algo": "sha256",
-        "checksum": checksum,
-    },
+foreach ($path in $pathsToRemove) {
+  Remove-Item -Force -Recurse -ErrorAction SilentlyContinue $path
 }
 
-print(json.dumps(data, indent=2, ensure_ascii=False))
-PY
+# Reset local task storage while keeping the framework task directory.
+$tasksDir = Join-Path ".codex-swarm" "tasks"
+if (Test-Path $tasksDir) {
+  Get-ChildItem -Force -Path $tasksDir -ErrorAction SilentlyContinue |
+    Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+} else {
+  New-Item -ItemType Directory -Force -Path $tasksDir | Out-Null
+}
+
+# Recreate an empty tasks export so the framework is usable after cleanup.
+$payload = '{"tasks":[]}'
+$sha256 = [System.Security.Cryptography.SHA256]::Create()
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
+$hashBytes = $sha256.ComputeHash($bytes)
+$checksum = -join ($hashBytes | ForEach-Object { $_.ToString("x2") })
+$sha256.Dispose()
+
+$data = [ordered]@{
+  tasks = @()
+  meta = [ordered]@{
+    schema_version = 1
+    managed_by = "agentctl"
+    checksum_algo = "sha256"
+    checksum = $checksum
+  }
+}
+$data | ConvertTo-Json -Depth 5 | Out-File -FilePath ".codex-swarm/tasks.json" -Encoding utf8
 
 # Apply the selected workflow_mode and scrub agent prompts for the unused mode.
-python3 - <<'PY'
+$python = Get-Command python,python3 -ErrorAction SilentlyContinue | Select-Object -First 1
+if (-not $python) {
+  throw "Python not found in PATH."
+}
+
+$script = @'
 import json
 import os
 import re
@@ -141,6 +157,9 @@ def scrub_line(line: str) -> Optional[str]:
             return None
         if "--worktree" in s:
             s = s.replace("--worktree", "").replace("  ", " ").replace("  ", " ").strip()
+            s = s.replace("  ", " ")
+            s = s.replace("`python .codex-swarm/agentctl.py work start T-123 --agent <ROLE> --slug <slug>`", "`python .codex-swarm/agentctl.py work start T-123`")
+            s = s.replace("`python .codex-swarm/agentctl.py work start T-123 --agent CODER --slug <slug>`", "`python .codex-swarm/agentctl.py work start T-123`")
         return s or None
 
     # branch_pr
@@ -231,31 +250,32 @@ for agent_path in sorted(agents_dir.glob("*.json")):
 # 3) Scrub the two human-facing prompt docs
 scrub_workflow_mode_docs(ROOT / "AGENTS.md")
 scrub_workflow_mode_docs(ROOT / ".codex-swarm" / "agentctl.md")
-PY
+'@
+
+$script | & $python.Source -
 
 # Initialize a fresh repository after the cleanup so the folder can be reused independently.
-if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  # If we're already in a git repo, pin the current branch as the base branch for agentctl.
-  current_branch="$(git symbolic-ref --short -q HEAD || true)"
-  if [[ -n "${current_branch}" && "${current_branch}" != "HEAD" ]]; then
-    git config --local codexswarm.baseBranch "${current_branch}"
-  fi
-else
-  # Initialize a new git repo. Prefer `main` when supported.
-  if git init -b main >/dev/null 2>&1; then
-    :
-  else
-    git init
-    git switch -c main >/dev/null 2>&1 || true
-  fi
+& git rev-parse --is-inside-work-tree >$null 2>&1
+if ($LASTEXITCODE -eq 0) {
+  $currentBranch = (& git symbolic-ref --short -q HEAD 2>$null)
+  if ($currentBranch -and $currentBranch -ne "HEAD") {
+    & git config --local codexswarm.baseBranch $currentBranch
+  }
+} else {
+  & git init -b main >$null 2>&1
+  if ($LASTEXITCODE -ne 0) {
+    & git init >$null 2>&1
+    & git switch -c main >$null 2>&1
+  }
 
-  current_branch="$(git symbolic-ref --short -q HEAD || true)"
-  if [[ -n "${current_branch}" && "${current_branch}" != "HEAD" ]]; then
-    git config --local codexswarm.baseBranch "${current_branch}"
-  fi
-fi
+  $currentBranch = (& git symbolic-ref --short -q HEAD 2>$null)
+  if ($currentBranch -and $currentBranch -ne "HEAD") {
+    & git config --local codexswarm.baseBranch $currentBranch
+  }
+}
 
-git add .codex-swarm .gitignore AGENTS.md
-git commit -m "Initial commit"
+& git add .codex-swarm .gitignore AGENTS.md
+& git commit -m "Initial commit"
 
-rm -rf clean.sh
+Remove-Item -Force -ErrorAction SilentlyContinue clean.sh
+Remove-Item -Force -ErrorAction SilentlyContinue clean.ps1
