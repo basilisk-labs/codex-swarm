@@ -33,6 +33,10 @@ rm -rf \
   .git \
   __pycache__ \
   .pytest_cache \
+  .ruff_cache \
+  .mypy_cache \
+  .pyright \
+  dmypy.json \
   .venv \
   assets \
   docs \

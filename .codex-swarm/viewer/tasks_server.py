@@ -4,14 +4,16 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import os
-from http import HTTPStatus
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
 import subprocess
 import sys
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from typing import cast
 from urllib.parse import urlparse
+
 
 def resolve_repo_root() -> Path:
     cwd = Path.cwd()
@@ -30,7 +32,7 @@ AGENTCTL = REPO_ROOT / ".codex-swarm" / "agentctl.py"
 STATUS_SET = {"TODO", "DOING", "BLOCKED", "DONE"}
 
 
-def run_agentctl(*args: str) -> subprocess.CompletedProcess:
+def run_agentctl(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [sys.executable, str(AGENTCTL), *args],
         cwd=str(REPO_ROOT),
@@ -47,9 +49,10 @@ def export_tasks_json() -> tuple[bool, str]:
     return True, ""
 
 
-def load_tasks_json() -> dict:
+def load_tasks_json() -> dict[str, object]:
     with TASKS_JSON.open("r", encoding="utf-8") as fh:
-        return json.load(fh)
+        return cast(dict[str, object], json.load(fh))
+
 
 def mask(value: str, keep: int = 4) -> str:
     if not value:
@@ -62,11 +65,12 @@ def mask(value: str, keep: int = 4) -> str:
 class TasksHandler(BaseHTTPRequestHandler):
     server_version = "TasksServer/0.1"
 
-    def log_message(self, fmt: str, *args) -> None:
+    def log_message(self, fmt: str, *args: object) -> None:
         # Keep console output concise.
-        sys.stderr.write("%s - - [%s] %s\n" % (self.address_string(), self.log_date_time_string(), fmt % args))
+        message = fmt % args if args else fmt
+        sys.stderr.write(f"{self.address_string()} - - [{self.log_date_time_string()}] {message}\n")
 
-    def _send_json(self, payload: dict, status: int = 200) -> None:
+    def _send_json(self, payload: dict[str, object], status: int = 200) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
@@ -86,15 +90,18 @@ class TasksHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _read_json(self) -> dict:
+    def _read_json(self) -> dict[str, object]:
         length = int(self.headers.get("Content-Length", "0"))
         raw = self.rfile.read(length) if length else b""
         if not raw:
             return {}
         try:
-            return json.loads(raw.decode("utf-8"))
+            payload = json.loads(raw.decode("utf-8"))
         except json.JSONDecodeError as exc:
             raise ValueError(f"Invalid JSON body: {exc}") from exc
+        if not isinstance(payload, dict):
+            raise TypeError("Invalid JSON body: expected object")
+        return cast(dict[str, object], payload)
 
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
@@ -154,7 +161,8 @@ class TasksHandler(BaseHTTPRequestHandler):
                     raise RuntimeError(err)
                 data = load_tasks_json()
                 if not ok:
-                    meta = data.get("meta") if isinstance(data.get("meta"), dict) else {}
+                    meta_obj = data.get("meta")
+                    meta = cast(dict[str, object], meta_obj) if isinstance(meta_obj, dict) else {}
                     meta["warning"] = err
                     data["meta"] = meta
             except Exception as exc:  # pragma: no cover - simple runtime guard
@@ -205,10 +213,8 @@ def main() -> int:
     addr = f"http://{args.host}:{args.port}"
     print(f"Serving tasks.html at {addr} (Ctrl+C to stop)")
     httpd = ThreadingHTTPServer((args.host, args.port), TasksHandler)
-    try:
+    with contextlib.suppress(KeyboardInterrupt):
         httpd.serve_forever()
-    except KeyboardInterrupt:
-        pass
     return 0
 
 

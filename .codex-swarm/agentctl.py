@@ -15,25 +15,27 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Callable, Dict, Iterable, List, Optional, Set, Tuple
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parent
 SWARM_DIR = ROOT / ".codex-swarm"
 SWARM_CONFIG_PATH = SWARM_DIR / "config.json"
 
-ALLOWED_WORKFLOW_MODES: Set[str] = {"direct", "branch_pr"}
+ALLOWED_WORKFLOW_MODES: set[str] = {"direct", "branch_pr"}
 DEFAULT_WORKFLOW_MODE = "direct"
 
-ALLOWED_STATUSES: Set[str] = {"TODO", "DOING", "BLOCKED", "DONE"}
+ALLOWED_STATUSES: set[str] = {"TODO", "DOING", "BLOCKED", "DONE"}
 TASKS_SCHEMA_VERSION = 1
 TASKS_META_KEY = "meta"
 TASKS_META_MANAGED_BY = "agentctl"
 
-GENERIC_COMMIT_TOKENS: Set[str] = {
+GENERIC_COMMIT_TOKENS: set[str] = {
     "start",
     "status",
     "mark",
@@ -61,12 +63,12 @@ def load_env_file(path: Path) -> None:
         if not key or key in os.environ:
             continue
         value = value.strip()
-        if value and value[0] == value[-1] and value[0] in ("\"", "'"):
+        if value and value[0] == value[-1] and value[0] in ('"', "'"):
             value = value[1:-1]
         os.environ[key] = value
 
 
-def run(cmd: List[str], *, cwd: Path = ROOT, check: bool = True) -> subprocess.CompletedProcess:
+def run(cmd: list[str], *, cwd: Path = ROOT, check: bool = True) -> subprocess.CompletedProcess:
     return subprocess.run(
         cmd,
         cwd=str(cwd),
@@ -76,7 +78,7 @@ def run(cmd: List[str], *, cwd: Path = ROOT, check: bool = True) -> subprocess.C
     )
 
 
-def error_context() -> Dict[str, object]:
+def error_context() -> dict[str, object]:
     return {"cwd": str(Path.cwd().resolve()), "argv": sys.argv[1:]}
 
 
@@ -137,10 +139,7 @@ def git_config_set(key: str, value: str, *, cwd: Path = ROOT) -> None:
 def is_task_worktree_checkout(*, cwd: Path = ROOT) -> bool:
     top = git_toplevel(cwd=cwd)
     parts = top.parts
-    for idx in range(len(parts) - 1):
-        if parts[idx] == ".codex-swarm" and parts[idx + 1] == "worktrees":
-            return True
-    return False
+    return any(parts[idx] == ".codex-swarm" and parts[idx + 1] == "worktrees" for idx in range(len(parts) - 1))
 
 
 def ensure_git_clean(*, cwd: Path = ROOT, action: str) -> None:
@@ -271,9 +270,9 @@ def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
-_TASK_CACHE: Optional[List[Dict]] = None
-_TASK_INDEX_CACHE: Optional[Tuple[str, Dict[str, Dict], List[str]]] = None
-_TASK_DEP_CACHE: Optional[Tuple[str, Dict[str, Dict[str, List[str]]], List[str]]] = None
+_TASK_CACHE: list[dict] | None = None
+_TASK_INDEX_CACHE: tuple[str, dict[str, dict], list[str]] | None = None
+_TASK_DEP_CACHE: tuple[str, dict[str, dict[str, list[str]]], list[str]] | None = None
 GLOBAL_QUIET = False
 GLOBAL_VERBOSE = False
 GLOBAL_JSON = False
@@ -288,9 +287,9 @@ def normalize_slug(value: str) -> str:
     return raw or "work"
 
 
-def normalize_task_ids(values: Iterable[str]) -> List[str]:
-    task_ids: List[str] = []
-    seen: Set[str] = set()
+def normalize_task_ids(values: Iterable[str]) -> list[str]:
+    task_ids: list[str] = []
+    seen: set[str] = set()
     for value in values:
         task_id = str(value or "").strip()
         if not task_id:
@@ -312,7 +311,7 @@ def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
     return bool(meaningful)
 
 
-def task_id_variants(task_id: str) -> Set[str]:
+def task_id_variants(task_id: str) -> set[str]:
     raw = task_id.strip()
     if not raw:
         return set()
@@ -330,7 +329,7 @@ def task_suffix(task_id: str) -> str:
     return raw
 
 
-def task_digest(task: Dict) -> str:
+def task_digest(task: dict) -> str:
     return json.dumps(task, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
 
@@ -338,12 +337,12 @@ def commit_subject_mentions_task(task_id: str, subject: str) -> bool:
     return any(token in subject for token in task_id_variants(task_id))
 
 
-def commit_subject_missing_error(task_ids: List[str], subject: str, *, context: Optional[str] = None) -> str:
+def commit_subject_missing_error(task_ids: list[str], subject: str, *, context: str | None = None) -> str:
     prefix = f"{context}: " if context else ""
     return f"{prefix}Commit subject does not mention task suffix(es) for {', '.join(task_ids)}: {subject!r}"
 
 
-def load_task_index() -> Tuple[List[Dict], Dict[str, Dict], List[str], str]:
+def load_task_index() -> tuple[list[dict], dict[str, dict], list[str], str]:
     tasks, _ = load_task_store()
     key = tasks_cache_key(tasks)
     global _TASK_INDEX_CACHE
@@ -355,7 +354,9 @@ def load_task_index() -> Tuple[List[Dict], Dict[str, Dict], List[str], str]:
     return tasks, tasks_by_id, warnings, key
 
 
-def load_dependency_state_for(tasks_by_id: Dict[str, Dict], *, key: str) -> Tuple[Dict[str, Dict[str, List[str]]], List[str]]:
+def load_dependency_state_for(
+    tasks_by_id: dict[str, dict], *, key: str
+) -> tuple[dict[str, dict[str, list[str]]], list[str]]:
     global _TASK_DEP_CACHE
     if _TASK_DEP_CACHE and _TASK_DEP_CACHE[0] == key:
         return _TASK_DEP_CACHE[1], _TASK_DEP_CACHE[2]
@@ -372,7 +373,7 @@ def require_structured_comment(body: str, *, prefix: str, min_chars: int) -> Non
         die(f"Comment body must be at least {min_chars} characters", code=2)
 
 
-def load_json(path: Path) -> Dict:
+def load_json(path: Path) -> dict:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
@@ -381,7 +382,7 @@ def load_json(path: Path) -> Dict:
         die(f"Invalid JSON in {path}: {exc}")
 
 
-def _resolve_optional_repo_relative_path(value: str, *, label: str) -> Optional[Path]:
+def _resolve_optional_repo_relative_path(value: str, *, label: str) -> Path | None:
     raw = str(value or "").strip()
     if not raw:
         return None
@@ -395,13 +396,11 @@ def _resolve_optional_repo_relative_path(value: str, *, label: str) -> Optional[
     return resolved
 
 
-def load_backend_config() -> Dict:
+def load_backend_config() -> dict:
     backend = _SWARM_CONFIG.get("tasks_backend") or {}
     if not isinstance(backend, dict):
         die(f"{SWARM_CONFIG_PATH} tasks_backend must be a JSON object", code=2)
-    config_path = _resolve_optional_repo_relative_path(
-        backend.get("config_path"), label="tasks_backend.config_path"
-    )
+    config_path = _resolve_optional_repo_relative_path(backend.get("config_path"), label="tasks_backend.config_path")
     if not config_path:
         return {}
     data = load_json(config_path)
@@ -412,7 +411,7 @@ def load_backend_config() -> Dict:
         if not isinstance(value, str) or not value.strip():
             die(f"{config_path} is missing required field {key!r}", code=2)
     version = data.get("version")
-    if not isinstance(version, (int, str)):
+    if not isinstance(version, int | str):
         die(f"{config_path} is missing required field 'version'", code=2)
     settings = data.get("settings")
     if settings is None:
@@ -428,7 +427,7 @@ def load_backend_config() -> Dict:
     return data
 
 
-def load_backend_class(backend_config: Dict) -> Optional[type]:
+def load_backend_class(backend_config: dict) -> type | None:
     if not backend_config:
         return None
     module_path = Path(str(backend_config.get("_module_path") or "")).resolve()
@@ -450,7 +449,6 @@ def load_backend_class(backend_config: Dict) -> Optional[type]:
     return backend_cls
 
 
-
 def _resolve_repo_relative_path(value: str, *, label: str) -> Path:
     raw = str(value or "").strip()
     if not raw:
@@ -465,7 +463,7 @@ def _resolve_repo_relative_path(value: str, *, label: str) -> Path:
     return resolved
 
 
-def load_swarm_config() -> Dict:
+def load_swarm_config() -> dict:
     if not SWARM_CONFIG_PATH.exists():
         die(f"Missing swarm config: {SWARM_CONFIG_PATH}", code=2)
     data = load_json(SWARM_CONFIG_PATH)
@@ -490,19 +488,19 @@ TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
 load_env_file(ROOT / ".env")
 BACKEND_CONFIG = load_backend_config()
 BACKEND_CLASS = load_backend_class(BACKEND_CONFIG) if BACKEND_CONFIG else None
-_BACKEND_INSTANCE: Optional[object] = None
+_BACKEND_INSTANCE: object | None = None
 
 
 def backend_enabled() -> bool:
     return BACKEND_CLASS is not None
 
 
-def backend_settings() -> Dict:
+def backend_settings() -> dict:
     settings = BACKEND_CONFIG.get("settings") if isinstance(BACKEND_CONFIG, dict) else None
     return settings if isinstance(settings, dict) else {}
 
 
-def backend_instance() -> Optional[object]:
+def backend_instance() -> object | None:
     global _BACKEND_INSTANCE
     if not backend_enabled():
         return None
@@ -533,6 +531,7 @@ def is_branch_pr_mode() -> bool:
 def is_direct_mode() -> bool:
     return workflow_mode() == "direct"
 
+
 DEFAULT_BASE_BRANCH = "main"
 GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
@@ -547,7 +546,7 @@ def pinned_base_branch(*, cwd: Path = ROOT) -> str:
     return git_config_get(GIT_CONFIG_BASE_BRANCH_KEY, cwd=cwd)
 
 
-def maybe_pin_base_branch(*, cwd: Path = ROOT) -> Optional[str]:
+def maybe_pin_base_branch(*, cwd: Path = ROOT) -> str | None:
     configured = config_base_branch()
     if configured:
         return configured
@@ -568,27 +567,27 @@ def base_branch(*, cwd: Path = ROOT) -> str:
 
 
 def now_iso_utc() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    return datetime.now(UTC).replace(microsecond=0).isoformat()
 
 
-def write_json(path: Path, data: Dict) -> None:
+def write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def canonical_tasks_payload(tasks: List[Dict]) -> str:
+def canonical_tasks_payload(tasks: list[dict]) -> str:
     return json.dumps({"tasks": tasks}, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
-def tasks_cache_key(tasks: List[Dict]) -> str:
+def tasks_cache_key(tasks: list[dict]) -> str:
     return hashlib.sha256(canonical_tasks_payload(tasks).encode("utf-8")).hexdigest()
 
 
-def compute_tasks_checksum(tasks: List[Dict]) -> str:
+def compute_tasks_checksum(tasks: list[dict]) -> str:
     payload = canonical_tasks_payload(tasks).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
 
 
-def update_tasks_meta(data: Dict) -> None:
+def update_tasks_meta(data: dict) -> None:
     tasks = data.get("tasks")
     if not isinstance(tasks, list):
         return
@@ -602,7 +601,7 @@ def update_tasks_meta(data: Dict) -> None:
     data[TASKS_META_KEY] = meta
 
 
-def write_tasks_json(data: Dict) -> None:
+def write_tasks_json(data: dict) -> None:
     update_tasks_meta(data)
     write_json(TASKS_PATH, data)
     if GLOBAL_LINT or AUTO_LINT_ON_WRITE:
@@ -613,7 +612,7 @@ def write_tasks_json(data: Dict) -> None:
             raise SystemExit(2)
 
 
-def write_tasks_json_to_path(path: Path, data: Dict) -> None:
+def write_tasks_json_to_path(path: Path, data: dict) -> None:
     update_tasks_meta(data)
     write_json(path, data)
     if (GLOBAL_LINT or AUTO_LINT_ON_WRITE) and path.resolve() == TASKS_PATH.resolve():
@@ -624,7 +623,7 @@ def write_tasks_json_to_path(path: Path, data: Dict) -> None:
             raise SystemExit(2)
 
 
-def load_tasks() -> List[Dict]:
+def load_tasks() -> list[dict]:
     data = load_json(TASKS_PATH)
     tasks = data.get("tasks", [])
     if not isinstance(tasks, list):
@@ -635,7 +634,7 @@ def load_tasks() -> List[Dict]:
     return tasks
 
 
-def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
+def load_task_store() -> tuple[list[dict], Callable[[list[dict]], None]]:
     backend = backend_instance()
     if backend is None:
         data = load_json(TASKS_PATH)
@@ -643,7 +642,7 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
         if not isinstance(tasks, list):
             die("tasks.json must contain a top-level 'tasks' list")
 
-        def save(updated_tasks: List[Dict]) -> None:
+        def save(updated_tasks: list[dict]) -> None:
             data["tasks"] = updated_tasks
             write_tasks_json(data)
 
@@ -659,13 +658,11 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
     if not isinstance(tasks, list):
         die("Backend list_tasks() must return a list of tasks", code=2)
     tasks_by_id = {str(task.get("id") or ""): task for task in tasks if isinstance(task, dict)}
-    tasks_digest_by_id = {
-        task_id: task_digest(task) for task_id, task in tasks_by_id.items() if task_id
-    }
+    tasks_digest_by_id = {task_id: task_digest(task) for task_id, task in tasks_by_id.items() if task_id}
 
-    def save(updated_tasks: List[Dict]) -> None:
+    def save(updated_tasks: list[dict]) -> None:
         global _TASK_CACHE
-        changed: List[Dict] = []
+        changed: list[dict] = []
         for task in updated_tasks:
             if not isinstance(task, dict):
                 continue
@@ -692,14 +689,14 @@ def load_task_store() -> Tuple[List[Dict], Callable[[List[Dict]], None]]:
     return tasks, save
 
 
-def _format_list_short(items: List[str], *, max_items: int = 3) -> str:
+def _format_list_short(items: list[str], *, max_items: int = 3) -> str:
     if len(items) <= max_items:
         return ", ".join(items)
     shown = ", ".join(items[:max_items])
     return f"{shown}, +{len(items) - max_items}"
 
 
-def _format_deps_summary(task_id: str, dep_state: Optional[Dict[str, Dict[str, List[str]]]]) -> Optional[str]:
+def _format_deps_summary(task_id: str, dep_state: dict[str, dict[str, list[str]]] | None) -> str | None:
     if not dep_state:
         return None
     info = dep_state.get(task_id) or {}
@@ -709,7 +706,7 @@ def _format_deps_summary(task_id: str, dep_state: Optional[Dict[str, Dict[str, L
     if not depends_on:
         return "deps=none"
     if missing or incomplete:
-        parts: List[str] = []
+        parts: list[str] = []
         if missing:
             parts.append(f"missing:{_format_list_short(missing)}")
         if incomplete:
@@ -718,8 +715,8 @@ def _format_deps_summary(task_id: str, dep_state: Optional[Dict[str, Dict[str, L
     return "deps=ready"
 
 
-def _format_task_extras(task: Dict, dep_state: Optional[Dict[str, Dict[str, List[str]]]]) -> str:
-    extras: List[str] = []
+def _format_task_extras(task: dict, dep_state: dict[str, dict[str, list[str]]] | None) -> str:
+    extras: list[str] = []
     owner = str(task.get("owner") or "").strip()
     if owner:
         extras.append(f"owner={owner}")
@@ -740,7 +737,7 @@ def _format_task_extras(task: Dict, dep_state: Optional[Dict[str, Dict[str, List
     return ", ".join(extras)
 
 
-def format_task_line(task: Dict, dep_state: Optional[Dict[str, Dict[str, List[str]]]] = None) -> str:
+def format_task_line(task: dict, dep_state: dict[str, dict[str, list[str]]] | None = None) -> str:
     task_id = str(task.get("id") or "").strip()
     title = str(task.get("title") or "").strip() or "(untitled task)"
     status = str(task.get("status") or "TODO").strip().upper()
@@ -767,7 +764,7 @@ def cmd_task_list(args: argparse.Namespace) -> None:
         tasks_sorted = [t for t in tasks_sorted if str(t.get("owner") or "").strip().upper() in want_owner]
     if args.tag:
         want_tag = {t.strip() for t in args.tag}
-        filtered: List[Dict] = []
+        filtered: list[dict] = []
         for task in tasks_sorted:
             tags = task.get("tags") or []
             if any(tag in want_tag for tag in tags if isinstance(tag, str)):
@@ -776,7 +773,7 @@ def cmd_task_list(args: argparse.Namespace) -> None:
     for task in tasks_sorted:
         print(format_task_line(task, dep_state=dep_state))
     if not args.quiet:
-        counts: Dict[str, int] = {}
+        counts: dict[str, int] = {}
         for task in tasks_sorted:
             status = str(task.get("status") or "TODO").strip().upper()
             counts[status] = counts.get(status, 0) + 1
@@ -802,14 +799,14 @@ def cmd_task_next(args: argparse.Namespace) -> None:
         tasks_sorted = [t for t in tasks_sorted if str(t.get("owner") or "").strip().upper() in want_owner]
     if args.tag:
         want_tag = {t.strip() for t in args.tag}
-        filtered: List[Dict] = []
+        filtered: list[dict] = []
         for task in tasks_sorted:
             tags = task.get("tags") or []
             if any(tag in want_tag for tag in tags if isinstance(tag, str)):
                 filtered.append(task)
         tasks_sorted = filtered
 
-    ready_tasks: List[Dict] = []
+    ready_tasks: list[dict] = []
     for task in tasks_sorted:
         task_id = str(task.get("id") or "").strip()
         info = dep_state.get(task_id) or {}
@@ -827,8 +824,8 @@ def cmd_task_next(args: argparse.Namespace) -> None:
         print(f"Ready: {len(ready_tasks)} / {len(tasks_sorted)}")
 
 
-def _task_text_blob(task: Dict) -> str:
-    parts: List[str] = []
+def _task_text_blob(task: dict) -> str:
+    parts: list[str] = []
     for key in ("id", "title", "description", "status", "priority", "owner"):
         value = task.get(key)
         if isinstance(value, str) and value.strip():
@@ -877,7 +874,7 @@ def cmd_task_search(args: argparse.Namespace) -> None:
         tasks_sorted = [t for t in tasks_sorted if str(t.get("owner") or "").strip().upper() in want_owner]
     if args.tag:
         want_tag = {t.strip() for t in args.tag}
-        filtered: List[Dict] = []
+        filtered: list[dict] = []
         for task in tasks_sorted:
             tags = task.get("tags") or []
             if any(tag in want_tag for tag in tags if isinstance(tag, str)):
@@ -906,7 +903,7 @@ def cmd_task_scaffold(args: argparse.Namespace) -> None:
         die("task_id must be non-empty", code=2)
 
     title = args.title
-    task: Optional[Dict] = None
+    task: dict | None = None
     if not title and not args.force:
         tasks, _ = load_task_store()
         task = _ensure_task_object(tasks, task_id)
@@ -975,7 +972,7 @@ def cmd_task_show(args: argparse.Namespace) -> None:
     doc_updated_at = task.get("doc_updated_at")
     doc_updated_by = task.get("doc_updated_by")
     if doc_version or doc_updated_at or doc_updated_by:
-        doc_parts: List[str] = []
+        doc_parts: list[str] = []
         if doc_version:
             doc_parts.append(f"v{doc_version}")
         if doc_updated_at:
@@ -988,13 +985,13 @@ def cmd_task_show(args: argparse.Namespace) -> None:
         print(f"Doc file: {readme_path.relative_to(ROOT)}")
     description = str(task.get("description") or "").strip()
     if description:
-        print("")
+        print()
         print("Description:")
         print(description)
     verify = task.get("verify")
     if isinstance(verify, list):
         commands = [cmd.strip() for cmd in verify if isinstance(cmd, str) and cmd.strip()]
-        print("")
+        print()
         print(f"Verify ({len(commands)}):")
         if commands:
             for cmd in commands:
@@ -1003,12 +1000,12 @@ def cmd_task_show(args: argparse.Namespace) -> None:
             print("- (none)")
     commit = task.get("commit") or {}
     if isinstance(commit, dict) and commit.get("hash"):
-        print("")
+        print()
         print("Commit:")
         print(f"{commit.get('hash')} {commit.get('message') or ''}".rstrip())
     comments = task.get("comments") or []
     if isinstance(comments, list) and comments:
-        print("")
+        print()
         print(f"Comments (total {len(comments)}, showing last {args.last_comments}):")
         for comment in comments[-args.last_comments :]:
             if not isinstance(comment, dict):
@@ -1021,7 +1018,10 @@ def cmd_task_show(args: argparse.Namespace) -> None:
 def cmd_task_doc_show(args: argparse.Namespace) -> None:
     backend = backend_instance()
     if backend is None:
-        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+        die(
+            "No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)",
+            code=2,
+        )
     get_doc = getattr(backend, "get_task_doc", None)
     if not callable(get_doc):
         die("Configured backend does not support task docs", code=2)
@@ -1046,7 +1046,10 @@ def cmd_task_doc_show(args: argparse.Namespace) -> None:
 def cmd_task_doc_set(args: argparse.Namespace) -> None:
     backend = backend_instance()
     if backend is None:
-        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+        die(
+            "No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)",
+            code=2,
+        )
     set_doc = getattr(backend, "set_task_doc", None)
     if not callable(set_doc):
         die("Configured backend does not support task docs", code=2)
@@ -1081,7 +1084,7 @@ def cmd_task_doc_set(args: argparse.Namespace) -> None:
         print(f"✅ updated task doc for {args.task_id}")
 
 
-def export_tasks_snapshot(out_path: Optional[Path] = None, *, quiet: bool = False) -> None:
+def export_tasks_snapshot(out_path: Path | None = None, *, quiet: bool = False) -> None:
     target_path = out_path or _resolve_repo_relative_path(TASKS_PATH_REL, label="task export output")
     backend = backend_instance()
     export_tasks_json = getattr(backend, "export_tasks_json", None) if backend else None
@@ -1107,7 +1110,10 @@ def cmd_task_normalize(args: argparse.Namespace) -> None:
     require_tasks_json_write_context(force=bool(args.force))
     backend = backend_instance()
     if backend is None:
-        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+        die(
+            "No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)",
+            code=2,
+        )
     normalize = getattr(backend, "normalize_tasks", None)
     if callable(normalize):
         count = normalize()
@@ -1137,7 +1143,10 @@ def cmd_task_migrate(args: argparse.Namespace) -> None:
     require_tasks_json_write_context(force=bool(args.force))
     backend = backend_instance()
     if backend is None:
-        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+        die(
+            "No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)",
+            code=2,
+        )
     write_task = getattr(backend, "write_task", None)
     write_tasks = getattr(backend, "write_tasks", None)
     if not callable(write_task) and not callable(write_tasks):
@@ -1175,19 +1184,27 @@ def load_backend_module(backend_id: str, module_path: Path) -> object:
 def cmd_sync(args: argparse.Namespace) -> None:
     backend = backend_instance()
     if backend is None:
-        die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
+        die(
+            "No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)",
+            code=2,
+        )
     backend_id = str(BACKEND_CONFIG.get("id") or "").strip()
     if args.backend and backend_id and args.backend != backend_id:
         die(f"Configured backend is {backend_id!r}, not {args.backend!r}", code=2)
     sync = getattr(backend, "sync", None)
     if not callable(sync):
         die("Configured backend does not support sync()", code=2)
-    sync(direction=args.direction, conflict=args.conflict, quiet=args.quiet, confirm=bool(getattr(args, "yes", False)))
+    sync(
+        direction=args.direction,
+        conflict=args.conflict,
+        quiet=args.quiet,
+        confirm=bool(getattr(args, "yes", False)),
+    )
 
 
-def index_tasks_by_id(tasks: List[Dict]) -> Tuple[Dict[str, Dict], List[str]]:
-    warnings: List[str] = []
-    tasks_by_id: Dict[str, Dict] = {}
+def index_tasks_by_id(tasks: list[dict]) -> tuple[dict[str, dict], list[str]]:
+    warnings: list[str] = []
+    tasks_by_id: dict[str, dict] = {}
     for index, task in enumerate(tasks):
         task_id = (task.get("id") or "").strip()
         if not task_id:
@@ -1200,14 +1217,14 @@ def index_tasks_by_id(tasks: List[Dict]) -> Tuple[Dict[str, Dict], List[str]]:
     return tasks_by_id, warnings
 
 
-def normalize_depends_on(value: object) -> Tuple[List[str], List[str]]:
+def normalize_depends_on(value: object) -> tuple[list[str], list[str]]:
     if value is None:
         return [], []
     if not isinstance(value, list):
         return [], ["depends_on must be a list of task IDs"]
-    errors: List[str] = []
-    normalized: List[str] = []
-    seen: Set[str] = set()
+    errors: list[str] = []
+    normalized: list[str] = []
+    seen: set[str] = set()
     for raw in value:
         if not isinstance(raw, str):
             errors.append("depends_on entries must be strings")
@@ -1220,11 +1237,11 @@ def normalize_depends_on(value: object) -> Tuple[List[str], List[str]]:
     return normalized, errors
 
 
-def detect_cycles(edges: Dict[str, List[str]]) -> List[List[str]]:
-    cycles: List[List[str]] = []
-    visiting: Set[str] = set()
-    visited: Set[str] = set()
-    stack: List[str] = []
+def detect_cycles(edges: dict[str, list[str]]) -> list[list[str]]:
+    cycles: list[list[str]] = []
+    visiting: set[str] = set()
+    visited: set[str] = set()
+    stack: list[str] = []
 
     def visit(node: str) -> None:
         if node in visited:
@@ -1248,10 +1265,12 @@ def detect_cycles(edges: Dict[str, List[str]]) -> List[List[str]]:
     return cycles
 
 
-def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Dict[str, List[str]]], List[str]]:
-    warnings: List[str] = []
-    state: Dict[str, Dict[str, List[str]]] = {}
-    edges: Dict[str, List[str]] = {}
+def compute_dependency_state(
+    tasks_by_id: dict[str, dict],
+) -> tuple[dict[str, dict[str, list[str]]], list[str]]:
+    warnings: list[str] = []
+    state: dict[str, dict[str, list[str]]] = {}
+    edges: dict[str, list[str]] = {}
 
     for task_id, task in tasks_by_id.items():
         depends_on, dep_errors = normalize_depends_on(task.get("depends_on"))
@@ -1259,8 +1278,8 @@ def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Di
             warnings.append(f"{task_id}: " + "; ".join(sorted(set(dep_errors))))
         if task_id in depends_on:
             warnings.append(f"{task_id}: depends_on contains itself")
-        missing: List[str] = []
-        incomplete: List[str] = []
+        missing: list[str] = []
+        incomplete: list[str] = []
         for dep_id in depends_on:
             dep_task = tasks_by_id.get(dep_id)
             if not dep_task:
@@ -1270,7 +1289,11 @@ def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Di
                 incomplete.append(dep_id)
                 continue
             commit = dep_task.get("commit") or {}
-            if not isinstance(commit, dict) or not str(commit.get("hash") or "").strip() or not str(commit.get("message") or "").strip():
+            if (
+                not isinstance(commit, dict)
+                or not str(commit.get("hash") or "").strip()
+                or not str(commit.get("message") or "").strip()
+            ):
                 incomplete.append(dep_id)
         state[task_id] = {
             "depends_on": depends_on,
@@ -1281,20 +1304,19 @@ def compute_dependency_state(tasks_by_id: Dict[str, Dict]) -> Tuple[Dict[str, Di
 
     cycles = detect_cycles(edges)
     if cycles:
-        for cycle in cycles:
-            warnings.append("Dependency cycle detected: " + " -> ".join(cycle))
+        warnings.extend("Dependency cycle detected: " + " -> ".join(cycle) for cycle in cycles)
 
     return state, warnings
 
 
-def readiness(task_id: str) -> Tuple[bool, List[str]]:
+def readiness(task_id: str) -> tuple[bool, list[str]]:
     _, tasks_by_id, index_warnings, key = load_task_index()
     dep_state, dep_warnings = load_dependency_state_for(tasks_by_id, key=key)
     warnings = index_warnings + dep_warnings
 
     task = tasks_by_id.get(task_id)
     if not task:
-        return False, warnings + [f"Unknown task id: {task_id}"]
+        return False, [*warnings, f"Unknown task id: {task_id}"]
 
     info = dep_state.get(task_id) or {}
     missing = info.get("missing") or []
@@ -1308,7 +1330,7 @@ def readiness(task_id: str) -> Tuple[bool, List[str]]:
     return (not missing and not incomplete), warnings
 
 
-def get_commit_info(rev: str, *, cwd: Path = ROOT) -> Dict[str, str]:
+def get_commit_info(rev: str, *, cwd: Path = ROOT) -> dict[str, str]:
     try:
         result = run(["git", "show", "-s", "--pretty=format:%H\x1f%s", rev], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
@@ -1320,7 +1342,7 @@ def get_commit_info(rev: str, *, cwd: Path = ROOT) -> Dict[str, str]:
     return {"hash": commit_hash.strip(), "message": subject.strip()}
 
 
-def git_staged_files(*, cwd: Path) -> List[str]:
+def git_staged_files(*, cwd: Path) -> list[str]:
     try:
         result = run(["git", "diff", "--name-only", "--cached"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
@@ -1328,7 +1350,7 @@ def git_staged_files(*, cwd: Path) -> List[str]:
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
-def git_unstaged_files(*, cwd: Path) -> List[str]:
+def git_unstaged_files(*, cwd: Path) -> list[str]:
     try:
         result = run(["git", "diff", "--name-only"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
@@ -1336,12 +1358,12 @@ def git_unstaged_files(*, cwd: Path) -> List[str]:
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
-def git_status_changed_paths(*, cwd: Path) -> List[str]:
+def git_status_changed_paths(*, cwd: Path) -> list[str]:
     try:
         result = run(["git", "status", "--porcelain"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to read git status")
-    paths: List[str] = []
+    paths: list[str] = []
     for raw in (result.stdout or "").splitlines():
         line = raw.rstrip()
         if len(line) < 3:
@@ -1355,8 +1377,8 @@ def git_status_changed_paths(*, cwd: Path) -> List[str]:
     return paths
 
 
-def suggest_allow_prefixes(paths: Iterable[str]) -> List[str]:
-    prefixes: List[str] = []
+def suggest_allow_prefixes(paths: Iterable[str]) -> list[str]:
+    prefixes: list[str] = []
     for raw in paths:
         path = raw.strip().lstrip("./")
         if not path:
@@ -1380,7 +1402,7 @@ _TASK_BRANCH_RE = re.compile(r"^task/(\d{12}-[0-9A-Z]{4,})/[^/]+$")
 _VERIFIED_SHA_RE = re.compile(r"verified_sha=([0-9a-f]{7,40})", re.IGNORECASE)
 
 
-def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
+def parse_task_id_from_task_branch(branch: str) -> str | None:
     raw = (branch or "").strip()
     match = _TASK_BRANCH_RE.match(raw)
     if not match:
@@ -1388,9 +1410,11 @@ def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
     return match.group(1)
 
 
-def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]]:
-    helpers: List[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]] = []
-    candidates: List[Tuple[str, Path]] = []
+def load_local_frontmatter_helpers() -> (
+    tuple[Callable[[str], object], Callable[[dict[str, object]], str], int, str] | None
+):
+    helpers: list[tuple[Callable[[str], object], Callable[[dict[str, object]], str], int, str]] = []
+    candidates: list[tuple[str, Path]] = []
 
     module_path = Path(str(BACKEND_CONFIG.get("_module_path") or "")).resolve()
     if module_path.exists():
@@ -1400,7 +1424,7 @@ def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], 
     if local_module.exists():
         candidates.insert(0, ("local", local_module))
 
-    seen: Set[Path] = set()
+    seen: set[Path] = set()
     for backend_id, path in candidates:
         resolved = path.resolve()
         if resolved in seen:
@@ -1419,10 +1443,8 @@ def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], 
     return helpers[0] if helpers else None
 
 
-def validate_task_readme_metadata(paths: List[str], *, cwd: Path) -> None:
-    readmes = [
-        path for path in paths if path.startswith(".codex-swarm/tasks/") and path.endswith("/README.md")
-    ]
+def validate_task_readme_metadata(paths: list[str], *, cwd: Path) -> None:
+    readmes = [path for path in paths if path.startswith(".codex-swarm/tasks/") and path.endswith("/README.md")]
     if not readmes:
         return
     helpers = load_local_frontmatter_helpers()
@@ -1466,7 +1488,7 @@ def apply_doc_metadata_to_frontmatter_text(frontmatter_text: str) -> str:
     return format_frontmatter(frontmatter)
 
 
-def extract_last_verified_sha_from_log(text: str) -> Optional[str]:
+def extract_last_verified_sha_from_log(text: str) -> str | None:
     for raw_line in reversed((text or "").splitlines()):
         match = _VERIFIED_SHA_RE.search(raw_line)
         if match:
@@ -1478,7 +1500,7 @@ def guard_commit_check(
     *,
     task_id: str,
     message: str,
-    allow: List[str],
+    allow: list[str],
     allow_tasks: bool,
     require_clean: bool,
     quiet: bool,
@@ -1501,12 +1523,20 @@ def guard_commit_check(
     integration_branch = base_branch(cwd=cwd)
     if is_branch_pr_mode():
         if not allow_tasks and current_branch == integration_branch:
+            base_msg = (
+                "Refusing commit: code/docs commits are forbidden on base branch "
+                f"{integration_branch!r} in workflow_mode='branch_pr'"
+            )
+            branch_hint = (
+                "  1) Create a task branch + worktree: `python .codex-swarm/agentctl.py work start "
+                f"{task_id} --agent <AGENT> --slug <slug> --worktree`"
+            )
             die(
                 "\n".join(
                     [
-                        f"Refusing commit: code/docs commits are forbidden on base branch {integration_branch!r} in workflow_mode='branch_pr'",
+                        base_msg,
                         "Fix:",
-                        f"  1) Create a task branch + worktree: `python .codex-swarm/agentctl.py work start {task_id} --agent <AGENT> --slug <slug> --worktree`",
+                        branch_hint,
                         f"  2) Commit from `task/{task_id}/<slug>`",
                         f"Context: {format_command_context(cwd=cwd)}",
                     ]
@@ -1514,14 +1544,19 @@ def guard_commit_check(
                 code=2,
             )
         if TASKS_PATH_REL in staged and not allow_tasks:
+            tasks_forbidden = f"Refusing commit: {TASKS_PATH_REL} is forbidden in workflow_mode='branch_pr'"
+            remove_hint = f"  1) Remove {TASKS_PATH_REL} from the index (`git restore --staged {TASKS_PATH_REL}`)"
+            close_hint = (
+                f"  3) Close the task on {integration_branch} via INTEGRATOR " "(tasks file only in closure commit)"
+            )
             die(
                 "\n".join(
                     [
-                        f"Refusing commit: {TASKS_PATH_REL} is forbidden in workflow_mode='branch_pr'",
+                        tasks_forbidden,
                         "Fix:",
-                        f"  1) Remove {TASKS_PATH_REL} from the index (`git restore --staged {TASKS_PATH_REL}`)",
+                        remove_hint,
                         "  2) Commit code/docs/PR artifacts on the task branch",
-                        f"  3) Close the task on {integration_branch} via INTEGRATOR (tasks file only in closure commit)",
+                        close_hint,
                         f"Context: {format_command_context(cwd=cwd)}",
                     ]
                 ),
@@ -1529,8 +1564,13 @@ def guard_commit_check(
             )
         if TASKS_PATH_REL in staged and allow_tasks:
             if is_task_worktree_checkout(cwd=cwd):
+                msg = (
+                    f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout "
+                    "(.codex-swarm/worktrees/*)\n"
+                    f"Context: {format_command_context(cwd=cwd)}"
+                )
                 die(
-                    f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout (.codex-swarm/worktrees/*)\nContext: {format_command_context(cwd=cwd)}",
+                    msg,
                     code=2,
                 )
             if current_branch != integration_branch:
@@ -1572,7 +1612,10 @@ def guard_commit_check(
 
     for path in staged:
         if path in denied:
-            die(f"Staged file is forbidden by default: {path} (use --allow-tasks to override)", code=2)
+            die(
+                f"Staged file is forbidden by default: {path} (use --allow-tasks to override)",
+                code=2,
+            )
         if not any(path_is_under(path, allowed) for allowed in allow):
             die(f"Staged file is outside allowlist: {path}", code=2)
 
@@ -1605,15 +1648,15 @@ def default_commit_emoji_for_status(status: str) -> str:
     return mapping.get(status.strip().upper(), "🛠️")
 
 
-def stage_allowlist(allow: List[str], *, allow_tasks: bool, cwd: Path) -> List[str]:
+def stage_allowlist(allow: list[str], *, allow_tasks: bool, cwd: Path) -> list[str]:
     changed = git_status_changed_paths(cwd=cwd)
     if not changed:
         die("No changes to stage", code=2)
     allowed = [a.strip().lstrip("./") for a in allow if str(a or "").strip()]
-    deny: Set[str] = set()
+    deny: set[str] = set()
     if not allow_tasks:
         deny.add(TASKS_PATH_REL)
-    staged: List[str] = []
+    staged: list[str] = []
     for path in changed:
         if path in deny:
             continue
@@ -1621,9 +1664,12 @@ def stage_allowlist(allow: List[str], *, allow_tasks: bool, cwd: Path) -> List[s
             staged.append(path)
     unique = sorted(set(staged))
     if not unique:
-        die("No changes matched the allowed prefixes (use --commit-auto-allow or broaden --commit-allow)", code=2)
+        die(
+            "No changes matched the allowed prefixes (use --commit-auto-allow or broaden --commit-allow)",
+            code=2,
+        )
     try:
-        run(["git", "add", "--"] + unique, cwd=cwd, check=True)
+        run(["git", "add", "--", *unique], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to stage files")
     return unique
@@ -1634,13 +1680,13 @@ def commit_from_comment(
     task_id: str,
     comment_body: str,
     emoji: str,
-    allow: List[str],
+    allow: list[str],
     auto_allow: bool,
     allow_tasks: bool,
     require_clean: bool,
     quiet: bool,
     cwd: Path,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     allow_prefixes = [a for a in (allow or []) if str(a or "").strip()]
     if auto_allow and not allow_prefixes:
         allow_prefixes = suggest_allow_prefixes(git_status_changed_paths(cwd=cwd))
@@ -1685,9 +1731,9 @@ def cmd_agents(_: argparse.Namespace) -> None:
     if not paths:
         die(f"No agents found under {AGENTS_DIR}")
 
-    rows: List[Tuple[str, str, str]] = []
-    seen: Dict[str, str] = {}
-    duplicates: List[str] = []
+    rows: list[tuple[str, str, str]] = []
+    seen: dict[str, str] = {}
+    duplicates: list[str] = []
     for path in paths:
         data = load_json(path)
         agent_id = str(data.get("id") or "").strip()
@@ -1700,8 +1746,8 @@ def cmd_agents(_: argparse.Namespace) -> None:
             seen[agent_id] = path.name
         rows.append((agent_id, role or "-", path.name))
 
-    width_id = max(len(r[0]) for r in rows + [("ID", "", "")])
-    width_file = max(len(r[2]) for r in rows + [("", "", "FILE")])
+    width_id = max(len(r[0]) for r in [*rows, ("ID", "", "")])
+    width_file = max(len(r[2]) for r in [*rows, ("", "", "FILE")])
     print(f"{'ID'.ljust(width_id)}  {'FILE'.ljust(width_file)}  ROLE")
     print(f"{'-'*width_id}  {'-'*width_file}  {'-'*4}")
     for agent_id, role, filename in rows:
@@ -1727,10 +1773,13 @@ def cmd_quickstart(_: argparse.Namespace) -> None:
                 "  python .codex-swarm/agentctl.py task show <task-id>",
                 "  python .codex-swarm/agentctl.py task lint",
                 "  python .codex-swarm/agentctl.py ready <task-id>",
-                "  python .codex-swarm/agentctl.py start <task-id> --author CODER --body \"Start: ...\"",
+                '  python .codex-swarm/agentctl.py start <task-id> --author CODER --body "Start: ..."',
                 "  python .codex-swarm/agentctl.py verify <task-id>",
-                "  python .codex-swarm/agentctl.py guard commit <task-id> -m \"✨ <task-id> ...\" --allow <path-prefix>",
-                "  python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author REVIEWER --body \"Verified: ...\"",
+                '  python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <task-id> ..." --allow <path-prefix>',
+                (
+                    "  python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author REVIEWER "
+                    '--body "Verified: ..."'
+                ),
                 "",
                 f"Tip: create {AGENTCTL_DOCS_PATH.as_posix()} to override this output.",
             ]
@@ -1738,10 +1787,10 @@ def cmd_quickstart(_: argparse.Namespace) -> None:
     )
 
 
-def load_agents_index() -> Set[str]:
+def load_agents_index() -> set[str]:
     if not AGENTS_DIR.exists():
         return set()
-    ids: Set[str] = set()
+    ids: set[str] = set()
     for path in sorted(AGENTS_DIR.glob("*.json")):
         data = load_json(path)
         agent_id = str(data.get("id") or "").strip().upper()
@@ -1760,8 +1809,7 @@ def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
         return
     if known and owner_upper not in known:
         die(
-            "Owner must be an existing agent id. "
-            "If a new agent is required, create it via CREATOR first.",
+            "Owner must be an existing agent id. " "If a new agent is required, create it via CREATOR first.",
             code=2,
         )
 
@@ -1769,15 +1817,15 @@ def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
 VERIFY_REQUIRED_TAGS = {"code", "backend", "frontend"}
 
 
-def requires_verify(tags: List[str]) -> bool:
+def requires_verify(tags: list[str]) -> bool:
     tag_set = {t.strip().lower() for t in tags if isinstance(t, str)}
     return bool(VERIFY_REQUIRED_TAGS & tag_set)
 
 
 def command_path(args: argparse.Namespace) -> str:
-    parts: List[str] = []
+    parts: list[str] = []
     if hasattr(args, "cmd"):
-        parts.append(str(getattr(args, "cmd") or "").strip())
+        parts.append(str(args.cmd or "").strip())
     for name in (
         "task_cmd",
         "doc_cmd",
@@ -1794,9 +1842,9 @@ def command_path(args: argparse.Namespace) -> str:
     return " ".join(p for p in parts if p) or "<unknown>"
 
 
-def lint_tasks_json() -> Dict[str, List[str]]:
-    errors: List[str] = []
-    warnings: List[str] = []
+def lint_tasks_json() -> dict[str, list[str]]:
+    errors: list[str] = []
+    warnings: list[str] = []
 
     data = load_json(TASKS_PATH)
     tasks = data.get("tasks")
@@ -1821,12 +1869,10 @@ def lint_tasks_json() -> Dict[str, List[str]]:
             errors.append("tasks.json meta.checksum does not match tasks payload (manual edit?)")
 
     tasks_by_id, index_warnings = index_tasks_by_id(tasks)
-    for warning in index_warnings:
-        errors.append(warning)
+    errors.extend(index_warnings)
 
     dep_state, dep_warnings = compute_dependency_state(tasks_by_id)
-    for warning in dep_warnings:
-        errors.append(warning)
+    errors.extend(dep_warnings)
 
     known_agents = load_agents_index()
     for task_id, task in tasks_by_id.items():
@@ -1846,7 +1892,12 @@ def lint_tasks_json() -> Dict[str, List[str]]:
         if owner is not None and (not isinstance(owner, str) or not owner.strip()):
             errors.append(f"{task_id}: owner must be a non-empty string when present")
         owner_upper = str(owner or "").strip().upper()
-        if owner_upper and known_agents and owner_upper not in known_agents and owner_upper not in {"HUMAN", "ORCHESTRATOR"}:
+        if (
+            owner_upper
+            and known_agents
+            and owner_upper not in known_agents
+            and owner_upper not in {"HUMAN", "ORCHESTRATOR"}
+        ):
             errors.append(f"{task_id}: owner {owner_upper!r} is not a known agent id")
 
         tags = task.get("tags") or []
@@ -1855,9 +1906,10 @@ def lint_tasks_json() -> Dict[str, List[str]]:
             errors.append(f"{task_id}: verify commands are required for tasks with code/backend/frontend tags")
 
         tags = task.get("tags")
-        if tags is not None:
-            if not isinstance(tags, list) or any(not isinstance(tag, str) or not tag.strip() for tag in tags):
-                errors.append(f"{task_id}: tags must be a list of non-empty strings")
+        if tags is not None and (
+            not isinstance(tags, list) or any(not isinstance(tag, str) or not tag.strip() for tag in tags)
+        ):
+            errors.append(f"{task_id}: tags must be a list of non-empty strings")
 
         comments = task.get("comments")
         if comments is not None:
@@ -1876,9 +1928,10 @@ def lint_tasks_json() -> Dict[str, List[str]]:
                         errors.append(f"{task_id}: comments[{idx}].body must be a non-empty string")
 
         verify = task.get("verify")
-        if verify is not None:
-            if not isinstance(verify, list) or any(not isinstance(cmd, str) or not cmd.strip() for cmd in verify):
-                errors.append(f"{task_id}: verify must be a list of non-empty strings")
+        if verify is not None and (
+            not isinstance(verify, list) or any(not isinstance(cmd, str) or not cmd.strip() for cmd in verify)
+        ):
+            errors.append(f"{task_id}: verify must be a list of non-empty strings")
 
         dep_info = dep_state.get(task_id) or {}
         missing = dep_info.get("missing") or []
@@ -2119,7 +2172,7 @@ def cmd_task_comment(args: argparse.Namespace) -> None:
     save(tasks)
 
 
-def _ensure_task_object(container: object, task_id: str) -> Dict:
+def _ensure_task_object(container: object, task_id: str) -> dict:
     if isinstance(container, list):
         tasks = container
     elif isinstance(container, dict):
@@ -2132,10 +2185,11 @@ def _ensure_task_object(container: object, task_id: str) -> Dict:
         if isinstance(task, dict) and task.get("id") == task_id:
             return task
     die(f"Unknown task id: {task_id}")
+    raise SystemExit(2)
 
 
 def _generate_task_id_via_local_backend(
-    existing_ids: Set[str],
+    existing_ids: set[str],
     *,
     length: int = 6,
     attempts: int = 1000,
@@ -2159,7 +2213,7 @@ def _generate_task_id_via_local_backend(
 
 
 def generate_task_id_for(
-    existing_ids: Set[str],
+    existing_ids: set[str],
     *,
     length: int = 6,
     attempts: int = 1000,
@@ -2198,14 +2252,14 @@ def cmd_task_add(args: argparse.Namespace) -> None:
         dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
     )
     for task_id in task_ids:
-        task: Dict = {
+        task: dict = {
             "id": task_id,
             "title": args.title,
             "description": args.description,
             "status": status,
             "priority": args.priority,
             "owner": args.owner,
-            "tags": list(dict.fromkeys((args.tag or []))),
+            "tags": list(dict.fromkeys(args.tag or [])),
             "depends_on": normalized_depends_on,
         }
         if args.verify:
@@ -2233,14 +2287,14 @@ def cmd_task_new(args: argparse.Namespace) -> None:
     )
     validate_owner(args.owner)
     task_id = generate_task_id_for(existing_ids, length=args.id_length)
-    task: Dict = {
+    task: dict = {
         "id": task_id,
         "title": args.title,
         "description": args.description,
         "status": status,
         "priority": args.priority,
         "owner": args.owner,
-        "tags": list(dict.fromkeys((args.tag or []))),
+        "tags": list(dict.fromkeys(args.tag or [])),
         "depends_on": normalized_depends_on,
     }
     verify_list = list(dict.fromkeys(args.verify)) if args.verify else []
@@ -2285,9 +2339,7 @@ def cmd_task_update(args: argparse.Namespace) -> None:
     if args.depends_on:
         existing = [dep for dep in (task.get("depends_on") or []) if isinstance(dep, str)]
         merged = existing + args.depends_on
-        task["depends_on"] = list(
-            dict.fromkeys(dep.strip() for dep in merged if dep.strip() and dep.strip() != "[]")
-        )
+        task["depends_on"] = list(dict.fromkeys(dep.strip() for dep in merged if dep.strip() and dep.strip() != "[]"))
 
     if args.replace_verify:
         task["verify"] = []
@@ -2322,8 +2374,8 @@ def cmd_task_scrub(args: argparse.Namespace) -> None:
     require_tasks_json_write_context()
     tasks, save = load_task_store()
 
-    updated_tasks: List[Dict] = []
-    changed_task_ids: List[str] = []
+    updated_tasks: list[dict] = []
+    changed_task_ids: list[str] = []
     for task in tasks:
         if not isinstance(task, dict):
             updated_tasks.append(task)
@@ -2366,7 +2418,7 @@ def cmd_verify(args: argparse.Namespace) -> None:
     if ROOT.resolve() not in cwd.parents and cwd.resolve() != ROOT.resolve():
         die(f"--cwd must stay under repo root: {cwd}", code=2)
 
-    log_path: Optional[Path] = None
+    log_path: Path | None = None
     if getattr(args, "log", None):
         log_path = Path(str(args.log)).resolve()
     else:
@@ -2375,12 +2427,11 @@ def cmd_verify(args: argparse.Namespace) -> None:
         if pr_root.exists():
             log_path = (pr_root / "verify.log").resolve()
 
-    if log_path:
-        if ROOT.resolve() not in log_path.parents and log_path.resolve() != ROOT.resolve():
-            die(f"--log must stay under repo root: {log_path}", code=2)
+    if log_path and ROOT.resolve() not in log_path.parents and log_path.resolve() != ROOT.resolve():
+        die(f"--log must stay under repo root: {log_path}", code=2)
 
     pr_meta_path = pr_dir(task_id) / "meta.json"
-    pr_meta: Optional[Dict] = pr_load_meta(pr_meta_path) if pr_meta_path.exists() else None
+    pr_meta: dict | None = pr_load_meta(pr_meta_path) if pr_meta_path.exists() else None
 
     head_sha = git_rev_parse("HEAD", cwd=cwd)
     current_sha = head_sha
@@ -2391,16 +2442,18 @@ def cmd_verify(args: argparse.Namespace) -> None:
             if meta_head:
                 current_sha = meta_head
                 if meta_head != head_sha and not args.quiet:
-                    print(
-                        f"⚠️ {task_id}: PR meta head_sha differs from HEAD; run `python .codex-swarm/agentctl.py pr update {task_id}` if needed"
+                    msg = (
+                        f"⚠️ {task_id}: PR meta head_sha differs from HEAD; "
+                        f"run `python .codex-swarm/agentctl.py pr update {task_id}` if needed"
                     )
+                    print(msg)
 
     if getattr(args, "skip_if_unchanged", False):
         if git_status_porcelain(cwd=cwd):
             if not args.quiet:
                 print(f"⚠️ {task_id}: working tree is dirty; ignoring --skip-if-unchanged")
         else:
-            last_verified_sha: Optional[str] = None
+            last_verified_sha: str | None = None
             if pr_meta:
                 last_verified_sha = str(pr_meta.get("last_verified_sha") or "").strip() or None
             if not last_verified_sha and log_path and log_path.exists():
@@ -2444,7 +2497,10 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
     if nxt not in ALLOWED_STATUSES:
         die(f"Invalid status: {args.status} (allowed: {', '.join(sorted(ALLOWED_STATUSES))})")
     if nxt == "DONE" and not args.force:
-        die("Use `python .codex-swarm/agentctl.py finish <task-id>` to mark DONE (use --force to override)", code=2)
+        die(
+            "Use `python .codex-swarm/agentctl.py finish <task-id>` to mark DONE (use --force to override)",
+            code=2,
+        )
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)
 
@@ -2510,7 +2566,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
         die("--body is required when building commit messages from comments", code=2)
 
     require_tasks_json_write_context(force=bool(args.force))
-    pr_context: Dict[str, Dict[str, object]] = {}
+    pr_context: dict[str, dict[str, object]] = {}
     if is_branch_pr_mode() and not args.force:
         ensure_git_clean(action="finish")
         if not args.author or not args.body:
@@ -2534,7 +2590,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
 
     tasks_by_id, _ = index_tasks_by_id(tasks)
     assume_done = set(task_ids)
-    tasks_override: Dict[str, Dict] = {}
+    tasks_override: dict[str, dict] = {}
     for task_key, task in tasks_by_id.items():
         if task_key in assume_done:
             override = dict(task)
@@ -2563,10 +2619,15 @@ def cmd_finish(args: argparse.Namespace) -> None:
             target_owner = str((tasks_by_id.get(task_id) or {}).get("owner") or "").strip().upper()
             author_upper = str(args.author or "").strip().upper()
             if author_upper and not is_branch_pr_mode() and author_upper not in {target_owner} and not args.force:
-                die(f"--author must match task owner ({target_owner or 'unknown'}) in direct mode (use --force to override)", code=2)
+                owner_label = target_owner or "unknown"
+                message = f"--author must match task owner ({owner_label}) in direct mode " "(use --force to override)"
+                die(
+                    message,
+                    code=2,
+                )
             validate_task_doc_complete(task_id)
 
-    verify_commands: Dict[str, List[str]] = {}
+    verify_commands: dict[str, list[str]] = {}
     for task_id in task_ids:
         target = tasks_by_id.get(task_id)
         if not target:
@@ -2582,7 +2643,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             commands = []
         verify_commands[task_id] = commands
 
-    code_commit_info: Optional[Dict[str, str]] = None
+    code_commit_info: dict[str, str] | None = None
     if commit_from_comment_flag:
         code_commit_info = commit_from_comment(
             task_id=primary_task_id,
@@ -2602,16 +2663,16 @@ def cmd_finish(args: argparse.Namespace) -> None:
         message = commit_info.get("message", "")
         missing = [task_id for task_id in task_ids if not commit_subject_mentions_task(task_id, message)]
         if missing:
-            die(
-                commit_subject_missing_error(missing, message)
-                + " (use --force or --no-require-task-id-in-commit)"
-            )
+            die(commit_subject_missing_error(missing, message) + " (use --force or --no-require-task-id-in-commit)")
 
     if is_branch_pr_mode() and not args.force:
         for task_id in task_ids:
             pr_path = pr_dir(task_id)
             if not pr_path.exists():
-                die(f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)", code=2)
+                die(
+                    f"Missing PR artifact dir: {pr_path} (required for finish in branch_pr mode)",
+                    code=2,
+                )
             pr_meta = pr_load_meta(pr_path / "meta.json")
             pr_branch = str(pr_meta.get("branch") or "").strip()
             pr_base = str(pr_meta.get("base_branch") or base_branch()).strip()
@@ -2621,10 +2682,17 @@ def cmd_finish(args: argparse.Namespace) -> None:
                 "pr_meta": pr_meta,
             }
 
+    current_sha = git_rev_parse("HEAD", cwd=ROOT)
     for task_id in task_ids:
         commands = verify_commands.get(task_id) or []
         if commands and not args.skip_verify and not args.force:
-            run_verify_commands(task_id, commands, cwd=ROOT, quiet=args.quiet)
+            run_verify_with_capture(
+                task_id,
+                cwd=ROOT,
+                quiet=bool(args.quiet),
+                log_path=None,
+                current_sha=current_sha,
+            )
 
     for task_id in task_ids:
         target = _ensure_task_object(tasks, task_id)
@@ -2706,7 +2774,7 @@ def git_branch_exists(branch: str, *, cwd: Path = ROOT) -> bool:
         return False
 
 
-def git_diff_names(base: str, head: str, *, cwd: Path = ROOT) -> List[str]:
+def git_diff_names(base: str, head: str, *, cwd: Path = ROOT) -> list[str]:
     try:
         result = run(["git", "diff", "--name-only", f"{base}...{head}"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
@@ -2722,7 +2790,7 @@ def git_diff_stat(base: str, head: str, *, cwd: Path = ROOT) -> str:
     return (result.stdout or "").rstrip() + "\n"
 
 
-def git_log_subjects(base: str, head: str, *, cwd: Path = ROOT, limit: int = 50) -> List[str]:
+def git_log_subjects(base: str, head: str, *, cwd: Path = ROOT, limit: int = 50) -> list[str]:
     try:
         result = run(
             ["git", "log", f"--max-count={limit}", "--pretty=format:%s", f"{base}..{head}"],
@@ -2734,7 +2802,7 @@ def git_log_subjects(base: str, head: str, *, cwd: Path = ROOT, limit: int = 50)
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
-def git_show_text(rev: str, relpath: str, *, cwd: Path = ROOT) -> Optional[str]:
+def git_show_text(rev: str, relpath: str, *, cwd: Path = ROOT) -> str | None:
     rel = str(relpath or "").strip().lstrip("/")
     if not rel:
         return None
@@ -2752,12 +2820,12 @@ def git_worktree_list_porcelain(*, cwd: Path = ROOT) -> str:
         result = run(["git", "worktree", "list", "--porcelain"], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to list git worktrees")
-    return (result.stdout or "")
+    return result.stdout or ""
 
 
-def parse_git_worktrees_porcelain(text: str) -> List[Dict[str, str]]:
-    entries: List[Dict[str, str]] = []
-    current: Dict[str, str] = {}
+def parse_git_worktrees_porcelain(text: str) -> list[dict[str, str]]:
+    entries: list[dict[str, str]] = []
+    current: dict[str, str] = {}
     for raw_line in (text or "").splitlines():
         line = raw_line.rstrip()
         if not line.strip():
@@ -2774,7 +2842,7 @@ def parse_git_worktrees_porcelain(text: str) -> List[Dict[str, str]]:
     return entries
 
 
-def detect_worktree_path_for_branch(branch: str, *, cwd: Path = ROOT) -> Optional[Path]:
+def detect_worktree_path_for_branch(branch: str, *, cwd: Path = ROOT) -> Path | None:
     want = (branch or "").strip()
     if not want:
         return None
@@ -2789,7 +2857,7 @@ def detect_worktree_path_for_branch(branch: str, *, cwd: Path = ROOT) -> Optiona
     return None
 
 
-def detect_branch_for_worktree_path(path: Path, *, cwd: Path = ROOT) -> Optional[str]:
+def detect_branch_for_worktree_path(path: Path, *, cwd: Path = ROOT) -> str | None:
     entries = parse_git_worktrees_porcelain(git_worktree_list_porcelain(cwd=cwd))
     want = path.resolve()
     for entry in entries:
@@ -2802,7 +2870,7 @@ def detect_branch_for_worktree_path(path: Path, *, cwd: Path = ROOT) -> Optional
     return None
 
 
-def assert_no_diff_paths(*, base: str, branch: str, forbidden: List[str], cwd: Path = ROOT) -> None:
+def assert_no_diff_paths(*, base: str, branch: str, forbidden: list[str], cwd: Path = ROOT) -> None:
     changed = set(git_diff_names(base, branch, cwd=cwd))
     bad = [p for p in forbidden if p in changed]
     if bad:
@@ -2818,6 +2886,7 @@ def assert_no_diff_paths(*, base: str, branch: str, forbidden: List[str], cwd: P
             ),
             code=2,
         )
+
 
 def task_title(task_id: str) -> str:
     tasks, _ = load_task_store()
@@ -2872,7 +2941,10 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
     if attached and attached != expected_worktree_path.resolve():
         die(f"Branch is already checked out in another worktree: {attached}", code=2)
     if attached and not args.reuse:
-        die(f"Branch is already checked out in an existing worktree: {attached} (use --reuse)", code=2)
+        die(
+            f"Branch is already checked out in an existing worktree: {attached} (use --reuse)",
+            code=2,
+        )
 
     if git_branch_exists(branch) and not args.reuse:
         die(f"Branch already exists: {branch} (use --reuse to reuse an existing worktree)", code=2)
@@ -2882,7 +2954,10 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
         worktree_path = expected_worktree_path
         if worktree_path.exists():
             if not args.reuse:
-                die(f"Worktree path already exists: {worktree_path} (use --reuse if it's a registered worktree)", code=2)
+                die(
+                    f"Worktree path already exists: {worktree_path} (use --reuse if it's a registered worktree)",
+                    code=2,
+                )
             registered_branch = detect_branch_for_worktree_path(worktree_path, cwd=ROOT)
             if registered_branch != branch:
                 die(
@@ -2906,7 +2981,11 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
             print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
             print_block("ACTION", f"Create task branch + worktree for {task_id} (agent={args.agent or '-'})")
             print_block("RESULT", f"branch={branch} worktree={worktree_path}")
-            print_block("NEXT", f"Open `{worktree_path}` in your IDE and run `python .codex-swarm/agentctl.py pr open {task_id} --branch {branch} --author {args.agent or 'CODER'}`.")
+            next_steps = (
+                f"Open `{worktree_path}` in your IDE and run `python .codex-swarm/agentctl.py pr open {task_id} "
+                f"--branch {branch} --author {args.agent or 'CODER'}`."
+            )
+            print_block("NEXT", next_steps)
         return
 
     try:
@@ -2917,12 +2996,20 @@ def cmd_branch_create(args: argparse.Namespace) -> None:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
         print_block("ACTION", f"Create and switch to task branch for {task_id} (agent={args.agent or '-'})")
         print_block("RESULT", f"branch={branch}")
-        print_block("NEXT", f"Run `python .codex-swarm/agentctl.py pr open {task_id} --branch {branch} --author {args.agent or 'CODER'}`.")
+        next_steps = (
+            f"Run `python .codex-swarm/agentctl.py pr open {task_id} --branch {branch} "
+            f"--author {args.agent or 'CODER'}`."
+        )
+        print_block("NEXT", next_steps)
 
 
-def _git_ahead_behind(branch: str, base: str, *, cwd: Path) -> Tuple[int, int]:
+def _git_ahead_behind(branch: str, base: str, *, cwd: Path) -> tuple[int, int]:
     try:
-        result = run(["git", "rev-list", "--left-right", "--count", f"{base}...{branch}"], cwd=cwd, check=True)
+        result = run(
+            ["git", "rev-list", "--left-right", "--count", f"{base}...{branch}"],
+            cwd=cwd,
+            check=True,
+        )
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to compute ahead/behind")
     raw = (result.stdout or "").strip()
@@ -2950,10 +3037,16 @@ def cmd_branch_status(args: argparse.Namespace) -> None:
     ahead, behind = _git_ahead_behind(branch, base, cwd=cwd)
 
     print_block("CONTEXT", format_command_context(cwd=cwd))
-    print_block("RESULT", f"branch={branch} base={base} ahead={ahead} behind={behind} task_id={task_id or '-'}")
+    print_block(
+        "RESULT",
+        f"branch={branch} base={base} ahead={ahead} behind={behind} task_id={task_id or '-'}",
+    )
     if worktree:
         print_block("RESULT", f"worktree={worktree}")
-    print_block("NEXT", "If you are ready, update PR artifacts via `python .codex-swarm/agentctl.py pr update <task-id>`.")
+    print_block(
+        "NEXT",
+        "If you are ready, update PR artifacts via `python .codex-swarm/agentctl.py pr update <task-id>`.",
+    )
 
 
 def cmd_branch_remove(args: argparse.Namespace) -> None:
@@ -2991,12 +3084,13 @@ def cmd_branch_remove(args: argparse.Namespace) -> None:
             print(f"✅ removed branch {branch}")
 
 
-def _run_agentctl_in_checkout(args: List[str], *, cwd: Path, quiet: bool) -> None:
+def _run_agentctl_in_checkout(args: list[str], *, cwd: Path, quiet: bool) -> None:
     proc = subprocess.run(
         [sys.executable, ".codex-swarm/agentctl.py", *args],
         cwd=str(cwd),
         text=True,
         capture_output=True,
+        check=False,
     )
     if proc.returncode != 0:
         out = (proc.stdout or "").strip()
@@ -3040,7 +3134,10 @@ def cmd_work_start(args: argparse.Namespace) -> None:
                     [
                         "Implement changes in this checkout (no task branches/worktrees).",
                         f"Edit `{readme_rel}` to capture scope/risks/verify steps.",
-                        f"Commit via `python .codex-swarm/agentctl.py commit {task_id} -m \"…\" --auto-allow` when ready.",
+                        (
+                            f'Commit via `python .codex-swarm/agentctl.py commit {task_id} -m "…" --auto-allow` '
+                            "when ready."
+                        ),
                     ]
                 ),
             )
@@ -3091,7 +3188,18 @@ def cmd_work_start(args: argparse.Namespace) -> None:
         pr_action = "updated"
     else:
         _run_agentctl_in_checkout(
-            ["pr", "open", task_id, "--branch", branch, "--base", base, "--author", agent, "--quiet"],
+            [
+                "pr",
+                "open",
+                task_id,
+                "--branch",
+                branch,
+                "--base",
+                base,
+                "--author",
+                agent,
+                "--quiet",
+            ],
             cwd=worktree_path,
             quiet=True,
         )
@@ -3111,9 +3219,13 @@ def cmd_work_start(args: argparse.Namespace) -> None:
         )
 
 
-def git_list_task_branches(*, cwd: Path = ROOT) -> List[str]:
+def git_list_task_branches(*, cwd: Path = ROOT) -> list[str]:
     try:
-        result = run(["git", "for-each-ref", "--format=%(refname:short)", "refs/heads/task"], cwd=cwd, check=True)
+        result = run(
+            ["git", "for-each-ref", "--format=%(refname:short)", "refs/heads/task"],
+            cwd=cwd,
+            check=True,
+        )
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "Failed to list task branches")
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
@@ -3132,7 +3244,7 @@ def cmd_cleanup_merged(args: argparse.Namespace) -> None:
     tasks, _ = load_task_store()
     tasks_by_id, _ = index_tasks_by_id(tasks)
 
-    candidates: List[Dict[str, str]] = []
+    candidates: list[dict[str, str]] = []
     for branch in git_list_task_branches(cwd=ROOT):
         task_id = parse_task_id_from_task_branch(branch)
         if not task_id:
@@ -3190,7 +3302,7 @@ def pr_dir(task_id: str) -> Path:
     return workflow_task_dir(task_id) / "pr"
 
 
-TASK_DOC_SECTIONS: Tuple[str, ...] = (
+TASK_DOC_SECTIONS: tuple[str, ...] = (
     "Summary",
     "Context",
     "Scope",
@@ -3199,7 +3311,7 @@ TASK_DOC_SECTIONS: Tuple[str, ...] = (
     "Rollback Plan",
     "Notes",
 )
-TASK_DOC_REQUIRED_SECTIONS: Tuple[str, ...] = (
+TASK_DOC_REQUIRED_SECTIONS: tuple[str, ...] = (
     "Summary",
     "Scope",
     "Risks",
@@ -3254,7 +3366,7 @@ def task_readme_template(task_id: str) -> str:
     )
 
 
-def split_frontmatter_block(text: str) -> Tuple[str, str]:
+def split_frontmatter_block(text: str) -> tuple[str, str]:
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---":
         return "", text
@@ -3299,10 +3411,10 @@ def pr_review_template(task_id: str) -> str:
     )
 
 
-def parse_handoff_notes(text: str) -> List[Dict[str, str]]:
+def parse_handoff_notes(text: str) -> list[dict[str, str]]:
     sections = extract_markdown_sections(text)
     lines = sections.get("Handoff Notes") or []
-    notes: List[Dict[str, str]] = []
+    notes: list[dict[str, str]] = []
     for raw in lines:
         line = raw.strip()
         if not line.startswith("-"):
@@ -3334,14 +3446,12 @@ def _is_placeholder_content(line: str) -> bool:
         return True
     if re.fullmatch(r"[-*]\s*\.\.\.\s*", stripped):
         return True
-    if re.fullmatch(r"\.+", stripped):
-        return True
-    return False
+    return bool(re.fullmatch(r"\.+", stripped))
 
 
-def extract_markdown_sections(text: str) -> Dict[str, List[str]]:
-    sections: Dict[str, List[str]] = {}
-    current: Optional[str] = None
+def extract_markdown_sections(text: str) -> dict[str, list[str]]:
+    sections: dict[str, list[str]] = {}
+    current: str | None = None
     for raw in (text or "").splitlines():
         line = raw.rstrip()
         if line.startswith("## "):
@@ -3353,10 +3463,10 @@ def extract_markdown_sections(text: str) -> Dict[str, List[str]]:
     return sections
 
 
-def parse_doc_sections(text: str) -> Tuple[Dict[str, List[str]], List[str]]:
-    sections: Dict[str, List[str]] = {}
-    order: List[str] = []
-    current: Optional[str] = None
+def parse_doc_sections(text: str) -> tuple[dict[str, list[str]], list[str]]:
+    sections: dict[str, list[str]] = {}
+    order: list[str] = []
+    current: str | None = None
     for raw in (text or "").splitlines():
         line = raw.rstrip()
         if line.startswith("## "):
@@ -3370,7 +3480,7 @@ def parse_doc_sections(text: str) -> Tuple[Dict[str, List[str]], List[str]]:
     return sections, order
 
 
-def _trim_blank_lines(lines: List[str]) -> List[str]:
+def _trim_blank_lines(lines: list[str]) -> list[str]:
     start = 0
     end = len(lines)
     while start < end and not lines[start].strip():
@@ -3380,7 +3490,7 @@ def _trim_blank_lines(lines: List[str]) -> List[str]:
     return lines[start:end]
 
 
-def _insert_section_order(order: List[str], section: str) -> List[str]:
+def _insert_section_order(order: list[str], section: str) -> list[str]:
     if section in order:
         return order
     canonical = list(TASK_DOC_SECTIONS)
@@ -3390,10 +3500,10 @@ def _insert_section_order(order: List[str], section: str) -> List[str]:
             if next_name in order:
                 insert_at = order.index(next_name)
                 return order[:insert_at] + [section] + order[insert_at:]
-    return order + [section]
+    return [*order, section]
 
 
-def ensure_required_doc_sections(sections: Dict[str, List[str]], order: List[str]) -> List[str]:
+def ensure_required_doc_sections(sections: dict[str, list[str]], order: list[str]) -> list[str]:
     for name in TASK_DOC_REQUIRED_SECTIONS:
         if name not in sections:
             sections[name] = ["- ..."]
@@ -3401,8 +3511,8 @@ def ensure_required_doc_sections(sections: Dict[str, List[str]], order: List[str
     return order
 
 
-def render_doc_sections(sections: Dict[str, List[str]], order: List[str]) -> str:
-    lines: List[str] = []
+def render_doc_sections(sections: dict[str, list[str]], order: list[str]) -> str:
+    lines: list[str] = []
     for name in order:
         content = _trim_blank_lines(sections.get(name, []))
         if not content and name in TASK_DOC_SECTIONS:
@@ -3425,9 +3535,9 @@ def normalize_doc_section_name(name: str) -> str:
     return raw
 
 
-def pr_validate_description(text: str) -> Tuple[List[str], List[str]]:
-    missing_sections: List[str] = []
-    empty_sections: List[str] = []
+def pr_validate_description(text: str) -> tuple[list[str], list[str]]:
+    missing_sections: list[str] = []
+    empty_sections: list[str] = []
     sections = extract_markdown_sections(text)
     for section in PR_DESCRIPTION_REQUIRED_SECTIONS:
         if section not in sections:
@@ -3440,7 +3550,7 @@ def pr_validate_description(text: str) -> Tuple[List[str], List[str]]:
     return missing_sections, empty_sections
 
 
-def validate_task_doc_complete(task_id: str, *, source_text: Optional[str] = None) -> None:
+def validate_task_doc_complete(task_id: str, *, source_text: str | None = None) -> None:
     doc_text = source_text
     if doc_text is None:
         readme_path = workflow_task_readme_path(task_id)
@@ -3456,14 +3566,14 @@ def validate_task_doc_complete(task_id: str, *, source_text: Optional[str] = Non
         die(f"{task_id}: task doc has placeholder/empty section(s): {', '.join(empty)}", code=2)
 
 
-def pr_load_meta(meta_path: Path) -> Dict:
+def pr_load_meta(meta_path: Path) -> dict:
     if not meta_path.exists():
         return {}
     data = load_json(meta_path)
     return data if isinstance(data, dict) else {}
 
 
-def pr_load_meta_text(text: str, *, source: str) -> Dict:
+def pr_load_meta_text(text: str, *, source: str) -> dict:
     try:
         data = json.loads(text)
     except json.JSONDecodeError as exc:
@@ -3471,7 +3581,7 @@ def pr_load_meta_text(text: str, *, source: str) -> Dict:
     return data if isinstance(data, dict) else {}
 
 
-def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> Optional[str]:
+def pr_try_read_file_text(task_id: str, filename: str, *, branch: str | None) -> str | None:
     candidates = [pr_dir(task_id) / filename]
     for path in candidates:
         if path.exists():
@@ -3486,7 +3596,7 @@ def pr_try_read_file_text(task_id: str, filename: str, *, branch: Optional[str])
     return None
 
 
-def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str]:
+def pr_try_read_doc_text(task_id: str, *, branch: str | None) -> str | None:
     """
     PR "description" doc:
       - .codex-swarm/tasks/<task-id>/README.md
@@ -3502,7 +3612,7 @@ def pr_try_read_doc_text(task_id: str, *, branch: Optional[str]) -> Optional[str
     return None
 
 
-def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> str:
+def pr_read_file_text(task_id: str, filename: str, *, branch: str | None) -> str:
     text = pr_try_read_file_text(task_id, filename, branch=branch)
     if text is not None:
         return text
@@ -3513,7 +3623,10 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
                 [
                     "Missing PR artifact dir in this checkout.",
                     "Fix:",
-                    f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR artifacts from that branch",
+                    (
+                        f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR "
+                        "artifacts from that branch"
+                    ),
                     "  2) Or check out the task branch that contains the PR artifact files",
                     f"Expected (new): {target.relative_to(ROOT)}",
                     f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
@@ -3521,6 +3634,7 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
             ),
             code=2,
         )
+        raise SystemExit(2)
 
     rel = (target / filename).relative_to(ROOT).as_posix()
     die(
@@ -3528,7 +3642,10 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
             [
                 f"Missing PR artifact file in {branch!r}: {rel}",
                 "Fix:",
-                f"  1) Ensure the task branch contains `{rel}` (run `python .codex-swarm/agentctl.py pr open {task_id}` in the branch)",
+                (
+                    f"  1) Ensure the task branch contains `{rel}` (run `python .codex-swarm/agentctl.py pr open "
+                    f"{task_id}` in the branch)"
+                ),
                 "  2) Commit the PR artifact files to the task branch",
                 "  3) Re-run the command",
                 f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
@@ -3536,9 +3653,10 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: Optional[str]) -> 
         ),
         code=2,
     )
+    raise SystemExit(2)
 
 
-def pr_write_meta(meta_path: Path, meta: Dict) -> None:
+def pr_write_meta(meta_path: Path, meta: dict) -> None:
     write_json(meta_path, meta)
 
 
@@ -3603,7 +3721,10 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
     if is_branch_pr_mode():
         parsed = parse_task_id_from_task_branch(branch)
         if parsed != task_id:
-            die(f"Branch {branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)", code=2)
+            die(
+                f"Branch {branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)",
+                code=2,
+            )
     if not git_branch_exists(branch):
         die(f"Unknown branch: {branch}", code=2)
 
@@ -3618,10 +3739,13 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         print_block("ACTION", f"Open PR artifact for {task_id}")
         print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={branch} base={base} author={author}")
         readme_rel = workflow_task_readme_path(task_id).relative_to(ROOT)
-        print_block("NEXT", f"Fill out `{readme_rel}` then run `python .codex-swarm/agentctl.py pr check {task_id}`.")
+        print_block(
+            "NEXT",
+            f"Fill out `{readme_rel}` then run `python .codex-swarm/agentctl.py pr check {task_id}`.",
+        )
 
 
-def update_task_readme_auto_summary(task_id: str, *, changed: List[str]) -> None:
+def update_task_readme_auto_summary(task_id: str, *, changed: list[str]) -> None:
     readme_path = workflow_task_readme_path(task_id)
     if not readme_path.exists():
         readme_path.parent.mkdir(parents=True, exist_ok=True)
@@ -3690,14 +3814,17 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
         print_block("CONTEXT", format_command_context(cwd=Path.cwd().resolve()))
         print_block("ACTION", f"Update PR artifact for {task_id}")
         print_block("RESULT", f"dir={target.relative_to(ROOT)} branch={branch} base={base}")
-        print_block("NEXT", f"Run `python .codex-swarm/agentctl.py pr check {task_id} --branch {branch} --base {base}`.")
+        print_block(
+            "NEXT",
+            f"Run `python .codex-swarm/agentctl.py pr check {task_id} --branch {branch} --base {base}`.",
+        )
 
 
 def pr_check(
     task_id: str,
     *,
-    branch: Optional[str] = None,
-    base: Optional[str] = None,
+    branch: str | None = None,
+    base: str | None = None,
     quiet: bool = False,
 ) -> None:
     target = pr_dir(task_id)
@@ -3715,18 +3842,30 @@ def pr_check(
         die(f"PR meta.json branch mismatch: expected {branch}, got {meta_branch}", code=2)
     pr_branch = (branch or meta_branch) or git_current_branch()
     if git_status_porcelain(cwd=Path.cwd().resolve()):
-        die(f"Working tree is dirty (pr check requires clean state)\nContext: {format_command_context(cwd=Path.cwd().resolve())}", code=2)
+        message = (
+            "Working tree is dirty (pr check requires clean state)\n"
+            f"Context: {format_command_context(cwd=Path.cwd().resolve())}"
+        )
+        die(
+            message,
+            code=2,
+        )
     if not git_branch_exists(pr_branch):
         die(f"Unknown branch: {pr_branch}", code=2)
     if not git_branch_exists(base_ref):
         die(f"Unknown base branch: {base_ref}", code=2)
     parsed_task_id = parse_task_id_from_task_branch(pr_branch)
     if is_branch_pr_mode() and parsed_task_id != task_id:
-        die(f"Branch {pr_branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)", code=2)
+        die(
+            f"Branch {pr_branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)",
+            code=2,
+        )
 
     required_files = ["meta.json", "diffstat.txt", "verify.log"]
     artifact_branch = pr_branch if not target.exists() else None
-    missing_files = [name for name in required_files if pr_try_read_file_text(task_id, name, branch=artifact_branch) is None]
+    missing_files = [
+        name for name in required_files if pr_try_read_file_text(task_id, name, branch=artifact_branch) is None
+    ]
     if missing_files:
         die(f"Missing PR artifact file(s): {', '.join(missing_files)}", code=2)
 
@@ -3823,9 +3962,12 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
                 [
                     f"Missing PR artifact file: {review_path.relative_to(ROOT)}",
                     "Fix:",
-                    f"  1) Run `python .codex-swarm/agentctl.py pr open {task_id} --author {author} --branch task/{task_id}/<slug>`",
+                    (
+                        f"  1) Run `python .codex-swarm/agentctl.py pr open {task_id} --author {author} "
+                        f"--branch task/{task_id}/<slug>`"
+                    ),
                     "  2) Commit the PR artifact files on the task branch",
-                    f"  3) Re-run `python .codex-swarm/agentctl.py pr note {task_id} --author {author} --body \"...\"`",
+                    f'  3) Re-run `python .codex-swarm/agentctl.py pr note {task_id} --author {author} --body "..."`',
                     f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
                 ]
             ),
@@ -3839,7 +3981,7 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
         print_block("RESULT", f"path={review_path.relative_to(ROOT)} author={author}")
 
 
-def get_task_verify_commands_for(task_id: str) -> List[str]:
+def get_task_verify_commands_for(task_id: str) -> list[str]:
     tasks, _ = load_task_store()
     task = _ensure_task_object(tasks, task_id)
     verify = task.get("verify")
@@ -3865,11 +4007,11 @@ def run_verify_with_capture(
     *,
     cwd: Path,
     quiet: bool,
-    log_path: Optional[Path] = None,
-    current_sha: Optional[str] = None,
-) -> List[Tuple[str, str]]:
+    log_path: Path | None = None,
+    current_sha: str | None = None,
+) -> list[tuple[str, str]]:
     commands = get_task_verify_commands_for(task_id)
-    entries: List[Tuple[str, str]] = []
+    entries: list[tuple[str, str]] = []
     if not commands:
         timestamp = now_iso_utc()
         header = f"[{timestamp}] ℹ️ no verify commands configured"
@@ -3884,7 +4026,7 @@ def run_verify_with_capture(
         if not quiet:
             print(f"$ {command}")
         timestamp = now_iso_utc()
-        proc = subprocess.run(command, cwd=str(cwd), shell=True, text=True, capture_output=True)
+        proc = subprocess.run(command, cwd=str(cwd), shell=True, text=True, capture_output=True, check=False)
         output = ""
         if proc.stdout:
             output += proc.stdout
@@ -3952,7 +4094,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
 
     verify_commands = get_task_verify_commands_for(task_id)
     branch_head_sha = git_rev_parse(branch)
-    already_verified_sha: Optional[str] = None
+    already_verified_sha: str | None = None
     if verify_commands and not args.run_verify:
         meta_verified = str(meta.get("last_verified_sha") or "").strip()
         if meta_verified and meta_verified == branch_head_sha:
@@ -3996,7 +4138,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
         return
 
     try:
-        verify_entries: List[Tuple[str, str]] = []
+        verify_entries: list[tuple[str, str]] = []
 
         head_before = git_rev_parse("HEAD")
         merge_hash = ""
@@ -4014,7 +4156,10 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             proc = run(["git", "merge", "--squash", branch], check=False)
             if proc.returncode != 0:
                 run(["git", "reset", "--hard", head_before], check=False)
-                die(proc.stderr.strip() or proc.stdout.strip() or "git merge --squash failed", code=2)
+                die(
+                    proc.stderr.strip() or proc.stdout.strip() or "git merge --squash failed",
+                    code=2,
+                )
             staged_after_squash = run(["git", "diff", "--cached", "--name-only"], check=True).stdout.strip()
             if not staged_after_squash:
                 run(["git", "reset", "--hard", head_before], check=False)
@@ -4038,7 +4183,10 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                     log_path=None,
                     current_sha=branch_head_sha,
                 )
-            proc = run(["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"], check=False)
+            proc = run(
+                ["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"],
+                check=False,
+            )
             if proc.returncode != 0:
                 run(["git", "reset", "--hard", head_before], check=False)
                 die(proc.stderr.strip() or proc.stdout.strip() or "git merge failed", code=2)
@@ -4072,7 +4220,10 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             proc = run(["git", "merge", "--ff-only", branch], check=False)
             if proc.returncode != 0:
                 run(["git", "reset", "--hard", head_before], check=False)
-                die(proc.stderr.strip() or proc.stdout.strip() or "git merge --ff-only failed", code=2)
+                die(
+                    proc.stderr.strip() or proc.stdout.strip() or "git merge --ff-only failed",
+                    code=2,
+                )
             merge_hash = git_rev_parse("HEAD")
 
         if not verify_commands:
@@ -4117,19 +4268,22 @@ def cmd_integrate(args: argparse.Namespace) -> None:
                 "updated_at": now,
             }
         )
-        if should_run_verify and verify_entries:
-            if branch_head_sha:
-                meta_main["last_verified_sha"] = branch_head_sha
-                meta_main["last_verified_at"] = now
+        if should_run_verify and verify_entries and branch_head_sha:
+            meta_main["last_verified_sha"] = branch_head_sha
+            meta_main["last_verified_at"] = now
         pr_write_meta(meta_path, meta_main)
 
         (pr_path / "diffstat.txt").write_text(git_diff_stat(base_sha_before_merge, branch), encoding="utf-8")
         update_task_readme_auto_summary(task_id, changed=git_diff_names(base_sha_before_merge, branch))
 
         print_block("RESULT", f"merge_commit={merge_hash} finish=OK")
+        next_steps = (
+            f"Commit closure on base branch: stage `{TASKS_PATH_REL}` + `{(pr_path / 'meta.json').relative_to(ROOT)}` "
+            f"(and any docs), then commit `✅ {task_id} close ...`."
+        )
         print_block(
             "NEXT",
-            f"Commit closure on base branch: stage `{TASKS_PATH_REL}` + `{(pr_path / 'meta.json').relative_to(ROOT)}` (and any docs), then commit `✅ {task_id} close ...`.",
+            next_steps,
         )
     finally:
         if created_temp:
@@ -4152,8 +4306,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_verify = sub.add_parser("verify", help="Run verify commands declared on a task (tasks.json)")
     p_verify.add_argument("task_id")
-    p_verify.add_argument("--cwd", help="Run verify commands in this repo subdirectory/worktree (must be under repo root)")
-    p_verify.add_argument("--log", help="Append output to a log file (e.g., .codex-swarm/tasks/<task-id>/pr/verify.log)")
+    p_verify.add_argument(
+        "--cwd",
+        help="Run verify commands in this repo subdirectory/worktree (must be under repo root)",
+    )
+    p_verify.add_argument(
+        "--log",
+        help="Append output to a log file (e.g., .codex-swarm/tasks/<task-id>/pr/verify.log)",
+    )
     p_verify.add_argument(
         "--skip-if-unchanged",
         action="store_true",
@@ -4169,11 +4329,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_work_start = work_sub.add_parser("start", help="Create branch+worktree and initialize per-task artifacts")
     p_work_start.add_argument("task_id")
     p_work_start.add_argument("--agent", help="Agent creating the checkout (e.g., CODER)")
-    p_work_start.add_argument("--slug", required=True, help="Short slug for the branch/worktree name (e.g., work-start)")
+    p_work_start.add_argument(
+        "--slug", required=True, help="Short slug for the branch/worktree name (e.g., work-start)"
+    )
     p_work_start.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_work_start.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
     p_work_start.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
-    p_work_start.add_argument("--overwrite", action="store_true", help="Overwrite .codex-swarm/tasks/<task-id>/README.md when scaffolding")
+    p_work_start.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite .codex-swarm/tasks/<task-id>/README.md when scaffolding",
+    )
     p_work_start.add_argument("--quiet", action="store_true", help="Minimal output")
     p_work_start.set_defaults(func=cmd_work_start)
 
@@ -4182,7 +4348,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_cleanup_merged = cleanup_sub.add_parser("merged", help="Remove merged task branches and their worktrees")
     p_cleanup_merged.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
-    p_cleanup_merged.add_argument("--yes", action="store_true", help="Actually delete; without this flag, prints a dry-run plan")
+    p_cleanup_merged.add_argument(
+        "--yes",
+        action="store_true",
+        help="Actually delete; without this flag, prints a dry-run plan",
+    )
     p_cleanup_merged.add_argument("--quiet", action="store_true", help="Minimal output")
     p_cleanup_merged.set_defaults(func=cmd_cleanup_merged)
 
@@ -4192,19 +4362,29 @@ def build_parser() -> argparse.ArgumentParser:
     p_branch_create = branch_sub.add_parser("create", help="Create task branch (optionally with a git worktree)")
     p_branch_create.add_argument("task_id")
     p_branch_create.add_argument("--agent", help="Agent creating the branch (e.g., CODER)")
-    p_branch_create.add_argument("--slug", required=True, help="Short slug for the branch/worktree name (e.g., auth-cache)")
+    p_branch_create.add_argument(
+        "--slug", required=True, help="Short slug for the branch/worktree name (e.g., auth-cache)"
+    )
     p_branch_create.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
-    p_branch_create.add_argument("--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/")
-    p_branch_create.add_argument("--reuse", action="store_true", help="Reuse an existing registered worktree if present")
+    p_branch_create.add_argument(
+        "--worktree", action="store_true", help=f"Create a worktree under {WORKTREES_DIRNAME}/"
+    )
+    p_branch_create.add_argument(
+        "--reuse", action="store_true", help="Reuse an existing registered worktree if present"
+    )
     p_branch_create.add_argument("--quiet", action="store_true", help="Minimal output")
     p_branch_create.set_defaults(func=cmd_branch_create)
 
-    p_branch_status = branch_sub.add_parser("status", help="Show quick branch/task status (ahead/behind, worktree path)")
+    p_branch_status = branch_sub.add_parser(
+        "status", help="Show quick branch/task status (ahead/behind, worktree path)"
+    )
     p_branch_status.add_argument("--branch", help="Branch name (default: current branch)")
     p_branch_status.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
     p_branch_status.set_defaults(func=cmd_branch_status)
 
-    p_branch_remove = branch_sub.add_parser("remove", help="Remove a task worktree and/or branch (manual confirmation recommended)")
+    p_branch_remove = branch_sub.add_parser(
+        "remove", help="Remove a task worktree and/or branch (manual confirmation recommended)"
+    )
     p_branch_remove.add_argument("--branch", help="Branch name to delete")
     p_branch_remove.add_argument("--worktree", help="Worktree path to remove (relative or absolute)")
     p_branch_remove.add_argument("--force", action="store_true", help="Force deletion")
@@ -4236,7 +4416,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr_check.add_argument("--quiet", action="store_true", help="Minimal output")
     p_pr_check.set_defaults(func=cmd_pr_check)
 
-    p_pr_note = pr_sub.add_parser("note", help="Append a handoff note bullet to .codex-swarm/tasks/<task-id>/pr/review.md")
+    p_pr_note = pr_sub.add_parser(
+        "note", help="Append a handoff note bullet to .codex-swarm/tasks/<task-id>/pr/review.md"
+    )
     p_pr_note.add_argument("task_id")
     p_pr_note.add_argument("--author", required=True, help="Note author/role (e.g., CODER)")
     p_pr_note.add_argument("--body", required=True, help="Note body text")
@@ -4247,9 +4429,22 @@ def build_parser() -> argparse.ArgumentParser:
     p_integrate.add_argument("task_id")
     p_integrate.add_argument("--branch", help="Task branch to integrate (default: from PR meta.json)")
     p_integrate.add_argument("--base", help="Base branch (default: pinned base branch or 'main').")
-    p_integrate.add_argument("--merge-strategy", dest="merge_strategy", default="squash", help="squash|merge|rebase (default: squash)")
-    p_integrate.add_argument("--run-verify", action="store_true", help="Run task verify commands (or always when configured) and append output to PR verify.log")
-    p_integrate.add_argument("--dry-run", action="store_true", help="Print plan + preflight checks without making changes")
+    p_integrate.add_argument(
+        "--merge-strategy",
+        dest="merge_strategy",
+        default="squash",
+        help="squash|merge|rebase (default: squash)",
+    )
+    p_integrate.add_argument(
+        "--run-verify",
+        action="store_true",
+        help="Run task verify commands (or always when configured) and append output to PR verify.log",
+    )
+    p_integrate.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print plan + preflight checks without making changes",
+    )
     p_integrate.add_argument("--quiet", action="store_true", help="Minimal output")
     p_integrate.set_defaults(func=cmd_integrate)
 
@@ -4274,7 +4469,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Derive --allow prefixes from staged files (useful when you don't know the minimal allowlist yet)",
     )
     p_guard_commit.add_argument("--allow-tasks", action="store_true", help="Allow staging tasks.json")
-    p_guard_commit.add_argument("--allow-dirty", action="store_true", help="Deprecated (unstaged changes are allowed by default)")
+    p_guard_commit.add_argument(
+        "--allow-dirty",
+        action="store_true",
+        help="Deprecated (unstaged changes are allowed by default)",
+    )
     p_guard_commit.add_argument("--require-clean", action="store_true", help="Fail if there are unstaged changes")
     p_guard_commit.add_argument("--quiet", action="store_true", help="Minimal output")
     p_guard_commit.set_defaults(func=cmd_guard_commit)
@@ -4295,17 +4494,36 @@ def build_parser() -> argparse.ArgumentParser:
     p_start.add_argument("--body", required=True)
     p_start.add_argument("--quiet", action="store_true", help="Minimal output")
     p_start.add_argument("--force", action="store_true", help="Bypass readiness/transition checks")
-    p_start.add_argument("--commit-from-comment", action="store_true", help="Stage + commit using the comment body as the message")
-    p_start.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default: 🚧)")
-    p_start.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
-    p_start.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_start.add_argument(
+        "--commit-from-comment",
+        action="store_true",
+        help="Stage + commit using the comment body as the message",
+    )
+    p_start.add_argument(
+        "--commit-emoji",
+        help="Emoji prefix when building a commit message from the comment (default: 🚧)",
+    )
+    p_start.add_argument(
+        "--commit-allow",
+        action="append",
+        help="Allowed path prefix (repeatable) when committing from comment",
+    )
+    p_start.add_argument(
+        "--commit-auto-allow",
+        action="store_true",
+        help="Auto-derive allowed prefixes from changed files",
+    )
     p_start.add_argument(
         "--commit-allow-tasks",
         action="store_true",
         default=True,
         help=f"Allow staging {TASKS_PATH_REL} when committing from comment (default: enabled)",
     )
-    p_start.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
+    p_start.add_argument(
+        "--commit-require-clean",
+        action="store_true",
+        help="Require a clean working tree when committing",
+    )
     p_start.set_defaults(func=cmd_start)
 
     p_block = sub.add_parser("block", help="Mark task BLOCKED with a mandatory comment")
@@ -4314,17 +4532,36 @@ def build_parser() -> argparse.ArgumentParser:
     p_block.add_argument("--body", required=True)
     p_block.add_argument("--quiet", action="store_true", help="Minimal output")
     p_block.add_argument("--force", action="store_true", help="Bypass transition checks")
-    p_block.add_argument("--commit-from-comment", action="store_true", help="Stage + commit using the comment body as the message")
-    p_block.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default: ⛔)")
-    p_block.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
-    p_block.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_block.add_argument(
+        "--commit-from-comment",
+        action="store_true",
+        help="Stage + commit using the comment body as the message",
+    )
+    p_block.add_argument(
+        "--commit-emoji",
+        help="Emoji prefix when building a commit message from the comment (default: ⛔)",
+    )
+    p_block.add_argument(
+        "--commit-allow",
+        action="append",
+        help="Allowed path prefix (repeatable) when committing from comment",
+    )
+    p_block.add_argument(
+        "--commit-auto-allow",
+        action="store_true",
+        help="Auto-derive allowed prefixes from changed files",
+    )
     p_block.add_argument(
         "--commit-allow-tasks",
         action="store_true",
         default=True,
         help=f"Allow staging {TASKS_PATH_REL} when committing from comment (default: enabled)",
     )
-    p_block.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
+    p_block.add_argument(
+        "--commit-require-clean",
+        action="store_true",
+        help="Require a clean working tree when committing",
+    )
     p_block.set_defaults(func=cmd_block)
 
     p_task = sub.add_parser("task", help="Operate on tasks.json")
@@ -4432,7 +4669,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_search.add_argument("--quiet", action="store_true", help="Suppress warnings")
     p_search.set_defaults(func=cmd_task_search)
 
-    p_scaffold = task_sub.add_parser("scaffold", help="Create .codex-swarm/tasks/<task-id>/README.md skeleton for a task")
+    p_scaffold = task_sub.add_parser(
+        "scaffold", help="Create .codex-swarm/tasks/<task-id>/README.md skeleton for a task"
+    )
     p_scaffold.add_argument("task_id")
     p_scaffold.add_argument("--title", help="Optional title override")
     p_scaffold.add_argument("--overwrite", action="store_true", help="Overwrite if the file exists")
@@ -4470,17 +4709,36 @@ def build_parser() -> argparse.ArgumentParser:
     p_status.add_argument("--body", help="Optional comment body (requires --author)")
     p_status.add_argument("--commit", help="Attach commit metadata from a git rev (e.g., HEAD)")
     p_status.add_argument("--force", action="store_true", help="Bypass transition and readiness checks")
-    p_status.add_argument("--commit-from-comment", action="store_true", help="Stage + commit using the comment body as the message")
-    p_status.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default depends on status)")
-    p_status.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
-    p_status.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_status.add_argument(
+        "--commit-from-comment",
+        action="store_true",
+        help="Stage + commit using the comment body as the message",
+    )
+    p_status.add_argument(
+        "--commit-emoji",
+        help="Emoji prefix when building a commit message from the comment (default depends on status)",
+    )
+    p_status.add_argument(
+        "--commit-allow",
+        action="append",
+        help="Allowed path prefix (repeatable) when committing from comment",
+    )
+    p_status.add_argument(
+        "--commit-auto-allow",
+        action="store_true",
+        help="Auto-derive allowed prefixes from changed files",
+    )
     p_status.add_argument(
         "--commit-allow-tasks",
         action="store_true",
         default=True,
         help=f"Allow staging {TASKS_PATH_REL} when committing from comment (default: enabled)",
     )
-    p_status.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
+    p_status.add_argument(
+        "--commit-require-clean",
+        action="store_true",
+        help="Require a clean working tree when committing",
+    )
     p_status.set_defaults(func=cmd_task_set_status)
 
     p_finish = sub.add_parser(
@@ -4505,15 +4763,30 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Create a code commit using the comment body before finishing",
     )
-    p_finish.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default: ✨)")
-    p_finish.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
-    p_finish.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_finish.add_argument(
+        "--commit-emoji",
+        help="Emoji prefix when building a commit message from the comment (default: ✨)",
+    )
+    p_finish.add_argument(
+        "--commit-allow",
+        action="append",
+        help="Allowed path prefix (repeatable) when committing from comment",
+    )
+    p_finish.add_argument(
+        "--commit-auto-allow",
+        action="store_true",
+        help="Auto-derive allowed prefixes from changed files",
+    )
     p_finish.add_argument(
         "--commit-allow-tasks",
         action="store_true",
         help=f"Allow staging {TASKS_PATH_REL} during the code commit (default: disabled)",
     )
-    p_finish.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
+    p_finish.add_argument(
+        "--commit-require-clean",
+        action="store_true",
+        help="Require a clean working tree when committing",
+    )
     p_finish.add_argument(
         "--status-commit",
         action="store_true",
@@ -4556,9 +4829,9 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def extract_global_flags(argv: List[str]) -> Tuple[Dict[str, bool], List[str]]:
+def extract_global_flags(argv: list[str]) -> tuple[dict[str, bool], list[str]]:
     flags = {"quiet": False, "verbose": False, "json": False, "lint": False}
-    remaining: List[str] = []
+    remaining: list[str] = []
     for arg in argv:
         if arg == "--quiet":
             flags["quiet"] = True
@@ -4578,7 +4851,7 @@ def extract_global_flags(argv: List[str]) -> Tuple[Dict[str, bool], List[str]]:
     return flags, remaining
 
 
-def apply_global_flags(args: argparse.Namespace, flags: Dict[str, bool]) -> None:
+def apply_global_flags(args: argparse.Namespace, flags: dict[str, bool]) -> None:
     global GLOBAL_QUIET, GLOBAL_VERBOSE, GLOBAL_JSON, GLOBAL_LINT
     GLOBAL_QUIET = bool(flags.get("quiet"))
     GLOBAL_VERBOSE = bool(flags.get("verbose"))
@@ -4586,14 +4859,14 @@ def apply_global_flags(args: argparse.Namespace, flags: Dict[str, bool]) -> None
     GLOBAL_LINT = bool(flags.get("lint"))
     if hasattr(args, "quiet"):
         if GLOBAL_QUIET:
-            setattr(args, "quiet", True)
+            args.quiet = True
     else:
-        setattr(args, "quiet", GLOBAL_QUIET)
+        args.quiet = GLOBAL_QUIET
     if hasattr(args, "verbose"):
         if GLOBAL_VERBOSE:
-            setattr(args, "verbose", True)
+            args.verbose = True
     else:
-        setattr(args, "verbose", GLOBAL_VERBOSE)
+        args.verbose = GLOBAL_VERBOSE
 
 
 def maybe_lint_tasks_json() -> None:
@@ -4606,7 +4879,7 @@ def maybe_lint_tasks_json() -> None:
         raise SystemExit(2)
 
 
-def main(argv: Optional[List[str]] = None) -> None:
+def main(argv: list[str] | None = None) -> None:
     maybe_pin_base_branch(cwd=ROOT)
     raw_argv = list(argv) if argv is not None else sys.argv[1:]
     flags, filtered = extract_global_flags(raw_argv)

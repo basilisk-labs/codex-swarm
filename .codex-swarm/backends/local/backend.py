@@ -5,10 +5,12 @@ import json
 import re
 import secrets
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 FRONTMATTER_BOUNDARY = "---"
 DEFAULT_TASKS_DIR = Path(".codex-swarm/tasks")
@@ -22,22 +24,22 @@ DOC_UPDATED_BY = "agentctl"
 
 @dataclass
 class FrontmatterDoc:
-    frontmatter: Dict[str, object]
+    frontmatter: dict[str, object]
     body: str
 
 
-def _split_top_level(value: str, sep: str = ",") -> List[str]:
-    parts: List[str] = []
-    buf: List[str] = []
+def _split_top_level(value: str, sep: str = ",") -> list[str]:
+    parts: list[str] = []
+    buf: list[str] = []
     depth = 0
-    quote: Optional[str] = None
+    quote: str | None = None
     for ch in value:
         if quote:
             buf.append(ch)
             if ch == quote:
                 quote = None
             continue
-        if ch in ("\"", "'"):
+        if ch in ('"', "'"):
             buf.append(ch)
             quote = ch
             continue
@@ -60,7 +62,7 @@ def _split_top_level(value: str, sep: str = ",") -> List[str]:
 
 
 def _strip_quotes(value: str) -> str:
-    if len(value) >= 2 and value[0] == value[-1] and value[0] in ("\"", "'"):
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
         return value[1:-1]
     return value
 
@@ -76,8 +78,8 @@ def _parse_scalar(value: str) -> object:
         return False
     if lowered in {"null", "none"}:
         return None
-    if raw[0] in ("\"", "'") and raw[-1] == raw[0]:
-        if raw[0] == "\"":
+    if raw[0] in ('"', "'") and raw[-1] == raw[0]:
+        if raw[0] == '"':
             try:
                 return json.loads(raw)
             except json.JSONDecodeError:
@@ -88,7 +90,7 @@ def _parse_scalar(value: str) -> object:
     return raw
 
 
-def _parse_inline_list(value: str) -> List[object]:
+def _parse_inline_list(value: str) -> list[object]:
     inner = value.strip()[1:-1].strip()
     if not inner:
         return []
@@ -96,12 +98,12 @@ def _parse_inline_list(value: str) -> List[object]:
     return [_parse_scalar(item) for item in items]
 
 
-def _parse_inline_dict(value: str) -> Dict[str, object]:
+def _parse_inline_dict(value: str) -> dict[str, object]:
     inner = value.strip()[1:-1].strip()
     if not inner:
         return {}
     entries = _split_top_level(inner)
-    result: Dict[str, object] = {}
+    result: dict[str, object] = {}
     for entry in entries:
         if ":" not in entry:
             continue
@@ -137,9 +139,9 @@ def parse_frontmatter(text: str) -> FrontmatterDoc:
     return FrontmatterDoc(frontmatter=frontmatter, body=body)
 
 
-def _parse_frontmatter_lines(lines: Iterable[str]) -> Dict[str, object]:
-    data: Dict[str, object] = {}
-    current_list_key: Optional[str] = None
+def _parse_frontmatter_lines(lines: Iterable[str]) -> dict[str, object]:
+    data: dict[str, object] = {}
+    current_list_key: str | None = None
     for raw_line in lines:
         if not raw_line.strip():
             continue
@@ -182,19 +184,19 @@ def _format_scalar(value: object) -> str:
     return json.dumps(text, ensure_ascii=False)
 
 
-def _format_inline_list(values: List[object]) -> str:
+def _format_inline_list(values: list[object]) -> str:
     return "[" + ", ".join(_format_scalar(v) for v in values) + "]"
 
 
-def _format_inline_dict(values: Dict[str, object]) -> str:
+def _format_inline_dict(values: dict[str, object]) -> str:
     parts = []
     for key, value in values.items():
         parts.append(f"{key}: {_format_scalar(value)}")
     return "{ " + ", ".join(parts) + " }"
 
 
-def format_frontmatter(frontmatter: Dict[str, object]) -> str:
-    lines: List[str] = [FRONTMATTER_BOUNDARY]
+def format_frontmatter(frontmatter: dict[str, object]) -> str:
+    lines: list[str] = [FRONTMATTER_BOUNDARY]
     keys = [
         "id",
         "title",
@@ -211,7 +213,7 @@ def format_frontmatter(frontmatter: Dict[str, object]) -> str:
         "doc_updated_by",
         "created_at",
     ]
-    remaining = [k for k in frontmatter.keys() if k not in keys]
+    remaining = [k for k in frontmatter if k not in keys]
     ordered_keys = keys + sorted(remaining)
     for key in ordered_keys:
         if key not in frontmatter:
@@ -220,8 +222,7 @@ def format_frontmatter(frontmatter: Dict[str, object]) -> str:
         if isinstance(value, list):
             if value and all(isinstance(item, dict) for item in value):
                 lines.append(f"{key}:")
-                for item in value:
-                    lines.append(f"  - {_format_inline_dict(item)}")
+                lines.extend(f"  - {_format_inline_dict(item)}" for item in value)
             else:
                 lines.append(f"{key}: {_format_inline_list(value)}")
             continue
@@ -234,7 +235,7 @@ def format_frontmatter(frontmatter: Dict[str, object]) -> str:
 
 
 def now_iso_utc() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    return datetime.now(UTC).replace(microsecond=0).isoformat()
 
 
 def _normalize_doc(text: str) -> str:
@@ -245,13 +246,13 @@ def _doc_changed(existing: str, updated: str) -> bool:
     return _normalize_doc(existing) != _normalize_doc(updated)
 
 
-def _apply_doc_metadata(frontmatter: Dict[str, object], *, updated_by: Optional[str] = None) -> None:
+def _apply_doc_metadata(frontmatter: dict[str, object], *, updated_by: str | None = None) -> None:
     frontmatter["doc_version"] = DOC_VERSION
     frontmatter["doc_updated_at"] = now_iso_utc()
-    frontmatter["doc_updated_by"] = (updated_by or DOC_UPDATED_BY)
+    frontmatter["doc_updated_by"] = updated_by or DOC_UPDATED_BY
 
 
-def validate_task_id(task_id: str, *, source: Optional[Path] = None) -> None:
+def validate_task_id(task_id: str, *, source: Path | None = None) -> None:
     if not TASK_ID_RE.match(task_id):
         hint = f" in {source}" if source else ""
         raise ValueError(f"Invalid task id{hint}: {task_id}")
@@ -273,8 +274,7 @@ def extract_task_doc(body: str) -> str:
         if lines[idx].strip() == AUTO_SUMMARY_HEADER:
             end_idx = idx
             break
-    doc = "\n".join(lines[start_idx:end_idx]).rstrip()
-    return doc
+    return "\n".join(lines[start_idx:end_idx]).rstrip()
 
 
 def merge_task_doc(body: str, doc: str) -> str:
@@ -298,7 +298,7 @@ def merge_task_doc(body: str, doc: str) -> str:
     auto_block = ""
     if auto_idx is not None:
         auto_block = "\n".join(lines[auto_idx:]).rstrip()
-    parts: List[str] = []
+    parts: list[str] = []
     if prefix_text:
         parts.append(prefix_text)
         parts.append("")
@@ -310,7 +310,7 @@ def merge_task_doc(body: str, doc: str) -> str:
 
 
 class LocalBackend:
-    def __init__(self, settings: Optional[Dict[str, object]] = None) -> None:
+    def __init__(self, settings: dict[str, object] | None = None) -> None:
         raw_dir = (settings or {}).get("dir") if isinstance(settings, dict) else None
         if raw_dir:
             self.root = Path(str(raw_dir)).resolve()
@@ -327,17 +327,17 @@ class LocalBackend:
         if length < 4:
             raise ValueError("length must be >= 4")
         for _ in range(attempts):
-            timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
+            timestamp = datetime.now(UTC).strftime("%Y%m%d%H%M")
             suffix = "".join(secrets.choice(ID_ALPHABET) for _ in range(length))
             task_id = f"{timestamp}-{suffix}"
             if not self.task_dir(task_id).exists():
                 return task_id
         raise RuntimeError("Failed to generate a unique task id")
 
-    def list_tasks(self) -> List[Dict[str, object]]:
+    def list_tasks(self) -> list[dict[str, object]]:
         if not self.root.exists():
             return []
-        tasks: List[Dict[str, object]] = []
+        tasks: list[dict[str, object]] = []
         seen_ids: set[str] = set()
         for entry in sorted(self.root.iterdir()):
             if not entry.is_dir():
@@ -360,7 +360,7 @@ class LocalBackend:
                 tasks.append(task)
         return tasks
 
-    def get_task(self, task_id: str) -> Optional[Dict[str, object]]:
+    def get_task(self, task_id: str) -> dict[str, object] | None:
         readme = self.task_readme_path(task_id)
         if not readme.exists():
             return None
@@ -378,7 +378,7 @@ class LocalBackend:
         parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
         return extract_task_doc(parsed.body)
 
-    def write_task(self, task: Dict[str, object]) -> None:
+    def write_task(self, task: dict[str, object]) -> None:
         task_id = str(task.get("id") or "").strip()
         if not task_id:
             raise ValueError("Task id is required")
@@ -387,7 +387,7 @@ class LocalBackend:
         doc = task_payload.pop("doc", None)
         readme = self.task_readme_path(task_id)
         body = ""
-        existing_frontmatter: Dict[str, object] = {}
+        existing_frontmatter: dict[str, object] = {}
         existing_doc = ""
         if readme.exists():
             parsed = parse_frontmatter(readme.read_text(encoding="utf-8"))
@@ -431,7 +431,7 @@ class LocalBackend:
             content += body.lstrip("\n") + "\n"
         readme.write_text(content, encoding="utf-8")
 
-    def touch_task_doc_metadata(self, task_id: str, *, updated_by: Optional[str] = None) -> None:
+    def touch_task_doc_metadata(self, task_id: str, *, updated_by: str | None = None) -> None:
         readme = self.task_readme_path(task_id)
         if not readme.exists():
             raise FileNotFoundError(f"Missing task README: {readme}")
@@ -444,7 +444,7 @@ class LocalBackend:
             content += parsed.body.lstrip("\n") + "\n"
         readme.write_text(content, encoding="utf-8")
 
-    def write_tasks(self, tasks: List[Dict[str, object]]) -> None:
+    def write_tasks(self, tasks: list[dict[str, object]]) -> None:
         for task in tasks:
             if isinstance(task, dict):
                 self.write_task(task)

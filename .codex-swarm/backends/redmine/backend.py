@@ -9,12 +9,15 @@ import re
 import secrets
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import TYPE_CHECKING
 from urllib import error as urlerror
 from urllib import parse as urlparse
 from urllib import request as urlrequest
+
+if TYPE_CHECKING:
+    from types import ModuleType
 
 
 class RedmineUnavailable(RuntimeError):
@@ -22,7 +25,7 @@ class RedmineUnavailable(RuntimeError):
 
 
 def now_iso_utc() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    return datetime.now(UTC).replace(microsecond=0).isoformat()
 
 
 def _load_local_backend_class() -> type:
@@ -33,7 +36,7 @@ def _load_local_backend_class() -> type:
     return backend_cls
 
 
-def _load_local_backend_module():
+def _load_local_backend_module() -> ModuleType:
     local_path = Path(__file__).resolve().parents[1] / "local" / "backend.py"
     spec = importlib.util.spec_from_file_location("local_backend", local_path)
     if not spec or not spec.loader:
@@ -45,13 +48,16 @@ def _load_local_backend_module():
 
 
 class RedmineBackend:
-    def __init__(self, settings: Optional[Dict[str, object]] = None) -> None:
+    def __init__(self, settings: dict[str, object] | None = None) -> None:
         settings = settings if isinstance(settings, dict) else {}
         env_url = os.environ.get("CODEXSWARM_REDMINE_URL", "").strip()
         env_api_key = os.environ.get("CODEXSWARM_REDMINE_API_KEY", "").strip()
         env_project_id = os.environ.get("CODEXSWARM_REDMINE_PROJECT_ID", "").strip()
         env_assignee = os.environ.get("CODEXSWARM_REDMINE_ASSIGNEE_ID", "").strip()
-        env_owner = os.environ.get("CODEXSWARM_REDMINE_OWNER", "").strip() or os.environ.get("CODEXSWARM_REDMINE_OWNER_AGENT", "").strip()
+        env_owner = (
+            os.environ.get("CODEXSWARM_REDMINE_OWNER", "").strip()
+            or os.environ.get("CODEXSWARM_REDMINE_OWNER_AGENT", "").strip()
+        )
 
         self.base_url = (env_url or str(settings.get("url") or "")).rstrip("/")
         self.api_key = env_api_key or str(settings.get("api_key") or "").strip()
@@ -61,13 +67,9 @@ class RedmineBackend:
         self.custom_fields = settings.get("custom_fields") or {}
         self.batch_size = int(settings.get("batch_size") or 20)
         self.batch_pause = float(settings.get("batch_pause") or 0.5)
-        self.owner_agent = (
-            env_owner
-            or str(settings.get("owner_agent") or "").strip()
-            or "REDMINE"
-        )
+        self.owner_agent = env_owner or str(settings.get("owner_agent") or "").strip() or "REDMINE"
         cache_dir = settings.get("cache_dir")
-        self._issue_cache: Dict[str, Dict[str, object]] = {}
+        self._issue_cache: dict[str, dict[str, object]] = {}
 
         if not self.base_url or not self.api_key or not self.project_id:
             raise ValueError("Redmine backend requires url, api_key, and project_id")
@@ -84,7 +86,7 @@ class RedmineBackend:
         if cache_dir:
             self.cache = local_backend_cls({"dir": str(cache_dir)})
 
-        self._reverse_status_map: Dict[int, str] = {}
+        self._reverse_status_map: dict[int, str] = {}
         if isinstance(self.status_map, dict):
             for key, value in self.status_map.items():
                 if isinstance(value, int):
@@ -96,33 +98,25 @@ class RedmineBackend:
     def generate_task_id(self, *, length: int = 6, attempts: int = 1000) -> str:
         existing_ids: set[str] = set()
         try:
-            existing_ids = {
-                str(task.get("id") or "")
-                for task in self._list_tasks_remote()
-                if isinstance(task, dict)
-            }
+            existing_ids = {str(task.get("id") or "") for task in self._list_tasks_remote() if isinstance(task, dict)}
         except RedmineUnavailable:
             if not self.cache:
                 raise
-            existing_ids = {
-                str(task.get("id") or "")
-                for task in self.cache.list_tasks()
-                if isinstance(task, dict)
-            }
+            existing_ids = {str(task.get("id") or "") for task in self.cache.list_tasks() if isinstance(task, dict)}
         return self._generate_task_id_from_existing(existing_ids, length=length, attempts=attempts)
 
     def _generate_task_id_from_existing(self, existing_ids: set[str], *, length: int, attempts: int) -> str:
         if length < 4:
             raise ValueError("length must be >= 4")
         for _ in range(attempts):
-            timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
+            timestamp = datetime.now(UTC).strftime("%Y%m%d%H%M")
             suffix = "".join(secrets.choice(self._id_alphabet) for _ in range(length))
             candidate = f"{timestamp}-{suffix}"
             if candidate not in existing_ids:
                 return candidate
         raise RuntimeError("Failed to generate a unique task id")
 
-    def list_tasks(self) -> List[Dict[str, object]]:
+    def list_tasks(self) -> list[dict[str, object]]:
         try:
             tasks = self._list_tasks_remote()
         except RedmineUnavailable:
@@ -145,7 +139,7 @@ class RedmineBackend:
         }
         output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    def get_task(self, task_id: str) -> Optional[Dict[str, object]]:
+    def get_task(self, task_id: str) -> dict[str, object] | None:
         try:
             issue = self._find_issue_by_task_id(task_id)
             if issue is None:
@@ -170,7 +164,7 @@ class RedmineBackend:
                 raise
             cached = self.cache.get_task(task_id)
             if not cached:
-                raise KeyError(f"Unknown task id: {task_id}")
+                raise KeyError(f"Unknown task id: {task_id}") from None
             return str(cached.get("doc") or "")
 
     def set_task_doc(self, task_id: str, doc: str) -> None:
@@ -186,7 +180,7 @@ class RedmineBackend:
             field_id = self.custom_fields.get("doc")
             task_doc = {"doc": doc}
             self._ensure_doc_metadata(task_doc, force=True)
-            custom_fields: List[Dict[str, object]] = []
+            custom_fields: list[dict[str, object]] = []
             self._append_custom_field(custom_fields, "doc", task_doc.get("doc"))
             self._append_custom_field(custom_fields, "doc_version", task_doc.get("doc_version"))
             self._append_custom_field(custom_fields, "doc_updated_at", task_doc.get("doc_updated_at"))
@@ -210,7 +204,7 @@ class RedmineBackend:
                 raise
             task = self.cache.get_task(task_id)
             if not task:
-                raise KeyError(f"Unknown task id: {task_id}")
+                raise KeyError(f"Unknown task id: {task_id}") from None
             task["doc"] = doc
             self._ensure_doc_metadata(task, force=True)
             self._cache_task(task, dirty=True)
@@ -227,12 +221,16 @@ class RedmineBackend:
                 raise RuntimeError("Missing Redmine issue id for task")
             task_doc = {"doc": self._custom_field_value(issue, self.custom_fields.get("doc"))}
             self._ensure_doc_metadata(task_doc, force=True)
-            custom_fields: List[Dict[str, object]] = []
+            custom_fields: list[dict[str, object]] = []
             self._append_custom_field(custom_fields, "doc_version", task_doc.get("doc_version"))
             self._append_custom_field(custom_fields, "doc_updated_at", task_doc.get("doc_updated_at"))
             self._append_custom_field(custom_fields, "doc_updated_by", task_doc.get("doc_updated_by"))
             if custom_fields:
-                self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": {"custom_fields": custom_fields}})
+                self._request_json(
+                    "PUT",
+                    f"issues/{issue_id}.json",
+                    payload={"issue": {"custom_fields": custom_fields}},
+                )
                 for key in ("doc_version", "doc_updated_at", "doc_updated_by"):
                     field_id = self.custom_fields.get(key)
                     if field_id:
@@ -245,16 +243,16 @@ class RedmineBackend:
                 raise
             task = self.cache.get_task(task_id)
             if not task:
-                raise KeyError(f"Unknown task id: {task_id}")
+                raise KeyError(f"Unknown task id: {task_id}") from None
             self._ensure_doc_metadata(task, force=True)
             self._cache_task(task, dirty=True)
 
-    def write_task(self, task: Dict[str, object]) -> None:
+    def write_task(self, task: dict[str, object]) -> None:
         task_id = str(task.get("id") or "").strip()
         if not task_id:
             raise ValueError("task.id is required")
         try:
-            existing_issue: Optional[Dict[str, object]] = None
+            existing_issue: dict[str, object] | None = None
             self._ensure_doc_metadata(task, force=False)
             issue_id = task.get("redmine_id")
             if not issue_id:
@@ -276,12 +274,14 @@ class RedmineBackend:
                     self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": update_payload})
                     existing_issue = self._request_json("GET", f"issues/{issue_id}.json").get("issue")
             if issue_id:
-                existing_comments: List[Dict[str, object]] = []
+                existing_comments: list[dict[str, object]] = []
                 if isinstance(existing_issue, dict):
                     comments_val = self._custom_field_value(existing_issue, self.custom_fields.get("comments"))
                     existing_comments = self._normalize_comments(self._maybe_parse_json(comments_val))
                 desired_comments = self._normalize_comments(task.get("comments"))
-                self._append_comment_notes(issue_id, existing_comments=existing_comments, desired_comments=desired_comments)
+                self._append_comment_notes(
+                    issue_id, existing_comments=existing_comments, desired_comments=desired_comments
+                )
             if issue_id:
                 task["redmine_id"] = issue_id
             task["dirty"] = False
@@ -293,7 +293,7 @@ class RedmineBackend:
             task["dirty"] = True
             self._cache_task(task, dirty=True)
 
-    def write_tasks(self, tasks: List[Dict[str, object]]) -> None:
+    def write_tasks(self, tasks: list[dict[str, object]]) -> None:
         for index, task in enumerate(tasks, start=1):
             if not isinstance(task, dict):
                 continue
@@ -301,7 +301,14 @@ class RedmineBackend:
             if self.batch_pause and self.batch_size > 0 and index % self.batch_size == 0:
                 time.sleep(self.batch_pause)
 
-    def sync(self, direction: str = "push", conflict: str = "diff", quiet: bool = False, confirm: bool = False) -> None:
+    def sync(
+        self,
+        direction: str = "push",
+        conflict: str = "diff",
+        *,
+        quiet: bool = False,
+        confirm: bool = False,
+    ) -> None:
         if direction == "push":
             self._sync_push(conflict=conflict, quiet=quiet, confirm=confirm)
             return
@@ -310,7 +317,7 @@ class RedmineBackend:
             return
         raise ValueError(f"Unsupported direction: {direction}")
 
-    def _sync_push(self, conflict: str, quiet: bool, confirm: bool) -> None:
+    def _sync_push(self, _conflict: str, quiet: bool, confirm: bool) -> None:
         if not self.cache:
             raise RuntimeError("Redmine cache is disabled; sync push is unavailable")
         tasks = self.cache.list_tasks()
@@ -351,7 +358,13 @@ class RedmineBackend:
         if not quiet:
             print(f"✅ pulled {len(remote)} task(s)")
 
-    def _handle_conflict(self, task_id: str, local_task: Dict[str, object], remote_task: Dict[str, object], conflict: str) -> None:
+    def _handle_conflict(
+        self,
+        task_id: str,
+        local_task: dict[str, object],
+        remote_task: dict[str, object],
+        conflict: str,
+    ) -> None:
         if conflict == "prefer-local":
             self.write_task(local_task)
             return
@@ -364,17 +377,15 @@ class RedmineBackend:
             raise RuntimeError(f"Conflict detected for {task_id}")
         raise RuntimeError(f"Conflict detected for {task_id}")
 
-    def _diff_tasks(self, local_task: Dict[str, object], remote_task: Dict[str, object]) -> str:
+    def _diff_tasks(self, local_task: dict[str, object], remote_task: dict[str, object]) -> str:
         local_text = json.dumps(local_task, indent=2, sort_keys=True, ensure_ascii=False).splitlines()
         remote_text = json.dumps(remote_task, indent=2, sort_keys=True, ensure_ascii=False).splitlines()
-        return "\n".join(
-            difflib.unified_diff(remote_text, local_text, fromfile="remote", tofile="local", lineterm="")
-        )
+        return "\n".join(difflib.unified_diff(remote_text, local_text, fromfile="remote", tofile="local", lineterm=""))
 
-    def _tasks_differ(self, local_task: Dict[str, object], remote_task: Dict[str, object]) -> bool:
+    def _tasks_differ(self, local_task: dict[str, object], remote_task: dict[str, object]) -> bool:
         return json.dumps(local_task, sort_keys=True) != json.dumps(remote_task, sort_keys=True)
 
-    def _cache_task(self, task: Dict[str, object], dirty: bool) -> None:
+    def _cache_task(self, task: dict[str, object], dirty: bool) -> None:
         if not self.cache:
             return
         task["dirty"] = dirty
@@ -385,7 +396,7 @@ class RedmineBackend:
             return self.custom_fields.get("task_id")
         raise RuntimeError("Redmine backend requires custom_fields.task_id")
 
-    def _set_issue_custom_field_value(self, issue: Dict[str, object], field_id: object, value: object) -> None:
+    def _set_issue_custom_field_value(self, issue: dict[str, object], field_id: object, value: object) -> None:
         fields = issue.get("custom_fields")
         if not isinstance(fields, list):
             fields = []
@@ -396,9 +407,9 @@ class RedmineBackend:
                 return
         fields.append({"id": field_id, "value": value})
 
-    def _list_tasks_remote(self) -> List[Dict[str, object]]:
-        tasks: List[Dict[str, object]] = []
-        all_issues: List[Dict[str, object]] = []
+    def _list_tasks_remote(self) -> list[dict[str, object]]:
+        tasks: list[dict[str, object]] = []
+        all_issues: list[dict[str, object]] = []
         offset = 0
         limit = 100
         task_id_field_id = self._task_id_field_id()
@@ -448,7 +459,7 @@ class RedmineBackend:
                 tasks.append(task)
         return tasks
 
-    def _find_issue_by_task_id(self, task_id: str) -> Optional[Dict[str, object]]:
+    def _find_issue_by_task_id(self, task_id: str) -> dict[str, object] | None:
         task_id_str = str(task_id or "").strip()
         if not task_id_str:
             return None
@@ -495,13 +506,15 @@ class RedmineBackend:
                     return issue
         return None
 
-    def _issue_to_task(self, issue: Dict[str, object], *, task_id_override: Optional[str] = None) -> Optional[Dict[str, object]]:
+    def _issue_to_task(
+        self, issue: dict[str, object], *, task_id_override: str | None = None
+    ) -> dict[str, object] | None:
         if not isinstance(issue, dict):
             return None
         task_id = task_id_override or self._custom_field_value(issue, self.custom_fields.get("task_id"))
         if not task_id:
             return None
-        status_id = ((issue.get("status") or {}).get("id") if isinstance(issue.get("status"), dict) else None)
+        status_id = (issue.get("status") or {}).get("id") if isinstance(issue.get("status"), dict) else None
         status = self._reverse_status_map.get(int(status_id)) if isinstance(status_id, int) else "TODO"
         verify_val = self._custom_field_value(issue, self.custom_fields.get("verify"))
         commit_val = self._custom_field_value(issue, self.custom_fields.get("commit"))
@@ -536,9 +549,11 @@ class RedmineBackend:
             task["doc_updated_by"] = doc_updated_by_val
         return task
 
-    def _task_to_issue_payload(self, task: Dict[str, object], existing_issue: Optional[Dict[str, object]] = None) -> Dict[str, object]:
+    def _task_to_issue_payload(
+        self, task: dict[str, object], existing_issue: dict[str, object] | None = None
+    ) -> dict[str, object]:
         status = str(task.get("status") or "").strip().upper()
-        payload: Dict[str, object] = {
+        payload: dict[str, object] = {
             "subject": str(task.get("title") or ""),
             "description": str(task.get("description") or ""),
         }
@@ -558,7 +573,7 @@ class RedmineBackend:
         done_ratio = self._done_ratio_for_status(status)
         if done_ratio is not None:
             payload["done_ratio"] = done_ratio
-        custom_fields: List[Dict[str, object]] = []
+        custom_fields: list[dict[str, object]] = []
         self._ensure_doc_metadata(task, force=False)
         self._append_custom_field(custom_fields, "task_id", task.get("id"))
         self._append_custom_field(custom_fields, "verify", task.get("verify"))
@@ -572,17 +587,17 @@ class RedmineBackend:
             payload["custom_fields"] = custom_fields
         return payload
 
-    def _append_custom_field(self, fields: List[Dict[str, object]], key: str, value: object) -> None:
+    def _append_custom_field(self, fields: list[dict[str, object]], key: str, value: object) -> None:
         field_id = None
         if isinstance(self.custom_fields, dict):
             field_id = self.custom_fields.get(key)
         if not field_id:
             return
-        if isinstance(value, (dict, list)):
+        if isinstance(value, dict | list):
             value = json.dumps(value, ensure_ascii=False)
         fields.append({"id": field_id, "value": value})
 
-    def _ensure_doc_metadata(self, task: Dict[str, object], *, force: bool) -> None:
+    def _ensure_doc_metadata(self, task: dict[str, object], *, force: bool) -> None:
         if "doc" not in task and not force:
             return
         if force or task.get("doc_version") is None:
@@ -592,7 +607,7 @@ class RedmineBackend:
         if force or not task.get("doc_updated_by"):
             task["doc_updated_by"] = self._doc_updated_by
 
-    def _coerce_doc_version(self, value: object) -> Optional[int]:
+    def _coerce_doc_version(self, value: object) -> int | None:
         if value is None:
             return None
         if isinstance(value, int):
@@ -602,7 +617,7 @@ class RedmineBackend:
             return int(raw)
         return None
 
-    def _normalize_comments(self, value: object) -> List[Dict[str, object]]:
+    def _normalize_comments(self, value: object) -> list[dict[str, object]]:
         if isinstance(value, list):
             return [item for item in value if isinstance(item, dict)]
         if isinstance(value, dict):
@@ -611,8 +626,8 @@ class RedmineBackend:
             return [{"author": "redmine", "body": value.strip()}]
         return []
 
-    def _comments_to_pairs(self, comments: List[Dict[str, object]]) -> List[tuple[str, str]]:
-        pairs: List[tuple[str, str]] = []
+    def _comments_to_pairs(self, comments: list[dict[str, object]]) -> list[tuple[str, str]]:
+        pairs: list[tuple[str, str]] = []
         for comment in comments:
             if not isinstance(comment, dict):
                 continue
@@ -632,8 +647,8 @@ class RedmineBackend:
         self,
         issue_id: object,
         *,
-        existing_comments: List[Dict[str, object]],
-        desired_comments: List[Dict[str, object]],
+        existing_comments: list[dict[str, object]],
+        desired_comments: list[dict[str, object]],
     ) -> None:
         if not issue_id:
             return
@@ -651,7 +666,7 @@ class RedmineBackend:
             if note:
                 self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": {"notes": note}})
 
-    def _start_date_from_task_id(self, task_id: str) -> Optional[str]:
+    def _start_date_from_task_id(self, task_id: str) -> str | None:
         if not task_id or "-" not in task_id:
             return None
         prefix = task_id.split("-", 1)[0]
@@ -662,14 +677,14 @@ class RedmineBackend:
         day = prefix[6:8]
         return f"{year}-{month}-{day}"
 
-    def _done_ratio_for_status(self, status: str) -> Optional[int]:
+    def _done_ratio_for_status(self, status: str) -> int | None:
         if not status:
             return None
         if status == "DONE":
             return 100
         return 0
 
-    def _custom_field_value(self, issue: Dict[str, object], field_id: object) -> Optional[str]:
+    def _custom_field_value(self, issue: dict[str, object], field_id: object) -> str | None:
         if not field_id:
             return None
         fields = issue.get("custom_fields")
@@ -680,13 +695,13 @@ class RedmineBackend:
                 return str(field.get("value") or "")
         return None
 
-    def _maybe_parse_json(self, value: Optional[str]) -> object:
+    def _maybe_parse_json(self, value: str | None) -> object:
         if value is None:
             return None
         raw = str(value).strip()
         if not raw:
             return None
-        if raw.startswith("{") or raw.startswith("["):
+        if raw.startswith(("{", "[")):
             try:
                 return json.loads(raw)
             except json.JSONDecodeError:
@@ -697,12 +712,12 @@ class RedmineBackend:
         self,
         method: str,
         path: str,
-        payload: Optional[Dict[str, object]] = None,
-        params: Optional[Dict[str, object]] = None,
+        payload: dict[str, object] | None = None,
+        params: dict[str, object] | None = None,
         *,
         attempts: int = 3,
         backoff: float = 0.5,
-    ) -> Dict[str, object]:
+    ) -> dict[str, object]:
         url = f"{self.base_url}/{path.lstrip('/')}"
         if params:
             url += "?" + urlparse.urlencode(params)

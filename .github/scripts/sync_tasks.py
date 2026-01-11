@@ -23,7 +23,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, cast
 
 import requests
 
@@ -52,17 +52,19 @@ SESSION.headers.update(
 
 # ---------- Helpers ----------
 
-def load_tasks() -> List[Dict[str, Any]]:
+
+def load_tasks() -> list[dict[str, Any]]:
     if not TASKS_PATH.exists():
-        raise SystemExit(
-            "Missing .codex-swarm/tasks.json. Run `python3 .codex-swarm/agentctl.py task export` first."
-        )
-    data = json.loads(TASKS_PATH.read_text())
-    return data["tasks"]
+        raise SystemExit("Missing .codex-swarm/tasks.json. Run `python3 .codex-swarm/agentctl.py task export` first.")
+    data = cast(dict[str, Any], json.loads(TASKS_PATH.read_text()))
+    tasks = data.get("tasks")
+    if not isinstance(tasks, list):
+        raise TypeError("tasks.json missing tasks list")
+    return cast(list[dict[str, Any]], tasks)
 
 
-def build_labels(task: Dict[str, Any]) -> List[str]:
-    labels: List[str] = []
+def build_labels(task: dict[str, Any]) -> list[str]:
+    labels: list[str] = []
     labels.append(f"task-id:{task['id']}")
 
     labels.append(f"status:{task['status']}")
@@ -73,12 +75,12 @@ def build_labels(task: Dict[str, Any]) -> List[str]:
     return labels
 
 
-def build_title(task: Dict[str, Any]) -> str:
+def build_title(task: dict[str, Any]) -> str:
     return f"[{task['id']}] {task['title']}"
 
 
-def build_body(task: Dict[str, Any]) -> str:
-    lines: List[str] = []
+def build_body(task: dict[str, Any]) -> str:
+    lines: list[str] = []
     lines.append(f"Internal ID: `{task['id']}`\n")
 
     lines.append("**Description**")
@@ -113,18 +115,18 @@ def build_body(task: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def find_issue_by_task_id(task_id: str) -> Optional[Dict[str, Any]]:
+def find_issue_by_task_id(task_id: str) -> dict[str, Any] | None:
     """Search issue by label task-id:<id>. Returns first match or None."""
     label = f"task-id:{task_id}"
     url = f"{GITHUB_API_REST}/repos/{OWNER}/{REPO}/issues"
-    params = {"labels": label, "state": "all", "per_page": 50}
+    params: dict[str, str | int] = {"labels": label, "state": "all", "per_page": 50}
     r = SESSION.get(url, params=params)
     r.raise_for_status()
-    issues = r.json()
+    issues = cast(list[dict[str, Any]], r.json())
     return issues[0] if issues else None
 
 
-def create_issue(task: Dict[str, Any]) -> Dict[str, Any]:
+def create_issue(task: dict[str, Any]) -> dict[str, Any]:
     url = f"{GITHUB_API_REST}/repos/{OWNER}/{REPO}/issues"
     data = {
         "title": build_title(task),
@@ -133,10 +135,10 @@ def create_issue(task: Dict[str, Any]) -> Dict[str, Any]:
     }
     r = SESSION.post(url, json=data)
     r.raise_for_status()
-    return r.json()
+    return cast(dict[str, Any], r.json())
 
 
-def update_issue(issue: Dict[str, Any], task: Dict[str, Any]) -> Dict[str, Any]:
+def update_issue(issue: dict[str, Any], task: dict[str, Any]) -> dict[str, Any]:
     number = issue["number"]
     url = f"{GITHUB_API_REST}/repos/{OWNER}/{REPO}/issues/{number}"
 
@@ -150,24 +152,29 @@ def update_issue(issue: Dict[str, Any], task: Dict[str, Any]) -> Dict[str, Any]:
     }
     r = SESSION.patch(url, json=data)
     r.raise_for_status()
-    return r.json()
+    return cast(dict[str, Any], r.json())
 
 
 # ---------- GraphQL helpers ----------
 
-def gql(query: str, variables: Dict[str, Any]) -> Dict[str, Any]:
+
+def gql(query: str, variables: dict[str, Any]) -> dict[str, Any]:
     r = SESSION.post(
         GITHUB_API_GRAPHQL,
         json={"query": query, "variables": variables},
     )
     r.raise_for_status()
-    payload = r.json()
-    if "errors" in payload:
-        raise RuntimeError(payload["errors"])
-    return payload["data"]
+    payload = cast(dict[str, Any], r.json())
+    errors = payload.get("errors")
+    if errors:
+        raise RuntimeError(errors)
+    data = payload.get("data")
+    if not isinstance(data, dict):
+        raise TypeError("GraphQL response missing data")
+    return cast(dict[str, Any], data)
 
 
-def get_project_and_status_field():
+def get_project_and_status_field() -> tuple[str, str, dict[str, str]]:
     """
     Returns:
       project_id: str
@@ -215,9 +222,7 @@ def get_project_and_status_field():
     return project_id, status_field["id"], options_by_name
 
 
-def find_project_item_by_task_id(
-    project_id: str, task_id: str
-) -> Optional[str]:
+def find_project_item_by_task_id(project_id: str, task_id: str) -> str | None:
     """
     Use project items search by issue title: "[T-XXX] ..."
     Returns item_id or None.
@@ -246,7 +251,9 @@ def find_project_item_by_task_id(
     items = data["node"]["items"]["nodes"]
     if not items:
         return None
-    return items[0]["id"]
+    item = items[0] if isinstance(items[0], dict) else None
+    item_id = item.get("id") if item else None
+    return str(item_id) if item_id else None
 
 
 def add_issue_to_project(project_id: str, issue_node_id: str) -> str:
@@ -267,7 +274,7 @@ def add_issue_to_project(project_id: str, issue_node_id: str) -> str:
     """
     data = gql(mutation, {"projectId": project_id, "contentId": issue_node_id})
     item = data["addProjectV2ItemById"]["item"]
-    return item["id"]
+    return str(item["id"])
 
 
 def set_project_status(
@@ -275,8 +282,8 @@ def set_project_status(
     item_id: str,
     field_id: str,
     status_name: str,
-    options_by_name: Dict[str, str],
-):
+    options_by_name: dict[str, str],
+) -> None:
     """
     status_name is the Status field option name in the project (for example, "Todo").
     """
@@ -319,7 +326,8 @@ STATUS_MAP = {
     "DONE": "DONE",
 }
 
-def sync():
+
+def sync() -> None:
     project_id, status_field_id, status_options_by_name = get_project_and_status_field()
 
     tasks = load_tasks()
@@ -329,7 +337,7 @@ def sync():
 
         existing = find_issue_by_task_id(task_id)
         if existing is None:
-            print(f"[+] create issue")
+            print("[+] create issue")
             issue = create_issue(task)
         else:
             print(f"[*] update issue #{existing['number']}")
