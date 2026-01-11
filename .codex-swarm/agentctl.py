@@ -1130,7 +1130,8 @@ def cmd_task_migrate(args: argparse.Namespace) -> None:
     if backend is None:
         die("No backend configured (set tasks_backend.config_path in .codex-swarm/config.json)", code=2)
     write_task = getattr(backend, "write_task", None)
-    if not callable(write_task):
+    write_tasks = getattr(backend, "write_tasks", None)
+    if not callable(write_task) and not callable(write_tasks):
         die("Configured backend does not support write_task()", code=2)
     source_raw = str(args.source or TASKS_PATH_REL).strip()
     source_path = _resolve_repo_relative_path(source_raw, label="task migrate source")
@@ -1138,9 +1139,12 @@ def cmd_task_migrate(args: argparse.Namespace) -> None:
     tasks = data.get("tasks")
     if not isinstance(tasks, list):
         die("tasks.json must contain a top-level 'tasks' list")
-    for task in tasks:
-        if isinstance(task, dict):
-            write_task(task)
+    if callable(write_tasks):
+        write_tasks([task for task in tasks if isinstance(task, dict)])
+    else:
+        for task in tasks:
+            if isinstance(task, dict):
+                write_task(task)
     if not args.quiet:
         print(f"✅ migrated {len(tasks)} task(s) into backend")
 

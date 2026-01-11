@@ -58,6 +58,8 @@ class RedmineBackend:
         self.assignee_id = int(env_assignee) if env_assignee.isdigit() else None
         self.status_map = settings.get("status_map") or {}
         self.custom_fields = settings.get("custom_fields") or {}
+        self.batch_size = int(settings.get("batch_size") or 20)
+        self.batch_pause = float(settings.get("batch_pause") or 0.5)
         cache_dir = settings.get("cache_dir")
         self._issue_cache: Dict[str, Dict[str, object]] = {}
 
@@ -285,6 +287,14 @@ class RedmineBackend:
             task["dirty"] = True
             self._cache_task(task, dirty=True)
 
+    def write_tasks(self, tasks: List[Dict[str, object]]) -> None:
+        for index, task in enumerate(tasks, start=1):
+            if not isinstance(task, dict):
+                continue
+            self.write_task(task)
+            if self.batch_pause and self.batch_size > 0 and index % self.batch_size == 0:
+                time.sleep(self.batch_pause)
+
     def sync(self, direction: str = "push", conflict: str = "diff", quiet: bool = False, confirm: bool = False) -> None:
         if direction == "push":
             self._sync_push(conflict=conflict, quiet=quiet, confirm=confirm)
@@ -308,8 +318,10 @@ class RedmineBackend:
                 task_id = task.get("id")
                 print(f"- pending push: {task_id}")
             raise RuntimeError("Refusing to push without --yes (preview above)")
-        for task in dirty:
+        for index, task in enumerate(dirty, start=1):
             self.write_task(task)
+            if self.batch_pause and self.batch_size > 0 and index % self.batch_size == 0:
+                time.sleep(self.batch_pause)
         if not quiet:
             print(f"✅ pushed {len(dirty)} dirty task(s)")
 
