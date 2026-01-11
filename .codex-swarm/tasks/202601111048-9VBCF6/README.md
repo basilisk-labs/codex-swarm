@@ -1,11 +1,14 @@
 ---
 id: "202601111048-9VBCF6"
 title: "Set Redmine batch settings"
-status: "TODO"
+status: "DONE"
 priority: "low"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "config"]
+commit: { hash: "f60b684adc2297581aadaf58cf3624fb87c13ed2", message: "✨ 9VBCF6 set redmine batch_size/batch_pause defaults" }
+comments:
+  - { author: "CODER", body: "Verified: set batch_size=5 and batch_pause=0.5 in redmine backend.json; py_compile backend.py; no workflow_mode or sync changes." }
 doc_version: 2
 doc_updated_at: "2026-01-11T10:49:09+00:00"
 doc_updated_by: "agentctl"
