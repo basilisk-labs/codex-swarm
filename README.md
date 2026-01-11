@@ -27,7 +27,7 @@ Codex Swarm turns your local IDE + OpenAI Codex plugin into a predictable multi-
 
 ## Getting Started
 
-If you just want to get it running, do these three steps:
+Default `workflow_mode` is `direct` (single checkout). Quick start:
 
 1) Clone and open the repo:
 ```bash
@@ -38,12 +38,12 @@ cd codex-swarm
 ```bash
 python .codex-swarm/agentctl.py quickstart
 ```
-3) In your IDE chat, tell ORCHESTRATOR the goal (e.g., “Add a new agent to summarize PRs”). The swarm will plan, ask approval, and guide the next commands.
+3) In your IDE chat, tell ORCHESTRATOR the goal (e.g., “Add a new agent to summarize PRs”). ORCHESTRATOR will propose a plan and request approval before commands run; reply Approve/Adjust/Cancel. Stay in `direct` unless you explicitly switch to `branch_pr` (see `docs/08-branching-and-pr-artifacts.md`).
+4) Optional reset: `./clean.sh` to scrub repo-specific artifacts when reusing a copy. It prompts for workflow mode; rerun quickstart afterward.
 
-If you need details or troubleshooting, jump into `docs/README.md` for the full reading order. Quick checks:
+Need details or troubleshooting? See `docs/README.md` for the full reading order. Quick checks:
 - Task status: `python .codex-swarm/agentctl.py task list`
 - Lint snapshot: `python .codex-swarm/agentctl.py task lint`
-- Optional reset for reuse: `./clean.sh` (removes repo-specific artifacts; rerun quickstart afterwards)
 
 If you're contributing, read `docs/05-workflow.md` for the full workflow expectations (agentctl-only writes, commits, handoffs).
 
