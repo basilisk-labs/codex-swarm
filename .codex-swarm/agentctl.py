@@ -1357,20 +1357,34 @@ def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
 
 
 def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]]:
-    backend_id = str(BACKEND_CONFIG.get("id") or "").strip()
-    if backend_id != "local":
-        return None
+    helpers: List[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]] = []
+    candidates: List[Tuple[str, Path]] = []
+
     module_path = Path(str(BACKEND_CONFIG.get("_module_path") or "")).resolve()
-    if not module_path.exists():
-        return None
-    module = load_backend_module(backend_id, module_path)
-    parse_frontmatter = getattr(module, "parse_frontmatter", None)
-    format_frontmatter = getattr(module, "format_frontmatter", None)
-    if not callable(parse_frontmatter) or not callable(format_frontmatter):
-        return None
-    expected_version = int(getattr(module, "DOC_VERSION", 2))
-    expected_by = str(getattr(module, "DOC_UPDATED_BY", "agentctl"))
-    return parse_frontmatter, format_frontmatter, expected_version, expected_by
+    if module_path.exists():
+        candidates.append((str(BACKEND_CONFIG.get("id") or "backend"), module_path))
+
+    local_module = (ROOT / ".codex-swarm/backends/local/backend.py").resolve()
+    if local_module.exists():
+        candidates.insert(0, ("local", local_module))
+
+    seen: Set[Path] = set()
+    for backend_id, path in candidates:
+        resolved = path.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        module = load_backend_module(backend_id, resolved)
+        parse_frontmatter = getattr(module, "parse_frontmatter", None)
+        format_frontmatter = getattr(module, "format_frontmatter", None)
+        if not callable(parse_frontmatter) or not callable(format_frontmatter):
+            continue
+        expected_version = int(getattr(module, "DOC_VERSION", 2))
+        expected_by = str(getattr(module, "DOC_UPDATED_BY", "agentctl"))
+        helpers.append((parse_frontmatter, format_frontmatter, expected_version, expected_by))
+        break
+
+    return helpers[0] if helpers else None
 
 
 def validate_task_readme_metadata(paths: List[str], *, cwd: Path) -> None:
