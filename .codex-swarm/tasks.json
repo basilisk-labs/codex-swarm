@@ -4,8 +4,8 @@
       "id": "202601041253-00001",
       "title": "Document framework in README",
       "status": "DONE",
-      "priority": "normal",
-      "owner": "CODER",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
       "depends_on": [],
       "tags": [],
       "verify": null,
@@ -20,14 +20,14 @@
       "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly.",
       "dirty": false,
       "id_source": "custom",
-      "redmine_id": 281
+      "redmine_id": 422
     },
     {
       "id": "202601041253-00002",
       "title": "Restructure agent registry into JSON files",
-      "status": "DONE",
-      "priority": "normal",
-      "owner": "CODER",
+      "status": "TODO",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
       "depends_on": [],
       "tags": [],
       "verify": null,
@@ -42,7 +42,7 @@
       "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
       "dirty": false,
       "id_source": "custom",
-      "redmine_id": 282
+      "redmine_id": 423
     },
     {
       "id": "202601041253-00003",
@@ -3526,16 +3526,26 @@
     {
       "id": "202601071400-697Z41",
       "title": "Standardize task README format + agentctl-only updates",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "CODER",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "95bfbb7f4d285be96102403b7946db516fa7358e",
+        "message": "✨ 697Z41 harden task README metadata guard across backends"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: ran python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py and python .codex-swarm/agentctl.py task lint; README metadata guard now applies across backends and task doc notes updated."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-07T14:29:03+00:00",
+      "doc_updated_at": "2026-01-11T09:52:01+00:00",
       "doc_updated_by": "agentctl",
       "description": "Refine task README.md format for human/agent readability and enforce updates via agentctl commands only.",
-      "doc": "## Summary\n\n- Add Context/Notes sections to task README template.\n- Add agentctl doc section updates + metadata guard for README changes.\n- Update local backend to stamp doc metadata.\n\n## Context\n\n- Agents should not edit task READMEs by hand; agentctl must own updates.\n- README structure should balance required metadata with readable guidance.\n\n## Scope\n\n- Update agentctl README template and doc section commands.\n- Add guardrails that require agentctl doc metadata for staged task READMEs.\n- Update local backend to maintain doc metadata and docs/instructions.\n- Extend Redmine backend field mapping to store doc metadata and comments.\n- Mirror new Redmine comments into issue journals as notes.\n- Document Redmine custom fields and notes behavior (separate doc).\n\n## Risks\n\n- Guard may block commits that touch legacy task READMEs missing doc metadata until updated via agentctl.\n- Section parsing is heading-based; unusual heading formats may be ignored.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py\n\n## Rollback Plan\n\n- Revert the commit and re-run agentctl if needed.\n\n## Notes\n\n- Existing READMEs keep their content; metadata is added on first agentctl update.\n- Redmine needs custom fields for comments/doc metadata to keep parity with local.\n- Journal notes are appended only when comment list grows in order."
+      "doc": "## Summary\n\n- Add Context/Notes sections to task README template.\n- Add agentctl doc section updates + metadata guard for README changes.\n- Update local backend to stamp doc metadata.\n\n## Context\n\n- Agents should not edit task READMEs by hand; agentctl must own updates.\n- README structure should balance required metadata with readable guidance.\n\n## Scope\n\n- Update agentctl README template and doc section commands.\n- Add guardrails that require agentctl doc metadata for staged task READMEs.\n- Update local backend to maintain doc metadata and docs/instructions.\n- Extend Redmine backend field mapping to store doc metadata and comments.\n- Mirror new Redmine comments into issue journals as notes.\n- Document Redmine custom fields and notes behavior (separate doc).\n\n## Risks\n\n- Guard may block commits that touch legacy task READMEs missing doc metadata until updated via agentctl.\n- Section parsing is heading-based; unusual heading formats may be ignored.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py\n\n## Rollback Plan\n\n- Revert the commit and re-run agentctl if needed.\n\n## Notes\n\n- Existing READMEs keep their content; metadata is added on first agentctl update.\n- Redmine needs custom fields for comments/doc metadata to keep parity with local.\n- Journal notes are appended only when comment list grows in order.\n- README metadata guard now enforces agentctl frontmatter even when the active backend is not local (cache + Redmine workflows)."
     },
     {
       "id": "202601071438-C7W2GE",
@@ -3599,12 +3609,22 @@
     {
       "id": "202601071526-GH5YSV",
       "title": "Clarify README onboarding guidance",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [],
       "tags": [
         "docs"
+      ],
+      "commit": {
+        "hash": "05da024c848b7deea29bb50f16ae26a4df0f42ac",
+        "message": "✨ GH5YSV clarify README onboarding flow and clean reset"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "Verified: proofread updated Getting Started section (ORCHESTRATOR approvals, direct/branch_pr note, clean.sh reset guidance) and ensured quickstart commands unchanged."
+        }
       ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-11T07:49:24+00:00",
@@ -3671,14 +3691,11 @@
       "id": "202601110804-H6TNMM",
       "title": "Remove legacy compatibility and backfill commit metadata",
       "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
       "depends_on": [],
-      "tags": [
-        "cleanup",
-        "agentctl",
-        "tasks"
-      ],
+      "tags": [],
+      "verify": null,
       "commit": {
         "hash": "22de83cff2560324e36b4904e559141b1bef206b",
         "message": "✅ H6TNMM backfill commit metadata export"
@@ -3693,20 +3710,19 @@
       "doc_updated_at": "2026-01-11T08:05:20+00:00",
       "doc_updated_by": "agentctl",
       "description": "Drop old T-### compatibility from agentctl/clean.sh and backfill commit metadata on DONE tasks to keep lint clean.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 424,
       "doc": "## Summary\n\nRemove legacy T-### compatibility and task reid helpers, align branch/worktree parsing with timestamp IDs, and backfill commit metadata so lint passes.\n\n## Context\n\nWe no longer need legacy T-### branches or task reid; branch_pr mode should only accept timestamp IDs. Lint was failing because early DONE tasks lacked commit metadata; backfill required.\n\n## Scope\n\n- Remove legacy branch parsing and task reid logic from agentctl; rely on timestamp IDs only.\n- Simplify clean.sh scrubbing to stop rewriting examples to T-###.\n- Backfill commit metadata for all DONE tasks and regenerate tasks.json so lint passes.\n\n## Risks\n\n- Removing legacy parsing could block users still on old T-### branches (not expected per request).\n- Bulk backfill touches many README files; git history noise.\n\n## Verify Steps\n\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert agentctl/clean.sh and tasks README backfill commits.\n\n## Notes\n\n- Owner warnings for 'AUTOMATION' remain; acceptable as lint warnings."
     },
     {
       "id": "202601110813-RGNDGK",
       "title": "Harden Redmine backend and add REDMINE agent",
       "status": "DONE",
-      "priority": "med",
-      "owner": "CODER",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
       "depends_on": [],
-      "tags": [
-        "redmine",
-        "backend",
-        "agents"
-      ],
+      "tags": [],
       "verify": [
         "python -m py_compile .codex-swarm/backends/redmine/backend.py"
       ],
@@ -3724,6 +3740,9 @@
       "doc_updated_at": "2026-01-11T08:14:27+00:00",
       "doc_updated_by": "agentctl",
       "description": "Improve Redmine connector (no legacy mutations, retries, targeted lookup, safe assignee) and introduce REDMINE agent with backend-aware policies.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 425,
       "doc": "## Summary\n\nImprove the Redmine backend (safer lookups, retries, no silent mutations, avoid reassignment) and add a REDMINE agent with backend-aware policies using only agentctl.\n\n## Context\n\nRedmine connector still does full scans per lookup, mutates missing task_id fields remotely, lacks retry/backoff, and forces an assignee even when one exists. We also lack an agent role to enforce Redmine-specific safety while using agentctl.\n\n## Scope\n\n- Add targeted task lookup in Redmine backend with cache and retry/backoff; avoid full rescan when possible.\n- Remove auto-mutation of task_id for remote issues; skip invalid IDs instead.\n- Respect existing assignees when writing; only set configured assignee when unassigned.\n- Add simple retry/backoff for API calls with 429/5xx handling.\n- Introduce REDMINE agent JSON with policies (no reassignment if assigned, use agentctl/sync, respect config fields).\n\n## Risks\n\n- API search by custom field may behave differently across Redmine deployments; fallback must still succeed.\n- Retry/backoff could mask persistent failures if not surfaced.\n- Skipping invalid task IDs may hide data inconsistencies.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/backends/redmine/backend.py .codex-swarm/agentctl.py\n\n## Rollback Plan\n\n- Revert Redmine backend and REDMINE agent changes.\n\n## Notes\n\n- Keep behavior backend-agnostic for other agents; REDMINE agent documents backend expectations."
     },
     {
@@ -3738,8 +3757,8 @@
         "tasks"
       ],
       "commit": {
-        "hash": "f64f2b21f69a77cf0a67a8d5cb252d5756823e96",
-        "message": "🔒 Z10Z68 enforce agent owners"
+        "hash": "2c6b87235c6a1292517cb179020a4ea00e1a44fa",
+        "message": "✅ Z10Z68 enforce verify/doc readiness and safer sync"
       },
       "comments": [
         {
@@ -3749,6 +3768,10 @@
         {
           "author": "DOCS",
           "body": "Verified: py_compile agentctl/redmine; lint clean. Enforced known-agent owners in task flows/docs."
+        },
+        {
+          "author": "DOCS",
+          "body": "Verified: py_compile agentctl/redmine; task lint clean after verify backfill; added verify/doc gates and safer sync."
         }
       ],
       "doc_version": 2,
@@ -3756,12 +3779,208 @@
       "doc_updated_by": "agentctl",
       "description": "Change owner=AUTOMATION tasks to a real agent (CODER) and adjust README/docs to guide first-time users vs full docs.",
       "doc": "## Summary\n\nSwap legacy owner=AUTOMATION to CODER across tasks and adjust README/docs to separate newcomer quickstart from full reference.\n\n## Context\n\nLint warnings came from owner=AUTOMATION; docs needed clearer split between newcomer quickstart (root README) and full docs (docs/README).\n\n## Scope\n\n- Replace owner=AUTOMATION with CODER in all tasks.\n- Regenerate tasks.json export.\n- Refresh root README for first-time quickstart emphasis and point to docs/README.md for the full guide.\n- Update docs/README.md to clarify it is the full reference.\n\n## Risks\n\n- Bulk owner changes touch many files; must avoid altering other metadata.\n- README simplification should not hide links to full docs.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/backends/redmine/backend.py\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert the owner changes and README/docs edits."
+    },
+    {
+      "id": "202601110937-ABC7XZ",
+      "title": "Add status summary output to agentctl",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agentctl",
+        "ux"
+      ],
+      "commit": {
+        "hash": "d2ccccc10fb8e9e1ddf4324d6e58bfc60dac34bf",
+        "message": "✨ ABC7XZ add status footer to agentctl; broaden command_path; refresh task doc"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: ran python -m compileall .codex-swarm/agentctl.py and python .codex-swarm/agentctl.py task lint; status footer behavior now emits success lines for non-quiet/non-json runs; no regressions observed."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T09:43:18+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Always emit a final status line for commands so agents can refresh context without guessing.",
+      "doc": "## Summary\n\nEmit a consistent status line for successful agentctl commands so automation can read results directly.\n\n## Context\n\n- Agents need an explicit success signal after each agentctl invocation to sync context without probing logs.\n- Commands can exit via SystemExit(0), so the footer must still appear when output isn't suppressed.\n\n## Scope\n\n- Compute the executed subcommand path (including nested parsers) via command_path.\n- Print a final success footer (`✅ <path> OK`) for non-quiet/non-json runs, even when commands exit with SystemExit(0).\n- Keep quiet/json modes untouched to avoid polluting structured outputs.\n\n## Risks\n\n- Extra stdout footer could surprise tooling that expected previous formatting.\n- Some commands already emit a success marker, so consumers may see duplicate ✅ lines.\n\n## Verify Steps\n\n- python -m compileall .codex-swarm/agentctl.py\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert the status-footer commit and restore agentctl.py.\n- Rerun python -m compileall .codex-swarm/agentctl.py and python .codex-swarm/agentctl.py task lint to confirm a clean state."
+    },
+    {
+      "id": "202601110958-W1A6H8",
+      "title": "Redmine sync smoke test",
+      "status": "DONE",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": {
+        "hash": "0e5bacb3095951ee4f4d7a36658dfc733b580f4b",
+        "message": "✨ W1A6H8 FZ099X switch to redmine backend and add redmine sync smoke tests"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: ran python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py; migrated a 3-task subset to Redmine (full 150-task migration timed out); task list + sync pull show remote tasks; created and exercised test task 202601111002-FZ099X (doc + comment) via Redmine backend."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T10:08:39+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Switch backend to Redmine using env config, migrate local tasks as source of truth, and validate CRUD/sync flows.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 426,
+      "doc": "## Summary\n\nSwitch backend to Redmine using env config and prove end-to-end sync from local source-of-truth tasks.\n\n## Context\n\n- Local repo tasks are the source of truth; Redmine can be used as a sandbox and cleared if needed.\n- Need to verify agents can operate via the backend abstraction (list/new/update/doc/comments) without backend-specific assumptions.\n- Sync must store intermediate context (docs/comments) cleanly in Redmine custom fields and journals.\n\n## Scope\n\n- Switch .codex-swarm/config.json to the Redmine backend (using existing env settings).\n- Perform an initial sync/migration so Redmine mirrors the local task state (or starts clean).\n- Exercise CRUD: list tasks, create a new task, update doc sections, append comments, and confirm they persist via pull.\n- Validate sync push/pull behavior with the cache and ensure CLI outputs remain usable for agents.\n\n## Risks\n\n- Redmine project may contain legacy issues; mass migration could create clutter or conflicts.\n- Network/API failures could leave cache and remote out of sync.\n- Credentials are stored in .env; accidental logging of secrets must be avoided.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py\n- python .codex-swarm/agentctl.py task migrate --source .codex-swarm/tasks.json --quiet\n- python .codex-swarm/agentctl.py task list --quiet\n\n## Rollback Plan\n\n- Revert .codex-swarm/config.json to the local backend config.\n- Clear any test issues in Redmine (or reset the project) if the migration polluted the sandbox.\n- Re-run python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py to ensure clean state.\n\n## Notes\n\n- Full migration of 150 tasks to Redmine hit HTTP timeouts; migrated a 3-task subset for smoke testing instead.\n- Created test task 202601111002-FZ099X via Redmine backend, updated docs, and added a comment to verify custom fields/journals.\n- `sync redmine --direction pull` succeeds; owners/priorities reflect Redmine assignee/priority names (e.g., Via Mentis Assistant / \"Нормальный\")."
+    },
+    {
+      "id": "202601111002-FZ099X",
+      "title": "Redmine backend CRUD check",
+      "status": "DONE",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
+      "depends_on": [],
+      "tags": [],
+      "verify": null,
+      "commit": {
+        "hash": "0e5bacb3095951ee4f4d7a36658dfc733b580f4b",
+        "message": "✨ W1A6H8 FZ099X switch to redmine backend and add redmine sync smoke tests"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Test comment via Redmine backend"
+        },
+        {
+          "author": "CODER",
+          "body": "Verified: created task via Redmine backend, set docs, added comment; task show confirms doc metadata and stored comment after sync pull."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T10:03:42+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Create/update/comment tasks directly against Redmine backend to verify CLI flows.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 427,
+      "doc": "## Summary\n\nValidate that Redmine backend supports create/update/comment flows via agentctl in sandbox.\n\n## Context\n\n- Need assurance that Redmine backend works end-to-end with the current CLI without backend-specific hacks.\n- Sandbox project is cleared; repo state is canonical so new tasks should appear and round-trip cleanly.\n\n## Scope\n\n- Create the task via Redmine backend and confirm it appears in task list.\n- Update doc sections and add a comment to verify custom fields and journals.\n- Pull the task again to confirm fields persist.\n\n## Risks\n\n- API latency could cause commands to time out; retries may be needed.\n- If sandbox contains old data, lists may mix test and legacy issues.\n\n## Verify Steps\n\n- python .codex-swarm/agentctl.py task show 202601111002-FZ099X --quiet\n- python .codex-swarm/agentctl.py task comment 202601111002-FZ099X --author CODER --body \"Test comment via Redmine backend\"\n- python .codex-swarm/agentctl.py task doc show 202601111002-FZ099X --quiet\n\n## Rollback Plan\n\n- Delete the test issue from Redmine if it pollutes the sandbox.\n- Re-run task list to confirm it is gone."
+    },
+    {
+      "id": "202601111019-JWTHTH",
+      "title": "Redmine sync batching/backoff",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "redmine",
+        "sync"
+      ],
+      "verify": [],
+      "commit": {
+        "hash": "3a95b500f57d6dce289ac269f2f525c47ea96ca5",
+        "message": "✨ JWTHTH add redmine sync batching/backoff and return to local backend"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py; redmine backend now batches writes with pauses (write_tasks, sync push, migrate); config returned to local backend."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T10:20:13+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add batch-friendly sync/migration with pauses to avoid Redmine timeouts; restore local backend after tests.",
+      "dirty": false,
+      "id_source": "custom",
+      "redmine_id": 428,
+      "doc": "## Summary\n\nAdd batch-friendly Redmine sync/migration with pauses to avoid API timeouts, then switch back to local backend.\n\n## Context\n\n- Full migration to Redmine timed out; need batching and pauses for write-heavy ops (migrate/sync push).\n- Agents should keep using agentctl without backend-specific knowledge; rate limiting should be transparent.\n- After testing, switch config back to the local backend.\n\n## Scope\n\n- Add batch size + pause settings to Redmine backend and apply them to write-heavy flows (write_tasks, sync push, migrate).\n- Prefer backend write_tasks when migrating; fall back to single writes otherwise.\n- Keep defaults conservative so existing users aren’t surprised.\n- Restore .codex-swarm/config.json to the local backend after testing.\n\n## Risks\n\n- Overly aggressive pauses slow sync; overly small batches may still time out on slow Redmine deployments.\n- Using backend.write_tasks could mask per-task failures if Redmine responds inconsistently.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py\n- python .codex-swarm/agentctl.py task migrate --source .codex-swarm/tasks-export-small.json --quiet (optional smoke)\n- python .codex-swarm/agentctl.py sync redmine --direction push --yes --quiet (optional when Redmine reachable)\n\n## Rollback Plan\n\n- Revert redmine/backend.py and .codex-swarm/config.json to previous versions.\n- Remove any partially migrated issues from the Redmine sandbox if needed."
+    },
+    {
+      "id": "202601111048-9VBCF6",
+      "title": "Set Redmine batch settings",
+      "status": "DONE",
+      "priority": "low",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "redmine",
+        "config"
+      ],
+      "commit": {
+        "hash": "f60b684adc2297581aadaf58cf3624fb87c13ed2",
+        "message": "✨ 9VBCF6 set redmine batch_size/batch_pause defaults"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: set batch_size=5 and batch_pause=0.5 in redmine backend.json; py_compile backend.py; no workflow_mode or sync changes."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T10:49:09+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Set batch_size/batch_pause in redmine backend config",
+      "doc": "## Summary\n\nSet explicit batch_size (5) and batch_pause in redmine/backend.json for sync/migration throttle.\n\n## Context\n\n- Redmine backend now supports batching via settings; backend.json currently lacks explicit values.\n- Need defaults so runs have consistent throttle without editing code.\n\n## Scope\n\n- Add batch_size and batch_pause to .codex-swarm/backends/redmine/backend.json.\n- Use batch_size=5 tasks and a small pause for throttling.\n- Do not change workflow_mode or trigger sync.\n\n## Risks\n\n- Too small batch or pause slows large migrations; too small pause may still hit server rate limits.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/backends/redmine/backend.py\n\n## Rollback Plan\n\n- Revert .codex-swarm/backends/redmine/backend.json."
+    },
+    {
+      "id": "202601111125-KZKBQ7",
+      "title": "Normalize Redmine owners to agent",
+      "status": "DONE",
+      "priority": "low",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "redmine",
+        "ownership"
+      ],
+      "commit": {
+        "hash": "06b37cfa276ad12ffb3b691248f750a2f873dbb2",
+        "message": "♻️ KZKBQ7 fill task doc sections"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: owner mapping now uses configured agent (default REDMINE); updated six tasks to REDMINE owner; ran python -m py_compile .codex-swarm/backends/redmine/backend.py."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T11:40:17+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Ensure Redmine-backed tasks use a configured agent owner (REDMINE) and retag existing tasks.",
+      "doc": "## Summary\n\nEnsure Redmine tasks map owner to configured agent (default REDMINE) and clean existing tasks.\n\n## Context\n\n- Some tasks imported from Redmine were assigned to the assignee name (Via Mentis Assistant) instead of an agent id.\n- We want owner fields to always be agent ids; the Redmine executor is effectively the API key owner.\n\n## Scope\n\n- Add owner_agent setting to Redmine backend (env override allowed) and default to REDMINE.\n- Map owner from Redmine issues to the configured agent when listing.\n- Update existing local task READMEs that used the assignee name to use REDMINE.\n\n## Risks\n\n- Changing owner mapping could surprise consumers expecting assignee names.\n- Legacy exports may still contain old owners until refreshed.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/backends/redmine/backend.py\n- python .codex-swarm/agentctl.py task list --owner REDMINE\n\n## Rollback Plan\n\n- Revert .codex-swarm/backends/redmine/backend.py and the adjusted task READMEs."
+    },
+    {
+      "id": "202601111630-9FFGAC",
+      "title": "Route git commands via agentctl using comment-derived commits",
+      "status": "DOING",
+      "priority": "high",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "workflow",
+        "agentctl",
+        "git"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: Implement comment-driven agentctl commits; forbid direct git in agents/docs; document new flags."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T16:46:56+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Agents must stop using git directly; agentctl should stage/commit using their task comments as commit messages while agents only update task status.",
+      "doc": "## Summary\n\nRoute git staging/commits through agentctl so agents only change task status and agentctl builds <emoji> <task-suffix> <comment> subjects from their comments.\n\n## Context\n\nUser requested removing direct git usage by agents; commits must be issued by agentctl using agent comments while keeping the <emoji> <suffix> extended comment format.\n\n## Scope\n\nAdd comment-derived staging/commit helpers in agentctl for start/block/set-status/finish, document the flow in AGENTS.md + agentctl.md, and update CODER/TESTER/CREATOR agent specs to ban direct git usage.\n\n## Risks\n\nAuto-allow staging can capture unintended files if the working tree is dirty; finish comment commits are restricted to one task; start/block now export tasks snapshots before committing (extra output).\n\n## Verify Steps\n\npython -m py_compile .codex-swarm/agentctl.py\\npython .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\nRestore .codex-swarm/agentctl.py, AGENTS.md, and the updated agent JSON files to the previous revision, re-export tasks via agentctl, and rerun task lint.\n\n## Notes\n\nComment-driven commit flags auto-derive allowlists when none are provided; start/block/set-status default to staging tasks changes, and finish enables the status commit automatically when --commit-from-comment is used."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9719155ec1c4be23b0d7b029fe3ff0c2a5ca63b0b20e68814725cff603740d61"
+    "checksum": "b971c8241fe598ff4442efb80a89fc90043cb6c07c94573380fcfd32d7da287f"
   }
 }

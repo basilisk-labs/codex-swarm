@@ -321,6 +321,15 @@ def task_id_variants(task_id: str) -> Set[str]:
     return {raw}
 
 
+def task_suffix(task_id: str) -> str:
+    raw = task_id.strip()
+    if not raw:
+        return ""
+    if "-" in raw:
+        return raw.split("-")[-1]
+    return raw
+
+
 def task_digest(task: Dict) -> str:
     return json.dumps(task, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
@@ -1327,6 +1336,25 @@ def git_unstaged_files(*, cwd: Path) -> List[str]:
     return [line.strip() for line in (result.stdout or "").splitlines() if line.strip()]
 
 
+def git_status_changed_paths(*, cwd: Path) -> List[str]:
+    try:
+        result = run(["git", "status", "--porcelain"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to read git status")
+    paths: List[str] = []
+    for raw in (result.stdout or "").splitlines():
+        line = raw.rstrip()
+        if len(line) < 3:
+            continue
+        entry = line[3:]
+        if " -> " in entry:
+            entry = entry.split(" -> ", 1)[1]
+        entry = entry.strip()
+        if entry:
+            paths.append(entry)
+    return paths
+
+
 def suggest_allow_prefixes(paths: Iterable[str]) -> List[str]:
     prefixes: List[str] = []
     for raw in paths:
@@ -1552,6 +1580,103 @@ def guard_commit_check(
 
     if not quiet:
         print("✅ guard passed")
+
+
+def derive_commit_message_from_comment(task_id: str, body: str, emoji: str) -> str:
+    summary = " ".join((body or "").split())
+    if not summary:
+        die("Comment body is required to build a commit message from the task comment", code=2)
+    prefix = (emoji or "").strip()
+    if not prefix:
+        die("Emoji prefix is required when deriving commit messages from task comments", code=2)
+    suffix = task_suffix(task_id)
+    if not suffix:
+        die(f"Invalid task id: {task_id!r}", code=2)
+    return f"{prefix} {suffix} {summary}"
+
+
+def default_commit_emoji_for_status(status: str) -> str:
+    mapping = {
+        "TODO": "📝",
+        "DOING": "🚧",
+        "BLOCKED": "⛔",
+        "DONE": "✅",
+    }
+    return mapping.get(status.strip().upper(), "🛠️")
+
+
+def stage_allowlist(allow: List[str], *, allow_tasks: bool, cwd: Path) -> List[str]:
+    changed = git_status_changed_paths(cwd=cwd)
+    if not changed:
+        die("No changes to stage", code=2)
+    allowed = [a.strip().lstrip("./") for a in allow if str(a or "").strip()]
+    deny: Set[str] = set()
+    if not allow_tasks:
+        deny.add(TASKS_PATH_REL)
+    staged: List[str] = []
+    for path in changed:
+        if path in deny:
+            continue
+        if any(path_is_under(path, prefix) for prefix in allowed):
+            staged.append(path)
+    unique = sorted(set(staged))
+    if not unique:
+        die("No changes matched the allowed prefixes (use --commit-auto-allow or broaden --commit-allow)", code=2)
+    try:
+        run(["git", "add", "--"] + unique, cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to stage files")
+    return unique
+
+
+def commit_from_comment(
+    *,
+    task_id: str,
+    comment_body: str,
+    emoji: str,
+    allow: List[str],
+    auto_allow: bool,
+    allow_tasks: bool,
+    require_clean: bool,
+    quiet: bool,
+    cwd: Path,
+) -> Dict[str, str]:
+    allow_prefixes = [a for a in (allow or []) if str(a or "").strip()]
+    if auto_allow and not allow_prefixes:
+        allow_prefixes = suggest_allow_prefixes(git_status_changed_paths(cwd=cwd))
+    allow_prefixes = [a.strip() for a in allow_prefixes if str(a or "").strip()]
+    if not allow_prefixes:
+        die("Provide at least one --allow prefix or enable --commit-auto-allow", code=2)
+
+    staged = stage_allowlist(allow_prefixes, allow_tasks=allow_tasks, cwd=cwd)
+    message = derive_commit_message_from_comment(task_id, comment_body, emoji)
+
+    guard_commit_check(
+        task_id=task_id,
+        message=message,
+        allow=allow_prefixes,
+        allow_tasks=allow_tasks,
+        require_clean=require_clean,
+        quiet=quiet,
+        cwd=cwd,
+    )
+
+    try:
+        subprocess.run(
+            ["git", "commit", "-m", message],
+            cwd=str(cwd),
+            text=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "git commit failed")
+
+    commit_info = get_commit_info("HEAD", cwd=cwd)
+    if not quiet:
+        staged_display = ", ".join(staged)
+        print(f"✅ committed {commit_info['hash'][:12]} {commit_info['message']} (staged: {staged_display})")
+    return commit_info
+
 
 def cmd_agents(_: argparse.Namespace) -> None:
     if not AGENTS_DIR.exists():
@@ -1915,19 +2040,28 @@ def cmd_start(args: argparse.Namespace) -> None:
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
     save(tasks)
-    if not args.quiet:
-        commit_hash = str(commit_info.get("hash") or "")[:12]
-        for task_id in task_ids:
-            task = _ensure_task_object(tasks, task_id)
-            line = format_task_line(task, dep_state=dep_state)
-            suffix = f" (commit={commit_hash})" if commit_hash else ""
-            print(f"✅ finished: {line}{suffix}")
     export_tasks_snapshot(quiet=bool(args.quiet))
+    commit_info = None
+    if getattr(args, "commit_from_comment", False):
+        commit_info = commit_from_comment(
+            task_id=args.task_id,
+            comment_body=args.body,
+            emoji=args.commit_emoji or default_commit_emoji_for_status("DOING"),
+            allow=list(args.commit_allow or []),
+            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            allow_tasks=bool(args.commit_allow_tasks),
+            require_clean=bool(args.commit_require_clean),
+            quiet=bool(args.quiet),
+            cwd=Path.cwd().resolve(),
+        )
     if not args.quiet:
         _, tasks_by_id, _, key = load_task_index()
         dep_state, _ = load_dependency_state_for(tasks_by_id, key=key)
         task = tasks_by_id.get(args.task_id) or target
-        print(f"✅ started: {format_task_line(task, dep_state=dep_state)}")
+        suffix = ""
+        if commit_info:
+            suffix = f" (commit={commit_info.get('hash', '')[:12]})"
+        print(f"✅ started: {format_task_line(task, dep_state=dep_state)}{suffix}")
 
 
 def cmd_block(args: argparse.Namespace) -> None:
@@ -1948,11 +2082,28 @@ def cmd_block(args: argparse.Namespace) -> None:
     comments.append({"author": args.author, "body": args.body})
     target["comments"] = comments
     save(tasks)
+    export_tasks_snapshot(quiet=bool(args.quiet))
+    commit_info = None
+    if getattr(args, "commit_from_comment", False):
+        commit_info = commit_from_comment(
+            task_id=args.task_id,
+            comment_body=args.body,
+            emoji=args.commit_emoji or default_commit_emoji_for_status("BLOCKED"),
+            allow=list(args.commit_allow or []),
+            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            allow_tasks=bool(args.commit_allow_tasks),
+            require_clean=bool(args.commit_require_clean),
+            quiet=bool(args.quiet),
+            cwd=Path.cwd().resolve(),
+        )
     if not args.quiet:
         _, tasks_by_id, _, key = load_task_index()
         dep_state, _ = load_dependency_state_for(tasks_by_id, key=key)
         task = tasks_by_id.get(args.task_id) or target
-        print(f"✅ blocked: {format_task_line(task, dep_state=dep_state)}")
+        suffix = ""
+        if commit_info:
+            suffix = f" (commit={commit_info.get('hash', '')[:12]})"
+        print(f"✅ blocked: {format_task_line(task, dep_state=dep_state)}{suffix}")
 
 
 def cmd_task_comment(args: argparse.Namespace) -> None:
@@ -2325,13 +2476,39 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
         commit_info = get_commit_info(args.commit)
         target["commit"] = commit_info
     save(tasks)
+    export_tasks_snapshot(quiet=bool(args.quiet))
+    if getattr(args, "commit_from_comment", False):
+        if not args.body:
+            die("--body is required when using --commit-from-comment", code=2)
+        commit_from_comment(
+            task_id=args.task_id,
+            comment_body=args.body,
+            emoji=args.commit_emoji or default_commit_emoji_for_status(nxt),
+            allow=list(args.commit_allow or []),
+            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            allow_tasks=bool(args.commit_allow_tasks),
+            require_clean=bool(args.commit_require_clean),
+            quiet=bool(args.quiet),
+            cwd=Path.cwd().resolve(),
+        )
 
 
 def cmd_finish(args: argparse.Namespace) -> None:
     raw_task_ids = args.task_id if isinstance(args.task_id, list) else [args.task_id]
     task_ids = normalize_task_ids(raw_task_ids)
+    primary_task_id = task_ids[0] if task_ids else ""
+    commit_from_comment_flag = bool(getattr(args, "commit_from_comment", False))
+    status_commit_flag = bool(getattr(args, "status_commit", False) or commit_from_comment_flag)
+
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)
+    if commit_from_comment_flag and len(task_ids) != 1:
+        die("--commit-from-comment supports exactly one task id", code=2)
+    if status_commit_flag and len(task_ids) != 1:
+        die("--status-commit/--commit-from-comment supports exactly one task id", code=2)
+    if (commit_from_comment_flag or status_commit_flag) and not args.body:
+        die("--body is required when building commit messages from comments", code=2)
+
     require_tasks_json_write_context(force=bool(args.force))
     pr_context: Dict[str, Dict[str, object]] = {}
     if is_branch_pr_mode() and not args.force:
@@ -2352,16 +2529,6 @@ def cmd_finish(args: argparse.Namespace) -> None:
             for message in lint["errors"]:
                 print(f"❌ {message}", file=sys.stderr)
             die("tasks.json failed lint (use --force to override)", code=2)
-
-    commit_info = get_commit_info(args.commit)
-    if args.require_task_id_in_commit and not args.force:
-        message = commit_info.get("message", "")
-        missing = [task_id for task_id in task_ids if not commit_subject_mentions_task(task_id, message)]
-        if missing:
-            die(
-                commit_subject_missing_error(missing, message)
-                + " (use --force or --no-require-task-id-in-commit)"
-            )
 
     tasks, save = load_task_store()
 
@@ -2414,6 +2581,31 @@ def cmd_finish(args: argparse.Namespace) -> None:
                 die(f"{task_id}: verify must be a list of strings (use --force to override)", code=2)
             commands = []
         verify_commands[task_id] = commands
+
+    code_commit_info: Optional[Dict[str, str]] = None
+    if commit_from_comment_flag:
+        code_commit_info = commit_from_comment(
+            task_id=primary_task_id,
+            comment_body=args.body,
+            emoji=args.commit_emoji or "✨",
+            allow=list(args.commit_allow or []),
+            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            allow_tasks=bool(args.commit_allow_tasks),
+            require_clean=bool(args.commit_require_clean),
+            quiet=bool(args.quiet),
+            cwd=Path.cwd().resolve(),
+        )
+        args.commit = code_commit_info["hash"]
+
+    commit_info = get_commit_info(args.commit)
+    if args.require_task_id_in_commit and not args.force:
+        message = commit_info.get("message", "")
+        missing = [task_id for task_id in task_ids if not commit_subject_mentions_task(task_id, message)]
+        if missing:
+            die(
+                commit_subject_missing_error(missing, message)
+                + " (use --force or --no-require-task-id-in-commit)"
+            )
 
     if is_branch_pr_mode() and not args.force:
         for task_id in task_ids:
@@ -2481,6 +2673,21 @@ def cmd_finish(args: argparse.Namespace) -> None:
             target["comments"] = comments
 
     save(tasks)
+    export_tasks_snapshot(quiet=bool(args.quiet))
+
+    if status_commit_flag:
+        status_allow = list(args.status_commit_allow or [])
+        commit_from_comment(
+            task_id=primary_task_id,
+            comment_body=args.body,
+            emoji=args.status_commit_emoji or default_commit_emoji_for_status("DONE"),
+            allow=status_allow,
+            auto_allow=bool(args.status_commit_auto_allow or not status_allow),
+            allow_tasks=True,
+            require_clean=bool(args.status_commit_require_clean),
+            quiet=bool(args.quiet),
+            cwd=Path.cwd().resolve(),
+        )
 
 
 def git_rev_parse(rev: str, *, cwd: Path = ROOT) -> str:
@@ -4088,6 +4295,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_start.add_argument("--body", required=True)
     p_start.add_argument("--quiet", action="store_true", help="Minimal output")
     p_start.add_argument("--force", action="store_true", help="Bypass readiness/transition checks")
+    p_start.add_argument("--commit-from-comment", action="store_true", help="Stage + commit using the comment body as the message")
+    p_start.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default: 🚧)")
+    p_start.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
+    p_start.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_start.add_argument(
+        "--commit-allow-tasks",
+        action="store_true",
+        default=True,
+        help=f"Allow staging {TASKS_PATH_REL} when committing from comment (default: enabled)",
+    )
+    p_start.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
     p_start.set_defaults(func=cmd_start)
 
     p_block = sub.add_parser("block", help="Mark task BLOCKED with a mandatory comment")
@@ -4096,6 +4314,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_block.add_argument("--body", required=True)
     p_block.add_argument("--quiet", action="store_true", help="Minimal output")
     p_block.add_argument("--force", action="store_true", help="Bypass transition checks")
+    p_block.add_argument("--commit-from-comment", action="store_true", help="Stage + commit using the comment body as the message")
+    p_block.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default: ⛔)")
+    p_block.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
+    p_block.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_block.add_argument(
+        "--commit-allow-tasks",
+        action="store_true",
+        default=True,
+        help=f"Allow staging {TASKS_PATH_REL} when committing from comment (default: enabled)",
+    )
+    p_block.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
     p_block.set_defaults(func=cmd_block)
 
     p_task = sub.add_parser("task", help="Operate on tasks.json")
@@ -4241,6 +4470,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_status.add_argument("--body", help="Optional comment body (requires --author)")
     p_status.add_argument("--commit", help="Attach commit metadata from a git rev (e.g., HEAD)")
     p_status.add_argument("--force", action="store_true", help="Bypass transition and readiness checks")
+    p_status.add_argument("--commit-from-comment", action="store_true", help="Stage + commit using the comment body as the message")
+    p_status.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default depends on status)")
+    p_status.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
+    p_status.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_status.add_argument(
+        "--commit-allow-tasks",
+        action="store_true",
+        default=True,
+        help=f"Allow staging {TASKS_PATH_REL} when committing from comment (default: enabled)",
+    )
+    p_status.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
     p_status.set_defaults(func=cmd_task_set_status)
 
     p_finish = sub.add_parser(
@@ -4259,6 +4499,44 @@ def build_parser() -> argparse.ArgumentParser:
         dest="require_task_id_in_commit",
         action="store_false",
         help="Allow finishing even if commit subject does not mention the task id",
+    )
+    p_finish.add_argument(
+        "--commit-from-comment",
+        action="store_true",
+        help="Create a code commit using the comment body before finishing",
+    )
+    p_finish.add_argument("--commit-emoji", help="Emoji prefix when building a commit message from the comment (default: ✨)")
+    p_finish.add_argument("--commit-allow", action="append", help="Allowed path prefix (repeatable) when committing from comment")
+    p_finish.add_argument("--commit-auto-allow", action="store_true", help="Auto-derive allowed prefixes from changed files")
+    p_finish.add_argument(
+        "--commit-allow-tasks",
+        action="store_true",
+        help=f"Allow staging {TASKS_PATH_REL} during the code commit (default: disabled)",
+    )
+    p_finish.add_argument("--commit-require-clean", action="store_true", help="Require a clean working tree when committing")
+    p_finish.add_argument(
+        "--status-commit",
+        action="store_true",
+        help="After finishing, commit task/doc changes using the comment body as the commit message",
+    )
+    p_finish.add_argument(
+        "--status-commit-emoji",
+        help="Emoji prefix for the status commit built from the comment (default: ✅)",
+    )
+    p_finish.add_argument(
+        "--status-commit-allow",
+        action="append",
+        help="Allowed path prefix (repeatable) when committing status/doc changes",
+    )
+    p_finish.add_argument(
+        "--status-commit-auto-allow",
+        action="store_true",
+        help="Auto-derive allowed prefixes from changed files for the status commit",
+    )
+    p_finish.add_argument(
+        "--status-commit-require-clean",
+        action="store_true",
+        help="Require a clean working tree when committing status/doc changes",
     )
     p_finish.set_defaults(require_task_id_in_commit=True, func=cmd_finish)
 

@@ -13,12 +13,12 @@
   ],
   "permissions": [
     "Project files (sources, configs, docs): read + write when part of the active task.",
-    "git: stage and commit only when explicitly part of a tracked task.",
+    "git: do not run git directly; trigger commits via agentctl comment-driven flags only.",
     "Terminal commands (tests, linters): describe and run them via the workspace shell when required."
   ],
   "workflow": [
     "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
-    "Default to agentctl-first for task context, readiness checks, branch/worktree setup, PR artifacts, verification logging, and commit guardrails as documented in @.codex-swarm/agentctl.md; fall back to raw git/shell only when agentctl has no equivalent.",
+    "Default to agentctl-first for task context, readiness checks, branch/worktree setup, PR artifacts, verification logging, and comment-driven commits as documented in @.codex-swarm/agentctl.md; do not call git directly.",
     "Reconfirm the task context and readiness using agentctl per @.codex-swarm/agentctl.md before starting work.",
     "Follow workflow_mode rules in @.codex-swarm/agentctl.md (branch_pr uses task branches/worktrees + PR artifacts; direct uses the current checkout).",
     "Before handing off to another agent (TESTER/REVIEWER/DOCS), add a handoff note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md.",
@@ -31,8 +31,8 @@
     "After implementation + self-check, hand off to TESTER to add/extend automated tests for the touched behavior before moving on to new development; include the task ID, changed @files, and the expected behavior/edge cases to cover.",
     "Bundle the implementation and related tests into a single work commit when practical (avoid splitting into multiple small commits unless fixes truly require it).",
     "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
-    "Commit only via `python .codex-swarm/agentctl.py guard commit` / `python .codex-swarm/agentctl.py commit`; do not run `git commit` directly.",
-    "Use agentctl guardrails for staging and commits per @.codex-swarm/agentctl.md.",
+    "When ready to record work, update the task status with agentctl’s comment-driven flags (`start`/`block`/`task set-status`/`finish` with `--commit-from-comment` or `--status-commit`); agentctl will stage changes and build the `<emoji> <task-suffix> <comment>` subject for you.",
+    "Keep the status comment detailed so the auto-built commit subject stays meaningful (emoji + task suffix + comment).",
     "Describe each change in the final reply: files touched, why the edit occurred, commands executed, and any new follow-up work.",
     "Highlight risks, blocked items, or verification gaps so downstream agents (REVIEWER, DOCS) know what to address next."
   ]

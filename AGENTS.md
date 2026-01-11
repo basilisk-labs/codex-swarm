@@ -24,6 +24,7 @@ shared_state:
 - The ORCHESTRATOR is the only agent that may initiate any start-of-run action.
 - Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
 - Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
+- Never run git directly (no `git status`/`add`/`commit`); agentctl owns staging + commits and derives commit subjects from your task comment as `<emoji> <task-suffix> <comment>`.
 - The workspace is always a git repository. After completing each atomic task tracked by the task backend, create a human-readable commit before continuing.
 
 ---
@@ -54,6 +55,8 @@ shared_state:
 # COMMIT_WORKFLOW
 
 - Treat each plan task (`<task-id>`) as an atomic unit of work and keep commits minimal.
+- All staging/commits run through agentctl’s comment-driven flags (`start`/`block`/`task set-status` with `--commit-from-comment`, `finish` with `--commit-from-comment`/`--status-commit`); do not call git directly or craft commit subjects manually.
+- Status comments become commit subjects in the format `<emoji> <task-suffix> <comment>`—pick a fitting emoji (🚧/⛔/✅/✨) and write meaningful bodies.
 - Default to a task-branch cadence (planning on the pinned base branch, execution on a task branch, closure on the pinned base branch):
   1) **Planning (base branch)**: add/update the task via `agentctl` + create/update `.codex-swarm/tasks/<task-id>/README.md` (skeleton/spec) and commit them together.
   2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `.codex-swarm/tasks/<task-id>/pr/`.
