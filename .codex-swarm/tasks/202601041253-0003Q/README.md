@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "1939744c7df301f0a9b1533a7ff7025624d45a3c"
+commit: { hash: "1939744c7df301f0a9b1533a7ff7025624d45a3c", message: "Legacy completion (backfill)" }
 comments: []
 description: "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
 dirty: false

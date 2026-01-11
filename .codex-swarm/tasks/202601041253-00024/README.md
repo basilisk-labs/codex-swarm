@@ -6,7 +6,7 @@ priority: "med"
 owner: "CODER"
 tags: ["agentctl", "workflow", "pipeline"]
 verify: ["python -m compileall scripts/agentctl.py", "python scripts/agentctl.py task lint"]
-commit: "324e74e5f3bcb4ad1bb239eb1e02bac645553721"
+commit: { hash: "324e74e5f3bcb4ad1bb239eb1e02bac645553721", message: "Legacy completion (backfill)" }
 comments:
   - { author: "CODER", body: "Start: Implement agentctl verify --log + --skip-if-unchanged; update PR meta.json with last_verified_sha/at and refresh .codex-swarm/agentctl.md. Plan: implement flags, add smoke steps, ensure branch_pr behavior. Risks: PR meta may be missing; keep safe fallbacks." }
   - { author: "INTEGRATOR", body: "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-068." }

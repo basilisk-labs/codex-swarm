@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "ea9ed7a50d1789d452abb61c00987e0925c76ecb"
+commit: { hash: "ea9ed7a50d1789d452abb61c00987e0925c76ecb", message: "Legacy completion (backfill)" }
 comments: []
 description: "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
 dirty: false

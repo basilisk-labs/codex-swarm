@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "decbfa9574e7df7e160329e92a7882763ba6ce16"
+commit: { hash: "decbfa9574e7df7e160329e92a7882763ba6ce16", message: "Legacy completion (backfill)" }
 comments: []
 description: "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored."
 dirty: false

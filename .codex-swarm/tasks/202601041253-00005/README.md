@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "fa8627b7e1cb31047987216d42f6664cd1fe8767"
+commit: { hash: "fa8627b7e1cb31047987216d42f6664cd1fe8767", message: "Legacy completion (backfill)" }
 comments: []
 description: "Expand the README with details on emoji commits and atomic task tracking."
 dirty: false

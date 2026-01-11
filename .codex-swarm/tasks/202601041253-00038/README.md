@@ -6,7 +6,7 @@ priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["readme", "docs"]
-commit: "fbc029009285cf68d7730f23156fce5572b52d96"
+commit: { hash: "fbc029009285cf68d7730f23156fce5572b52d96", message: "Legacy completion (backfill)" }
 description: "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation."
 dirty: false
 redmine_id: 384

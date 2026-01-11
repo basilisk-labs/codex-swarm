@@ -6,7 +6,7 @@ priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
-commit: "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd"
+commit: { hash: "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd", message: "Legacy completion (backfill)" }
 comments:
   - { author: "INTEGRATOR", body: "Verified: batch writes, caching, JSON errors, lazy lint, and logging flags implemented." }
   - { author: "INTEGRATOR", body: "Verified: documentation updated for lint/flags and agent guidance." }

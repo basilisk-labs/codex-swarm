@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "2f93325a23837b89b0431b3219cee725b6902583"
+commit: { hash: "2f93325a23837b89b0431b3219cee725b6902583", message: "Legacy completion (backfill)" }
 comments: []
 description: "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board."
 dirty: false

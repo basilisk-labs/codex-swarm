@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "13721c623fd186abbaee48456aa242f7e4561119"
+commit: { hash: "13721c623fd186abbaee48456aa242f7e4561119", message: "Legacy completion (backfill)" }
 comments: []
 description: "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged."
 dirty: false

@@ -6,7 +6,7 @@ priority: "low"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "agents"]
-commit: "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c"
+commit: { hash: "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c", message: "Legacy completion (backfill)" }
 description: "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR."
 dirty: false
 redmine_id: 371

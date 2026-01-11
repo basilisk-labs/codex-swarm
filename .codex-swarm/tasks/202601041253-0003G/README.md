@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "bf73519e146bf3c6cf68f73acc46be5a319e7182"
+commit: { hash: "bf73519e146bf3c6cf68f73acc46be5a319e7182", message: "Legacy completion (backfill)" }
 comments: []
 description: "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help."
 dirty: false

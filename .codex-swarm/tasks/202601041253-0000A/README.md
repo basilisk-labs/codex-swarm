@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "CODER"
 tags: ["agents", "automation"]
-commit: "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1"
+commit: { hash: "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1", message: "Legacy completion (backfill)" }
 comments: []
 description: "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list."
 dirty: false

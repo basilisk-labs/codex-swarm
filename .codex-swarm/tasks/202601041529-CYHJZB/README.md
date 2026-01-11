@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0"
+commit: { hash: "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0", message: "Legacy completion (backfill)" }
 comments: []
 description: "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks."
 dirty: false

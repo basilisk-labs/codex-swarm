@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "13721c623fd186abbaee48456aa242f7e4561119"
+commit: { hash: "13721c623fd186abbaee48456aa242f7e4561119", message: "Legacy completion (backfill)" }
 comments: []
 description: "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster."
 dirty: false

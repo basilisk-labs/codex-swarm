@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "e571744e288fc0f63599967eae460d290d4c97ef"
+commit: { hash: "e571744e288fc0f63599967eae460d290d4c97ef", message: "Legacy completion (backfill)" }
 comments: []
 description: "Keep the frontmatter block intact when overwriting task README scaffolds."
 dirty: false

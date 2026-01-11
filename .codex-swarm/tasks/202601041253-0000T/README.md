@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "851c576b97b52541b3cab13ed3555c97d4d1f475"
+commit: { hash: "851c576b97b52541b3cab13ed3555c97d4d1f475", message: "Legacy completion (backfill)" }
 comments: []
 description: "Ensure the PLANNER splits every request into single-owner tasks with unique commits."
 dirty: false

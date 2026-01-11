@@ -9,7 +9,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "76d362097fa5d7237d78e4142d9d4ce7f9511513",
+      "commit": {
+        "hash": "76d362097fa5d7237d78e4142d9d4ce7f9511513",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly.",
       "dirty": false,
@@ -25,7 +28,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "645a960e59145717d77f4bfab367c2a14234cc03",
+      "commit": {
+        "hash": "645a960e59145717d77f4bfab367c2a14234cc03",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
       "dirty": false,
@@ -41,7 +47,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "645a960e59145717d77f4bfab367c2a14234cc03",
+      "commit": {
+        "hash": "645a960e59145717d77f4bfab367c2a14234cc03",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Ensure task state is available in a machine-readable JSON file for Codex automation.",
       "dirty": false,
@@ -57,7 +66,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "fb9f40ff9b294361cf2d6322d4b68d220ebbf1c6",
+      "commit": {
+        "hash": "fb9f40ff9b294361cf2d6322d4b68d220ebbf1c6",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Document the rule that every plan item must end with its own git commit for traceability.",
       "dirty": false,
@@ -73,7 +85,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "fa8627b7e1cb31047987216d42f6664cd1fe8767",
+      "commit": {
+        "hash": "fa8627b7e1cb31047987216d42f6664cd1fe8767",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Expand the README with details on emoji commits and atomic task tracking.",
       "dirty": false,
@@ -89,7 +104,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Describe how new specialist agents are proposed, reviewed, and added to the registry.",
       "dirty": false,
@@ -105,7 +123,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Tighten the instructions around writing meaningful, emoji-prefixed commit messages.",
       "dirty": false,
@@ -121,7 +142,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add a quick-start tour of key files and directories so contributors know where to work.",
       "dirty": false,
@@ -137,7 +161,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED.",
       "dirty": false,
@@ -154,7 +181,10 @@
         "agents",
         "automation"
       ],
-      "commit": "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1",
+      "commit": {
+        "hash": "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list.",
       "dirty": false,
@@ -169,7 +199,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Review the end-to-end authoring flow and capture improvement ideas inside the docs.",
       "dirty": false,
@@ -185,7 +218,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions.",
       "dirty": false,
@@ -201,7 +237,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Update every agent spec so prompts match the GPT-5.1 best practices.",
       "dirty": false,
@@ -217,7 +256,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add environment assumptions for local-only workflows without remote runtimes.",
       "dirty": false,
@@ -233,7 +275,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools.",
       "dirty": false,
@@ -250,7 +295,10 @@
         "docs",
         "agents"
       ],
-      "commit": "d5b3e2eac2dc04098d97248ddba1dcca271311fa",
+      "commit": {
+        "hash": "d5b3e2eac2dc04098d97248ddba1dcca271311fa",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Strip references to unsupported helper tools to keep instructions aligned with the local stack.",
       "dirty": false,
@@ -266,7 +314,10 @@
         "prompting",
         "agents"
       ],
-      "commit": "6ed438a36b77e1ae7ca742ce4ace0fd4391c978e",
+      "commit": {
+        "hash": "6ed438a36b77e1ae7ca742ce4ace0fd4391c978e",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Reword prompts so agents do not assume access to external search or commands.",
       "dirty": false,
@@ -281,7 +332,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Trim redundant English-language instructions and keep the doc crisp.",
       "dirty": false,
@@ -297,7 +351,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Introduce a translator agent that respects glossary entries when localizing README content.",
       "dirty": false,
@@ -313,7 +370,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Provide a Spanish version of the README while keeping glossary terms consistent.",
       "dirty": false,
@@ -329,7 +389,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Teach the translator agent how to maintain glossary metadata and usage counts automatically.",
       "dirty": false,
@@ -345,7 +408,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add a Russian localization of the README plus supporting glossary entries.",
       "dirty": false,
@@ -361,7 +427,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Deliver another Spanish README update incorporating the refined glossary process.",
       "dirty": false,
@@ -379,7 +448,10 @@
         "localization",
         "glossary"
       ],
-      "commit": "eb5a18530947e3387e401f9539595db257492b0c",
+      "commit": {
+        "hash": "eb5a18530947e3387e401f9539595db257492b0c",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "reviewer",
@@ -400,7 +472,10 @@
         "workflow",
         "git"
       ],
-      "commit": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
+      "commit": {
+        "hash": "8b9cb04780d1d21ba8016303cbb79754c5931b94",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "reviewer",
@@ -420,7 +495,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "851c576b97b52541b3cab13ed3555c97d4d1f475",
+      "commit": {
+        "hash": "851c576b97b52541b3cab13ed3555c97d4d1f475",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Ensure the PLANNER splits every request into single-owner tasks with unique commits.",
       "dirty": false,
@@ -436,7 +514,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
+      "commit": {
+        "hash": "1f484b210e0b3c5f94db94ab08d846bb9661035f",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested.",
       "dirty": false,
@@ -452,7 +533,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
+      "commit": {
+        "hash": "cc7a02002b47e16d7d7b6cea5a5d8a935cbdb54d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments.",
       "dirty": false,
@@ -468,7 +552,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
+      "commit": {
+        "hash": "32b4219cc283f233a1b2d68a6ea9d86a2e65a12d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
       "dirty": false,
@@ -484,7 +571,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
+      "commit": {
+        "hash": "c7f224ce23c0a0b2e46ab6e5d03858a8faea7295",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request.",
       "dirty": false,
@@ -501,7 +591,10 @@
         "docs",
         "readme"
       ],
-      "commit": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
+      "commit": {
+        "hash": "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -521,7 +614,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
+      "commit": {
+        "hash": "f6eecde89e99f7a3c31413e3a173620bd64331c9",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact.",
       "dirty": false,
@@ -537,7 +633,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "2f93325a23837b89b0431b3219cee725b6902583",
+      "commit": {
+        "hash": "2f93325a23837b89b0431b3219cee725b6902583",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board.",
       "dirty": false,
@@ -555,7 +654,10 @@
         "workflow",
         "formatting"
       ],
-      "commit": "f52008459f7415f33a7d3064d064ec841718d00e",
+      "commit": {
+        "hash": "f52008459f7415f33a7d3064d064ec841718d00e",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "reviewer",
@@ -576,7 +678,10 @@
         "docs",
         "workflow"
       ],
-      "commit": "6c5bc662a3f71b8e206a48133cc401033142ccd2",
+      "commit": {
+        "hash": "6c5bc662a3f71b8e206a48133cc401033142ccd2",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "reviewer",
@@ -598,7 +703,10 @@
         "workflow",
         "formatting"
       ],
-      "commit": "463a8853f38d3b9f3ebd9f6a191f3f7c81db0aa7",
+      "commit": {
+        "hash": "463a8853f38d3b9f3ebd9f6a191f3f7c81db0aa7",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "reviewer",
@@ -619,7 +727,10 @@
         "docs",
         "workflow"
       ],
-      "commit": "ec13d916bfc5d0e577b757d2a16dd8380ca3861d",
+      "commit": {
+        "hash": "ec13d916bfc5d0e577b757d2a16dd8380ca3861d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -640,7 +751,10 @@
         "docs",
         "readme"
       ],
-      "commit": "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc",
+      "commit": {
+        "hash": "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -661,7 +775,10 @@
         "automation",
         "cleanup"
       ],
-      "commit": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
+      "commit": {
+        "hash": "25d2b916ec4f2fbdf3caa0553c6271974acffdab",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -682,7 +799,10 @@
         "docs",
         "readme"
       ],
-      "commit": "f9c3e6c1e4bb906895811443799ef70faf18c7a3",
+      "commit": {
+        "hash": "f9c3e6c1e4bb906895811443799ef70faf18c7a3",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -703,7 +823,10 @@
         "docs",
         "guideline"
       ],
-      "commit": "21ddede356590745546962fedebbead23b2edae2",
+      "commit": {
+        "hash": "21ddede356590745546962fedebbead23b2edae2",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework.",
       "dirty": false,
@@ -718,7 +841,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "18a62ee44d660dd7d7e8590329edb92194e4eba6",
+      "commit": {
+        "hash": "18a62ee44d660dd7d7e8590329edb92194e4eba6",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear.",
       "dirty": false,
@@ -735,7 +861,10 @@
         "git",
         "workflow"
       ],
-      "commit": "a63694f182aff97ce18b5b9458bf54982e787120",
+      "commit": {
+        "hash": "a63694f182aff97ce18b5b9458bf54982e787120",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -756,7 +885,10 @@
         "automation",
         "sync"
       ],
-      "commit": "5e3b74a497ada1b723813b416747ccc47ca6ddbc",
+      "commit": {
+        "hash": "5e3b74a497ada1b723813b416747ccc47ca6ddbc",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -777,7 +909,10 @@
         "automation",
         "workflow"
       ],
-      "commit": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
+      "commit": {
+        "hash": "7b8445b4326e1d8c52e7f0e2718b9d88f75db502",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -799,7 +934,10 @@
         "project",
         "sync"
       ],
-      "commit": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
+      "commit": {
+        "hash": "ef12528c6ce74b53ca93b8f83a872ede49b81e26",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -820,7 +958,10 @@
         "docs",
         "policy"
       ],
-      "commit": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
+      "commit": {
+        "hash": "113c748a1f5c9bd56bc96ccb5616930310f7776d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -842,7 +983,10 @@
         "workflow",
         "tasks"
       ],
-      "commit": "759a800bde828ebb252bac2bb8f24fb7531989de",
+      "commit": {
+        "hash": "759a800bde828ebb252bac2bb8f24fb7531989de",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -864,7 +1008,10 @@
         "tasks",
         "workflow"
       ],
-      "commit": "5cc30b601bb86f224a984851dae8137374db7ded",
+      "commit": {
+        "hash": "5cc30b601bb86f224a984851dae8137374db7ded",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "docs",
@@ -884,7 +1031,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata).",
       "dirty": false,
@@ -906,7 +1056,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
-      "commit": "d6517d61191b4d80e80acc63117b6e55ba02c557",
+      "commit": {
+        "hash": "d6517d61191b4d80e80acc63117b6e55ba02c557",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "PLANNER",
@@ -939,7 +1092,10 @@
         "python scripts/agentctl.py agents",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "cc0a0a73dd2d3864f6d2cb9619d8837465046887",
+      "commit": {
+        "hash": "cc0a0a73dd2d3864f6d2cb9619d8837465046887",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "CREATOR",
@@ -963,7 +1119,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Change DOCS agent behavior so it runs before finishing any task and produces an atomic documentation artifact under @docs/workflow (e.g., @docs/workflow/T-025.md) describing what was implemented. Update orchestration guidance so plans include DOCS before REVIEWER marks tasks DONE.\\\\n\\\\nAcceptance criteria:\\\\n- @docs/workflow directory exists and is committed (with a short README describing artifact convention).\\\\n- @.AGENTS/DOCS.json instructs producing @docs/workflow/T-###.md artifacts (English, atomic, task-scoped).\\\\n- @AGENTS.md ORCHESTRATOR guidance schedules DOCS before finishing any task (DOCS before REVIEWER finish).\\\\n\\\\nNotes:\\\\n- Artifacts must be task-ID named, contain summary + changed files + verification commands (when available).",
       "dirty": false,
@@ -984,7 +1143,10 @@
         "bash -n clean.sh",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "b1ff627216f332cc34652d0a2968c78e89c68d2d",
+      "commit": {
+        "hash": "b1ff627216f332cc34652d0a2968c78e89c68d2d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1014,7 +1176,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
-      "commit": "20b580ff017d997987112ec3bd46597cd7efe8db",
+      "commit": {
+        "hash": "20b580ff017d997987112ec3bd46597cd7efe8db",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "CREATOR",
@@ -1038,7 +1203,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Update @README.md to include a short description and a Mermaid diagram (flowchart) showing the default agent workflow and handoffs (ORCHESTRATOR, PLANNER, CODER, TESTER, DOCS, REVIEWER).\\\\n\\\\nAcceptance criteria:\\\\n- README includes a Mermaid flowchart block describing the typical flow (plan -> implement -> test -> docs -> review -> finish).\\\\n- Diagram matches current agent rules (3-phase commits, DOCS artifact before DONE, CODER -> TESTER for dev work).",
       "dirty": false,
@@ -1054,7 +1222,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\\\n\\\\nAcceptance criteria:\\\\n- Mermaid block renders on GitHub README view.\\\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits).",
       "dirty": false,
@@ -1070,7 +1241,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster.",
       "dirty": false,
@@ -1086,7 +1260,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit).",
       "dirty": false,
@@ -1107,7 +1284,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
-      "commit": "c735c4c5202296b00105c46e73cc23ddd9b7d203",
+      "commit": {
+        "hash": "c735c4c5202296b00105c46e73cc23ddd9b7d203",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "REVIEWER",
@@ -1133,7 +1313,10 @@
         "python scripts/agentctl.py task lint",
         "python scripts/agentctl.py agents"
       ],
-      "commit": "dca6297f9226447c57df14fb9f6090a679b535f3",
+      "commit": {
+        "hash": "dca6297f9226447c57df14fb9f6090a679b535f3",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "REVIEWER",
@@ -1159,7 +1342,10 @@
         "bash -n clean.sh",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "c4d8084771dabcdb57353f5e7792322010f648ed",
+      "commit": {
+        "hash": "c4d8084771dabcdb57353f5e7792322010f648ed",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "PLANNER",
@@ -1188,7 +1374,10 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "5e6efe85aa351635d1592525f06ad824f14b3d2c",
+      "commit": {
+        "hash": "5e6efe85aa351635d1592525f06ad824f14b3d2c",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "REVIEWER",
@@ -1215,7 +1404,10 @@
         "python scripts/agentctl.py quickstart > /dev/null",
         "bash -n clean.sh"
       ],
-      "commit": "eb7cf5363ce55ec602fb9cc078069bc8d262a130",
+      "commit": {
+        "hash": "eb7cf5363ce55ec602fb9cc078069bc8d262a130",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "REVIEWER",
@@ -1239,7 +1431,10 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "6b22130b391becfada866dfc8136dbe1decff850",
+      "commit": {
+        "hash": "6b22130b391becfada866dfc8136dbe1decff850",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "REVIEWER",
@@ -1265,7 +1460,10 @@
         "python scripts/agentctl.py task lint",
         "python -m compileall scripts/agentctl.py"
       ],
-      "commit": "9fd7273c23ae3490637588e158ff485627d93e4a",
+      "commit": {
+        "hash": "9fd7273c23ae3490637588e158ff485627d93e4a",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1291,7 +1489,10 @@
         "python scripts/agentctl.py task lint",
         "python -m compileall scripts/agentctl.py"
       ],
-      "commit": "91b3760239846f01443b8550c9402dcc99c12c74",
+      "commit": {
+        "hash": "91b3760239846f01443b8550c9402dcc99c12c74",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1321,7 +1522,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "324e74e5f3bcb4ad1bb239eb1e02bac645553721",
+      "commit": {
+        "hash": "324e74e5f3bcb4ad1bb239eb1e02bac645553721",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1354,7 +1558,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "771cdf260f496ee5fb1a2e2e4f291141c455785f",
+      "commit": {
+        "hash": "771cdf260f496ee5fb1a2e2e4f291141c455785f",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "CODER",
@@ -1382,7 +1589,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "26eabcc06d63db1b67637df7bc84b849c27e789e",
+      "commit": {
+        "hash": "26eabcc06d63db1b67637df7bc84b849c27e789e",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md.",
       "dirty": false,
@@ -1404,7 +1614,10 @@
         "python scripts/agentctl.py agents",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "dea6792a39f57fd3f842a06efa198525afc7271d",
+      "commit": {
+        "hash": "dea6792a39f57fd3f842a06efa198525afc7271d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1424,7 +1637,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "10b4ffcce3069a858b32580fe7247a1bb8a824a5",
+      "commit": {
+        "hash": "10b4ffcce3069a858b32580fe7247a1bb8a824a5",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated).",
       "dirty": false,
@@ -1440,7 +1656,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "6ee132fca0297c6909cdb6b2b60fa5e3f83bcc28",
+      "commit": {
+        "hash": "6ee132fca0297c6909cdb6b2b60fa5e3f83bcc28",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Speed up the pipeline by removing the common integrate warning about stale PR meta head_sha. Acceptance: (1) python scripts/agentctl.py integrate no longer prints \\\"PR meta head_sha differs\\\" in normal usage; (2) integrate uses the actual task branch HEAD SHA for verify and writes it into docs/workflow/prs/T-###/meta.json on main (head_sha + last_verified_sha) so artifacts stay consistent; (3) safe in workflow_mode=branch_pr and never writes to the task branch; (4) meta.json ends up correct after integration.",
       "dirty": false,
@@ -1456,7 +1675,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "77a7ec17750368061351c416f1aebafadf2903aa",
+      "commit": {
+        "hash": "77a7ec17750368061351c416f1aebafadf2903aa",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Eliminate duplication between docs/workflow/T-###.md and docs/workflow/prs/T-###/description.md by moving to a single per-task folder layout under docs/workflow/T-###/. New canonical doc: docs/workflow/T-###/README.md. PR artifacts live at docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}. Update agentctl commands (task scaffold/add, pr open/update/check/note, verify --log, integrate meta sync) to use the new layout, while keeping backward compatibility for the old paths. Migrate existing tracked artifacts (T-055..T-073 and docs/workflow/prs/T-067..T-073) to the new layout and update all docs/agent texts that reference the old pipeline.",
       "dirty": false,
@@ -1481,7 +1703,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "2a76efc28ea31c69c13e9c13e2494036db931d6c",
+      "commit": {
+        "hash": "2a76efc28ea31c69c13e9c13e2494036db931d6c",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1510,7 +1735,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "5ad82c70456333dacda8ff88d5daf15060253536",
+      "commit": {
+        "hash": "5ad82c70456333dacda8ff88d5daf15060253536",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1539,7 +1767,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "cedb50251e77482aecf066e0fe5e2baa2c3d4078",
+      "commit": {
+        "hash": "cedb50251e77482aecf066e0fe5e2baa2c3d4078",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1568,7 +1799,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "1d665885edb4a478f1e627e75e0cceb8d34b569e",
+      "commit": {
+        "hash": "1d665885edb4a478f1e627e75e0cceb8d34b569e",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1588,7 +1822,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "6b04b9b75b7c783b4beb33fac5d6a2fc3a95ce36",
+      "commit": {
+        "hash": "6b04b9b75b7c783b4beb33fac5d6a2fc3a95ce36",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Finish migration documentation cleanup.\\n\\nAcceptance:\\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only.",
       "dirty": false,
@@ -1613,7 +1850,10 @@
         "python -m compileall scripts/agentctl.py",
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "62171a9bb6b56469b6209f2d5b29f053096a1d6f",
+      "commit": {
+        "hash": "62171a9bb6b56469b6209f2d5b29f053096a1d6f",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1633,7 +1873,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "0df88f39f6bb08d5fac2dabf5e113687135295a4",
+      "commit": {
+        "hash": "0df88f39f6bb08d5fac2dabf5e113687135295a4",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Speed up branch_pr integration by skipping redundant verify runs when the task branch HEAD SHA is already recorded as verified (via PR meta last_verified_sha or pr/verify.log). Keep --run-verify as a force-rerun escape hatch. Also ensure rebase strategy runs rebase before verify so the verified SHA matches what gets merged.",
       "dirty": false,
@@ -1658,7 +1901,10 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "c881605fdfef8585816e845648c826acf0c0ee6f",
+      "commit": {
+        "hash": "c881605fdfef8585816e845648c826acf0c0ee6f",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1686,7 +1932,10 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "8a70c8e2413945ec564c82f13766421adf15514f",
+      "commit": {
+        "hash": "8a70c8e2413945ec564c82f13766421adf15514f",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1715,7 +1964,10 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "95358c3c7df46275d7afccb5e2556aa52cdb4c39",
+      "commit": {
+        "hash": "95358c3c7df46275d7afccb5e2556aa52cdb4c39",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1735,7 +1987,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "e6d312e0b441b0deedf3c89c159fca9d9b4c09cb",
+      "commit": {
+        "hash": "e6d312e0b441b0deedf3c89c159fca9d9b4c09cb",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \\\"File already exists\\\" errors now that agents default to work start.",
       "dirty": false,
@@ -1757,7 +2012,10 @@
       "verify": [
         "python scripts/agentctl.py task lint"
       ],
-      "commit": "2b93d6297c22494b1cbc0805952a6f81b3461153",
+      "commit": {
+        "hash": "2b93d6297c22494b1cbc0805952a6f81b3461153",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1780,7 +2038,10 @@
         "git",
         "branching"
       ],
-      "commit": "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d",
+      "commit": {
+        "hash": "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1803,7 +2064,10 @@
         "workflow",
         "agents"
       ],
-      "commit": "780f1d05339296b8840b004e866e35fc74c67e32",
+      "commit": {
+        "hash": "780f1d05339296b8840b004e866e35fc74c67e32",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "ORCHESTRATOR",
@@ -1823,7 +2087,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged.",
       "dirty": false,
@@ -1839,7 +2106,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
       "dirty": false,
@@ -1857,7 +2127,10 @@
         "docs",
         "agents"
       ],
-      "commit": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
+      "commit": {
+        "hash": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
       "dirty": false,
       "redmine_id": 371
@@ -1872,7 +2145,10 @@
       "tags": [
         "docs"
       ],
-      "commit": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
+      "commit": {
+        "hash": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
       "dirty": false,
       "redmine_id": 372
@@ -1885,7 +2161,10 @@
       "owner": "DOCS",
       "depends_on": [],
       "tags": [],
-      "commit": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
+      "commit": {
+        "hash": "c1adda8fb29cda65889f32cc09bab6bf268fe315",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1904,7 +2183,10 @@
       "owner": "DOCS",
       "depends_on": [],
       "tags": [],
-      "commit": "9900d029d4f831d920a82e58869c7d7ec8b28623",
+      "commit": {
+        "hash": "9900d029d4f831d920a82e58869c7d7ec8b28623",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1923,7 +2205,10 @@
       "owner": "DOCS",
       "depends_on": [],
       "tags": [],
-      "commit": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
+      "commit": {
+        "hash": "4ad33b9b0ba39aa9c2380b935f012af3b03a0d83",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1944,7 +2229,10 @@
       "tags": [
         "docs"
       ],
-      "commit": "7eb0068599e887d0ceda3f427e413b1a7505d6dc",
+      "commit": {
+        "hash": "7eb0068599e887d0ceda3f427e413b1a7505d6dc",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -1964,7 +2252,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs.",
       "dirty": false,
@@ -1980,7 +2271,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually.",
       "dirty": false,
@@ -1996,7 +2290,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs.",
       "dirty": false,
@@ -2012,7 +2309,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find.",
       "dirty": false,
@@ -2030,7 +2330,10 @@
         "docs",
         "readme"
       ],
-      "commit": "5912c9c7a818350820e56e37830ff34a7daceb87",
+      "commit": {
+        "hash": "5912c9c7a818350820e56e37830ff34a7daceb87",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
       "dirty": false,
       "redmine_id": 381
@@ -2046,7 +2349,10 @@
         "agentctl",
         "tasks"
       ],
-      "commit": "0b222dfbd26ac511935b4a3026686a4685280d4f",
+      "commit": {
+        "hash": "0b222dfbd26ac511935b4a3026686a4685280d4f",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
       "dirty": false,
       "redmine_id": 382
@@ -2060,7 +2366,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
       "dirty": false,
@@ -2078,7 +2387,10 @@
         "readme",
         "docs"
       ],
-      "commit": "fbc029009285cf68d7730f23156fce5572b52d96",
+      "commit": {
+        "hash": "fbc029009285cf68d7730f23156fce5572b52d96",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
       "dirty": false,
       "redmine_id": 384
@@ -2092,7 +2404,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "13721c623fd186abbaee48456aa242f7e4561119",
+      "commit": {
+        "hash": "13721c623fd186abbaee48456aa242f7e4561119",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
       "dirty": false,
@@ -2109,7 +2424,10 @@
       "tags": [
         "docs"
       ],
-      "commit": "fe29281d02dadd4154586cbd088361ba54174a97",
+      "commit": {
+        "hash": "fe29281d02dadd4154586cbd088361ba54174a97",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
       "dirty": false,
       "redmine_id": 386
@@ -2123,7 +2441,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "7e88f9df016c340dbf314d6f687473f2f955ea6c",
+      "commit": {
+        "hash": "7e88f9df016c340dbf314d6f687473f2f955ea6c",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
       "dirty": false,
@@ -2139,7 +2460,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
+      "commit": {
+        "hash": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior.",
       "dirty": false,
@@ -2154,7 +2478,10 @@
       "owner": "DOCS",
       "depends_on": [],
       "tags": [],
-      "commit": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
+      "commit": {
+        "hash": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order.",
       "dirty": false,
       "redmine_id": 388
@@ -2167,7 +2494,10 @@
       "owner": "PLANNER",
       "depends_on": [],
       "tags": [],
-      "commit": "edf60000edb0b50cc9195328d3053157714fc200",
+      "commit": {
+        "hash": "edf60000edb0b50cc9195328d3053157714fc200",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring.",
       "dirty": false,
       "redmine_id": 389
@@ -2182,7 +2512,10 @@
         "202601041253-0003E"
       ],
       "tags": [],
-      "commit": "9066ff9431b53406ad4a42fc9323260f58f1011a",
+      "commit": {
+        "hash": "9066ff9431b53406ad4a42fc9323260f58f1011a",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json.",
       "dirty": false,
       "redmine_id": 265
@@ -2196,7 +2529,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "bf73519e146bf3c6cf68f73acc46be5a319e7182",
+      "commit": {
+        "hash": "bf73519e146bf3c6cf68f73acc46be5a319e7182",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help.",
       "dirty": false,
@@ -2212,7 +2548,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "7cafeace14cd6f307a5137f3ae94eb74080afcd0",
+      "commit": {
+        "hash": "7cafeace14cd6f307a5137f3ae94eb74080afcd0",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
       "dirty": false,
@@ -2228,7 +2567,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "9f593fed6fb24d0eec8912eda970708241e955a9",
+      "commit": {
+        "hash": "9f593fed6fb24d0eec8912eda970708241e955a9",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
       "dirty": false,
@@ -2244,7 +2586,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6",
+      "commit": {
+        "hash": "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
       "dirty": false,
@@ -2261,7 +2606,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "188350307b487d91a3ef004847f87f8b6d1a3995",
+      "commit": {
+        "hash": "188350307b487d91a3ef004847f87f8b6d1a3995",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model.",
       "dirty": false,
@@ -2279,7 +2627,10 @@
         "202601041253-0003K"
       ],
       "tags": [],
-      "commit": "25a6c054b1b513003186c6b337437547c6fb4a79",
+      "commit": {
+        "hash": "25a6c054b1b513003186c6b337437547c6fb4a79",
+        "message": "Legacy completion (backfill)"
+      },
       "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references.",
       "dirty": false,
       "redmine_id": 270,
@@ -2294,7 +2645,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "04fdd37dca3c7541e1d957e263b473547c94d6ad",
+      "commit": {
+        "hash": "04fdd37dca3c7541e1d957e263b473547c94d6ad",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data.",
       "dirty": false,
@@ -2311,7 +2665,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "1939744c7df301f0a9b1533a7ff7025624d45a3c",
+      "commit": {
+        "hash": "1939744c7df301f0a9b1533a7ff7025624d45a3c",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing.",
       "dirty": false,
@@ -2327,7 +2684,10 @@
       "owner": "CODER",
       "depends_on": [],
       "tags": [],
-      "commit": "f84ae1546f3077d674c659dce3ce9bf690160894",
+      "commit": {
+        "hash": "f84ae1546f3077d674c659dce3ce9bf690160894",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2348,7 +2708,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "e571744e288fc0f63599967eae460d290d4c97ef",
+      "commit": {
+        "hash": "e571744e288fc0f63599967eae460d290d4c97ef",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Keep the frontmatter block intact when overwriting task README scaffolds.",
       "dirty": false,
@@ -2365,7 +2728,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "8ebac65cf3df403807155f58e430ba30e925692b",
+      "commit": {
+        "hash": "8ebac65cf3df403807155f58e430ba30e925692b",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes.",
       "dirty": false,
@@ -2381,7 +2747,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "ea9ed7a50d1789d452abb61c00987e0925c76ecb",
+      "commit": {
+        "hash": "ea9ed7a50d1789d452abb61c00987e0925c76ecb",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs.",
       "dirty": false,
@@ -2417,7 +2786,10 @@
       "owner": "CODER",
       "depends_on": [],
       "tags": [],
-      "commit": "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd",
+      "commit": {
+        "hash": "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [
         {
           "author": "INTEGRATOR",
@@ -2446,7 +2818,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0",
+      "commit": {
+        "hash": "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks.",
       "dirty": false,
@@ -2463,7 +2838,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "decbfa9574e7df7e160329e92a7882763ba6ce16",
+      "commit": {
+        "hash": "decbfa9574e7df7e160329e92a7882763ba6ce16",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored.",
       "dirty": false,
@@ -2498,7 +2876,10 @@
       "depends_on": [],
       "tags": [],
       "verify": null,
-      "commit": "f1568e3460bd7e7a293bca7448b9e81348b8a575",
+      "commit": {
+        "hash": "f1568e3460bd7e7a293bca7448b9e81348b8a575",
+        "message": "Legacy completion (backfill)"
+      },
       "comments": [],
       "description": "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion.",
       "dirty": false,
@@ -2759,10 +3140,10 @@
         }
       ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-07T14:44:07+00:00",
+      "doc_updated_at": "2026-01-11T07:48:40+00:00",
       "doc_updated_by": "agentctl",
       "description": "Update Redmine backend config and docs to use sequential custom field IDs 1-8 for task metadata.",
-      "doc": "## Summary\n\nUpdate Redmine custom field ID mapping to use sequential IDs 1-8 for task metadata.\n\n## Context\n\nUser requested sequential Redmine custom field IDs; admin API access was unavailable so we aligned docs to IDs 1-8.\n\n## Scope\n\n- Update Redmine docs/examples to use sequential custom field IDs 1..8.\\n- Keep backend config aligned with the same mapping.\n\n## Risks\n\n- If Redmine custom field IDs differ, sync will fail until corrected.\n\n## Verify Steps\n\n- (Optional) Confirm custom field IDs in Redmine admin.\\n- Run  after configuration.\n\n## Rollback Plan\n\nRevert the Redmine backend config and docs to the previous custom field IDs.\n\n## Notes\n\nBackend config already uses IDs 1-8; only docs needed updates.\n\n## Changes Summary\n\n- Updated Redmine docs examples to match sequential custom field IDs 1-8."
+      "doc": "## Summary\n\nUpdate Redmine custom field ID mapping to use sequential IDs 1-8 for task metadata.\n\n## Context\n\nUser requested sequential Redmine custom field IDs; admin API access was unavailable, so we aligned docs and config to IDs 1-8.\n\n## Scope\n\n- Update Redmine docs/examples to use sequential custom field IDs 1..8.\n- Keep backend config aligned with the same mapping.\n\n## Risks\n\n- If Redmine custom field IDs differ, sync will fail until corrected.\n\n## Verify Steps\n\n- (Optional) Confirm custom field IDs in Redmine admin.\n- Run `python .codex-swarm/agentctl.py sync redmine` after configuration.\n\n## Rollback Plan\n\nRevert the Redmine backend config and docs to the previous custom field IDs.\n\n## Notes\n\nBackend config already uses IDs 1-8; only docs needed updates.\n\n## Changes Summary\n\n- Updated Redmine docs examples to match sequential custom field IDs 1-8."
     },
     {
       "id": "202601071448-CEVJ6V",
@@ -2791,12 +3172,83 @@
       "doc_updated_by": "agentctl",
       "description": "Enhance agentctl CLI outputs to include richer task context (readiness, deps, metadata) to reduce extra checks.",
       "doc": "## Summary\n\nImprove agentctl CLI outputs to include richer task context (deps, readiness, metadata) so agents need fewer follow-up commands.\n\n## Context\n\nUser asked to make agentctl CLI outputs more informative so agents avoid extra status checks.\n\n## Scope\n\n- Enrich task list/show/ready outputs with dependency readiness and metadata.\\n- Keep outputs compact and stable for CLI use.\n\n## Risks\n\n- More verbose output may affect scripts that parse human-readable CLI output.\n\n## Verify Steps\n\n- Run 'python .codex-swarm/agentctl.py task show <task-id>' and 'python .codex-swarm/agentctl.py task list' to confirm richer context.\n\n## Rollback Plan\n\nRevert agentctl output changes if verbosity breaks downstream scripting.\n\n## Notes\n\nUpdated task list/show/ready/start/block/finish outputs to include deps/readiness/metadata summaries.\n\n## Changes Summary\n\n- Added dependency/owner/priority/tag/verify info to task list/search/next output lines.\\n- Expanded task show output with readiness, doc metadata, verify commands, and comment counts.\\n- Added richer summaries for ready/start/block/finish commands."
+    },
+    {
+      "id": "202601071526-GH5YSV",
+      "title": "Clarify README onboarding guidance",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T07:49:24+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Make Getting Started more newcomer-friendly; explain the ORCHESTRATOR prompt and mention clean.sh.",
+      "doc": "## Summary\n\nMake README onboarding clearer for newcomers by explaining the ORCHESTRATOR prompt flow and mentioning clean.sh.\n\n## Context\n\nNew users struggle to understand how to start with the ORCHESTRATOR prompt and when to use clean.sh. The README getting-started section needs clearer guidance for the direct workflow.\n\n## Scope\n\n- Clarify the initial ORCHESTRATOR prompt and approval expectations in README.\n- Add newcomer-friendly steps to Getting Started.\n- Mention clean.sh as an optional reset tool and when to use it.\n\n## Risks\n\n- Over-explaining could clutter the README and bury key steps.\n- Guidance must stay aligned with both direct and branch_pr workflows.\n\n## Verify Steps\n\n- (Docs) Proofread updated README copy.\n\n## Rollback Plan\n\n- Revert the README onboarding edits.\n\n## Notes\n\n- Keep examples consistent with the active workflow_mode guidance."
+    },
+    {
+      "id": "202601110745-AAQVJW",
+      "title": "Fix branch_pr ID parsing and clean.sh scrub",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agentctl",
+        "branch_pr",
+        "cleanup"
+      ],
+      "commit": {
+        "hash": "88e82c4af90d4611745387fb2de4147147c57943",
+        "message": "✨ AAQVJW fix branch_pr id parsing and clean scrub"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py; branch_pr regex now accepts timestamp task IDs; clean.sh scrub examples updated to timestamp format."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T07:46:17+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Accept timestamp task IDs in branch parsing/PR flows and update clean.sh/docs hints to avoid legacy T-### examples.",
+      "doc": "## Summary\n\nAccept timestamp task IDs in branch parsing/PR flows and keep clean.sh/docs hints off the legacy T-### format.\n\n## Context\n\nBranch/PR helpers still parse only legacy task branches (`task/T-###/<slug>`), and clean.sh rewrites examples to T-123 even though the framework now uses timestamp-based task IDs. This blocks branch_pr mode and produces stale docs after cleanup.\n\n## Scope\n\n- Update task-branch parsing to accept timestamp IDs while preserving legacy T-### support.\n- Refresh CLI hints to reference `<task-id>` instead of `<T-###>`.\n- Modernize clean.sh scrub replacements so examples stay on timestamp IDs.\n\n## Risks\n\n- Broader regex may allow unexpected branch names if patterns are too loose.\n- clean.sh scrub logic could still drop needed instructions if replacements are incorrect.\n\n## Verify Steps\n\n- python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py\n\n## Rollback Plan\n\n- Revert the branch parsing and clean.sh changes.\n\n## Notes\n\n- Keep legacy T-### task branches working for old repositories; timestamp IDs are the primary path."
+    },
+    {
+      "id": "202601110746-RETWRH",
+      "title": "Repair task doc metadata and fill missing sections",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs",
+        "tasks"
+      ],
+      "commit": {
+        "hash": "33b3e35be2da5d7acf1964178bf06813e285a7c4",
+        "message": "✨ RETWRH repair task docs metadata"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "Verified: task lint reports many legacy DONE tasks missing commit metadata (pre-existing); updated C7W2GE status/doc and scaffolded GH5YSV sections via agentctl."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T07:46:55+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Fix corrupted task README metadata and populate missing sections to keep PR checks healthy.",
+      "doc": "## Summary\n\nFix corrupted task README metadata and populate missing sections so task docs pass PR checks.\n\n## Context\n\nTask 202601071438-C7W2GE frontmatter is malformed (`Яstatus`) and contains escaped newlines, so the backend reads it as TODO. Task 202601071526-GH5YSV lacks body sections entirely, causing future PR checks to fail. Both need cleanup via agentctl.\n\n## Scope\n\n- Rewrite C7W2GE frontmatter via agentctl so status=DONE is respected and docs render correctly.\n- Replace escaped `\\n` bullets in C7W2GE with proper Markdown list items.\n- Populate GH5YSV task README sections (Summary/Context/Scope/Risks/Verify Steps/Rollback Plan/Notes).\n\n## Risks\n\n- Manual doc updates could misrepresent task status if fields are missed.\n- PR checks may still fail if required sections remain empty.\n\n## Verify Steps\n\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert the README changes for C7W2GE and GH5YSV.\n\n## Notes\n\n- Do not change task ownership/status beyond correcting the corrupted frontmatter."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4613450cbd099d952e55a09262b827f0122109a099ef25bb527c215efacee816"
+    "checksum": "5582431741139ce99e27b8a65b281f4b57b76d2ba64cb6462c7f930d6d80528e"
   }
 }

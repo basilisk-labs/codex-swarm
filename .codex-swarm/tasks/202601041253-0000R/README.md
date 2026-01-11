@@ -5,7 +5,7 @@ status: "DONE"
 priority: "high"
 owner: "CODER"
 tags: ["docs", "localization", "glossary"]
-commit: "eb5a18530947e3387e401f9539595db257492b0c"
+commit: { hash: "eb5a18530947e3387e401f9539595db257492b0c", message: "Legacy completion (backfill)" }
 comments:
   - { author: "reviewer", body: "Updated the TRANSLATOR workflow and converted GLOSSARY.json so languages own their preferred terms and descriptions." }
 description: "Restructure the glossary so English remains canonical while localized entries store metadata per language."

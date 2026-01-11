@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "f1568e3460bd7e7a293bca7448b9e81348b8a575"
+commit: { hash: "f1568e3460bd7e7a293bca7448b9e81348b8a575", message: "Legacy completion (backfill)" }
 comments: []
 description: "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion."
 dirty: false

@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "13721c623fd186abbaee48456aa242f7e4561119"
+commit: { hash: "13721c623fd186abbaee48456aa242f7e4561119", message: "Legacy completion (backfill)" }
 comments: []
 description: "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs."
 dirty: false

@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "188350307b487d91a3ef004847f87f8b6d1a3995"
+commit: { hash: "188350307b487d91a3ef004847f87f8b6d1a3995", message: "Legacy completion (backfill)" }
 comments: []
 description: "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model."
 dirty: false

@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "26eabcc06d63db1b67637df7bc84b849c27e789e"
+commit: { hash: "26eabcc06d63db1b67637df7bc84b849c27e789e", message: "Legacy completion (backfill)" }
 comments: []
 description: "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md."
 dirty: false

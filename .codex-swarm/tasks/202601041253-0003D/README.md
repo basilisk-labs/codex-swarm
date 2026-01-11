@@ -6,7 +6,7 @@ priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: []
-commit: "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20"
+commit: { hash: "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20", message: "Legacy completion (backfill)" }
 description: "Restructure docs into modular, numbered files and update the documentation index to match the new order."
 dirty: false
 redmine_id: 388

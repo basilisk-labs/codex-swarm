@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "04fdd37dca3c7541e1d957e263b473547c94d6ad"
+commit: { hash: "04fdd37dca3c7541e1d957e263b473547c94d6ad", message: "Legacy completion (backfill)" }
 comments: []
 description: "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
 dirty: false

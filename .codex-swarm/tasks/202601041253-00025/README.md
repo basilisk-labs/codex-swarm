@@ -7,7 +7,7 @@ owner: "CODER"
 depends_on: ["202601041253-00024"]
 tags: ["agentctl", "workflow", "pipeline"]
 verify: ["python -m compileall scripts/agentctl.py", "python scripts/agentctl.py task lint"]
-commit: "771cdf260f496ee5fb1a2e2e4f291141c455785f"
+commit: { hash: "771cdf260f496ee5fb1a2e2e4f291141c455785f", message: "Legacy completion (backfill)" }
 comments:
   - { author: "CODER", body: "Start: add agentctl pr note to append '- ROLE: TEXT' under ## Handoff Notes in docs/workflow/prs/T-###/review.md; update .codex-swarm/agentctl.md; verify via task lint and a manual note append smoke." }
   - { author: "CODER", body: "Implemented pr note helper; ready for review." }

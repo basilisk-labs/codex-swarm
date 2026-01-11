@@ -6,7 +6,7 @@ priority: "med"
 owner: "human"
 depends_on: []
 tags: ["workflow", "git", "branching"]
-commit: "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d"
+commit: { hash: "4f93b993ecca14b9a7d9a464711cc9a75d5d5a2d", message: "Legacy completion (backfill)" }
 comments:
   - { author: "INTEGRATOR", body: "Verified: Base branch now pins to local git config (codexswarm.baseBranch); integrate/guard/cleanup use it; no-op integrates fail fast." }
 description: "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main."

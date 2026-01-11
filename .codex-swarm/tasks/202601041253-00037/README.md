@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "13721c623fd186abbaee48456aa242f7e4561119"
+commit: { hash: "13721c623fd186abbaee48456aa242f7e4561119", message: "Legacy completion (backfill)" }
 comments: []
 description: "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout."
 dirty: false

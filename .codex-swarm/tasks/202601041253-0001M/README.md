@@ -6,7 +6,7 @@ priority: "med"
 owner: "CREATOR"
 tags: ["agents", "testing"]
 verify: ["python scripts/agentctl.py agents", "python scripts/agentctl.py task lint"]
-commit: "cc0a0a73dd2d3864f6d2cb9619d8837465046887"
+commit: { hash: "cc0a0a73dd2d3864f6d2cb9619d8837465046887", message: "Legacy completion (backfill)" }
 comments:
   - { author: "CREATOR", body: "Start: add TESTER agent JSON + update CODER/AGENTS/README to enforce post-CODER test coverage." }
   - { author: "REVIEWER", body: "Verified: agent registry lists TESTER, JSON prompts validate, and tasks.json lints clean (workflow now defaults to CODER -> TESTER -> REVIEWER for dev work)." }

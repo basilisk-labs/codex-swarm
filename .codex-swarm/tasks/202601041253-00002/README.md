@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "645a960e59145717d77f4bfab367c2a14234cc03"
+commit: { hash: "645a960e59145717d77f4bfab367c2a14234cc03", message: "Legacy completion (backfill)" }
 comments: []
 description: "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance."
 dirty: false

@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "f6eecde89e99f7a3c31413e3a173620bd64331c9"
+commit: { hash: "f6eecde89e99f7a3c31413e3a173620bd64331c9", message: "Legacy completion (backfill)" }
 comments: []
 description: "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact."
 dirty: false

@@ -271,7 +271,6 @@ def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
-LEGACY_TASK_ID_RE = re.compile(r"^T-(\d+)$")
 _TASK_CACHE: Optional[List[Dict]] = None
 _TASK_INDEX_CACHE: Optional[Tuple[str, Dict[str, Dict], List[str]]] = None
 _TASK_DEP_CACHE: Optional[Tuple[str, Dict[str, Dict[str, List[str]]], List[str]]] = None
@@ -301,19 +300,6 @@ def normalize_task_ids(values: Iterable[str]) -> List[str]:
         seen.add(task_id)
         task_ids.append(task_id)
     return task_ids
-
-
-def encode_base32(value: int, alphabet: str) -> str:
-    if value < 0:
-        raise ValueError("value must be >= 0")
-    if value == 0:
-        return alphabet[0]
-    base = len(alphabet)
-    digits: List[str] = []
-    while value > 0:
-        value, rem = divmod(value, base)
-        digits.append(alphabet[rem])
-    return "".join(reversed(digits))
 
 
 def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
@@ -1173,169 +1159,6 @@ def load_backend_module(backend_id: str, module_path: Path) -> object:
     return module
 
 
-def _update_task_heading(body: str, old_id: str, new_id: str) -> str:
-    if not body:
-        return body
-    lines = body.splitlines()
-    if not lines:
-        return body
-    first = lines[0]
-    prefix = "# "
-    if first.startswith(prefix):
-        rest = first[len(prefix) :]
-        if rest.startswith(old_id):
-            lines[0] = prefix + rest.replace(old_id, new_id, 1)
-            return "\n".join(lines)
-    return body
-
-
-def cmd_task_reid(args: argparse.Namespace) -> None:
-    require_tasks_json_write_context(force=bool(args.force))
-    backend = backend_instance()
-    backend_id = str(BACKEND_CONFIG.get("id") or "").strip()
-    if backend is None or backend_id != "local":
-        die("task reid is only supported for the local backend", code=2)
-    module_path = Path(str(BACKEND_CONFIG.get("_module_path") or "")).resolve()
-    if not module_path.exists():
-        die(f"Missing backend module: {module_path}", code=2)
-    module = load_backend_module(backend_id, module_path)
-    parse_frontmatter = getattr(module, "parse_frontmatter", None)
-    format_frontmatter = getattr(module, "format_frontmatter", None)
-    id_alphabet = getattr(module, "ID_ALPHABET", None)
-    default_tasks_dir = getattr(module, "DEFAULT_TASKS_DIR", None)
-    if not callable(parse_frontmatter) or not callable(format_frontmatter) or not isinstance(id_alphabet, str):
-        die("Local backend helpers missing parse_frontmatter/format_frontmatter/ID_ALPHABET", code=2)
-
-    suffix_length = int(args.suffix_length or 5)
-    if suffix_length < 4:
-        die("suffix length must be >= 4", code=2)
-    timestamp = str(args.timestamp or "").strip()
-    if timestamp:
-        if not re.fullmatch(r"\d{12}", timestamp):
-            die("timestamp must be in YYYYMMDDHHMM format", code=2)
-    else:
-        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M")
-
-    tasks_root = getattr(backend, "root", None) or default_tasks_dir or SWARM_DIR / "tasks"
-    tasks_root = Path(tasks_root).resolve()
-    if not tasks_root.exists():
-        die(f"Missing tasks directory: {tasks_root}", code=2)
-
-    records: List[Dict[str, object]] = []
-    for entry in sorted(tasks_root.iterdir()):
-        if not entry.is_dir():
-            continue
-        readme = entry / "README.md"
-        if not readme.exists():
-            continue
-        text = readme.read_text(encoding="utf-8")
-        doc = parse_frontmatter(text)
-        frontmatter = getattr(doc, "frontmatter", {})
-        if not isinstance(frontmatter, dict):
-            continue
-        task_id = str(frontmatter.get("id") or entry.name or "").strip()
-        if not task_id:
-            continue
-        records.append(
-            {
-                "id": task_id,
-                "dir": entry,
-                "frontmatter": frontmatter,
-                "body": getattr(doc, "body", ""),
-            }
-        )
-
-    legacy_records = [r for r in records if LEGACY_TASK_ID_RE.match(str(r["id"]))]
-    if not legacy_records:
-        if not args.quiet:
-            print("ℹ️ no legacy task ids found; nothing to re-id")
-        return
-
-    legacy_records.sort(key=lambda r: int(LEGACY_TASK_ID_RE.match(str(r["id"])).group(1)))  # type: ignore[union-attr]
-    base = len(id_alphabet)
-    if len(legacy_records) > base**suffix_length:
-        die(f"suffix length {suffix_length} is too small for {len(legacy_records)} tasks", code=2)
-
-    existing_ids = {str(r["id"]) for r in records if not LEGACY_TASK_ID_RE.match(str(r["id"]))}
-    used_ids = set(existing_ids)
-    mapping: Dict[str, str] = {}
-    counter = 1
-    for record in legacy_records:
-        old_id = str(record["id"])
-        while True:
-            suffix = encode_base32(counter, id_alphabet).rjust(suffix_length, id_alphabet[0])
-            counter += 1
-            new_id = f"{timestamp}-{suffix}"
-            if new_id not in used_ids:
-                break
-        mapping[old_id] = new_id
-        used_ids.add(new_id)
-
-    for record in records:
-        frontmatter = dict(record["frontmatter"])
-        old_id = str(record["id"])
-        if old_id in mapping:
-            frontmatter["id"] = mapping[old_id]
-        depends_on = frontmatter.get("depends_on")
-        if isinstance(depends_on, list):
-            updated = []
-            for dep in depends_on:
-                dep_id = str(dep)
-                updated.append(mapping.get(dep_id, dep_id))
-            frontmatter["depends_on"] = updated
-        record["frontmatter"] = frontmatter
-        body = str(record["body"] or "")
-        if old_id in mapping:
-            body = _update_task_heading(body, old_id, mapping[old_id])
-        record["body"] = body
-
-    temp_map: Dict[str, Path] = {}
-    for record in records:
-        old_id = str(record["id"])
-        if old_id not in mapping:
-            continue
-        current_dir = Path(record["dir"])
-        temp_dir = tasks_root / f".reid-{old_id}"
-        if temp_dir.exists():
-            die(f"Temporary dir already exists: {temp_dir}", code=2)
-        current_dir.rename(temp_dir)
-        temp_map[old_id] = temp_dir
-
-    for record in records:
-        old_id = str(record["id"])
-        if old_id in mapping:
-            new_dir = tasks_root / mapping[old_id]
-            temp_dir = temp_map[old_id]
-            temp_dir.rename(new_dir)
-            record["dir"] = new_dir
-
-    for record in records:
-        target_dir = Path(record["dir"])
-        target_dir.mkdir(parents=True, exist_ok=True)
-        readme = target_dir / "README.md"
-        frontmatter_text = format_frontmatter(record["frontmatter"])
-        content = frontmatter_text + "\n"
-        body = str(record["body"] or "")
-        if body:
-            content += body.lstrip("\n") + "\n"
-        readme.write_text(content, encoding="utf-8")
-
-    report_path = None
-    if args.report:
-        report_path = _resolve_repo_relative_path(args.report, label="task reid report")
-        report_payload = {"timestamp": timestamp, "mapping": mapping}
-        report_path.write_text(json.dumps(report_payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-
-    export_path = _resolve_repo_relative_path(TASKS_PATH_REL, label="task export output")
-    tasks, _ = load_task_store()
-    write_tasks_json_to_path(export_path, {"tasks": tasks})
-
-    if not args.quiet:
-        print(f"✅ re-identified {len(mapping)} task(s)")
-        if report_path:
-            print(f"✅ wrote mapping report to {report_path.relative_to(ROOT)}")
-
-
 def cmd_sync(args: argparse.Namespace) -> None:
     backend = backend_instance()
     if backend is None:
@@ -1517,9 +1340,7 @@ def path_is_under(path: str, prefix: str) -> bool:
     return p == root or p.startswith(root + "/")
 
 
-_TASK_BRANCH_RE = re.compile(
-    r"^task/(?:(T-[0-9]{3,})|(\d{12}-[0-9A-Z]{4,}))/[^/]+$"
-)
+_TASK_BRANCH_RE = re.compile(r"^task/(\d{12}-[0-9A-Z]{4,})/[^/]+$")
 _VERIFIED_SHA_RE = re.compile(r"verified_sha=([0-9a-f]{7,40})", re.IGNORECASE)
 
 
@@ -1528,8 +1349,7 @@ def parse_task_id_from_task_branch(branch: str) -> Optional[str]:
     match = _TASK_BRANCH_RE.match(raw)
     if not match:
         return None
-    legacy, modern = match.group(1), match.group(2)
-    return legacy or modern
+    return match.group(1)
 
 
 def load_local_frontmatter_helpers() -> Optional[Tuple[Callable[[str], object], Callable[[Dict[str, object]], str], int, str]]:
@@ -4305,14 +4125,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_migrate.add_argument("--quiet", action="store_true", help="Minimal output")
     p_migrate.add_argument("--force", action="store_true", help="Bypass base-branch checks")
     p_migrate.set_defaults(func=cmd_task_migrate)
-
-    p_reid = task_sub.add_parser("reid", help="Re-identify legacy T-### tasks in the local backend")
-    p_reid.add_argument("--timestamp", help="Override timestamp prefix (YYYYMMDDHHMM)")
-    p_reid.add_argument("--suffix-length", type=int, default=5, help="Suffix length (default: 5)")
-    p_reid.add_argument("--report", help="Write legacy->new mapping JSON (repo-relative)")
-    p_reid.add_argument("--quiet", action="store_true", help="Minimal output")
-    p_reid.add_argument("--force", action="store_true", help="Bypass base-branch checks")
-    p_reid.set_defaults(func=cmd_task_reid)
 
     p_comment = task_sub.add_parser("comment", help="Append a comment to a task")
     p_comment.add_argument("task_id")

@@ -7,7 +7,7 @@ owner: "automation"
 depends_on: []
 tags: []
 verify: null
-commit: "18a62ee44d660dd7d7e8590329edb92194e4eba6"
+commit: { hash: "18a62ee44d660dd7d7e8590329edb92194e4eba6", message: "Legacy completion (backfill)" }
 comments: []
 description: "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear."
 dirty: false
