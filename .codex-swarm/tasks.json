@@ -4001,19 +4001,81 @@
         {
           "author": "CODER",
           "body": "Start: Add strict Python lint/format/type-check configs, update code to pass them, and clean new artifacts."
+        },
+        {
+          "author": "CODER",
+          "body": "Add strict ruff/mypy configs and dev deps; update Python modules for lint/type checks; clean new lint caches."
         }
       ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-11T16:57:04+00:00",
+      "doc_updated_at": "2026-01-11T17:22:04+00:00",
       "doc_updated_by": "agentctl",
       "description": "Introduce strict Python lint/format/type-check tooling, update cleanup scripts for new artifacts, and ensure the repo passes the checks.",
-      "doc": "## Summary\n\nAdd strict Python lint/format/type-check tooling, clean up their artifacts, and ensure repository Python code passes the new checks.\n\n## Context\n\nUser requested максимально жесткие линтеры/фиксеров for Python and cleanup of their artifacts; tooling should keep code correct and verified after linting.\n\n## Scope\n\nAdd lint/format/type-check configs (ruff + type checker), update Python code to comply, add ignore/clean rules for caches, and document/run verify commands.\n\n## Risks\n\nStrict rules may require code refactors or per-file ignores; type-checker strictness can surface missing annotations or third-party stubs.\n\n## Verify Steps\n\nruff format .\\nruff check .\\nmypy .\n\n## Rollback Plan\n\nRevert lint config files, clean script changes, and any code edits; remove lint dependencies; rerun previous checks.\n\n## Notes\n\nAim for strict linting while scoping unavoidable exceptions (e.g., CLI subprocess usage)."
+      "doc": "## Summary\n\nAdd strict Python lint/format/type-check tooling, clean up their artifacts, and ensure repository Python code passes the new checks.\n\n## Context\n\nUser requested максимально жесткие линтеры/фиксеров for Python and cleanup of their artifacts; tooling should keep code correct and verified after linting.\n\n## Scope\n\nAdd lint/format/type-check configs (ruff + type checker), update Python code to comply, add ignore/clean rules for caches, and document/run verify commands.\n\n## Risks\n\nStrict rules may require code refactors or per-file ignores; type-checker strictness can surface missing annotations or third-party stubs.\n\n## Verify Steps\n\n- .venv/bin/ruff format .\n- .venv/bin/ruff check .\n- .venv/bin/mypy\n\n## Rollback Plan\n\nRevert lint config files, clean script changes, and any code edits; remove lint dependencies; rerun previous checks.\n\n## Notes\n\nAim for strict linting while scoping unavoidable exceptions (e.g., CLI subprocess usage)."
+    },
+    {
+      "id": "202601111732-2ZFSDR",
+      "title": "Update GitHub sync scripts and cleanup",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "github",
+        "sync",
+        "cleanup",
+        "scripting"
+      ],
+      "verify": [
+        ".venv/bin/ruff format .",
+        ".venv/bin/ruff check .",
+        ".venv/bin/mypy"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T17:33:29+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Align GitHub task sync scripts with current backend/schema and keep viewer.sh during cleanup.",
+      "doc": "## Summary\n\nUpdate GitHub task sync scripts/workflow to match current backend schema and keep viewer.sh during cleanup.\n\n## Scope\n\n- Align .github/scripts/sync_tasks.py with current tasks export fields and backend behavior.\n- Adjust .github/workflows/sync-tasks.yml if needed for new args/envs.\n- Remove viewer.sh from clean scripts so it is preserved.\n\n## Risks\n\n- GitHub API schema or project fields may differ from expected values.\n- Workflow token permissions could block updates.\n\n## Verify Steps\n\n- .venv/bin/ruff format .\n- .venv/bin/ruff check .\n- .venv/bin/mypy\n\n## Rollback Plan\n\n- ..."
+    },
+    {
+      "id": "202601111732-M23S62",
+      "title": "Refactor agentctl/backends for strict mypy",
+      "status": "TODO",
+      "priority": "high",
+      "owner": "CODER",
+      "depends_on": [
+        "202601111656-4HQ6XY"
+      ],
+      "tags": [
+        "python",
+        "mypy",
+        "refactor",
+        "typing",
+        "agentctl",
+        "backend"
+      ],
+      "verify": [
+        ".venv/bin/ruff format .",
+        ".venv/bin/ruff check .",
+        ".venv/bin/mypy"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Plan: add refactor task for strict mypy in agentctl/backends and schedule GitHub sync + cleanup update task."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T17:33:08+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Refactor agentctl and backend modules to pass strict mypy without exclusions while preserving behavior.",
+      "doc": "## Summary\n\nRefactor agentctl/backends to satisfy strict mypy without exclusions while preserving CLI behavior.\n\n## Scope\n\n- Audit mypy errors in agentctl/backends and map fixes.\n- Add typed helpers (TypedDict/Protocol/dataclasses) for task models and backend APIs.\n- Narrow dynamic imports and casts so mypy can validate module loading.\n- Remove mypy excludes for agentctl/backends in pyproject.toml.\n\n## Risks\n\n- Type refactors may change CLI edge cases or backend error handling.\n- Large surface area could require incremental migration to avoid regressions.\n\n## Verify Steps\n\n- .venv/bin/ruff format .\n- .venv/bin/ruff check .\n- .venv/bin/mypy\n\n## Rollback Plan\n\n- ...\n\n## Notes\n\nAim for incremental, well-tested typing improvements rather than broad rewrites."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "e18b20c046d8e8b768b110db85b87d522eb9a4886b4e5a158ffef2a8bbd63cbe"
+    "checksum": "b6004a94dd962fafbe5b721fac6c5e6a88bc083caf5e0e974a12d395309608b8"
   }
 }
