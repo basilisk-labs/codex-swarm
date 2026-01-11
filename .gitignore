@@ -6,3 +6,4 @@ __pycache__
 .pytest_cache
 .venv
 .codex-swarm/worktrees
+.codex-swarm/tasks.json
