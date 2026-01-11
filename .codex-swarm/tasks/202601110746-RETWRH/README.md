@@ -1,11 +1,14 @@
 ---
 id: "202601110746-RETWRH"
 title: "Repair task doc metadata and fill missing sections"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "tasks"]
+commit: { hash: "33b3e35be2da5d7acf1964178bf06813e285a7c4", message: "✨ RETWRH repair task docs metadata" }
+comments:
+  - { author: "DOCS", body: "Verified: task lint reports many legacy DONE tasks missing commit metadata (pre-existing); updated C7W2GE status/doc and scaffolded GH5YSV sections via agentctl." }
 doc_version: 2
 doc_updated_at: "2026-01-11T07:46:55+00:00"
 doc_updated_by: "agentctl"
