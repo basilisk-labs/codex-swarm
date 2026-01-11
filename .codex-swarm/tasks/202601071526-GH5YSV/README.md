@@ -1,11 +1,14 @@
 ---
 id: "202601071526-GH5YSV"
 title: "Clarify README onboarding guidance"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["docs"]
+commit: { hash: "05da024c848b7deea29bb50f16ae26a4df0f42ac", message: "✨ GH5YSV clarify README onboarding flow and clean reset" }
+comments:
+  - { author: "DOCS", body: "Verified: proofread updated Getting Started section (ORCHESTRATOR approvals, direct/branch_pr note, clean.sh reset guidance) and ensured quickstart commands unchanged." }
 doc_version: 2
 doc_updated_at: "2026-01-11T07:49:24+00:00"
 doc_updated_by: "agentctl"
