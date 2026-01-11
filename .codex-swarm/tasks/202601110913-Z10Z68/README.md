@@ -6,9 +6,10 @@ priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "tasks"]
-commit: { hash: "7d2a6ad857fc076230c7060526db39393f4ecc1a", message: "✨ Z10Z68 replace automation owners and refresh newcomer docs" }
+commit: { hash: "f64f2b21f69a77cf0a67a8d5cb252d5756823e96", message: "🔒 Z10Z68 enforce agent owners" }
 comments:
   - { author: "DOCS", body: "Verified: py_compile redmine backend; task lint clean; owners now CODER; README/docs split between quickstart and full reference." }
+  - { author: "DOCS", body: "Verified: py_compile agentctl/redmine; lint clean. Enforced known-agent owners in task flows/docs." }
 doc_version: 2
 doc_updated_at: "2026-01-11T09:15:44+00:00"
 doc_updated_by: "agentctl"
