@@ -1,11 +1,14 @@
 ---
 id: "202601111125-KZKBQ7"
 title: "Normalize Redmine owners to agent"
-status: "TODO"
+status: "DONE"
 priority: "low"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "ownership"]
+commit: { hash: "06b37cfa276ad12ffb3b691248f750a2f873dbb2", message: "♻️ KZKBQ7 fill task doc sections" }
+comments:
+  - { author: "CODER", body: "Verified: owner mapping now uses configured agent (default REDMINE); updated six tasks to REDMINE owner; ran python -m py_compile .codex-swarm/backends/redmine/backend.py." }
 doc_version: 2
 doc_updated_at: "2026-01-11T11:40:17+00:00"
 doc_updated_by: "agentctl"
