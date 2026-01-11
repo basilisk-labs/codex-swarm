@@ -3,7 +3,7 @@ id: "202601051417-P7AMW3"
 title: "Remove Via Mentis ownership references"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: ["cleanup", "policy"]
 commit: { hash: "944d0b90f177d0515866112cfb2b2a037ff6dccd", message: "🧹 P7AMW3 neutralize task owners" }

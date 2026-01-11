@@ -3,7 +3,7 @@ id: "202601041253-0001T"
 title: "Agentctl quickstart + docs pointer"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

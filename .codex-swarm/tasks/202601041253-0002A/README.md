@@ -3,7 +3,7 @@ id: "202601041253-0002A"
 title: "Unify workflow artifact layout (single per-task folder)"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

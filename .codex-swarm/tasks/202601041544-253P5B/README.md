@@ -3,7 +3,7 @@ id: "202601041544-253P5B"
 title: "Load .env for Redmine settings"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

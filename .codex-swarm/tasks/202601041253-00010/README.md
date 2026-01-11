@@ -3,7 +3,7 @@ id: "202601041253-00010"
 title: "Stylize README with icons and ASCII art"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

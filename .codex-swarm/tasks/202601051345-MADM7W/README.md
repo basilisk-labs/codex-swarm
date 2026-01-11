@@ -3,7 +3,7 @@ id: "202601051345-MADM7W"
 title: "Suffix-only commit policy, cleanup, and English-only text"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: ["workflow", "cleanup", "policy"]
 commit: { hash: "c9a25a5a7d02119017ef6fff74de6d1d63d29b7e", message: "🧹 MADM7W suffix-only commit policy" }

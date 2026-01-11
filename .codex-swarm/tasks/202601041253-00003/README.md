@@ -3,7 +3,7 @@ id: "202601041253-00003"
 title: "Move tasks data into .AGENTS/TASKS.json"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

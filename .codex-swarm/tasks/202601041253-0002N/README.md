@@ -3,7 +3,7 @@ id: "202601041253-0002N"
 title: "agentctl work start: idempotent scaffold"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

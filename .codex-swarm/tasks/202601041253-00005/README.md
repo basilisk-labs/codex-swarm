@@ -3,7 +3,7 @@ id: "202601041253-00005"
 title: "Document commit workflow in README"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

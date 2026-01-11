@@ -1,7 +1,7 @@
 # Documentation Index
 
 ## Purpose
-This is the entry point for Codex Swarm documentation. Use it to find the right guide quickly and understand the recommended reading order.
+This is the entry point for Codex Swarm documentation. The root `README.md` is a lightweight quickstart for first-time users; use this page when you need the full guide and reading order.
 
 ## Document Map (Suggested Reading Order)
 1. Overview: [`01-overview.md`](01-overview.md)

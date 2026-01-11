@@ -3,7 +3,7 @@ id: "202601041253-0000D"
 title: "Align agent prompts with GPT-5.1 guide"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

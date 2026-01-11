@@ -3,7 +3,7 @@ id: "202601041311-D7Q7D"
 title: "Fix frontmatter parsing and commit id rules"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

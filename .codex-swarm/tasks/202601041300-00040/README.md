@@ -3,7 +3,7 @@ id: "202601041300-00040"
 title: "tasks.html kanban viewer with local server"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

@@ -3,7 +3,7 @@ id: "202601041331-Q11MC"
 title: "Prune legacy paths and optimize agentctl"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

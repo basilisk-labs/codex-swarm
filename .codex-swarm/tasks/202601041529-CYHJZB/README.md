@@ -3,7 +3,7 @@ id: "202601041529-CYHJZB"
 title: "Redmine sync: enrich metadata"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

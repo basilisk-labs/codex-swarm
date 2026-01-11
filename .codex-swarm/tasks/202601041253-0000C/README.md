@@ -3,7 +3,7 @@ id: "202601041253-0000C"
 title: "Generalize AGENTS.md to remove agent-specific guidance"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

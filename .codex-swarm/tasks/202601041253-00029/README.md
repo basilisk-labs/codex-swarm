@@ -3,7 +3,7 @@ id: "202601041253-00029"
 title: "Reduce integrate noise: auto-sync PR meta head_sha"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

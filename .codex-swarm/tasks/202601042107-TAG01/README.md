@@ -3,7 +3,7 @@ id: "202601042107-TAG01"
 title: "Clarify planner task tags + deps"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

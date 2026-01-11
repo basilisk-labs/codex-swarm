@@ -3,7 +3,7 @@ id: "202601041253-0000Q"
 title: "Add Spanish README translation"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

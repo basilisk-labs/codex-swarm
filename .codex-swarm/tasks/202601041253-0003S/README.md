@@ -3,7 +3,7 @@ id: "202601041253-0003S"
 title: "agentctl: preserve frontmatter on scaffold overwrite"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

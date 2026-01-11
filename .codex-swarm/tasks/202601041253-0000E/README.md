@@ -3,7 +3,7 @@ id: "202601041253-0000E"
 title: "Document Cursor + Codex local workflow in AGENTS.md"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

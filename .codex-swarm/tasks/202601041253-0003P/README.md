@@ -3,7 +3,7 @@ id: "202601041253-0003P"
 title: "Update clean.sh for new structure"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

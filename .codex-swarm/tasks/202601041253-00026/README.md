@@ -3,7 +3,7 @@ id: "202601041253-00026"
 title: "agentctl guard commit: add --auto-allow"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

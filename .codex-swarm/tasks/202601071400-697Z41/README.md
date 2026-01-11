@@ -3,7 +3,7 @@ id: "202601071400-697Z41"
 title: "Standardize task README format + agentctl-only updates"
 status: "TODO"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 doc_version: 2

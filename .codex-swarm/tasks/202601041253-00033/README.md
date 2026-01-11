@@ -3,7 +3,7 @@ id: "202601041253-00033"
 title: "Fill T-096 artifact and enforce doc completion"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

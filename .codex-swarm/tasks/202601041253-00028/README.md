@@ -3,7 +3,7 @@ id: "202601041253-00028"
 title: "agentctl task add: default depends_on to []"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

@@ -3,7 +3,7 @@ id: "202601041253-00002"
 title: "Restructure agent registry into JSON files"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

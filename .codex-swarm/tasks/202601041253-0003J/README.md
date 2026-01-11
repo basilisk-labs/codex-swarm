@@ -3,7 +3,7 @@ id: "202601041253-0003J"
 title: "agentctl: migrate workspace paths to tasks/ + PR artifacts"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

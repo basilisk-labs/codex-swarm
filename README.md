@@ -11,7 +11,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/basilisk-labs/codex-swarm.svg)](https://github.com/basilisk-labs/codex-swarm/commits/main)
 [![Stars](https://img.shields.io/github/stars/basilisk-labs/codex-swarm.svg?style=social)](https://github.com/basilisk-labs/codex-swarm/stargazers)
 
-Codex Swarm turns your local IDE + OpenAI Codex plugin into a predictable multi-agent workflow. It fixes the “just chat with the model” chaos by adding a small, opinionated layer: JSON-defined agents, a shared task backlog, and commit rules so every change is planned and traceable. There is no separate runner or daemon—everything lives in this repo and flows through the plugin you already use.
+Codex Swarm turns your local IDE + OpenAI Codex plugin into a predictable multi-agent workflow. It fixes the “just chat with the model” chaos by adding a small, opinionated layer: JSON-defined agents, a shared task backlog, and commit rules so every change is planned and traceable. There is no separate runner or daemon—everything lives in this repo and flows through the plugin you already use. If you are here for the first time, use the quick steps below; the `docs/` folder holds the full reference.
 
 **Quick links:** `docs/README.md` · `docs/03-setup.md` · `docs/05-workflow.md` · `docs/09-commands.md` · `docs/10-troubleshooting.md`
 
@@ -27,45 +27,23 @@ Codex Swarm turns your local IDE + OpenAI Codex plugin into a predictable multi-
 
 ## Getting Started
 
-> Quickstart: run `python .codex-swarm/agentctl.py quickstart` to see the short setup checklist.
+If you just want to get it running, do these three steps:
 
-Prerequisites:
-- OpenAI Codex plugin (Cursor / VS Code / JetBrains) configured for your repo
-- Git and Python 3.10+ installed locally
+1) Clone and open the repo:
+```bash
+git clone https://github.com/basilisk-labs/codex-swarm.git
+cd codex-swarm
+```
+2) Sanity-check your setup:
+```bash
+python .codex-swarm/agentctl.py quickstart
+```
+3) In your IDE chat, tell ORCHESTRATOR the goal (e.g., “Add a new agent to summarize PRs”). The swarm will plan, ask approval, and guide the next commands.
 
-### Install and first run (newcomer-friendly)
-
-1. Clone the repo and open it in your IDE:
-   ```bash
-   git clone https://github.com/basilisk-labs/codex-swarm.git
-   cd codex-swarm
-   ```
-
-2. Run the quickstart checklist to confirm your environment:
-   ```bash
-   python .codex-swarm/agentctl.py quickstart
-   ```
-
-3. Start in your IDE chat:
-   - Simply describe a high-level goal in plain language (what you want done and why).
-   - Example: “Keep CHANGELOG.md in sync with merged PRs” or “Add a new agent to summarize PRs.”
-   - The ORCHESTRATOR turns that into a concrete plan, assigns agents (PLANNER/CODER/TESTER/DOCS/REVIEWER/INTEGRATOR), and asks for approval.
-
-4. Confirm task tracking is wired up:
-   ```bash
-   python .codex-swarm/agentctl.py task list
-   python .codex-swarm/agentctl.py task show 202601031816-7F3K2Q
-   ```
-   - The canonical task source depends on the active backend (`local` or `redmine`).
-   - Use `python .codex-swarm/agentctl.py task lint` or `--lint` on read-only commands to validate the export; writes auto-lint.
-
-5. Optional (clean slate for reuse):
-   - Run `./clean.sh` to remove framework-development artifacts and reinitialize git, leaving only the minimal “runtime” files needed to reuse Codex Swarm as your own local project.
-   - Rerun the quickstart afterwards if you want a fresh sanity check.
-
-Documentation:
-- Start at `docs/README.md` for the reading order and document map.
-- Use the Docs index below to jump to specific guides.
+If you need details or troubleshooting, jump into `docs/README.md` for the full reading order. Quick checks:
+- Task status: `python .codex-swarm/agentctl.py task list`
+- Lint snapshot: `python .codex-swarm/agentctl.py task lint`
+- Optional reset for reuse: `./clean.sh` (removes repo-specific artifacts; rerun quickstart afterwards)
 
 ## Example: auto-doc for a tiny refactor
 

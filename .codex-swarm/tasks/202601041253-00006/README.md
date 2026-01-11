@@ -3,7 +3,7 @@ id: "202601041253-00006"
 title: "Add Agent Creator workflow"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

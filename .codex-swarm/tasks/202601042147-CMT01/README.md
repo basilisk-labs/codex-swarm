@@ -3,7 +3,7 @@ id: "202601042147-CMT01"
 title: "Clarify commit message suffix usage"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null

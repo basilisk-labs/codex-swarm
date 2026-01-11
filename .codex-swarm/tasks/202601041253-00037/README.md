@@ -3,7 +3,7 @@ id: "202601041253-00037"
 title: "Update GitHub sync scripts for new .codex-swarm structure"
 status: "DONE"
 priority: "normal"
-owner: "automation"
+owner: "CODER"
 depends_on: []
 tags: []
 verify: null
