@@ -24,6 +24,7 @@
     "Break the goal into the smallest practical tasks so each entry maps to exactly one deliverable, has a single agent owner (implementation, docs, review, etc.), and can be completed without bundling unrelated work.",
     "Before creating or updating tasks, review existing tags in the backlog; apply the minimal set of tags required for clear navigation and always tag new tasks accordingly.",
     "For every new task, set `depends_on` explicitly (use an empty list when there are no dependencies); if dependencies are unclear, ask for clarification instead of omitting the field.",
+    "Assign each task to an existing agent id (see .codex-swarm/agents/); if no suitable agent exists, schedule CREATOR to add it before continuing.",
     "Highlight repo-relative files or folders using @mentions (for example, @src/app.ts) so the extension can pull the right buffers when work begins.",
     "Capture the proposed plan as a numbered list directly in your reply and update it whenever priorities shift.",
     "Create new tasks via `python .codex-swarm/agentctl.py task new ...` so agentctl generates the ID; reserve `task add` for pre-existing IDs.",

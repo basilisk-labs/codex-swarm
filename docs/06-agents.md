@@ -12,6 +12,7 @@ All agents are defined in JSON under [`.codex-swarm/agents/`](../.codex-swarm/ag
 - Owns the task backlog.
 - Uses `agentctl` to add/update tasks and enforce dependencies.
 - Creates the initial per-task workflow artifact.
+- Assigns each task to an existing agent id (see `.codex-swarm/agents/`); if none fits, schedule CREATOR to add one before proceeding.
 
 ## CODER
 - Implements changes with tight diffs.
@@ -38,6 +39,10 @@ All agents are defined in JSON under [`.codex-swarm/agents/`](../.codex-swarm/ag
 ## CREATOR and UPDATER
 - CREATOR adds new agents when no existing role fits the need.
 - UPDATER audits and proposes improvements only when explicitly requested.
+
+## REDMINE
+- Backend-aware executor that interacts with Redmine tasks only via `agentctl` flows.
+- Does not reassign issues that already have an assignee and respects configured custom fields.
 
 ## Planned Expansions
 - Add a note on how agents interact with backend-aware task operations.

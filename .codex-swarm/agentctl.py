@@ -1603,6 +1603,22 @@ def load_agents_index() -> Set[str]:
     return ids
 
 
+def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
+    owner_upper = str(owner or "").strip().upper()
+    if not owner_upper:
+        die("owner must be non-empty", code=2)
+    extras = {"HUMAN", "ORCHESTRATOR"}
+    known = load_agents_index()
+    if owner_upper in extras or allow_missing_agents:
+        return
+    if known and owner_upper not in known:
+        die(
+            "Owner must be an existing agent id. "
+            "If a new agent is required, create it via CREATOR first.",
+            code=2,
+        )
+
+
 def lint_tasks_json() -> Dict[str, List[str]]:
     errors: List[str] = []
     warnings: List[str] = []
@@ -1656,7 +1672,7 @@ def lint_tasks_json() -> Dict[str, List[str]]:
             errors.append(f"{task_id}: owner must be a non-empty string when present")
         owner_upper = str(owner or "").strip().upper()
         if owner_upper and known_agents and owner_upper not in known_agents and owner_upper not in {"HUMAN", "ORCHESTRATOR"}:
-            warnings.append(f"{task_id}: owner {owner_upper!r} is not a known agent id")
+            errors.append(f"{task_id}: owner {owner_upper!r} is not a known agent id")
 
         tags = task.get("tags")
         if tags is not None:
@@ -2009,6 +2025,7 @@ def cmd_task_new(args: argparse.Namespace) -> None:
     normalized_depends_on = list(
         dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
     )
+    validate_owner(args.owner)
     task_id = generate_task_id_for(existing_ids, length=args.id_length)
     task: Dict = {
         "id": task_id,
@@ -2044,6 +2061,7 @@ def cmd_task_update(args: argparse.Namespace) -> None:
     if args.priority is not None:
         task["priority"] = args.priority
     if args.owner is not None:
+        validate_owner(args.owner)
         task["owner"] = args.owner
 
     if args.replace_tags:
