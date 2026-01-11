@@ -56,11 +56,17 @@ SESSION.headers.update(
 def load_tasks() -> list[dict[str, Any]]:
     if not TASKS_PATH.exists():
         raise SystemExit("Missing .codex-swarm/tasks.json. Run `python3 .codex-swarm/agentctl.py task export` first.")
-    data = cast(dict[str, Any], json.loads(TASKS_PATH.read_text()))
+    data = cast(dict[str, Any], json.loads(TASKS_PATH.read_text(encoding="utf-8")))
     tasks = data.get("tasks")
     if not isinstance(tasks, list):
         raise TypeError("tasks.json missing tasks list")
     return cast(list[dict[str, Any]], tasks)
+
+
+def coerce_str_list(value: object) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [item.strip() for item in value if isinstance(item, str) and item.strip()]
 
 
 def build_labels(task: dict[str, Any]) -> list[str]:
@@ -71,8 +77,8 @@ def build_labels(task: dict[str, Any]) -> list[str]:
     labels.append(f"priority:{task.get('priority', 'med')}")
     labels.append(f"owner:{task.get('owner', 'unknown')}")
 
-    labels.extend(task.get("tags", []))
-    return labels
+    labels.extend(coerce_str_list(task.get("tags")))
+    return sorted(set(labels))
 
 
 def build_title(task: dict[str, Any]) -> str:
@@ -91,8 +97,13 @@ def build_body(task: dict[str, Any]) -> str:
     lines.append(f"- Status: `{task['status']}`")
     lines.append(f"- Priority: `{task.get('priority', 'med')}`")
     lines.append(f"- Owner: `{task.get('owner', 'unknown')}`")
-    tags = ", ".join(task.get("tags", [])) or "none"
+    tags = ", ".join(coerce_str_list(task.get("tags"))) or "none"
     lines.append(f"- Tags: `{tags}`")
+    depends_on = ", ".join(coerce_str_list(task.get("depends_on"))) or "none"
+    lines.append(f"- Depends on: `{depends_on}`")
+    verify_cmds = coerce_str_list(task.get("verify"))
+    if verify_cmds:
+        lines.append(f"- Verify: `{'; '.join(verify_cmds)}`")
 
     commit = task.get("commit")
     if isinstance(commit, dict):
@@ -289,6 +300,12 @@ def set_project_status(
     """
     option_id = options_by_name.get(status_name)
     if not option_id:
+        status_lower = status_name.lower()
+        for name, option in options_by_name.items():
+            if name.lower() == status_lower:
+                option_id = option
+                break
+    if not option_id:
         print(f"[WARN] Status option '{status_name}' not found in project; skip")
         return
 
@@ -320,10 +337,10 @@ def set_project_status(
 
 
 STATUS_MAP = {
-    "TODO": "TODO",
-    "DOING": "DOING",
-    "BLOCKED": "BLOCKED",
-    "DONE": "DONE",
+    "TODO": "Todo",
+    "DOING": "In Progress",
+    "BLOCKED": "Blocked",
+    "DONE": "Done",
 }
 
 

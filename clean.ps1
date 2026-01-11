@@ -57,7 +57,6 @@ $pathsToRemove = @(
   "CONTRIBUTING.md",
   "CODE_OF_CONDUCT.md",
   "GUIDELINE.md",
-  "viewer.sh"
 )
 
 foreach ($path in $pathsToRemove) {

@@ -49,7 +49,6 @@ rm -rf \
   CONTRIBUTING.md \
   CODE_OF_CONDUCT.md \
   GUIDELINE.md \
-  viewer.sh \
   clean.ps1
 
 # Reset local task storage while keeping the framework task directory.
