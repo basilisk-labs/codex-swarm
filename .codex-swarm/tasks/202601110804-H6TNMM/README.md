@@ -1,11 +1,14 @@
 ---
 id: "202601110804-H6TNMM"
 title: "Remove legacy compatibility and backfill commit metadata"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["cleanup", "agentctl", "tasks"]
+commit: { hash: "22de83cff2560324e36b4904e559141b1bef206b", message: "✅ H6TNMM backfill commit metadata export" }
+comments:
+  - { author: "CODER", body: "Verified: task lint passes after commit backfill; legacy branch parsing removed per request." }
 doc_version: 2
 doc_updated_at: "2026-01-11T08:05:20+00:00"
 doc_updated_by: "agentctl"
