@@ -11,6 +11,9 @@ comments:
   - { author: "INTEGRATOR", body: "Verified: batch writes, caching, JSON errors, lazy lint, and logging flags implemented." }
   - { author: "INTEGRATOR", body: "Verified: documentation updated for lint/flags and agent guidance." }
   - { author: "INTEGRATOR", body: "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
 dirty: false
 redmine_id: 276
@@ -55,3 +58,4 @@ redmine_id: 276
 - `.codex-swarm/backends/local/backend.py`: add write_tasks support.
 - `.codex-swarm/agentctl.md`: document new flags.
 <!-- END AUTO SUMMARY -->
+

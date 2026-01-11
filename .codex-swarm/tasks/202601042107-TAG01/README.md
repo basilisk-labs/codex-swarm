@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "a13b7c8bf9ce6143bad33fb58ac0fed49089c83c", message: "✅ P7AMW3 close task" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible."
 dirty: false
 id_source: "custom"

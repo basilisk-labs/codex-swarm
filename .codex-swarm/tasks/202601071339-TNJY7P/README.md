@@ -9,6 +9,9 @@ tags: ["docs"]
 commit: { hash: "918e384d381c85c237c936bde01954fa7a193268", message: "🪄 TNJY7P normalize diagram wording: update export label in README sequence diagram; align task export phrasing" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Align README diagrams and badges with 'task export' wording, ensuring tasks.json references are consistent and minimal."
 ---
 ## Summary

@@ -9,6 +9,9 @@ tags: ["agents", "docs"]
 commit: { hash: "3ad71a3bcebb400acf2b8204c490415b406511b4", message: "🧩 3XK6VD centralize commit format: define canonical format in agentctl; replace per-agent format rules with agentctl reference; align AGENTS commit rule to agentctl" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Make agentctl.md the single source of truth for commit format; update AGENTS.md + agent JSONs to reference agentctl instead of duplicating detailed rules/examples. Update any remaining commit examples to follow the new detailed-changelog format."
 ---
 ## Summary

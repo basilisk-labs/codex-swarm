@@ -7,6 +7,9 @@ owner: "DOCS"
 depends_on: ["202601041253-0003K"]
 tags: []
 commit: { hash: "25a6c054b1b513003186c6b337437547c6fb4a79", message: "Legacy completion (backfill)" }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references."
 dirty: false
 redmine_id: 270
@@ -43,3 +46,4 @@ redmine_id: 270
 
 - Removed `.codex-swarm/workspace/` from the repo.
 - Updated references to `.codex-swarm/tasks/` in agent prompts, docs, and scripts.
+

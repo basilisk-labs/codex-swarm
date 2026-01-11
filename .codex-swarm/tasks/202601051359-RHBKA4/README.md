@@ -7,6 +7,9 @@ owner: "automation"
 depends_on: []
 tags: ["github", "docs"]
 commit: { hash: "a91551597ef49af43b45d2fe57814a0b378450b9", message: "🛠️ RHBKA4 fix github sync parsing" }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Handle commit fields stored as strings in sync_tasks.py and fix the Mermaid sequence diagram participant list so it renders."
 ---
 ## Summary

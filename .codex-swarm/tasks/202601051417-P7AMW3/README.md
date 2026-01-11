@@ -7,6 +7,9 @@ owner: "automation"
 depends_on: []
 tags: ["cleanup", "policy"]
 commit: { hash: "944d0b90f177d0515866112cfb2b2a037ff6dccd", message: "🧹 P7AMW3 neutralize task owners" }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Replace Via Mentis owner values with a neutral owner label across tasks and export the updated snapshot."
 ---
 ## Summary

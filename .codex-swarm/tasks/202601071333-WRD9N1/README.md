@@ -9,6 +9,9 @@ tags: ["docs", "cleanup"]
 commit: { hash: "c8cc07f9a2424f20a7f2d062494519761f7bf2a5", message: "🧹 WRD9N1 reduce snapshot wording in docs: switch snapshot phrasing to export/view; update viewer and export descriptions; keep tasks.json references only where needed" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Update README, docs, and CONTRIBUTING to minimize repeated 'snapshot/tasks.json' phrasing, while preserving rules: do not edit exports by hand and use agentctl for task export."
 ---
 ## Summary

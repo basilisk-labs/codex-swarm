@@ -14,6 +14,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly.",
       "dirty": false,
       "id_source": "custom",
@@ -33,6 +36,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
       "dirty": false,
       "id_source": "custom",
@@ -52,6 +58,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ensure task state is available in a machine-readable JSON file for Codex automation.",
       "dirty": false,
       "id_source": "custom",
@@ -71,6 +80,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Document the rule that every plan item must end with its own git commit for traceability.",
       "dirty": false,
       "id_source": "custom",
@@ -90,6 +102,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Expand the README with details on emoji commits and atomic task tracking.",
       "dirty": false,
       "id_source": "custom",
@@ -109,6 +124,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Describe how new specialist agents are proposed, reviewed, and added to the registry.",
       "dirty": false,
       "id_source": "custom",
@@ -128,6 +146,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Tighten the instructions around writing meaningful, emoji-prefixed commit messages.",
       "dirty": false,
       "id_source": "custom",
@@ -147,6 +168,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a quick-start tour of key files and directories so contributors know where to work.",
       "dirty": false,
       "id_source": "custom",
@@ -166,6 +190,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED.",
       "dirty": false,
       "id_source": "custom",
@@ -186,6 +213,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list.",
       "dirty": false,
       "redmine_id": 290
@@ -204,6 +234,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Review the end-to-end authoring flow and capture improvement ideas inside the docs.",
       "dirty": false,
       "id_source": "custom",
@@ -223,6 +256,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions.",
       "dirty": false,
       "id_source": "custom",
@@ -242,6 +278,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update every agent spec so prompts match the GPT-5.1 best practices.",
       "dirty": false,
       "id_source": "custom",
@@ -261,6 +300,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add environment assumptions for local-only workflows without remote runtimes.",
       "dirty": false,
       "id_source": "custom",
@@ -280,6 +322,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools.",
       "dirty": false,
       "id_source": "custom",
@@ -300,6 +345,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Strip references to unsupported helper tools to keep instructions aligned with the local stack.",
       "dirty": false,
       "redmine_id": 296
@@ -319,6 +367,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Reword prompts so agents do not assume access to external search or commands.",
       "dirty": false,
       "redmine_id": 297
@@ -337,6 +388,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Trim redundant English-language instructions and keep the doc crisp.",
       "dirty": false,
       "id_source": "custom",
@@ -356,6 +410,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Introduce a translator agent that respects glossary entries when localizing README content.",
       "dirty": false,
       "id_source": "custom",
@@ -375,6 +432,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Provide a Spanish version of the README while keeping glossary terms consistent.",
       "dirty": false,
       "id_source": "custom",
@@ -394,6 +454,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Teach the translator agent how to maintain glossary metadata and usage counts automatically.",
       "dirty": false,
       "id_source": "custom",
@@ -413,6 +476,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a Russian localization of the README plus supporting glossary entries.",
       "dirty": false,
       "id_source": "custom",
@@ -432,6 +498,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Deliver another Spanish README update incorporating the refined glossary process.",
       "dirty": false,
       "id_source": "custom",
@@ -458,6 +527,9 @@
           "body": "Updated the TRANSLATOR workflow and converted GLOSSARY.json so languages own their preferred terms and descriptions."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Restructure the glossary so English remains canonical while localized entries store metadata per language.",
       "dirty": false,
       "redmine_id": 304
@@ -482,6 +554,9 @@
           "body": "Updated AGENTS.md and README.md so commit messages start with meaningful emojis referencing the finished plan item."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Clarify how commits should start with emojis and summarize completed plan items.",
       "dirty": false,
       "redmine_id": 305
@@ -500,6 +575,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ensure the PLANNER splits every request into single-owner tasks with unique commits.",
       "dirty": false,
       "id_source": "custom",
@@ -519,6 +597,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested.",
       "dirty": false,
       "id_source": "custom",
@@ -538,6 +619,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments.",
       "dirty": false,
       "id_source": "custom",
@@ -557,6 +641,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps.",
       "dirty": false,
       "id_source": "custom",
@@ -576,6 +663,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request.",
       "dirty": false,
       "id_source": "custom",
@@ -601,6 +691,9 @@
           "body": "README now mentions the UPDATER optimization agent and lifecycle so the doc mirrors the current codebase."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Refresh README.md so it describes the existing agents (including UPDATER), workflow rules, and repository layout that reflect the latest codebase.",
       "dirty": false,
       "redmine_id": 311
@@ -619,6 +712,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact.",
       "dirty": false,
       "id_source": "custom",
@@ -638,6 +734,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board.",
       "dirty": false,
       "id_source": "custom",
@@ -664,6 +763,9 @@
           "body": "Confirmed the label prefixes are bold while the italics remain on the suffix, so the board matches the request."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Render the `_Status`, `_Description`, and `_Commit` prefixes as bold text while leaving their italic suffixes intact.",
       "dirty": false,
       "redmine_id": 314
@@ -688,6 +790,9 @@
           "body": "Confirmed the description label is no longer italicized yet still stands out via bold styling."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Render the description label without italics so only the bold text shows.",
       "dirty": false,
       "redmine_id": 315
@@ -713,6 +818,9 @@
           "body": "Confirmed the summary section is now a table with playful emoji notes and the `_Status` italic text stays intact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is.",
       "dirty": false,
       "redmine_id": 316
@@ -737,6 +845,9 @@
           "body": "Added CONTRIBUTING.md with the requested contribution guidance."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Document the recommended contribution workflow and behavioral expectations for Codex Swarm.",
       "dirty": false,
       "redmine_id": 317
@@ -761,6 +872,9 @@
           "body": "Extended README with code breakdown and local dev steps (download zip, run clean.sh)."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ensure README describes the codebase and includes local development steps (download Zip, run clean.sh).",
       "dirty": false,
       "redmine_id": 318
@@ -785,6 +899,9 @@
           "body": "clean.sh now removes CONTRIBUTING.md and deletes itself after repository cleanup."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo.",
       "dirty": false,
       "redmine_id": 319
@@ -809,6 +926,9 @@
           "body": "Refreshed README intro, added a concrete Getting Started path with clean.sh guidance, an example session, and a Limitations/Non-goals section."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a focused Getting Started path, example session log, and limitations/non-goals to README with a simpler intro.",
       "dirty": false,
       "redmine_id": 320
@@ -828,6 +948,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework.",
       "dirty": false,
       "redmine_id": 321
@@ -846,6 +969,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear.",
       "dirty": false,
       "id_source": "custom",
@@ -871,6 +997,9 @@
           "body": ".gitignore now ignores `.env` variants following the cleanup."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ignore `.env*` so sensitive environment overrides stay out of the repo.",
       "dirty": false,
       "redmine_id": 323
@@ -895,6 +1024,9 @@
           "body": "Recorded completion of sync_tasks.py so tasks.json stays aligned with GitHub Issues."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ensure the local tasks.json reflects the completed synchronization script and the GitHub Issues mirror.",
       "dirty": false,
       "redmine_id": 324
@@ -919,6 +1051,9 @@
           "body": "Workflow file exists and ensures tasks.json is kept in sync via GitHub Actions."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Document the new `.github/workflows/sync-tasks.yml` workflow that keeps tasks.json and GitHub Issues synchronized.",
       "dirty": false,
       "redmine_id": 325
@@ -944,6 +1079,9 @@
           "body": "ProjectV2 integration is wired up, and the workflow now provides the project number."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion.",
       "dirty": false,
       "redmine_id": 326
@@ -968,6 +1106,9 @@
           "body": "Added CODE_OF_CONDUCT.md covering standards, unacceptable behaviors, and reporting guidance."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles.",
       "dirty": false,
       "redmine_id": 327
@@ -993,6 +1134,9 @@
           "body": "Removed the markdown task board and updated docs/scripts; verified the repo contains no remaining references to it."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Remove references to the markdown task board and stop generating it; tasks.json remains the single source of truth.",
       "dirty": false,
       "redmine_id": 328
@@ -1018,6 +1162,9 @@
           "body": "Added tasks.html as a local-first viewer for tasks.json (auto-load over HTTP, plus file picker/drag-drop when opened via file://)."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a standalone HTML interface to view and filter tasks.json (search, status/owner/priority/tag filters, sorting, and file:// fallback via file picker).",
       "dirty": false,
       "redmine_id": 329
@@ -1036,6 +1183,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata).",
       "dirty": false,
       "id_source": "custom",
@@ -1074,6 +1224,9 @@
           "body": "Verified: scripts/tasks.py removed; README.md and GUIDELINE.md updated to agentctl-based task lifecycle (ready/start/block/task/verify/guard/finish); agentctl task lint passes; Limitations: existing CODEX owner warnings remain."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Delete scripts/tasks.py and update README.md + any other docs/configs that mention the old tasks.py/status-board flow, replacing it with the agentctl CLI workflow (ready/start/block/task/verify/guard/finish).",
       "dirty": false,
       "redmine_id": 331
@@ -1106,6 +1259,9 @@
           "body": "Verified: agent registry lists TESTER, JSON prompts validate, and tasks.json lints clean (workflow now defaults to CODER -> TESTER -> REVIEWER for dev work)."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a new TESTER specialist agent responsible for adding automated test coverage for code changes. Wire the workflow so development-oriented plans always schedule TESTER after CODER before REVIEWER, and update CODER instructions to explicitly hand off to TESTER after implementation/self-check.\\\\n\\\\nAcceptance criteria:\\\\n- New @.AGENTS/TESTER.json exists (id=TESTER) with clear inputs/outputs/permissions/workflow for adding/maintaining tests.\\\\n- @.AGENTS/CODER.json explicitly hands off to TESTER for test coverage after implementation and local checks.\\\\n- @AGENTS.md updates ORCHESTRATOR rules so dev tasks plan CODER -> TESTER -> REVIEWER by default (unless justified).\\\\n- @README.md reflects the new agent in the lineup and repository layout.\\\\n\\\\nNotes:\\\\n- Prefer existing test framework; if none, propose a dedicated task to introduce test infrastructure rather than inventing one ad-hoc.",
       "dirty": false,
       "redmine_id": 332
@@ -1124,6 +1280,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Change DOCS agent behavior so it runs before finishing any task and produces an atomic documentation artifact under @docs/workflow (e.g., @docs/workflow/T-025.md) describing what was implemented. Update orchestration guidance so plans include DOCS before REVIEWER marks tasks DONE.\\\\n\\\\nAcceptance criteria:\\\\n- @docs/workflow directory exists and is committed (with a short README describing artifact convention).\\\\n- @.AGENTS/DOCS.json instructs producing @docs/workflow/T-###.md artifacts (English, atomic, task-scoped).\\\\n- @AGENTS.md ORCHESTRATOR guidance schedules DOCS before finishing any task (DOCS before REVIEWER finish).\\\\n\\\\nNotes:\\\\n- Artifacts must be task-ID named, contain summary + changed files + verification commands (when available).",
       "dirty": false,
       "id_source": "custom",
@@ -1157,6 +1316,9 @@
           "body": "Verified: clean.sh now removes docs/ and other framework-development artifacts (tasks.html, .DS_Store) during cleanup; script syntax checks pass and tasks.json lints clean."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update @clean.sh so cleanup removes framework-development artifacts (including @docs/) when preparing a reusable snapshot.\\\\n\\\\nAcceptance criteria:\\\\n- Running clean.sh removes @docs/ and other framework-specific files/directories it currently leaves behind.\\\\n- Script remains idempotent and safe (no unscoped rm outside repo root).",
       "dirty": false,
       "redmine_id": 334
@@ -1190,6 +1352,9 @@
           "body": "Verified: agent workflows now target a minimal 3-phase commit cadence (plan+artifact, implementation, verification/closure) and avoid extra status-only commits; agent registry and tasks lint pass."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update agent workflows so they avoid extra commits beyond what is necessary. Target a default 3-commit cadence per task:\\\\n1) Planning: add the task + create initial workflow artifact @docs/workflow/T-###.md (skeleton/spec).\\\\n2) Implementation: implement the change set (preferably including tests) in a single work commit.\\\\n3) Verification/closure: run tests + review, update the workflow artifact with what was implemented, and mark the task DONE (tasks.json) in one final commit.\\\\n\\\\nAcceptance criteria:\\\\n- @AGENTS.md COMMIT_WORKFLOW reflects the 3-commit default and explicitly discourages extra 'start/status' commits.\\\\n- Agent prompts (.AGENTS/*.json) align: TESTER does not commit by default; DOCS artifacts are committed as part of planning/closure; REVIEWER closes tasks with a single final commit; CODER bundles implementation+tests into one work commit where practical.\\\\n- Existing guardrails (agentctl) remain usable (finish may reference the implementation commit hash).",
       "dirty": false,
       "redmine_id": 335
@@ -1208,6 +1373,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update @README.md to include a short description and a Mermaid diagram (flowchart) showing the default agent workflow and handoffs (ORCHESTRATOR, PLANNER, CODER, TESTER, DOCS, REVIEWER).\\\\n\\\\nAcceptance criteria:\\\\n- README includes a Mermaid flowchart block describing the typical flow (plan -> implement -> test -> docs -> review -> finish).\\\\n- Diagram matches current agent rules (3-phase commits, DOCS artifact before DONE, CODER -> TESTER for dev work).",
       "dirty": false,
       "id_source": "custom",
@@ -1227,6 +1395,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\\\n\\\\nAcceptance criteria:\\\\n- Mermaid block renders on GitHub README view.\\\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits).",
       "dirty": false,
       "id_source": "custom",
@@ -1246,6 +1417,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster.",
       "dirty": false,
       "id_source": "custom",
@@ -1265,6 +1439,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit).",
       "dirty": false,
       "id_source": "custom",
@@ -1294,6 +1471,9 @@
           "body": "Verified: Ran python scripts/agentctl.py task lint and python scripts/agentctl.py agents; confirmed .AGENTS workflows now start with python scripts/agentctl.py quickstart and reference docs/agentctl.md and helper commands."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update .AGENTS/*.json workflows to explicitly reference docs/agentctl.md (via # agentctl quickstart\\n\\n`python scripts/agentctl.py` is the only supported way to inspect/update `tasks.json` (manual edits break the checksum).\\n\\n## Common commands\\n\\n```bash\\n# list/show\\npython scripts/agentctl.py task list\\npython scripts/agentctl.py task show T-123\\n\\n# validate tasks.json (schema/deps/checksum)\\npython scripts/agentctl.py task lint\\n\\n# readiness gate (deps DONE)\\npython scripts/agentctl.py ready T-123\\n\\n# status transitions that require structured comments\\npython scripts/agentctl.py start T-123 --author CODER --body \\\"Start: ... (why, scope, plan, risks)\\\"\\npython scripts/agentctl.py block T-123 --author CODER --body \\\"Blocked: ... (what blocks, next step, owner)\\\"\\n\\n# run per-task verify commands (declared on the task)\\npython scripts/agentctl.py verify T-123\\n\\n# before committing, validate staged allowlist + message quality\\npython scripts/agentctl.py guard commit T-123 -m \\\"✨ T-123 Short meaningful summary\\\" --allow <path-prefix>\\n\\n# if you want a safe wrapper that also runs `git commit`\\npython scripts/agentctl.py commit T-123 -m \\\"✨ T-123 Short meaningful summary\\\" --allow <path-prefix>\\n\\n# when closing a task: mark DONE + attach commit metadata (typically after implementation commit)\\npython scripts/agentctl.py finish T-123 --commit <git-rev> --author REVIEWER --body \\\"Verified: ... (what ran, results, caveats)\\\"\\n```\\n\\n## Ergonomics helpers\\n\\n```bash\\n# find tasks that are ready to start (deps DONE)\\npython scripts/agentctl.py task next\\n\\n# search tasks by text (title/description/tags/comments)\\npython scripts/agentctl.py task search agentctl\\n\\n# scaffold a workflow artifact (docs/workflow/T-###.md)\\npython scripts/agentctl.py task scaffold T-123\\n\\n# suggest minimal --allow prefixes based on staged files\\npython scripts/agentctl.py guard suggest-allow\\npython scripts/agentctl.py guard suggest-allow --format args\\n```\\n\\n## Workflow reminders\\n\\n- `tasks.json` is canonical; do not edit it by hand.\\n- Keep work atomic: one task → one implementation commit (plus planning + closure commits if you use the 3-phase cadence).\\n- Prefer `start/block/finish` over `task set-status`.\\n- Keep allowlists tight: pass only the path prefixes you intend to commit.) and prefer the new helper commands (task next/search/scaffold, guard suggest-allow, commit wrapper) where applicable.",
       "dirty": false,
       "redmine_id": 340
@@ -1323,6 +1503,9 @@
           "body": "Verified: AGENTS.md and REVIEWER workflow now require explicit user approval before the final task-closing commit; task lint and agents registry checks pass."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update agent workflows so that before creating the final closure commit for a task (the commit that marks the task DONE in tasks.json, typically together with docs/workflow/T-###.md updates), the agent must explicitly request user confirmation and wait for approval.\\\\n\\\\nAcceptance criteria:\\\\n- AGENTS.md COMMIT_WORKFLOW states that the final closure commit requires explicit user approval.\\\\n- ORCHESTRATOR guidance includes a pause/confirmation request before the closing commit.\\\\n- REVIEWER workflow requires asking the user before running agentctl finish + committing tasks.json (and any workflow artifact updates).",
       "dirty": false,
       "redmine_id": 341
@@ -1356,6 +1539,9 @@
           "body": "Verified: Ran bash -n clean.sh and python scripts/agentctl.py task lint; docs refreshed and docs/architecture.md added; clean.sh now removes dev artifacts, preserves docs/agentctl.md when present, and recreates checksum-valid tasks.json."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update the repo documentation to match the current codebase and workflow (agentctl-driven tasks, JSON agent registry, commit/verification cadence).\\\\n\\\\nScope:\\\\n- Refresh @README.md, @GUIDELINE.md, @CONTRIBUTING.md, @CODE_OF_CONDUCT.md to reflect current scripts and file layout.\\\\n- Restructure docs where helpful (move deep/auxiliary content into @docs/ and keep root docs as entrypoints with links).\\\\n- Update @clean.sh so it removes framework-development artifacts, leaving only what is necessary to *use* the framework (e.g., @AGENTS.md, @.AGENTS/, @scripts/, @.gitignore, and optionally @docs/agentctl.md).\\\\n\\\\nAcceptance criteria:\\\\n- Root docs are accurate and non-duplicative; links resolve.\\\\n- clean.sh is repo-root scoped, idempotent, and leaves only the minimal runtime files listed above.\\\\n- Verification commands pass.",
       "dirty": false,
       "redmine_id": 342
@@ -1384,6 +1570,9 @@
           "body": "Verified: python scripts/agentctl.py task lint; manual check of tasks.html dependency inspector (lists + SVG graph + navigation)"
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Refresh @tasks.html to be simpler/lighter and clearly show task dependencies.\\n\\nScope:\\n- Update UI styling to a minimal, airy Codex Swarm-branded layout.\\n- Add a dependency inspector that makes it easy to see \\\"depends_on\\\" and reverse dependencies (tasks that depend on the selected task).\\n- Include a small visual graph (SVG) for the selected task to make upstream/downstream relationships obvious.\\n\\nAcceptance criteria:\\n- @tasks.html header is branded as Codex Swarm.\\n- Dependencies are visible both as lists and as a small graph for the selected task.\\n- Clicking a dependency navigates/updates the selection.\\n- No server required: keep file picker + drag/drop fallback for file://.\\n",
       "dirty": false,
       "redmine_id": 343
@@ -1414,6 +1603,9 @@
           "body": "Verified: Ran python scripts/agentctl.py verify T-064 (task lint, agents, quickstart, bash -n clean.sh); framework paths now live under .codex-swarm."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Move all framework-specific artifacts under .codex-swarm (agents + agentctl docs + config), update references/docs, and update clean.sh accordingly.",
       "dirty": false,
       "redmine_id": 344
@@ -1441,6 +1633,9 @@
           "body": "Verified: Ran python scripts/agentctl.py verify T-065 (task lint) and reviewed README/architecture pointer consistency."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Move the full contents of docs/architecture.md into README.md for easier discovery; leave docs/architecture.md as a thin pointer to avoid duplication.",
       "dirty": false,
       "redmine_id": 345
@@ -1470,6 +1665,9 @@
           "body": "Verified: Ran python scripts/agentctl.py task lint; python -m compileall scripts/agentctl.py; checked agentctl branch/pr/integrate help output."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Introduce a branching workflow to enable parallel agent work without tasks.json conflicts: task branch per T-###, required git worktree under .codex-swarm/worktrees, PR-like artifacts under docs/workflow/prs, and an INTEGRATOR role responsible for merge + finish on main.",
       "dirty": false,
       "redmine_id": 346
@@ -1503,6 +1701,9 @@
           "body": "Verified: merged commit 91b3760 on main; pr check and verify T-067 passed; handoff notes captured from PR review."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Implement the stricter branch_pr workflow spec: worktrees under .codex-swarm/worktrees, branch naming task/T-###/<slug>, new branch status, stricter pr open/update/check, integrate dry-run + verify in branch worktree, workflow_mode config in .codex-swarm/swarm.config.json, and stronger finish/guard/verify guardrails + standardized outputs.",
       "dirty": false,
       "redmine_id": 347
@@ -1536,6 +1737,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-068."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add flags to python scripts/agentctl.py verify to reduce manual PR bookkeeping and redundant runs. Acceptance: (1) verify T-### --log PATH appends a timestamped entry per verify command with combined stdout+stderr; (2) --skip-if-unchanged skips when current SHA (prefer PR meta.json head_sha when log path is under docs/workflow/prs/T-###, else git rev-parse HEAD in --cwd) matches last recorded verified SHA; (3) after success, record last_verified_sha and last_verified_at in PR meta.json when available; (4) document the new flow in .codex-swarm/agentctl.md.",
       "dirty": false,
       "redmine_id": 348
@@ -1576,6 +1780,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-069."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a convenience command to append correctly formatted bullets under the '## Handoff Notes' section in docs/workflow/prs/T-###/review.md. Acceptance: (1) python scripts/agentctl.py pr note T-### --author ROLE --body TEXT adds a '- ROLE: TEXT' entry under Handoff Notes; (2) preserves existing content and keeps formatting stable; (3) emits clear errors/fixes when the PR artifact is missing; (4) update .codex-swarm/agentctl.md with the new command.",
       "dirty": false,
       "redmine_id": 349
@@ -1594,6 +1801,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Reduce commit friction by adding --auto-allow to python scripts/agentctl.py guard commit (same behavior as the commit wrapper): infer minimal --allow prefixes from staged files and run the same guard checks. Acceptance: (1) python scripts/agentctl.py guard commit T-### -m MSG --auto-allow works without explicit --allow; (2) keeps existing behavior when --allow is provided; (3) error messages remain actionable; (4) document in .codex-swarm/agentctl.md.",
       "dirty": false,
       "id_source": "custom",
@@ -1624,6 +1834,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/prs/T-071."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update the agent pipeline instructions so every task added to tasks.json includes an explicit depends_on list (use [] when there are no dependencies). Update AGENTS.md schema/docs and PLANNER workflow to require setting dependencies (and to ask for clarification when dependencies are unknown).",
       "dirty": false,
       "redmine_id": 351
@@ -1642,6 +1855,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated).",
       "dirty": false,
       "id_source": "custom",
@@ -1661,6 +1877,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Speed up the pipeline by removing the common integrate warning about stale PR meta head_sha. Acceptance: (1) python scripts/agentctl.py integrate no longer prints \\\"PR meta head_sha differs\\\" in normal usage; (2) integrate uses the actual task branch HEAD SHA for verify and writes it into docs/workflow/prs/T-###/meta.json on main (head_sha + last_verified_sha) so artifacts stay consistent; (3) safe in workflow_mode=branch_pr and never writes to the task branch; (4) meta.json ends up correct after integration.",
       "dirty": false,
       "id_source": "custom",
@@ -1680,6 +1899,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Eliminate duplication between docs/workflow/T-###.md and docs/workflow/prs/T-###/description.md by moving to a single per-task folder layout under docs/workflow/T-###/. New canonical doc: docs/workflow/T-###/README.md. PR artifacts live at docs/workflow/T-###/pr/{meta.json,diffstat.txt,verify.log,review.md}. Update agentctl commands (task scaffold/add, pr open/update/check/note, verify --log, integrate meta sync) to use the new layout, while keeping backward compatibility for the old paths. Migrate existing tracked artifacts (T-055..T-073 and docs/workflow/prs/T-067..T-073) to the new layout and update all docs/agent texts that reference the old pipeline.",
       "dirty": false,
       "id_source": "custom",
@@ -1713,6 +1935,9 @@
           "body": "Verified: Squash-merged task/T-075/work-start; verify will be recorded via agentctl verify log in this closure; PR artifacts + README updated."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a single command to reduce startup friction for a task branch in workflow_mode=branch_pr.\\n\\nAcceptance:\\n- New command: `python scripts/agentctl.py work start T-123 --agent CODER --slug x --worktree`.\\n- Performs the equivalent of:\\n  - `python scripts/agentctl.py branch create T-123 --agent CODER --slug x --worktree`\\n  - `python scripts/agentctl.py pr open T-123 --author CODER --branch task/T-123/x`\\n  - `python scripts/agentctl.py task scaffold T-123` (writes `docs/workflow/T-123/README.md`)\\n- Creates PR artifacts at `docs/workflow/T-123/pr/` (meta/diffstat/verify.log/review.md).\\n- Idempotent with `--reuse`; does not clobber existing artifacts unless `--overwrite` is passed through to scaffold.\\n- Prints clear NEXT steps.\\n- Never writes `tasks.json`.\\n- Update `.codex-swarm/agentctl.md` to document the new command.",
       "dirty": false,
       "redmine_id": 355
@@ -1745,6 +1970,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-076/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Make `agentctl verify` faster by defaulting the log file when a PR artifact exists.\\n\\nAcceptance:\\n- `python scripts/agentctl.py verify T-123` appends to `docs/workflow/T-123/pr/verify.log` when that PR dir exists.\\n- `--log` still overrides.\\n- Supports legacy `docs/workflow/prs/T-123/verify.log` during migration.\\n- `--skip-if-unchanged` continues to work and uses PR `meta.json:head_sha` when the effective log path is under the PR directory.\\n- Update `.codex-swarm/agentctl.md` to document the new default.",
       "dirty": false,
       "redmine_id": 356
@@ -1777,6 +2005,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-077/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\\n\\nAcceptance:\\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\\n- Deletes only when:\\n  - task is `DONE` in `tasks.json`, AND\\n  - `git diff --name-only main...<branch>` is empty.\\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\\n- Never writes `tasks.json`.",
       "dirty": false,
       "redmine_id": 357
@@ -1809,6 +2040,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-078/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Reduce review ping-pong by making `pr check` fail fast on placeholder docs.\\n\\nAcceptance:\\n- `python scripts/agentctl.py pr check T-123` validates `docs/workflow/T-123/README.md` exists and required sections are present and non-placeholder.\\n- Error message points to missing/empty section names.\\n- Supports legacy `docs/workflow/prs/T-123/description.md` during migration.\\n- Update `.codex-swarm/agentctl.md` to reflect the README-based PR doc.",
       "dirty": false,
       "redmine_id": 358
@@ -1827,6 +2061,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Finish migration documentation cleanup.\\n\\nAcceptance:\\n- Update docs so they no longer instruct using `docs/workflow/prs/...` or `docs/workflow/T-###.md` (except clearly marked legacy notes).\\n- Includes at least: `docs/workflow/T-066/README.md`, `docs/workflow/T-067/README.md`, and any other references found via ripgrep.\\n- Do not rewrite historical task text in `tasks.json`; keep changes doc-only.",
       "dirty": false,
       "id_source": "custom",
@@ -1860,6 +2097,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-080/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Reduce manual PR bookkeeping by having `agentctl integrate` refresh the tracked PR artifacts on main.\\n\\nAcceptance:\\n- During `python scripts/agentctl.py integrate T-123 ...` (workflow_mode=branch_pr), after merge it updates:\\n  - `docs/workflow/T-123/pr/diffstat.txt` (recomputed for the task branch vs base), and\\n  - `docs/workflow/T-123/README.md` auto-summary block (between `<!-- BEGIN AUTO SUMMARY -->` / `<!-- END AUTO SUMMARY -->`) using the changed files list.\\n- No writes happen to the task branch; updates are only in the main checkout after merge.\\n- Works with `--merge-strategy squash|merge|rebase`.\\n- Update `.codex-swarm/agentctl.md` to state `integrate` refreshes these artifacts automatically.",
       "dirty": false,
       "redmine_id": 360
@@ -1878,6 +2118,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Speed up branch_pr integration by skipping redundant verify runs when the task branch HEAD SHA is already recorded as verified (via PR meta last_verified_sha or pr/verify.log). Keep --run-verify as a force-rerun escape hatch. Also ensure rebase strategy runs rebase before verify so the verified SHA matches what gets merged.",
       "dirty": false,
       "id_source": "custom",
@@ -1911,6 +2154,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-082/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update root README.md to reflect latest branch_pr workflow and agentctl behavior (integrate auto-refresh artifacts; integrate may skip verify when SHA already verified). Fix Mermaid diagram so it renders correctly on GitHub.",
       "dirty": false,
       "redmine_id": 362
@@ -1942,6 +2188,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-083/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility).",
       "dirty": false,
       "redmine_id": 363
@@ -1974,6 +2223,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-084/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Audit scripts/agentctl.py capabilities and update .codex-swarm/agents/*.json prompts so each agent uses agentctl for any supported operation (tasks.json ops, branch/worktree management, PR artifacts, verify logs, commit guardrails, integrate/cleanup). Only fall back to raw git/shell commands when agentctl has no equivalent.",
       "dirty": false,
       "redmine_id": 364
@@ -1992,6 +2244,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \\\"File already exists\\\" errors now that agents default to work start.",
       "dirty": false,
       "id_source": "custom",
@@ -2022,6 +2277,9 @@
           "body": "Verified: Integrated via squash; verify=ran; pr=docs/workflow/T-086/pr."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a clear, unambiguous definition of workflow_mode values \\\"direct\\\" and \\\"branch_pr\\\" across agent instructions and documentation. Document the operational differences (where work happens, whether task branches/worktrees are required, who can write tasks.json, required PR artifacts under docs/workflow/T-###/pr, and which agent is allowed to integrate/finish). Update AGENTS.md and .codex-swarm/agentctl.md accordingly.",
       "dirty": false,
       "redmine_id": 366
@@ -2048,6 +2306,9 @@
           "body": "Verified: Base branch now pins to local git config (codexswarm.baseBranch); integrate/guard/cleanup use it; no-op integrates fail fast."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "When running Codex Swarm in an existing git repo that is already on a branch, pin that branch into .codex-swarm/swarm.config.json (base_branch) and use it as the base for creating task branches/worktrees and for integration; avoid touching main when base_branch is not main.",
       "dirty": false,
       "redmine_id": 367
@@ -2074,6 +2335,9 @@
           "body": "Verified: tasks/workflow artifact added; clean.sh already includes interactive mode selection + prompt scrubbing."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Record the clean.sh interactive workflow_mode selection + prompt scrubbing feature in tasks.json and add the per-task workflow README artifact.",
       "dirty": false,
       "redmine_id": 368
@@ -2092,6 +2356,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged.",
       "dirty": false,
       "id_source": "custom",
@@ -2111,6 +2378,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit.",
       "dirty": false,
       "id_source": "custom",
@@ -2131,6 +2401,9 @@
         "hash": "aba18e40b2d78fd3e9ebf5cbadfb845069be0b0c",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Append a strict instruction at the end of AGENTS.md requiring that all work starts with the ORCHESTRATOR.",
       "dirty": false,
       "redmine_id": 371
@@ -2149,6 +2422,9 @@
         "hash": "d49f2ce511f3dca9b3a4f1d15e1551d29ac35b0e",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Document commit subject conventions for batch finish in agentctl quickstart.",
       "dirty": false,
       "redmine_id": 372
@@ -2171,6 +2447,9 @@
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs.",
       "dirty": false,
       "redmine_id": 373
@@ -2193,6 +2472,9 @@
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update docs/index.md with a document map, reading order, and links to the new docs set.",
       "dirty": false,
       "redmine_id": 374
@@ -2215,6 +2497,9 @@
           "body": "Verified: docs-only changes; manual review only (no automated checks)."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update README.md and related references so the documentation structure matches the new docs/ files.",
       "dirty": false,
       "redmine_id": 375
@@ -2239,6 +2524,9 @@
           "body": "Verified: docs-only update in agentctl.md and agent JSONs; no tests required."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations.",
       "dirty": false,
       "redmine_id": 376
@@ -2257,6 +2545,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs.",
       "dirty": false,
       "id_source": "custom",
@@ -2276,6 +2567,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually.",
       "dirty": false,
       "id_source": "custom",
@@ -2295,6 +2589,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs.",
       "dirty": false,
       "id_source": "custom",
@@ -2314,6 +2611,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find.",
       "dirty": false,
       "id_source": "custom",
@@ -2334,6 +2634,9 @@
         "hash": "5912c9c7a818350820e56e37830ff34a7daceb87",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation.",
       "dirty": false,
       "redmine_id": 381
@@ -2353,6 +2656,9 @@
         "hash": "0b222dfbd26ac511935b4a3026686a4685280d4f",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ignore literal '[]' and empty strings in --depends-on to avoid invalid dependencies in tasks.json, and update docs to prevent misuse.",
       "dirty": false,
       "redmine_id": 382
@@ -2371,6 +2677,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout.",
       "dirty": false,
       "id_source": "custom",
@@ -2391,6 +2700,9 @@
         "hash": "fbc029009285cf68d7730f23156fce5572b52d96",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation.",
       "dirty": false,
       "redmine_id": 384
@@ -2409,6 +2721,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md.",
       "dirty": false,
       "id_source": "custom",
@@ -2428,6 +2743,9 @@
         "hash": "fe29281d02dadd4154586cbd088361ba54174a97",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow.",
       "dirty": false,
       "redmine_id": 386
@@ -2446,6 +2764,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks.",
       "dirty": false,
       "id_source": "custom",
@@ -2465,6 +2786,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior.",
       "dirty": false,
       "id_source": "custom",
@@ -2482,6 +2806,9 @@
         "hash": "e27d9a325ee6e9a8c6e202d19e63eb206eb70c20",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Restructure docs into modular, numbered files and update the documentation index to match the new order.",
       "dirty": false,
       "redmine_id": 388
@@ -2498,6 +2825,9 @@
         "hash": "edf60000edb0b50cc9195328d3053157714fc200",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add backend plugin loading (backend.json + module/class), config_path in config.json, and backend interface wiring.",
       "dirty": false,
       "redmine_id": 389
@@ -2516,6 +2846,9 @@
         "hash": "9066ff9431b53406ad4a42fc9323260f58f1011a",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Implement local backend using .codex-swarm/tasks/<id>/README.md frontmatter, ID generation (YYYYMMDDHHMM-<RAND>), and export to tasks.json.",
       "dirty": false,
       "redmine_id": 265
@@ -2534,6 +2867,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help.",
       "dirty": false,
       "id_source": "custom",
@@ -2553,6 +2889,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling.",
       "dirty": false,
       "id_source": "custom",
@@ -2572,6 +2911,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly.",
       "dirty": false,
       "id_source": "custom",
@@ -2591,6 +2933,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend.",
       "dirty": false,
       "id_source": "custom",
@@ -2611,6 +2956,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model.",
       "dirty": false,
       "id_source": "custom",
@@ -2631,6 +2979,9 @@
         "hash": "25a6c054b1b513003186c6b337437547c6fb4a79",
         "message": "Legacy completion (backfill)"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references.",
       "dirty": false,
       "redmine_id": 270,
@@ -2650,6 +3001,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data.",
       "dirty": false,
       "id_source": "custom",
@@ -2670,6 +3024,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing.",
       "dirty": false,
       "id_source": "custom",
@@ -2694,6 +3051,9 @@
           "body": "Verified: python3 .codex-swarm/agentctl.py task list --quiet; ids migrated."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies.",
       "dirty": false,
       "redmine_id": 279,
@@ -2713,6 +3073,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Keep the frontmatter block intact when overwriting task README scaffolds.",
       "dirty": false,
       "id_source": "custom",
@@ -2733,6 +3096,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes.",
       "dirty": false,
       "id_source": "custom",
@@ -2752,6 +3118,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs.",
       "dirty": false,
       "id_source": "custom",
@@ -2772,6 +3141,9 @@
         "message": "✅ P7AMW3 close task"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Remove legacy workspace/PR fallback paths (keep legacy ID reid), add task normalize, use backend export fast path, reduce redundant backend writes, add per-run task cache, and unify repeated error messaging in agentctl.",
       "dirty": false,
       "id_source": "custom",
@@ -2804,6 +3176,9 @@
           "body": "Verified: agentctl.md now documents flags, JSON errors, normalize, lint behavior, and batch writes."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags.",
       "dirty": false,
       "redmine_id": 276,
@@ -2823,6 +3198,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks.",
       "dirty": false,
       "id_source": "custom",
@@ -2843,6 +3221,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored.",
       "dirty": false,
       "id_source": "custom",
@@ -2862,6 +3243,9 @@
         "message": "✅ P7AMW3 close task"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible.",
       "dirty": false,
       "id_source": "custom",
@@ -2881,6 +3265,9 @@
         "message": "Legacy completion (backfill)"
       },
       "comments": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion.",
       "dirty": false,
       "id_source": "custom",
@@ -2902,6 +3289,9 @@
         "hash": "095a9428549afe10ccf9d4e078cdc6c48d78b0f9",
         "message": "🧩 8DGWPT redmine doc metadata"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Add doc metadata storage via custom field, enforce valid task_id on Redmine, export tasks.json deterministically, and document new commands/behavior.",
       "doc": "## Summary\n\n- Store task doc metadata in Redmine via a dedicated custom field and expose read/write commands.\n- Enforce valid `task_id` values in Redmine and export a deterministic `tasks.json`.\n\n## Scope\n\n- Add `doc` storage for Redmine and local backends, plus agentctl `task doc show|set`.\n- Require valid `task_id` for Redmine issues, auto-fill missing/invalid IDs, and detect duplicates.\n- Update docs for backend behavior and new commands.\n\n## Risks\n\n- Redmine custom fields must be configured correctly or doc updates will fail.\n- Auto-filled `task_id` values in Redmine could surprise users if they expected manual IDs.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task doc show 202601051338-8DGWPT`\n- `python3 .codex-swarm/agentctl.py task doc set 202601051338-8DGWPT --text \"## Summary\\n\\n- doc sync check\"`\n\n## Rollback Plan\n\n- Revert the commit and remove the Redmine `doc` custom field mapping if needed."
     },
@@ -2921,6 +3311,9 @@
         "hash": "c9a25a5a7d02119017ef6fff74de6d1d63d29b7e",
         "message": "🧹 MADM7W suffix-only commit policy"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Enforce suffix-only task IDs in commit subjects, remove non-English text from tracked files, update clean.sh to purge non-framework files, and refresh docs and snapshots.",
       "doc": "## Summary\n\n- Enforce suffix-only task IDs in commit subjects and update docs.\n- Remove non-English text from tracked files and refresh snapshots.\n- Tighten clean.sh cleanup to remove non-framework files.\n\n## Scope\n\n- Update commit subject matching and related docs to require suffix-only IDs.\n- Normalize priorities and remove Cyrillic text from tracked files.\n- Adjust clean.sh cleanup targets and keep it Python 3 only.\n\n## Risks\n\n- Bulk text normalization touches many task README files and the tasks snapshot.\n- Stricter commit checks might reject previously acceptable commit subjects.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task list --quiet`\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the prior state."
     },
@@ -2939,6 +3332,9 @@
         "hash": "a91551597ef49af43b45d2fe57814a0b378450b9",
         "message": "🛠️ RHBKA4 fix github sync parsing"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Handle commit fields stored as strings in sync_tasks.py and fix the Mermaid sequence diagram participant list so it renders.",
       "doc": "## Summary\n\n- Make GitHub sync handle commit hashes stored as strings.\n- Fix the Mermaid sequence diagram so it renders correctly.\n\n## Scope\n\n- `.github/scripts/sync_tasks.py`: accept string commit values in task payloads.\n- `README.md`: add missing participant in Mermaid sequence.\n\n## Risks\n\n- Minimal; logic change is localized to formatting.\n\n## Verify Steps\n\n- `python3 .github/scripts/sync_tasks.py`\n\n## Rollback Plan\n\n- Revert the commit and re-run sync if needed."
     },
@@ -2957,6 +3353,9 @@
         "hash": "944d0b90f177d0515866112cfb2b2a037ff6dccd",
         "message": "🧹 P7AMW3 neutralize task owners"
       },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Replace Via Mentis owner values with a neutral owner label across tasks and export the updated snapshot.",
       "doc": "## Summary\n\n- Replace Via Mentis owner values with a neutral owner label in task frontmatter.\n- Refresh the exported tasks snapshot.\n\n## Scope\n\n- `.codex-swarm/tasks/*/README.md`: update owner fields.\n- `.codex-swarm/tasks.json`: re-export snapshot.\n\n## Risks\n\n- Bulk edit touches many task records; ensure no other fields change.\n\n## Verify Steps\n\n- `python3 .codex-swarm/agentctl.py task export --out .codex-swarm/tasks.json`\n\n## Rollback Plan\n\n- Revert the commit and re-export tasks.json from the previous state."
     },
@@ -2981,6 +3380,9 @@
           "body": "Verified: not run; doc/instruction edits only, no runtime impact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Make agentctl.md the single source of truth for commit format; update AGENTS.md + agent JSONs to reference agentctl instead of duplicating detailed rules/examples. Update any remaining commit examples to follow the new detailed-changelog format.",
       "doc": "## Summary\n\n- Centralized commit format rules in @.codex-swarm/agentctl.md.\n- Replaced per-agent commit format instructions with a single agentctl reference.\n- Aligned AGENTS.md commit guidance to the agentctl format source of truth.\n\n## Goal\n\n- Ensure commit formatting is defined in one place and referenced everywhere else.\n\n## Scope\n\n- @.codex-swarm/agentctl.md\n- @AGENTS.md\n- @.codex-swarm/agents/*.json\n\n## Risks\n\n- Low: format changes now require updates only in agentctl.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `3ad71a3bcebb`."
     },
@@ -3005,6 +3407,9 @@
           "body": "Verified: not run; doc/instruction edits only, no runtime impact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Reduce duplicated workflow_mode and handoff guidance across agent JSONs/AGENTS.md by pointing to agentctl.md. Unify task-id/suffix terminology in agent instructions and docs.",
       "doc": "## Summary\n\n- Consolidated workflow_mode guidance to reference @.codex-swarm/agentctl.md.\n- Standardized task-id placeholders to `<task-id>` across agents and docs.\n- Switched handoff instructions to `agentctl pr note` and removed repeated snapshot filename mentions.\n\n## Goal\n\n- Reduce duplicated workflow rules and normalize terminology across agent instructions.\n\n## Scope\n\n- @AGENTS.md\n- @.codex-swarm/agentctl.md\n- @.codex-swarm/agents/*.json\n\n## Risks\n\n- Low: terminology updates could require follow-up if other docs expect old placeholders.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `1b7c1e375690`."
     },
@@ -3029,6 +3434,9 @@
           "body": "Verified: not run; doc/instruction edits only, no runtime impact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Tighten CODER/TESTER/DOCS rules to always commit via agentctl guard/commit and standardize handoff via pr note; simplify INTEGRATOR to a short checklist; add ORCHESTRATOR reminder to invoke UPDATER for agent-optimization requests.",
       "doc": "## Summary\n\n- Required CODER/TESTER/DOCS to use agentctl commit wrappers.\n- Simplified INTEGRATOR workflow to a short checklist.\n- Added ORCHESTRATOR trigger to invoke UPDATER on explicit optimization requests.\n\n## Goal\n\n- Tighten role-specific guardrails around commits and handoffs.\n\n## Scope\n\n- @.codex-swarm/agents/CODER.json\n- @.codex-swarm/agents/TESTER.json\n- @.codex-swarm/agents/DOCS.json\n- @.codex-swarm/agents/INTEGRATOR.json\n- @.codex-swarm/agents/ORCHESTRATOR.json\n\n## Risks\n\n- Low: checklist wording may need adjustment if agentctl commands change.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `e55fa3aa761e`."
     },
@@ -3053,6 +3461,9 @@
           "body": "Verified: not run; doc/instruction edits only, no runtime impact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Minimize repeated snapshot mentions across AGENTS.md and agent JSONs by centralizing the rule and pointing to agentctl.md for details; keep only a single explicit 'do not edit snapshot' rule.",
       "doc": "## Summary\n\n- Centralized snapshot/export rules in @AGENTS.md.\n- Removed snapshot wording from agent role specs, relying on agentctl guidance.\n- Simplified workflow wording to avoid repeated export references.\n\n## Goal\n\n- Keep snapshot handling centralized with a single explicit rule and agentctl references.\n\n## Scope\n\n- @AGENTS.md\n- @.codex-swarm/agents/*.json\n\n## Risks\n\n- Low: reduced wording may require cross-check if new docs add snapshot references.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `7d60d437aba0`."
     },
@@ -3077,6 +3488,9 @@
           "body": "Verified: not run; doc/instruction edits only, no runtime impact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Update README, docs, and CONTRIBUTING to minimize repeated 'snapshot/tasks.json' phrasing, while preserving rules: do not edit exports by hand and use agentctl for task export.",
       "doc": "## Summary\n\n- Reduced snapshot wording in README, docs, CONTRIBUTING, and cleanup notes.\n- Kept tasks.json references only where needed for export/viewer guidance.\n\n## Goal\n\n- Minimize repeated snapshot phrasing while preserving export rules and commands.\n\n## Scope\n\n- @README.md\n- @CONTRIBUTING.md\n- @clean.sh\n- @docs/01-overview.md\n- @docs/03-setup.md\n- @docs/04-architecture.md\n- @docs/07-tasks-and-backends.md\n- @docs/09-commands.md\n- @docs/10-troubleshooting.md\n\n## Risks\n\n- Low: wording changes could hide explicit snapshot terminology some users expect.\n\n## Verify Steps\n\n- None (doc/instruction changes only).\n\n## Rollback Plan\n\n- Revert commit `c8cc07f9a242`."
     },
@@ -3100,6 +3514,9 @@
           "body": "Verified: not run; doc/instruction edits only, no runtime impact."
         }
       ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_by": "agentctl",
       "description": "Align README diagrams and badges with 'task export' wording, ensuring tasks.json references are consistent and minimal.",
       "doc": "## Summary\n\n- Normalized diagram wording in README to refer to the task export/view consistently.\n\n## Goal\n\n- Keep diagrams and badges aligned with export terminology without overusing tasks.json.\n\n## Scope\n\n- @README.md\n\n## Risks\n\n- Low: diagram text change only.\n\n## Verify Steps\n\n- None (doc-only change).\n\n## Rollback Plan\n\n- Revert commit `918e384d381c`."
     },
@@ -3243,12 +3660,30 @@
       "doc_updated_by": "agentctl",
       "description": "Fix corrupted task README metadata and populate missing sections to keep PR checks healthy.",
       "doc": "## Summary\n\nFix corrupted task README metadata and populate missing sections so task docs pass PR checks.\n\n## Context\n\nTask 202601071438-C7W2GE frontmatter is malformed (`Яstatus`) and contains escaped newlines, so the backend reads it as TODO. Task 202601071526-GH5YSV lacks body sections entirely, causing future PR checks to fail. Both need cleanup via agentctl.\n\n## Scope\n\n- Rewrite C7W2GE frontmatter via agentctl so status=DONE is respected and docs render correctly.\n- Replace escaped `\\n` bullets in C7W2GE with proper Markdown list items.\n- Populate GH5YSV task README sections (Summary/Context/Scope/Risks/Verify Steps/Rollback Plan/Notes).\n\n## Risks\n\n- Manual doc updates could misrepresent task status if fields are missed.\n- PR checks may still fail if required sections remain empty.\n\n## Verify Steps\n\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert the README changes for C7W2GE and GH5YSV.\n\n## Notes\n\n- Do not change task ownership/status beyond correcting the corrupted frontmatter."
+    },
+    {
+      "id": "202601110804-H6TNMM",
+      "title": "Remove legacy compatibility and backfill commit metadata",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "cleanup",
+        "agentctl",
+        "tasks"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-11T08:05:20+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Drop old T-### compatibility from agentctl/clean.sh and backfill commit metadata on DONE tasks to keep lint clean.",
+      "doc": "## Summary\n\nRemove legacy T-### compatibility and task reid helpers, align branch/worktree parsing with timestamp IDs, and backfill commit metadata so lint passes.\n\n## Context\n\nWe no longer need legacy T-### branches or task reid; branch_pr mode should only accept timestamp IDs. Lint was failing because early DONE tasks lacked commit metadata; backfill required.\n\n## Scope\n\n- Remove legacy branch parsing and task reid logic from agentctl; rely on timestamp IDs only.\n- Simplify clean.sh scrubbing to stop rewriting examples to T-###.\n- Backfill commit metadata for all DONE tasks and regenerate tasks.json so lint passes.\n\n## Risks\n\n- Removing legacy parsing could block users still on old T-### branches (not expected per request).\n- Bulk backfill touches many README files; git history noise.\n\n## Verify Steps\n\n- python .codex-swarm/agentctl.py task lint\n\n## Rollback Plan\n\n- Revert agentctl/clean.sh and tasks README backfill commits.\n\n## Notes\n\n- Owner warnings for 'AUTOMATION' remain; acceptable as lint warnings."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5582431741139ce99e27b8a65b281f4b57b76d2ba64cb6462c7f930d6d80528e"
+    "checksum": "388b6c0a80bd905dea26a21299bd7023e81cdd8adf14d81887dcd9cc4b4750af"
   }
 }

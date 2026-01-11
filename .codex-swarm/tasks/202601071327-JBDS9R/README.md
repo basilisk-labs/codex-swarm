@@ -9,6 +9,9 @@ tags: ["agents", "docs"]
 commit: { hash: "7d60d437aba09ecb77ccfa5f895c0401b7479a6c", message: "🧰 JBDS9R reduce snapshot mentions: centralize export rules in AGENTS; remove snapshot wording from agent roles; simplify export references" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Minimize repeated snapshot mentions across AGENTS.md and agent JSONs by centralizing the rule and pointing to agentctl.md for details; keep only a single explicit 'do not edit snapshot' rule."
 ---
 ## Summary

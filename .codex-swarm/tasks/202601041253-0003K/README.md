@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "3d8cd6dd2137ee90f303f6ca13d2f0f13cd412a6", message: "Legacy completion (backfill)" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
 dirty: false
 id_source: "custom"
@@ -51,3 +54,4 @@ redmine_id: 269
 - `.codex-swarm/agentctl.py`: add `task migrate` command for seeding backend from tasks.json.
 - `.codex-swarm/config.json`: set `tasks_backend.config_path` to local backend plugin.
 <!-- END AUTO SUMMARY -->
+

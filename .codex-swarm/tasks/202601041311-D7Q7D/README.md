@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "ea9ed7a50d1789d452abb61c00987e0925c76ecb", message: "Legacy completion (backfill)" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
 dirty: false
 id_source: "custom"
@@ -52,3 +55,4 @@ redmine_id: 274
 - `AGENTS.md`: clarify commit messages may use the id suffix.
 - `.codex-swarm/agentctl.md`: document suffix usage in commit subjects.
 <!-- END AUTO SUMMARY -->
+

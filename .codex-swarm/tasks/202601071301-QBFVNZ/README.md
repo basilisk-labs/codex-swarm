@@ -9,6 +9,9 @@ tags: ["agents", "docs"]
 commit: { hash: "e55fa3aa761e778f65518407a0ac13d4fa5a32c7", message: "🧷 QBFVNZ tighten role guardrails: require agentctl commit wrapper for CODER/TESTER/DOCS; add integrator checklist; add orchestrator UPDATER trigger" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Tighten CODER/TESTER/DOCS rules to always commit via agentctl guard/commit and standardize handoff via pr note; simplify INTEGRATOR to a short checklist; add ORCHESTRATOR reminder to invoke UPDATER for agent-optimization requests."
 ---
 ## Summary

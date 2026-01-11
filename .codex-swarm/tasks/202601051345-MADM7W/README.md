@@ -7,6 +7,9 @@ owner: "automation"
 depends_on: []
 tags: ["workflow", "cleanup", "policy"]
 commit: { hash: "c9a25a5a7d02119017ef6fff74de6d1d63d29b7e", message: "🧹 MADM7W suffix-only commit policy" }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Enforce suffix-only task IDs in commit subjects, remove non-English text from tracked files, update clean.sh to purge non-framework files, and refresh docs and snapshots."
 ---
 ## Summary

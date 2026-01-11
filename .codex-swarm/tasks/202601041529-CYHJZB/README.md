@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "4d57b45688484f8e5db8ee6ba9eed44a541fe4d0", message: "Legacy completion (backfill)" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks."
 dirty: false
 id_source: "custom"
@@ -38,3 +41,4 @@ Improve Redmine sync to include more local metadata when pushing tasks, such as 
 ## Rollback Plan
 
 - Revert the commit for this task and re-sync from local cache if needed.
+

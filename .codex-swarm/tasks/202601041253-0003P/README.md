@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "04fdd37dca3c7541e1d957e263b473547c94d6ad", message: "Legacy completion (backfill)" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
 dirty: false
 id_source: "custom"
@@ -48,3 +51,4 @@ redmine_id: 271
 <!-- BEGIN AUTO SUMMARY -->
 - `clean.sh`: reset local tasks directory during cleanup and regenerate snapshot with Python 3.
 <!-- END AUTO SUMMARY -->
+

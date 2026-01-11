@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "1939744c7df301f0a9b1533a7ff7025624d45a3c", message: "Legacy completion (backfill)" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
 dirty: false
 id_source: "custom"
@@ -49,3 +52,4 @@ redmine_id: 272
 - `.github/workflows/sync-tasks.yml`: export snapshot before sync and watch backend/task paths.
 - `.github/scripts/sync_tasks.py`: clarify snapshot source and require exported tasks.json.
 <!-- END AUTO SUMMARY -->
+

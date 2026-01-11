@@ -9,6 +9,9 @@ tags: []
 verify: null
 commit: { hash: "e571744e288fc0f63599967eae460d290d4c97ef", message: "Legacy completion (backfill)" }
 comments: []
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Keep the frontmatter block intact when overwriting task README scaffolds."
 dirty: false
 id_source: "custom"
@@ -46,3 +49,4 @@ redmine_id: 280
 <!-- BEGIN AUTO SUMMARY -->
 - `.codex-swarm/agentctl.py`: preserve frontmatter when overwriting task scaffolds.
 <!-- END AUTO SUMMARY -->
+

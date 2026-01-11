@@ -9,6 +9,9 @@ tags: ["agents", "docs"]
 commit: { hash: "1b7c1e37569071a725602a2ac9b7a1904de7e834", message: "🧭 JGRGE3 dedupe workflow and terms: unify workflow_mode guidance; standardize task-id references; switch handoff notes to agentctl pr note; remove snapshot filename mentions" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: not run; doc/instruction edits only, no runtime impact." }
+doc_version: 2
+doc_updated_at: "2026-01-11T08:06:07+00:00"
+doc_updated_by: "agentctl"
 description: "Reduce duplicated workflow_mode and handoff guidance across agent JSONs/AGENTS.md by pointing to agentctl.md. Unify task-id/suffix terminology in agent instructions and docs."
 ---
 ## Summary
