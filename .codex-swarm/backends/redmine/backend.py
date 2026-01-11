@@ -8,6 +8,7 @@ import os
 import re
 import secrets
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -58,6 +59,7 @@ class RedmineBackend:
         self.status_map = settings.get("status_map") or {}
         self.custom_fields = settings.get("custom_fields") or {}
         cache_dir = settings.get("cache_dir")
+        self._issue_cache: Dict[str, Dict[str, object]] = {}
 
         if not self.base_url or not self.api_key or not self.project_id:
             raise ValueError("Redmine backend requires url, api_key, and project_id")
@@ -253,7 +255,7 @@ class RedmineBackend:
                 existing_issue = issue if isinstance(issue, dict) else None
             if issue_id and existing_issue is None:
                 existing_issue = self._request_json("GET", f"issues/{issue_id}.json").get("issue")
-            payload = self._task_to_issue_payload(task)
+            payload = self._task_to_issue_payload(task, existing_issue=existing_issue)
             if issue_id:
                 self._request_json("PUT", f"issues/{issue_id}.json", payload={"issue": payload})
             else:
@@ -276,6 +278,7 @@ class RedmineBackend:
                 task["redmine_id"] = issue_id
             task["dirty"] = False
             self._cache_task(task, dirty=False)
+            self._issue_cache = {}
         except RedmineUnavailable:
             if not self.cache:
                 raise
@@ -376,6 +379,7 @@ class RedmineBackend:
         offset = 0
         limit = 100
         task_id_field_id = self._task_id_field_id()
+        self._issue_cache = {}
         while True:
             payload = self._request_json(
                 "GET",
@@ -411,34 +415,61 @@ class RedmineBackend:
         if duplicates:
             sample = ", ".join(sorted(duplicates)[:5])
             raise RuntimeError(f"Duplicate task_id values found in Redmine: {sample}")
-        generated_ids: set[str] = set()
         for issue in all_issues:
             task_id = self._custom_field_value(issue, task_id_field_id)
-            if task_id and not self._task_id_re.match(str(task_id)):
-                task_id = None
-            if not task_id:
-                task_id = self._generate_task_id_from_existing(existing_ids | generated_ids, length=6, attempts=1000)
-                issue_id = issue.get("id")
-                if issue_id:
-                    self._request_json(
-                        "PUT",
-                        f"issues/{issue_id}.json",
-                        payload={"issue": {"custom_fields": [{"id": task_id_field_id, "value": task_id}]}},
-                    )
-                self._set_issue_custom_field_value(issue, task_id_field_id, task_id)
-                generated_ids.add(str(task_id))
+            if not task_id or not self._task_id_re.match(str(task_id)):
+                continue
             task = self._issue_to_task(issue, task_id_override=str(task_id))
             if task:
+                self._issue_cache[str(task.get("id"))] = issue
                 tasks.append(task)
         return tasks
 
     def _find_issue_by_task_id(self, task_id: str) -> Optional[Dict[str, object]]:
+        task_id_str = str(task_id or "").strip()
+        if not task_id_str:
+            return None
+        cached = self._issue_cache.get(task_id_str)
+        if isinstance(cached, dict):
+            return cached
+
+        task_field = self._task_id_field_id()
+        try:
+            payload = self._request_json(
+                "GET",
+                "issues.json",
+                params={
+                    "project_id": self.project_id,
+                    "status_id": "*",
+                    f"cf_{task_field}": task_id_str,
+                    "limit": 100,
+                },
+            )
+            candidates = payload.get("issues") if isinstance(payload, dict) else None
+            if isinstance(candidates, list):
+                for issue in candidates:
+                    if not isinstance(issue, dict):
+                        continue
+                    val = self._custom_field_value(issue, task_field)
+                    if val and str(val) == task_id_str:
+                        self._issue_cache[task_id_str] = issue
+                        return issue
+        except RedmineUnavailable:
+            if self.cache:
+                cached_task = self.cache.get_task(task_id_str)
+                if cached_task:
+                    return cached_task
+            raise
+
         issues = self._list_tasks_remote()
         for task in issues:
-            if task.get("id") == task_id:
+            if task.get("id") == task_id_str:
                 issue_id = task.get("redmine_id")
                 if issue_id:
-                    return self._request_json("GET", f"issues/{issue_id}.json").get("issue")
+                    issue = self._request_json("GET", f"issues/{issue_id}.json").get("issue")
+                    if issue:
+                        self._issue_cache[task_id_str] = issue
+                    return issue
         return None
 
     def _issue_to_task(self, issue: Dict[str, object], *, task_id_override: Optional[str] = None) -> Optional[Dict[str, object]]:
@@ -482,7 +513,7 @@ class RedmineBackend:
             task["doc_updated_by"] = doc_updated_by_val
         return task
 
-    def _task_to_issue_payload(self, task: Dict[str, object]) -> Dict[str, object]:
+    def _task_to_issue_payload(self, task: Dict[str, object], existing_issue: Optional[Dict[str, object]] = None) -> Dict[str, object]:
         status = str(task.get("status") or "").strip().upper()
         payload: Dict[str, object] = {
             "subject": str(task.get("title") or ""),
@@ -493,7 +524,10 @@ class RedmineBackend:
         priority = task.get("priority")
         if isinstance(priority, int):
             payload["priority_id"] = priority
-        if self.assignee_id:
+        existing_assignee = None
+        if isinstance(existing_issue, dict):
+            existing_assignee = (existing_issue.get("assigned_to") or {}).get("id")
+        if self.assignee_id and not existing_assignee:
             payload["assigned_to_id"] = self.assignee_id
         start_date = self._start_date_from_task_id(str(task.get("id") or ""))
         if start_date:
@@ -636,7 +670,16 @@ class RedmineBackend:
                 return raw
         return raw
 
-    def _request_json(self, method: str, path: str, payload: Optional[Dict[str, object]] = None, params: Optional[Dict[str, object]] = None) -> Dict[str, object]:
+    def _request_json(
+        self,
+        method: str,
+        path: str,
+        payload: Optional[Dict[str, object]] = None,
+        params: Optional[Dict[str, object]] = None,
+        *,
+        attempts: int = 3,
+        backoff: float = 0.5,
+    ) -> Dict[str, object]:
         url = f"{self.base_url}/{path.lstrip('/')}"
         if params:
             url += "?" + urlparse.urlencode(params)
@@ -650,14 +693,23 @@ class RedmineBackend:
                 "X-Redmine-API-Key": self.api_key,
             },
         )
-        try:
-            with urlrequest.urlopen(req, timeout=10) as resp:
-                raw = resp.read()
-        except urlerror.HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace") if exc.fp else str(exc)
-            raise RuntimeError(f"Redmine API error: {exc.code} {body}") from exc
-        except urlerror.URLError as exc:
-            raise RedmineUnavailable("Redmine unavailable") from exc
+        raw: bytes = b""
+        for attempt in range(1, max(1, attempts) + 1):
+            try:
+                with urlrequest.urlopen(req, timeout=10) as resp:
+                    raw = resp.read()
+                break
+            except urlerror.HTTPError as exc:
+                body = exc.read().decode("utf-8", errors="replace") if exc.fp else str(exc)
+                if (exc.code == 429 or 500 <= exc.code < 600) and attempt < attempts:
+                    time.sleep(backoff * attempt)
+                    continue
+                raise RuntimeError(f"Redmine API error: {exc.code} {body}") from exc
+            except urlerror.URLError as exc:
+                if attempt >= attempts:
+                    raise RedmineUnavailable("Redmine unavailable") from exc
+                time.sleep(backoff * attempt)
+                continue
         if not raw:
             return {}
         try:
