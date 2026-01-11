@@ -1,11 +1,14 @@
 ---
 id: "202601110745-AAQVJW"
 title: "Fix branch_pr ID parsing and clean.sh scrub"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "branch_pr", "cleanup"]
+commit: { hash: "88e82c4af90d4611745387fb2de4147147c57943", message: "✨ AAQVJW fix branch_pr id parsing and clean scrub" }
+comments:
+  - { author: "CODER", body: "Verified: python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py; branch_pr regex now accepts timestamp task IDs; clean.sh scrub examples updated to timestamp format." }
 doc_version: 2
 doc_updated_at: "2026-01-11T07:46:17+00:00"
 doc_updated_by: "agentctl"
