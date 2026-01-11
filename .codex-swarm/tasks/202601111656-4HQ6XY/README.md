@@ -1,15 +1,18 @@
 ---
 id: "202601111656-4HQ6XY"
 title: "Add strict Python linting/formatting and cleanup"
-status: "DOING"
+status: "DONE"
 priority: "high"
 owner: "CODER"
 depends_on: []
 tags: ["python", "lint", "quality", "tooling"]
+commit: { hash: "bf1955ebe79ce7ce7324980587969a0d72385247", message: "✨ 4HQ6XY Add strict ruff/mypy configs and dev deps; update Python modules for lint/type checks; clean new lint caches." }
 comments:
   - { author: "CODER", body: "Start: Add strict Python lint/format/type-check configs, update code to pass them, and clean new artifacts." }
+  - { author: "CODER", body: "Add strict ruff/mypy configs and dev deps; update Python modules for lint/type checks; clean new lint caches." }
+  - { author: "CODER", body: "Verified: ran .venv/bin/ruff format ., .venv/bin/ruff check ., and .venv/bin/mypy; all passed. Added strict ruff/mypy configs, cleaned lint cache artifacts, and updated Python code for compliance." }
 doc_version: 2
-doc_updated_at: "2026-01-11T16:57:04+00:00"
+doc_updated_at: "2026-01-11T17:22:04+00:00"
 doc_updated_by: "agentctl"
 description: "Introduce strict Python lint/format/type-check tooling, update cleanup scripts for new artifacts, and ensure the repo passes the checks."
 ---
@@ -31,7 +34,9 @@ Strict rules may require code refactors or per-file ignores; type-checker strict
 
 ## Verify Steps
 
-ruff format .\nruff check .\nmypy .
+- .venv/bin/ruff format .
+- .venv/bin/ruff check .
+- .venv/bin/mypy
 
 ## Rollback Plan
 
