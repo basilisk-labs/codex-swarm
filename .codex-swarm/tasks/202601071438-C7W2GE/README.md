@@ -1,7 +1,7 @@
 ---
 id: "202601071438-C7W2GE"
 title: "Update Redmine custom field IDs"
-Яstatus: "DONE"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
@@ -10,7 +10,7 @@ commit: { hash: "a31d27a72cba9e89cd51ea3e90533df52bac35d4", message: "✨ C7W2GE
 comments:
   - { author: "INTEGRATOR", body: "Verified: not run (docs-only update). Redmine IDs assumed sequential 1-8." }
 doc_version: 2
-doc_updated_at: "2026-01-07T14:44:07+00:00"
+doc_updated_at: "2026-01-11T07:48:40+00:00"
 doc_updated_by: "agentctl"
 description: "Update Redmine backend config and docs to use sequential custom field IDs 1-8 for task metadata."
 ---
@@ -20,11 +20,12 @@ Update Redmine custom field ID mapping to use sequential IDs 1-8 for task metada
 
 ## Context
 
-User requested sequential Redmine custom field IDs; admin API access was unavailable so we aligned docs to IDs 1-8.
+User requested sequential Redmine custom field IDs; admin API access was unavailable, so we aligned docs and config to IDs 1-8.
 
 ## Scope
 
-- Update Redmine docs/examples to use sequential custom field IDs 1..8.\n- Keep backend config aligned with the same mapping.
+- Update Redmine docs/examples to use sequential custom field IDs 1..8.
+- Keep backend config aligned with the same mapping.
 
 ## Risks
 
@@ -32,7 +33,8 @@ User requested sequential Redmine custom field IDs; admin API access was unavail
 
 ## Verify Steps
 
-- (Optional) Confirm custom field IDs in Redmine admin.\n- Run  after configuration.
+- (Optional) Confirm custom field IDs in Redmine admin.
+- Run `python .codex-swarm/agentctl.py sync redmine` after configuration.
 
 ## Rollback Plan
 
