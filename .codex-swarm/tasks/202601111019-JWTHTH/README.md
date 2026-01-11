@@ -1,13 +1,15 @@
 ---
 id: "202601111019-JWTHTH"
 title: "Redmine sync batching/backoff"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "sync"]
 verify: []
-comments: []
+commit: { hash: "3a95b500f57d6dce289ac269f2f525c47ea96ca5", message: "✨ JWTHTH add redmine sync batching/backoff and return to local backend" }
+comments:
+  - { author: "CODER", body: "Verified: python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py; redmine backend now batches writes with pauses (write_tasks, sync push, migrate); config returned to local backend." }
 doc_version: 2
 doc_updated_at: "2026-01-11T10:20:13+00:00"
 doc_updated_by: "agentctl"
@@ -48,3 +50,4 @@ Add batch-friendly Redmine sync/migration with pauses to avoid API timeouts, the
 
 - Revert redmine/backend.py and .codex-swarm/config.json to previous versions.
 - Remove any partially migrated issues from the Redmine sandbox if needed.
+
