@@ -3,7 +3,7 @@ id: "202601110958-W1A6H8"
 title: "Redmine sync smoke test"
 status: "DONE"
 priority: "Нормальный"
-owner: "Via Mentis Assistant"
+owner: "REDMINE"
 depends_on: []
 tags: []
 verify: null
@@ -58,4 +58,3 @@ Switch backend to Redmine using env config and prove end-to-end sync from local 
 - Full migration of 150 tasks to Redmine hit HTTP timeouts; migrated a 3-task subset for smoke testing instead.
 - Created test task 202601111002-FZ099X via Redmine backend, updated docs, and added a comment to verify custom fields/journals.
 - `sync redmine --direction pull` succeeds; owners/priorities reflect Redmine assignee/priority names (e.g., Via Mentis Assistant / "Нормальный").
-

@@ -3,7 +3,7 @@ id: "202601111002-FZ099X"
 title: "Redmine backend CRUD check"
 status: "DONE"
 priority: "Нормальный"
-owner: "Via Mentis Assistant"
+owner: "REDMINE"
 depends_on: []
 tags: []
 verify: null
@@ -49,4 +49,3 @@ Validate that Redmine backend supports create/update/comment flows via agentctl 
 
 - Delete the test issue from Redmine if it pollutes the sandbox.
 - Re-run task list to confirm it is gone.
-

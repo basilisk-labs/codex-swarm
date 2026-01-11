@@ -3,7 +3,7 @@ id: "202601110813-RGNDGK"
 title: "Harden Redmine backend and add REDMINE agent"
 status: "DONE"
 priority: "Нормальный"
-owner: "Via Mentis Assistant"
+owner: "REDMINE"
 depends_on: []
 tags: []
 verify: ["python -m py_compile .codex-swarm/backends/redmine/backend.py"]
@@ -51,4 +51,3 @@ Redmine connector still does full scans per lookup, mutates missing task_id fiel
 ## Notes
 
 - Keep behavior backend-agnostic for other agents; REDMINE agent documents backend expectations.
-

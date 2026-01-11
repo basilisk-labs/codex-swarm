@@ -51,6 +51,7 @@ class RedmineBackend:
         env_api_key = os.environ.get("CODEXSWARM_REDMINE_API_KEY", "").strip()
         env_project_id = os.environ.get("CODEXSWARM_REDMINE_PROJECT_ID", "").strip()
         env_assignee = os.environ.get("CODEXSWARM_REDMINE_ASSIGNEE_ID", "").strip()
+        env_owner = os.environ.get("CODEXSWARM_REDMINE_OWNER", "").strip() or os.environ.get("CODEXSWARM_REDMINE_OWNER_AGENT", "").strip()
 
         self.base_url = (env_url or str(settings.get("url") or "")).rstrip("/")
         self.api_key = env_api_key or str(settings.get("api_key") or "").strip()
@@ -60,6 +61,11 @@ class RedmineBackend:
         self.custom_fields = settings.get("custom_fields") or {}
         self.batch_size = int(settings.get("batch_size") or 20)
         self.batch_pause = float(settings.get("batch_pause") or 0.5)
+        self.owner_agent = (
+            env_owner
+            or str(settings.get("owner_agent") or "").strip()
+            or "REDMINE"
+        )
         cache_dir = settings.get("cache_dir")
         self._issue_cache: Dict[str, Dict[str, object]] = {}
 
@@ -510,7 +516,7 @@ class RedmineBackend:
             "description": str(issue.get("description") or ""),
             "status": status or "TODO",
             "priority": str((issue.get("priority") or {}).get("name") or ""),
-            "owner": str((issue.get("assigned_to") or {}).get("name") or ""),
+            "owner": self.owner_agent,
             "tags": [tag.get("name") for tag in issue.get("tags", []) if isinstance(tag, dict)],
             "depends_on": [],
             "verify": self._maybe_parse_json(verify_val),

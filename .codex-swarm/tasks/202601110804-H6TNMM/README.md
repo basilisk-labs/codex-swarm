@@ -3,7 +3,7 @@ id: "202601110804-H6TNMM"
 title: "Remove legacy compatibility and backfill commit metadata"
 status: "DONE"
 priority: "Нормальный"
-owner: "Via Mentis Assistant"
+owner: "REDMINE"
 depends_on: []
 tags: []
 verify: null
@@ -48,4 +48,3 @@ We no longer need legacy T-### branches or task reid; branch_pr mode should only
 ## Notes
 
 - Owner warnings for 'AUTOMATION' remain; acceptable as lint warnings.
-
