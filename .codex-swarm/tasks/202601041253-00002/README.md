@@ -1,9 +1,9 @@
 ---
 id: "202601041253-00002"
 title: "Restructure agent registry into JSON files"
-status: "DONE"
-priority: "normal"
-owner: "CODER"
+status: "TODO"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
 verify: null
@@ -15,5 +15,5 @@ doc_updated_by: "agentctl"
 description: "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance."
 dirty: false
 id_source: "custom"
-redmine_id: 282
+redmine_id: 423
 ---

@@ -2,10 +2,11 @@
 id: "202601110804-H6TNMM"
 title: "Remove legacy compatibility and backfill commit metadata"
 status: "DONE"
-priority: "med"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
-tags: ["cleanup", "agentctl", "tasks"]
+tags: []
+verify: null
 commit: { hash: "22de83cff2560324e36b4904e559141b1bef206b", message: "✅ H6TNMM backfill commit metadata export" }
 comments:
   - { author: "CODER", body: "Verified: task lint passes after commit backfill; legacy branch parsing removed per request." }
@@ -13,6 +14,9 @@ doc_version: 2
 doc_updated_at: "2026-01-11T08:05:20+00:00"
 doc_updated_by: "agentctl"
 description: "Drop old T-### compatibility from agentctl/clean.sh and backfill commit metadata on DONE tasks to keep lint clean."
+dirty: false
+id_source: "custom"
+redmine_id: 424
 ---
 ## Summary
 

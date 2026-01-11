@@ -2,8 +2,8 @@
 id: "202601041253-00001"
 title: "Document framework in README"
 status: "DONE"
-priority: "normal"
-owner: "CODER"
+priority: "Нормальный"
+owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
 verify: null
@@ -15,5 +15,5 @@ doc_updated_by: "agentctl"
 description: "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly."
 dirty: false
 id_source: "custom"
-redmine_id: 281
+redmine_id: 422
 ---

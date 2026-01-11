@@ -1,16 +1,17 @@
 ---
 id: "202601110958-W1A6H8"
 title: "Redmine sync smoke test"
-status: "TODO"
+status: "DONE"
 priority: "Нормальный"
 owner: "Via Mentis Assistant"
 depends_on: []
 tags: []
 verify: null
-commit: null
-comments: []
+commit: { hash: "0e5bacb3095951ee4f4d7a36658dfc733b580f4b", message: "✨ W1A6H8 FZ099X switch to redmine backend and add redmine sync smoke tests" }
+comments:
+  - { author: "CODER", body: "Verified: ran python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py; migrated a 3-task subset to Redmine (full 150-task migration timed out); task list + sync pull show remote tasks; created and exercised test task 202601111002-FZ099X (doc + comment) via Redmine backend." }
 doc_version: 2
-doc_updated_at: "2026-01-11T10:08:40+00:00"
+doc_updated_at: "2026-01-11T10:08:39+00:00"
 doc_updated_by: "agentctl"
 description: "Switch backend to Redmine using env config, migrate local tasks as source of truth, and validate CRUD/sync flows."
 dirty: false
