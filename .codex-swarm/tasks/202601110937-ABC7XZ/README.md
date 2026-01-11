@@ -1,11 +1,14 @@
 ---
 id: "202601110937-ABC7XZ"
 title: "Add status summary output to agentctl"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "ux"]
+commit: { hash: "d2ccccc10fb8e9e1ddf4324d6e58bfc60dac34bf", message: "✨ ABC7XZ add status footer to agentctl; broaden command_path; refresh task doc" }
+comments:
+  - { author: "CODER", body: "Verified: ran python -m compileall .codex-swarm/agentctl.py and python .codex-swarm/agentctl.py task lint; status footer behavior now emits success lines for non-quiet/non-json runs; no regressions observed." }
 doc_version: 2
 doc_updated_at: "2026-01-11T09:43:18+00:00"
 doc_updated_by: "agentctl"
