@@ -1631,20 +1631,24 @@ def requires_verify(tags: List[str]) -> bool:
     return bool(VERIFY_REQUIRED_TAGS & tag_set)
 
 
-def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
-    owner_upper = str(owner or "").strip().upper()
-    if not owner_upper:
-        die("owner must be non-empty", code=2)
-    extras = {"HUMAN", "ORCHESTRATOR"}
-    known = load_agents_index()
-    if owner_upper in extras or allow_missing_agents:
-        return
-    if known and owner_upper not in known:
-        die(
-            "Owner must be an existing agent id. "
-            "If a new agent is required, create it via CREATOR first.",
-            code=2,
-        )
+def command_path(args: argparse.Namespace) -> str:
+    parts: List[str] = []
+    if hasattr(args, "cmd"):
+        parts.append(str(getattr(args, "cmd") or "").strip())
+    for name in (
+        "task_cmd",
+        "doc_cmd",
+        "guard_cmd",
+        "pr_cmd",
+        "branch_cmd",
+        "work_cmd",
+        "cleanup_cmd",
+        "sync_cmd",
+    ):
+        val = getattr(args, name, None)
+        if val:
+            parts.append(str(val).strip())
+    return " ".join(p for p in parts if p) or "<unknown>"
 
 
 def lint_tasks_json() -> Dict[str, List[str]]:
@@ -4318,7 +4322,16 @@ def main(argv: Optional[List[str]] = None) -> None:
     if not func:
         parser.print_help()
         raise SystemExit(2)
-    func(args)
+    suppressed = GLOBAL_JSON or GLOBAL_QUIET or bool(getattr(args, "quiet", False))
+    try:
+        func(args)
+    except SystemExit as exc:
+        code = 0 if exc.code is None else exc.code
+        if code == 0 and not suppressed:
+            print(f"✅ {command_path(args)} OK")
+        raise
+    if not suppressed:
+        print(f"✅ {command_path(args)} OK")
 
 
 if __name__ == "__main__":
