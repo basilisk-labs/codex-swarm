@@ -52,6 +52,8 @@ $pathsToRemove = @(
   "README.md",
   ".codex-swarm/worktrees",
   "Makefile",
+  "pyproject.toml",
+  "requirements-dev.txt",
   "LICENSE",
   ".codex-swarm/tasks.json",
   "CONTRIBUTING.md",
