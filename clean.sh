@@ -42,7 +42,7 @@ rm -rf \
   docs \
   scripts \
   README.md \
-  .codex-swarm/viewer \
+  .codex-swarm/worktrees \
   Makefile \
   LICENSE \
   .codex-swarm/tasks.json \
