@@ -1,54 +1,100 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Local task viewer with kanban and table views." />
+    <meta name="application-name" content="Codex Swarm Tasks" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content="Codex Swarm Tasks" />
+    <meta property="og:description" content="Local task viewer with kanban and table views." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Codex Swarm" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Codex Swarm Tasks" />
+    <meta name="twitter:description" content="Local task viewer with kanban and table views." />
     <title>Codex Swarm - Tasks</title>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap");
       :root {
         color-scheme: light dark;
-        --bg: #0f1115;
-        --bg-2: #12151b;
-        --panel: #171b23;
-        --panel-2: #1b202a;
-        --text: #e6e8ee;
-        --muted: #a3adbe;
-        --border: rgba(230, 232, 238, 0.12);
-        --shadow: rgba(8, 10, 14, 0.22);
-        --accent: #3b82f6;
-        --accent-2: #60a5fa;
-        --good: #22c55e;
-        --warn: #f59e0b;
-        --bad: #ef4444;
-        --chip-bg: rgba(255, 255, 255, 0.04);
-        --chip-border: rgba(255, 255, 255, 0.1);
+        --bg: #f2f2f7;
+        --bg-2: #f7f7fa;
+        --panel: #ffffff;
+        --panel-2: #f2f2f7;
+        --text: #1c1c1e;
+        --muted: #6e6e73;
+        --border: rgba(60, 60, 67, 0.18);
+        --shadow: rgba(0, 0, 0, 0.08);
+        --accent: #007aff;
+        --accent-2: #ff9f0a;
+        --accent-3: #5ac8fa;
+        --good: #34c759;
+        --warn: #ff9f0a;
+        --bad: #ff3b30;
+        --chip-bg: rgba(0, 122, 255, 0.12);
+        --chip-border: rgba(0, 122, 255, 0.24);
         --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        --sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-        --column-gap: 16px;
+        --sans: "Space Grotesk", "Segoe UI", Tahoma, sans-serif;
+        --display: "Fraunces", "Times New Roman", serif;
+        --column-gap: 18px;
         --card-gap: 12px;
       }
 
-      html[data-theme="light"] {
-        --bg: #f5f6f8;
-        --bg-2: #ffffff;
-        --panel: #ffffff;
-        --panel-2: #f4f5f7;
-        --text: #0b0f16;
-        --muted: #5f6b7b;
-        --border: rgba(15, 23, 42, 0.1);
-        --shadow: rgba(15, 23, 42, 0.06);
-        --chip-bg: rgba(15, 23, 42, 0.04);
-        --chip-border: rgba(15, 23, 42, 0.12);
+      html[data-theme="dark"] {
+        --bg: #000000;
+        --bg-2: #0c0c0d;
+        --panel: #1c1c1e;
+        --panel-2: #2c2c2e;
+        --text: #f2f2f7;
+        --muted: #8e8e93;
+        --border: rgba(84, 84, 88, 0.6);
+        --shadow: rgba(0, 0, 0, 0.6);
+        --chip-bg: rgba(0, 122, 255, 0.2);
+        --chip-border: rgba(0, 122, 255, 0.34);
       }
 
       * {
         box-sizing: border-box;
       }
 
-      html,
-      body {
-        height: 100%;
+      html {
+        min-height: 100%;
+      }
+
+      @keyframes fade-up {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes card-rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
       }
 
       body {
@@ -56,6 +102,36 @@
         font-family: var(--sans);
         background: linear-gradient(180deg, var(--bg), var(--bg-2));
         color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -20% -10%;
+        background:
+          radial-gradient(600px 420px at 10% 0%, rgba(0, 122, 255, 0.16), transparent 65%),
+          radial-gradient(520px 380px at 90% 10%, rgba(255, 159, 10, 0.14), transparent 60%),
+          radial-gradient(640px 420px at 85% 85%, rgba(90, 200, 250, 0.16), transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+        background-size: 28px 28px;
+        opacity: 0.12;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      html[data-theme="dark"] body::after {
+        opacity: 0.06;
       }
 
       a {
@@ -63,76 +139,124 @@
       }
 
       .wrap {
-        max-width: 1320px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 28px 20px 54px;
+        padding: 32px 22px 64px;
+        position: relative;
+        z-index: 1;
       }
 
       header {
         display: grid;
-        gap: 16px;
-        margin-bottom: 18px;
+        gap: 18px;
+        margin-bottom: 22px;
+        animation: fade-up 0.45s ease both;
       }
 
       .title-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: 16px;
         flex-wrap: wrap;
+      }
+
+      .app-bar {
+        position: sticky;
+        top: 14px;
+        z-index: 6;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.86);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 12px 24px var(--shadow);
+        transition: padding 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        margin-bottom: 16px;
+      }
+
+      html[data-theme="dark"] .app-bar {
+        background: rgba(28, 28, 30, 0.86);
+      }
+
+      .app-bar.compact {
+        padding: 8px 12px;
+        box-shadow: 0 16px 30px var(--shadow);
+      }
+
+      .app-bar.compact h1 {
+        font-size: 20px;
+      }
+
+      .app-bar.compact .mark {
+        transform: scale(0.85);
+      }
+
+      .app-bar.compact .meta-secondary {
+        display: none;
       }
 
       .brand {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
       }
 
       .mark {
-        width: 14px;
-        height: 14px;
-        border-radius: 4px;
+        width: 18px;
+        height: 18px;
+        border-radius: 6px;
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        box-shadow: 0 0 0 6px rgba(0, 122, 255, 0.2);
+        transition: transform 0.2s ease;
       }
 
       h1 {
-        font-size: 18px;
+        font-size: 24px;
+        font-family: var(--display);
         margin: 0;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.2px;
       }
 
       .meta {
         font-size: 12px;
         color: var(--muted);
+        letter-spacing: 0.02em;
+      }
+
+      .meta-secondary {
+        font-size: 11px;
+        margin-top: 4px;
       }
 
       .panel {
         background: var(--panel);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        box-shadow: 0 10px 24px var(--shadow);
+        border-radius: 14px;
+        box-shadow: 0 18px 38px var(--shadow);
       }
 
       .controls {
-        padding: 14px 16px;
+        padding: 18px 18px;
         display: grid;
-        gap: 12px;
+        gap: 14px;
+        animation: fade-up 0.5s ease both;
+        animation-delay: 0.04s;
       }
 
       .controls-grid {
         display: grid;
-        grid-template-columns: 1.2fr repeat(4, minmax(160px, 0.55fr)) 0.8fr;
-        gap: 12px;
+        grid-template-columns: minmax(240px, 1.2fr) repeat(5, minmax(140px, 1fr));
+        gap: 14px;
       }
 
-      @media (max-width: 1100px) {
+      @media (max-width: 1200px) {
         .controls-grid {
-          grid-template-columns: repeat(2, minmax(160px, 1fr));
+          grid-template-columns: repeat(3, minmax(160px, 1fr));
         }
       }
 
-      @media (max-width: 680px) {
+      @media (max-width: 760px) {
         .controls-grid {
           grid-template-columns: 1fr;
         }
@@ -140,21 +264,24 @@
 
       label {
         display: grid;
-        gap: 6px;
-        font-size: 12px;
+        gap: 8px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
         color: var(--muted);
       }
 
       input[type="text"],
       select {
         width: 100%;
-        padding: 10px 12px;
-        border-radius: 8px;
+        padding: 11px 12px;
+        border-radius: 10px;
         border: 1px solid var(--border);
-        background: var(--panel-2);
+        background: var(--panel);
         color: var(--text);
         outline: none;
         font-family: var(--sans);
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
       }
 
       input[type="text"]::placeholder {
@@ -163,8 +290,8 @@
 
       input[type="text"]:focus,
       select:focus {
-        border-color: rgba(59, 130, 246, 0.4);
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+        border-color: rgba(0, 122, 255, 0.55);
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
       }
 
       .row {
@@ -178,25 +305,42 @@
       .chips {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 10px;
         align-items: center;
       }
 
       .chip {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        border-radius: 8px;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
         border: 1px solid var(--chip-border);
         background: var(--chip-bg);
-        color: var(--muted);
-        font-size: 12px;
+        color: var(--text);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+      }
+
+      .chip[data-status] {
+        cursor: pointer;
+      }
+
+      .chip[data-status]:hover {
+        transform: translateY(-1px);
+        border-color: rgba(0, 122, 255, 0.4);
+      }
+
+      .chip.active {
+        background: rgba(0, 122, 255, 0.18);
+        border-color: rgba(0, 122, 255, 0.36);
       }
 
       .dot {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
         border-radius: 999px;
       }
 
@@ -218,39 +362,70 @@
 
       .actions {
         display: inline-flex;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
       }
 
       .btn {
-        border-radius: 8px;
+        border-radius: 999px;
         border: 1px solid var(--border);
-        background: var(--panel-2);
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
         color: var(--text);
-        padding: 8px 14px;
+        padding: 8px 16px;
         font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
         cursor: pointer;
-        transition: border-color 0.15s ease, background 0.15s ease;
+        transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
       }
 
       .btn:hover {
-        border-color: rgba(59, 130, 246, 0.5);
-        background: rgba(59, 130, 246, 0.06);
+        transform: translateY(-1px);
+        border-color: rgba(0, 122, 255, 0.4);
+        background: linear-gradient(180deg, rgba(0, 122, 255, 0.08), rgba(0, 122, 255, 0.02));
+        box-shadow: 0 10px 20px var(--shadow);
       }
 
       .btn-primary {
-        background: rgba(59, 130, 246, 0.12);
-        border-color: rgba(59, 130, 246, 0.45);
+        background: linear-gradient(135deg, rgba(0, 122, 255, 0.22), rgba(255, 159, 10, 0.16));
+        border-color: rgba(0, 122, 255, 0.48);
+      }
+
+      .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .order-toggle .order-icon {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.6;
+        transition: transform 0.2s ease;
+      }
+
+      .order-toggle.reverse .order-icon {
+        transform: rotate(180deg);
+      }
+
+      .order-toggle .btn-label {
+        font-size: 12px;
+        letter-spacing: 0.04em;
       }
 
       .board {
-        margin-top: 18px;
+        margin-top: 20px;
         display: grid;
         grid-template-columns: repeat(4, minmax(280px, 1fr));
         gap: var(--column-gap);
         overflow-x: auto;
-        padding-bottom: 6px;
+        padding-bottom: 12px;
         align-items: start;
+        scroll-snap-type: x proximity;
+        animation: fade-up 0.55s ease both;
+        animation-delay: 0.08s;
       }
 
       @media (max-width: 1100px) {
@@ -267,8 +442,9 @@
 
       .column {
         display: grid;
-        gap: 12px;
-        min-height: 180px;
+        gap: 14px;
+        min-height: 200px;
+        scroll-snap-align: start;
       }
 
       .column-header {
@@ -279,49 +455,99 @@
       }
 
       .column-title {
-        font-weight: 600;
-        letter-spacing: 0.2px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 11px;
+      }
+
+      .column-title::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--muted);
+      }
+
+      .column[data-status="TODO"] .column-title::before {
+        background: var(--muted);
+      }
+
+      .column[data-status="DOING"] .column-title::before {
+        background: var(--accent);
+      }
+
+      .column[data-status="BLOCKED"] .column-title::before {
+        background: var(--bad);
+      }
+
+      .column[data-status="DONE"] .column-title::before {
+        background: var(--good);
       }
 
       .column-body {
         display: grid;
         gap: var(--card-gap);
-        padding: 12px;
-        border-radius: 8px;
+        padding: 14px;
+        border-radius: 14px;
         border: 1px solid var(--border);
-        background: var(--panel-2);
-        min-height: 140px;
+        background: linear-gradient(180deg, var(--panel-2), var(--panel));
+        min-height: 160px;
         transition: border-color 0.2s ease, background 0.2s ease;
         align-content: start;
       }
 
       .column-body.drag-over {
-        border-color: rgba(59, 130, 246, 0.4);
-        background: rgba(59, 130, 246, 0.06);
+        border-color: rgba(0, 122, 255, 0.4);
+        background: rgba(0, 122, 255, 0.08);
       }
 
       .card {
         background: var(--panel);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 10px 10px 8px;
+        border-radius: 14px;
+        padding: 12px 12px 10px;
         display: grid;
-        gap: 6px;
+        gap: 8px;
         cursor: grab;
-        animation: none;
+        border-left: 3px solid transparent;
+        box-shadow: 0 10px 20px var(--shadow);
+        transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+        animation: card-rise 0.35s ease both;
       }
 
       .card:hover {
-        border-color: rgba(59, 130, 246, 0.35);
-        background: rgba(59, 130, 246, 0.04);
+        transform: translateY(-2px);
+        border-color: rgba(0, 122, 255, 0.3);
+        background: rgba(0, 122, 255, 0.05);
+        box-shadow: 0 16px 28px var(--shadow);
       }
 
       .card:active {
         cursor: grabbing;
       }
 
+      .card[data-status="todo"] {
+        border-left-color: rgba(110, 110, 115, 0.7);
+      }
+
+      .card[data-status="doing"] {
+        border-left-color: var(--accent);
+      }
+
+      .card[data-status="blocked"] {
+        border-left-color: var(--bad);
+      }
+
+      .card[data-status="done"] {
+        border-left-color: var(--good);
+      }
+
       .card-title {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
         line-height: 1.3;
       }
@@ -330,7 +556,7 @@
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
-        font-size: 10px;
+        font-size: 11px;
         color: var(--muted);
       }
 
@@ -341,12 +567,15 @@
       }
 
       .tag {
-        padding: 3px 8px;
-        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 9px;
+        border-radius: 999px;
         background: var(--chip-bg);
         border: 1px solid var(--chip-border);
         font-size: 10px;
         color: var(--muted);
+        line-height: 1.2;
       }
 
       .tag-btn {
@@ -364,41 +593,51 @@
       .status-line {
         font-size: 12px;
         color: var(--muted);
+        font-weight: 500;
       }
 
       .status-badge {
         display: inline-flex;
         align-items: center;
-        padding: 2px 6px;
-        border-radius: 6px;
+        gap: 6px;
+        padding: 3px 8px;
+        border-radius: 999px;
         border: 1px solid var(--border);
         font-size: 10px;
-        letter-spacing: 0.2px;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .status-badge .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: currentColor;
       }
 
       .status-badge.status-todo {
         color: var(--muted);
-        background: rgba(148, 163, 184, 0.16);
-        border-color: rgba(148, 163, 184, 0.36);
+        background: rgba(110, 110, 115, 0.18);
+        border-color: rgba(110, 110, 115, 0.36);
       }
 
       .status-badge.status-doing {
         color: var(--accent);
-        background: rgba(59, 130, 246, 0.14);
-        border-color: rgba(59, 130, 246, 0.38);
+        background: rgba(0, 122, 255, 0.16);
+        border-color: rgba(0, 122, 255, 0.34);
       }
 
       .status-badge.status-blocked {
         color: var(--bad);
-        background: rgba(239, 68, 68, 0.14);
-        border-color: rgba(239, 68, 68, 0.38);
+        background: rgba(255, 59, 48, 0.16);
+        border-color: rgba(255, 59, 48, 0.34);
       }
 
       .status-badge.status-done {
         color: var(--good);
-        background: rgba(34, 197, 94, 0.14);
-        border-color: rgba(34, 197, 94, 0.38);
+        background: rgba(52, 199, 89, 0.16);
+        border-color: rgba(52, 199, 89, 0.32);
       }
 
       .empty {
@@ -412,12 +651,12 @@
         top: 0;
         right: 0;
         height: 100%;
-        width: min(420px, 92vw);
-        background: var(--panel);
+        width: min(460px, 94vw);
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
         border-left: 1px solid var(--border);
-        box-shadow: -14px 0 30px var(--shadow);
+        box-shadow: -18px 0 40px var(--shadow);
         transform: translateX(100%);
-        transition: transform 0.2s ease;
+        transition: transform 0.24s ease;
         z-index: 20;
         display: grid;
         grid-template-rows: auto 1fr auto;
@@ -428,7 +667,7 @@
       }
 
       .drawer-header {
-        padding: 16px 16px 10px;
+        padding: 18px 18px 12px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -437,14 +676,14 @@
       }
 
       .drawer-body {
-        padding: 14px 16px;
+        padding: 16px 18px;
         display: grid;
-        gap: 12px;
+        gap: 14px;
         overflow: auto;
       }
 
       .drawer-footer {
-        padding: 12px 16px 16px;
+        padding: 12px 18px 18px;
         border-top: 1px solid var(--border);
         display: flex;
         gap: 10px;
@@ -453,7 +692,8 @@
 
       .drawer-title {
         font-weight: 600;
-        font-size: 16px;
+        font-size: 18px;
+        font-family: var(--display);
       }
 
       .drawer-subtitle {
@@ -465,8 +705,8 @@
       .drawer-section {
         display: grid;
         gap: 8px;
-        padding: 10px 12px;
-        border-radius: 8px;
+        padding: 12px 14px;
+        border-radius: 12px;
         border: 1px solid var(--border);
         background: var(--panel-2);
       }
@@ -474,7 +714,7 @@
       .drawer-label {
         font-size: 11px;
         color: var(--muted);
-        letter-spacing: 0.2px;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
@@ -496,12 +736,12 @@
       .drawer-pills {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: 8px;
       }
 
       .drawer-pill {
-        padding: 4px 8px;
-        border-radius: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
         background: var(--panel);
         border: 1px solid var(--border);
         font-size: 11px;
@@ -510,6 +750,12 @@
         align-items: center;
         gap: 6px;
         cursor: pointer;
+        transition: border-color 0.15s ease, transform 0.15s ease;
+      }
+
+      .drawer-pill:hover {
+        transform: translateY(-1px);
+        border-color: rgba(0, 122, 255, 0.35);
       }
 
       .dep-dot {
@@ -538,7 +784,7 @@
       .dep-graph {
         width: 100%;
         height: 140px;
-        border-radius: 8px;
+        border-radius: 12px;
         border: 1px solid var(--border);
         background: var(--panel);
         display: block;
@@ -563,16 +809,22 @@
         background: var(--panel);
         color: var(--text);
         padding: 4px 8px;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 11px;
         cursor: pointer;
+        transition: border-color 0.15s ease, transform 0.15s ease;
+      }
+
+      .graph-btn:hover {
+        transform: translateY(-1px);
+        border-color: rgba(0, 122, 255, 0.35);
       }
 
       .tooltip {
         position: fixed;
         z-index: 40;
-        padding: 8px 10px;
-        border-radius: 8px;
+        padding: 10px 12px;
+        border-radius: 12px;
         border: 1px solid var(--border);
         background: var(--panel);
         color: var(--text);
@@ -584,42 +836,52 @@
         max-width: 260px;
       }
 
+      .tooltip-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 6px;
+      }
+
       .tooltip.show {
         opacity: 1;
       }
 
       .view-toggle {
         display: inline-flex;
-        gap: 6px;
+        gap: 4px;
         align-items: center;
-        padding: 2px;
-        border-radius: 8px;
+        padding: 3px;
+        border-radius: 999px;
         border: 1px solid var(--border);
-        background: var(--panel-2);
+        background: var(--panel);
       }
 
       .view-btn {
         border: 0;
         background: transparent;
         color: var(--muted);
-        padding: 6px 10px;
-        border-radius: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
         font-size: 12px;
+        font-weight: 600;
         cursor: pointer;
       }
 
       .view-btn.active {
         color: var(--text);
-        background: var(--panel);
-        border: 1px solid var(--border);
+        background: rgba(0, 122, 255, 0.14);
+        border: 1px solid rgba(0, 122, 255, 0.32);
       }
 
       .table-wrap {
-        margin-top: 18px;
+        margin-top: 20px;
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: 12px;
         background: var(--panel);
         overflow: hidden;
+        animation: fade-up 0.55s ease both;
+        animation-delay: 0.08s;
       }
 
       table {
@@ -632,7 +894,7 @@
         text-align: left;
         font-size: 11px;
         color: var(--muted);
-        letter-spacing: 0.2px;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         padding: 10px 12px;
         border-bottom: 1px solid var(--border);
@@ -645,8 +907,12 @@
         vertical-align: top;
       }
 
+      tbody tr {
+        transition: background 0.15s ease;
+      }
+
       tbody tr:hover {
-        background: rgba(59, 130, 246, 0.04);
+        background: rgba(0, 122, 255, 0.08);
       }
 
       .table-id {
@@ -657,7 +923,7 @@
 
       .table-title {
         font-weight: 600;
-        font-size: 13px;
+        font-size: 14px;
         margin-bottom: 2px;
       }
 
@@ -669,7 +935,7 @@
       .overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.22);
+        background: rgba(10, 16, 15, 0.32);
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.2s ease;
@@ -682,7 +948,7 @@
       }
 
       .footer-note {
-        margin-top: 16px;
+        margin-top: 18px;
         font-size: 12px;
         color: var(--muted);
       }
@@ -691,24 +957,31 @@
   </head>
   <body>
     <div class="wrap">
-      <header>
-        <div class="title-row">
-          <div class="brand">
-            <span class="mark"></span>
-            <div>
-              <h1>Codex Swarm Tasks</h1>
-              <div class="meta" id="loadMeta">Loading /api/tasks...</div>
-            </div>
-          </div>
-          <div class="actions">
-            <div class="view-toggle" id="viewToggle">
-              <button class="view-btn active" data-view="kanban" type="button">Kanban</button>
-              <button class="view-btn" data-view="table" type="button">Table</button>
-            </div>
-            <button class="btn" id="themeToggle">Toggle theme</button>
-            <button class="btn" id="reload">Reload</button>
+      <div class="title-row app-bar" id="appBar">
+        <div class="brand">
+          <span class="mark"></span>
+          <div>
+            <h1>Codex Swarm Tasks</h1>
+            <div class="meta" id="loadMeta">Syncing tasks...</div>
+            <div class="meta meta-secondary" id="headerMeta">Loading summary...</div>
           </div>
         </div>
+        <div class="actions">
+          <div class="view-toggle" id="viewToggle">
+            <button class="view-btn active" data-view="kanban" type="button">Kanban</button>
+            <button class="view-btn" data-view="table" type="button">Table</button>
+          </div>
+          <button class="btn btn-icon order-toggle" id="orderToggle" type="button" aria-pressed="false" title="Toggle order">
+            <svg class="order-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M8 2v12M5.5 4.5L8 2l2.5 2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="btn-label" id="orderLabel">Order: Normal</span>
+          </button>
+          <button class="btn" id="themeToggle">Theme</button>
+          <button class="btn" id="reload">Refresh</button>
+        </div>
+      </div>
+      <header class="app-header">
         <div class="panel controls">
           <div class="controls-grid">
             <label>
@@ -776,7 +1049,7 @@
         </table>
       </div>
 
-      <div class="footer-note">Drag cards between columns to update status via local agentctl.</div>
+      <div class="footer-note">Drag cards between columns to update status locally.</div>
     </div>
 
     <div class="overlay" id="drawerOverlay"></div>
@@ -813,12 +1086,45 @@
       let SELECTED_ID = "";
       let VIEW_MODE = localStorage.getItem("view-mode") || "kanban";
       let GRAPH_SCALE = 1;
+      let ORDER_MODE = localStorage.getItem("order-mode") || "asc";
 
       const statusLine = document.getElementById("statusLine");
 
       function setStatusLine(text, tone = "") {
         statusLine.textContent = text;
         statusLine.style.color = tone || "";
+      }
+
+      function shorten(text, max = 18) {
+        const clean = String(text || "").trim();
+        if (!clean) return "";
+        if (clean.length <= max) return clean;
+        return `${clean.slice(0, max)}...`;
+      }
+
+      function getActiveFilters() {
+        const q = String(document.getElementById("q").value || "").trim();
+        const status = String(document.getElementById("status").value || "");
+        const owner = String(document.getElementById("owner").value || "");
+        const priority = String(document.getElementById("priority").value || "");
+        const tag = String(document.getElementById("tag").value || "");
+        const parts = [];
+        if (q) parts.push(`search="${shorten(q, 18)}"`);
+        if (status) parts.push(`status=${STATUS_LABELS[status] || status}`);
+        if (owner) parts.push(`owner=${shorten(owner, 14)}`);
+        if (priority) parts.push(`priority=${priority}`);
+        if (tag) parts.push(`tag=${shorten(tag, 14)}`);
+        return parts;
+      }
+
+      function updateHeaderMeta(filteredCount, totalCount) {
+        const meta = document.getElementById("headerMeta");
+        if (!meta) return;
+        const viewLabel = VIEW_MODE === "table" ? "Table" : "Kanban";
+        const orderLabel = ORDER_MODE === "desc" ? "Reverse" : "Normal";
+        const filters = getActiveFilters();
+        const filterText = filters.length ? `Filters: ${filters.join(", ")}` : "Filters: none";
+        meta.textContent = `Showing ${filteredCount} of ${totalCount} tasks - ${viewLabel} - Order: ${orderLabel} - ${filterText}`;
       }
 
       function escapeHtml(str) {
@@ -836,7 +1142,7 @@
 
       function statusBadge(status) {
         const key = String(status || "TODO").toLowerCase();
-        return `<span class="status-badge status-${key}">${escapeHtml(status || "TODO")}</span>`;
+        return `<span class="status-badge status-${key}"><span class="badge-dot"></span>${escapeHtml(status || "TODO")}</span>`;
       }
 
       function tagHue(tag) {
@@ -870,7 +1176,7 @@
           <div style="font-weight:600; margin-bottom:4px;">${escapeHtml(task.title)}</div>
           <div class="table-sub">${escapeHtml(idLine)} ${statusBadge(task.status)}</div>
           <div class="table-sub">Owner: ${escapeHtml(task.owner || "-")} - Priority: ${escapeHtml(task.priority || "-")}</div>
-          <div style="margin-top:6px;">${tags}</div>
+          <div class="tooltip-tags">${tags}</div>
         `;
       }
 
@@ -957,23 +1263,30 @@
         const summary = document.getElementById("summary");
         summary.innerHTML = "";
         const total = tasks.length;
+        const selected = String(document.getElementById("status").value || "");
         const counts = STATUS_ORDER.reduce((acc, st) => {
           acc[st] = tasks.filter((t) => t.status === st).length;
           return acc;
         }, {});
 
         const chips = [
-          { label: `Total ${total}`, dot: "todo" },
-          { label: `TODO ${counts.TODO}`, dot: "todo" },
-          { label: `DOING ${counts.DOING}`, dot: "doing" },
-          { label: `BLOCKED ${counts.BLOCKED}`, dot: "blocked" },
-          { label: `DONE ${counts.DONE}`, dot: "done" },
+          { label: `Total ${total}`, dot: "todo", status: "" },
+          { label: `TODO ${counts.TODO}`, dot: "todo", status: "TODO" },
+          { label: `DOING ${counts.DOING}`, dot: "doing", status: "DOING" },
+          { label: `BLOCKED ${counts.BLOCKED}`, dot: "blocked", status: "BLOCKED" },
+          { label: `DONE ${counts.DONE}`, dot: "done", status: "DONE" },
         ];
 
         chips.forEach((item) => {
           const chip = document.createElement("div");
           chip.className = "chip";
+          chip.dataset.status = item.status;
+          chip.classList.toggle("active", item.status === selected);
           chip.innerHTML = `<span class="dot ${item.dot}"></span><span>${item.label}</span>`;
+          chip.addEventListener("click", () => {
+            document.getElementById("status").value = item.status;
+            renderView();
+          });
           summary.appendChild(chip);
         });
       }
@@ -995,7 +1308,7 @@
         });
       }
 
-      function sortTasks(tasks, mode) {
+      function sortTasks(tasks, mode, reverse) {
         const sorted = [...tasks];
         const compare = {
           status: (a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status),
@@ -1013,6 +1326,7 @@
           if (primary !== 0) return primary;
           return a.id.localeCompare(b.id);
         });
+        if (reverse) sorted.reverse();
         return sorted;
       }
 
@@ -1022,10 +1336,12 @@
         renderSummary(filtered);
 
         const sortMode = String(document.getElementById("sort").value || "status");
+        const reverse = ORDER_MODE === "desc";
 
         STATUS_ORDER.forEach((status) => {
           const col = document.createElement("div");
           col.className = "column";
+          col.dataset.status = status;
           const header = document.createElement("div");
           header.className = "column-header";
           header.innerHTML = `<div class="column-title">${STATUS_LABELS[status]}</div><div class="meta">${filtered.filter((t) => t.status === status).length}</div>`;
@@ -1033,10 +1349,7 @@
           body.className = "column-body";
           body.dataset.status = status;
 
-          const tasks = sortTasks(
-            filtered.filter((t) => t.status === status),
-            sortMode,
-          );
+          const tasks = sortTasks(filtered.filter((t) => t.status === status), sortMode, reverse);
 
           if (!tasks.length) {
             const empty = document.createElement("div");
@@ -1067,7 +1380,9 @@
           tbody.appendChild(row);
           return;
         }
-        const sorted = sortTasks(filtered, String(document.getElementById("sort").value || "status"));
+        const sortMode = String(document.getElementById("sort").value || "status");
+        const reverse = ORDER_MODE === "desc";
+        const sorted = sortTasks(filtered, sortMode, reverse);
         sorted.forEach((task) => {
           const row = document.createElement("tr");
           row.style.cursor = "pointer";
@@ -1105,6 +1420,7 @@
         } else {
           renderBoard(filtered);
         }
+        updateHeaderMeta(filtered.length, STATE.tasks.length);
       }
 
       function renderCard(task, idx) {
@@ -1112,6 +1428,7 @@
         card.className = "card";
         card.draggable = window.location.protocol !== "file:";
         card.dataset.id = task.id;
+        card.dataset.status = task.status.toLowerCase();
         card.style.animationDelay = `${Math.min(idx, 8) * 0.03}s`;
         card.addEventListener("click", (ev) => {
           const tagEl = ev.target.closest(".tag-btn");
@@ -1203,6 +1520,7 @@
       function wireControls() {
         ["q", "status", "owner", "priority", "tag", "sort"].forEach((id) => {
           const el = document.getElementById(id);
+          if (!el) return;
           el.addEventListener("input", renderView);
           el.addEventListener("change", renderView);
         });
@@ -1425,17 +1743,49 @@
       function setTheme(theme) {
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("theme", theme);
+        updateThemeToggle();
+      }
+
+      function setOrderMode(mode, render = true) {
+        ORDER_MODE = mode === "desc" ? "desc" : "asc";
+        localStorage.setItem("order-mode", ORDER_MODE);
+        updateOrderToggle();
+        if (render) renderView();
+      }
+
+      function updateThemeToggle() {
+        const current = document.documentElement.getAttribute("data-theme") || "light";
+        const label = current === "dark" ? "Theme: Dark" : "Theme: Light";
+        document.getElementById("themeToggle").textContent = label;
+      }
+
+      function updateOrderToggle() {
+        const btn = document.getElementById("orderToggle");
+        if (!btn) return;
+        const label = document.getElementById("orderLabel");
+        const isReverse = ORDER_MODE === "desc";
+        btn.classList.toggle("reverse", isReverse);
+        btn.setAttribute("aria-pressed", String(isReverse));
+        if (label) label.textContent = isReverse ? "Order: Reverse" : "Order: Normal";
+        btn.title = isReverse ? "Switch to normal order" : "Switch to reverse order";
       }
 
       function toggleTheme() {
-        const current = document.documentElement.getAttribute("data-theme") || "dark";
+        const current = document.documentElement.getAttribute("data-theme") || "light";
         setTheme(current === "dark" ? "light" : "dark");
       }
 
       async function main() {
-        const theme = localStorage.getItem("theme") || "dark";
+        const storedTheme = localStorage.getItem("theme");
+        const prefersDark =
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = storedTheme || (prefersDark ? "dark" : "light");
         setTheme(theme);
+        setOrderMode(ORDER_MODE, false);
         document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+        document.getElementById("orderToggle").addEventListener("click", () => {
+          setOrderMode(ORDER_MODE === "asc" ? "desc" : "asc");
+        });
         document.getElementById("reload").addEventListener("click", () => window.location.reload());
         wireControls();
         document.querySelectorAll(".view-btn").forEach((btn) => {
@@ -1445,21 +1795,27 @@
           });
         });
         setViewMode(VIEW_MODE);
+        const appBar = document.getElementById("appBar");
+        if (appBar) {
+          const syncBar = () => appBar.classList.toggle("compact", window.scrollY > 24);
+          syncBar();
+          window.addEventListener("scroll", syncBar, { passive: true });
+        }
 
         if (window.location.protocol === "file:") {
           document.getElementById("loadMeta").textContent = "Open this via viewer.sh for live updates.";
-          setStatusLine("Drag-and-drop disabled in file mode.");
+          setStatusLine("Read-only in file mode.");
           return;
         }
 
         try {
           const data = await loadTasks();
           applyData(data);
-          document.getElementById("loadMeta").textContent = `Loaded ${STATE.tasks.length} tasks - ${new Date().toLocaleString()}`;
+          document.getElementById("loadMeta").textContent = `Synced ${STATE.tasks.length} tasks - ${new Date().toLocaleString()}`;
           if (data?.meta?.warning) {
             setStatusLine(`Warning: ${data.meta.warning}`, "var(--warn)");
           } else if (!STATE.tasks.length) {
-            setStatusLine("No tasks returned - check Redmine project_id or filters.", "var(--warn)");
+            setStatusLine("No tasks returned - check task source settings or filters.", "var(--warn)");
           } else {
             setStatusLine("Ready for drag-and-drop status updates.");
           }

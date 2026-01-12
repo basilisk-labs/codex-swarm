@@ -4104,12 +4104,36 @@
       "doc_updated_by": "agentctl",
       "description": "Refactor agentctl and backend modules to pass strict mypy without exclusions while preserving behavior.",
       "doc": "## Summary\n\nRefactor agentctl/backends to satisfy strict mypy without exclusions while preserving CLI behavior.\n\n## Scope\n\n- Audit mypy errors in agentctl/backends and map fixes.\n- Add typed helpers (TypedDict/Protocol/dataclasses) for task models and backend APIs.\n- Narrow dynamic imports and casts so mypy can validate module loading.\n- Remove mypy excludes for agentctl/backends in pyproject.toml.\n\n## Risks\n\n- Type refactors may change CLI edge cases or backend error handling.\n- Large surface area could require incremental migration to avoid regressions.\n\n## Verify Steps\n\n- .venv/bin/ruff format .\n- .venv/bin/ruff check .\n- .venv/bin/mypy\n\n## Rollback Plan\n\nRevert refactor commits and restore previous mypy excludes; rerun ruff/mypy to confirm prior behavior.\n\n## Notes\n\nAim for incremental, well-tested typing improvements rather than broad rewrites."
+    },
+    {
+      "id": "202601121711-GZ15T6",
+      "title": "Polish cleanup scripts and tasks viewer",
+      "status": "DOING",
+      "priority": "normal",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "cleanup",
+        "ui",
+        "tasks"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Polish tasks viewer UI (iOS palette, sticky header, order toggle, tooltip tags, metadata) and update clean scripts to remove dev files."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-12T17:12:41+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Remove dev-only files in clean scripts and refine tasks viewer UI (iOS palette, order toggle, sticky header, tooltip tags, metadata) and fix layout issues.",
+      "doc": "## Summary\n\n- Update clean.sh/clean.ps1 to remove dev-only files and refresh tasks viewer UI (iOS palette, header, order toggle, tooltip tags, metadata).\n\n## Scope\n\n- clean.sh/clean.ps1 remove pyproject.toml and requirements-dev.txt; tasks.html updates palette, header behavior, ordering, tooltips, and metadata.\n\n## Risks\n\n- UI styling regressions or layout differences across browsers.\n\n## Verify Steps\n\n- Manual: run ./viewer.sh, check sticky header, full-height background, tooltip tag wrapping, order toggle; run clean.sh on a test copy.\n\n## Rollback Plan\n\n- Revert this commit to restore the previous tasks viewer and clean scripts."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "009dd9947f48495fb0fd538c85bd52e04fdaa46b86948da4e919735e8d8a7ca8"
+    "checksum": "42dfc1e14a0f02b2af2a6cea37a5b9a88462e64cafd7ae66e6a43afa669b19a0"
   }
 }
