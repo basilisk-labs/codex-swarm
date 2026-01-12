@@ -4062,7 +4062,7 @@
     {
       "id": "202601111732-M23S62",
       "title": "Refactor agentctl/backends for strict mypy",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "high",
       "owner": "CODER",
       "depends_on": [
@@ -4081,23 +4081,35 @@
         ".venv/bin/ruff check .",
         ".venv/bin/mypy"
       ],
+      "commit": {
+        "hash": "7b469b885764e3f4220fb5c2b8d6ea6bbc1ef0c8",
+        "message": "🛠️ M23S62 Verified: strict mypy typing for redmine backend/agentctl, cleanup scripts keep viewer; ruff and mypy pass."
+      },
       "comments": [
         {
           "author": "CODER",
           "body": "Plan: add refactor task for strict mypy in agentctl/backends and schedule GitHub sync + cleanup update task."
+        },
+        {
+          "author": "CODER",
+          "body": "Start: begin strict mypy refactor plan for agentctl/backends."
+        },
+        {
+          "author": "CODER",
+          "body": "Verified: strict mypy typing for redmine backend/agentctl, cleanup scripts keep viewer; ruff and mypy pass."
         }
       ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-11T17:33:08+00:00",
+      "doc_updated_at": "2026-01-11T17:43:44+00:00",
       "doc_updated_by": "agentctl",
       "description": "Refactor agentctl and backend modules to pass strict mypy without exclusions while preserving behavior.",
-      "doc": "## Summary\n\nRefactor agentctl/backends to satisfy strict mypy without exclusions while preserving CLI behavior.\n\n## Scope\n\n- Audit mypy errors in agentctl/backends and map fixes.\n- Add typed helpers (TypedDict/Protocol/dataclasses) for task models and backend APIs.\n- Narrow dynamic imports and casts so mypy can validate module loading.\n- Remove mypy excludes for agentctl/backends in pyproject.toml.\n\n## Risks\n\n- Type refactors may change CLI edge cases or backend error handling.\n- Large surface area could require incremental migration to avoid regressions.\n\n## Verify Steps\n\n- .venv/bin/ruff format .\n- .venv/bin/ruff check .\n- .venv/bin/mypy\n\n## Rollback Plan\n\n- ...\n\n## Notes\n\nAim for incremental, well-tested typing improvements rather than broad rewrites."
+      "doc": "## Summary\n\nRefactor agentctl/backends to satisfy strict mypy without exclusions while preserving CLI behavior.\n\n## Scope\n\n- Audit mypy errors in agentctl/backends and map fixes.\n- Add typed helpers (TypedDict/Protocol/dataclasses) for task models and backend APIs.\n- Narrow dynamic imports and casts so mypy can validate module loading.\n- Remove mypy excludes for agentctl/backends in pyproject.toml.\n\n## Risks\n\n- Type refactors may change CLI edge cases or backend error handling.\n- Large surface area could require incremental migration to avoid regressions.\n\n## Verify Steps\n\n- .venv/bin/ruff format .\n- .venv/bin/ruff check .\n- .venv/bin/mypy\n\n## Rollback Plan\n\nRevert refactor commits and restore previous mypy excludes; rerun ruff/mypy to confirm prior behavior.\n\n## Notes\n\nAim for incremental, well-tested typing improvements rather than broad rewrites."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "90377ef341818f0a56587e6f0c0cc921ab6c0cacbe6f6ad6730c0d16bf277d58"
+    "checksum": "009dd9947f48495fb0fd538c85bd52e04fdaa46b86948da4e919735e8d8a7ca8"
   }
 }

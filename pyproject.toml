@@ -51,7 +51,7 @@ strict = true
 show_error_codes = true
 warn_unreachable = true
 warn_unused_configs = true
-exclude = "(^\\.venv/|^\\.codex-swarm/worktrees/|^\\.codex-swarm/agentctl\\.py|^\\.codex-swarm/backends/)"
+exclude = "(^\\.venv/|^\\.codex-swarm/worktrees/)"
 files = [
   ".codex-swarm",
   ".github/scripts",

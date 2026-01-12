@@ -149,6 +149,7 @@ def _parse_frontmatter_lines(lines: Iterable[str]) -> dict[str, object]:
             continue
         if raw_line.startswith("  - ") and current_list_key:
             item_text = raw_line.strip()[2:].strip()
+            item: object
             if item_text.startswith("{") and item_text.endswith("}"):
                 item = _parse_inline_dict(item_text)
             else:
@@ -451,7 +452,7 @@ class LocalBackend:
 
     def export_tasks_json(self, output_path: Path) -> None:
         tasks = sorted(self.list_tasks(), key=lambda item: str(item.get("id") or ""))
-        payload = {"tasks": tasks}
+        payload: dict[str, object] = {"tasks": tasks}
         canonical = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         payload["meta"] = {
             "schema_version": 1,
