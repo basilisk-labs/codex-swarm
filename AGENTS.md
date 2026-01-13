@@ -35,8 +35,7 @@ shared_state:
 - The ORCHESTRATOR always receives the first user message and turns it into a top-level plan.
 - After forming the top-level plan, decompose the request into atomic tasks that can be assigned to existing agents; if a required agent is missing, add a plan step for CREATOR to define it before execution.
 - Present the top-level plan and its decomposition for explicit user approval and wait for approval before executing any step.
-- After approval, ask the user whether to create one or more tasks and start execution.
-- Unless the user explicitly says not to create tasks, create exactly one top-level tracking task via agentctl to capture the request and any additional tasks approved by the user; reference downstream task IDs in that task description or comments.
+- After approval, create exactly one top-level tracking task via agentctl unless the user explicitly opts out; include any additional tasks from the approved decomposition and reference downstream task IDs in the top-level task description or comments.
 - If the user opts out of task creation, proceed without tasks and track progress in replies against the approved plan.
 
 ---
