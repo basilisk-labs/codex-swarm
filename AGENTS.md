@@ -74,7 +74,7 @@ shared_state:
   2) **Implementation (task branch + worktree)**: ship code/tests/docs changes in the task branch worktree and keep the tracked PR artifact up to date under `.codex-swarm/tasks/<task-id>/pr/`.
   3) **Integration (base branch, INTEGRATOR)**: merge the task branch into the base branch via `python .codex-swarm/agentctl.py integrate …` (optionally running verify and capturing output in `.codex-swarm/tasks/<task-id>/pr/verify.log`).
   4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/tasks/<task-id>/README.md`, mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, then follow the Task export rules below before committing closure artifacts.
-- Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
+- Before creating the final **verification/closure** commit, check `closure_commit_requires_approval` in `.codex-swarm/config.json`; if true, ask the user to approve it, otherwise proceed without confirmation.
 - Do not finish a task until `.codex-swarm/tasks/<task-id>/README.md` is fully filled in (no placeholder `...`).
 - Avoid dedicated commits for intermediate status-only changes (e.g., a standalone "start/DOING" commit). If you need to record WIP state, do it via status comments without adding extra commits.
 - Commit message format is defined in `@.codex-swarm/agentctl.md`; follow it and do not invent alternate formats.

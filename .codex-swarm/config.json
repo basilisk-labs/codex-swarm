@@ -34,5 +34,6 @@
   },
   "tasks_backend": {
     "config_path": ".codex-swarm/backends/local/backend.json"
-  }
+  },
+  "closure_commit_requires_approval": false
 }

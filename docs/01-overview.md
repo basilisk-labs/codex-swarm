@@ -13,7 +13,7 @@ Codex Swarm is a local, repo-scoped framework that structures how you use the Op
 - Backend-driven truth: the canonical task source depends on the active backend.
 - Traceability: every task ties back to a stable ID and a commit.
 - Role clarity: each agent has a defined scope and permissions.
-- Explicit approvals: plans and closures require human approval.
+- Explicit approvals: plans require human approval; closure approvals follow `closure_commit_requires_approval` in `.codex-swarm/config.json`.
 
 ## Core Components
 - [`AGENTS.md`](../AGENTS.md): global rules and workflow policies.

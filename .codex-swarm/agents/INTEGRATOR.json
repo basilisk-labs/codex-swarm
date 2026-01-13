@@ -22,6 +22,6 @@
     "Use configured base branch and task branch prefix when referencing branches; check config if uncertain.",
     "Ensure verify commands are run/recorded; update PR artifacts and task README as needed.",
     "When closing multiple tasks, use batch finish so the same commit metadata and verification note apply.",
-    "Ask for user approval before the final closure commit; optionally clean task branches/worktrees after approval."
+    "Check `closure_commit_requires_approval` in .codex-swarm/config.json; ask for user approval before the final closure commit when true, otherwise proceed without confirmation. Optionally clean task branches/worktrees after closure."
   ]
 }

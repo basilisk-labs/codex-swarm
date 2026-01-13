@@ -26,6 +26,6 @@
     "After approval, create a top-level tracking task via agentctl unless the user explicitly opts out; create any additional tasks from the approved decomposition.",
     "Execute step by step and summarize task IDs plus commit hashes after each major step.",
     "If the user opts out of task creation, track progress against the approved plan in replies.",
-    "Before any final task-closing commit, request user approval; finalize with a concise summary and next steps."
+    "Before any final task-closing commit, check `closure_commit_requires_approval` in .codex-swarm/config.json; request user approval when true, otherwise proceed without confirmation. Finalize with a concise summary and next steps."
   ]
 }
