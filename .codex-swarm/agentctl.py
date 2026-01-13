@@ -179,6 +179,24 @@ DEFAULT_GENERIC_COMMIT_TOKENS: set[str] = {
     "tasks",
     "task",
 }
+START_COMMIT_EMOJI = "🚧"
+FINISH_COMMIT_EMOJI = "✅"
+INTERMEDIATE_COMMIT_EMOJI_FALLBACK = "🛠️"
+COMMIT_EMOJI_KEYWORDS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("⛔", ("blocked", "blocker", "blocking", "stuck", "waiting", "hold")),
+    ("🚑", ("hotfix", "urgent", "emergency")),
+    ("🐛", ("fix", "bug", "bugs", "defect", "defects", "error", "errors", "crash", "regression", "issue")),
+    ("🔒", ("security", "vuln", "vulnerability", "auth", "encrypt", "encryption")),
+    ("⚡", ("perf", "performance", "optimize", "optimization", "speed", "latency")),
+    ("🧪", ("test", "tests", "testing", "spec", "specs", "coverage", "verify", "verified", "validation")),
+    ("📝", ("doc", "docs", "docstring", "readme", "documentation", "guide", "changelog")),
+    ("♻️", ("refactor", "refactoring", "cleanup", "simplify", "restructure", "rename")),
+    ("🏗️", ("build", "ci", "pipeline", "release", "packaging")),
+    ("🔧", ("config", "configuration", "settings", "flag", "env", "toggle")),
+    ("📦", ("deps", "dependency", "dependencies", "upgrade", "bump", "vendor")),
+    ("🎨", ("ui", "ux", "style", "css", "theme", "layout")),
+    ("🧹", ("lint", "format", "formatting", "typo", "spelling")),
+)
 HOOK_ENV_TASK_ID = "CODEX_SWARM_TASK_ID"
 HOOK_ENV_ALLOW_TASKS = "CODEX_SWARM_ALLOW_TASKS"
 HOOK_ENV_ALLOW_BASE = "CODEX_SWARM_ALLOW_BASE"
@@ -2202,7 +2220,7 @@ def guard_commit_check(
 
 
 def derive_commit_message_from_comment(task_id: str, body: str, emoji: str) -> str:
-    summary = " ".join((body or "").split())
+    summary = format_comment_body_for_commit(body)
     if not summary:
         die("Comment body is required to build a commit message from the task comment", code=2)
     prefix = (emoji or "").strip()
@@ -2214,14 +2232,97 @@ def derive_commit_message_from_comment(task_id: str, body: str, emoji: str) -> s
     return f"{prefix} {suffix} {summary}"
 
 
-def default_commit_emoji_for_status(status: str) -> str:
-    mapping = {
-        "TODO": "📝",
-        "DOING": "🚧",
-        "BLOCKED": "⛔",
-        "DONE": "✅",
-    }
-    return mapping.get(status.strip().upper(), "🛠️")
+def normalize_comment_body_for_commit(body: str) -> str:
+    raw = str(body or "")
+    raw = raw.replace("\r\n", "\n").replace("\r", "\n")
+    raw = re.sub(r"\n+", " | ", raw)
+    raw = re.sub(r"\s+", " ", raw)
+    return raw.strip()
+
+
+def normalize_comment_prefix(prefix: str) -> str:
+    label = prefix.strip()
+    if label.endswith(":"):
+        label = label[:-1]
+    return label.strip().lower()
+
+
+def comment_prefixes_for_commit() -> list[tuple[str, str]]:
+    prefixes = []
+    for kind in ("start", "blocked", "verified"):
+        prefix, _ = comment_rule(kind)
+        label = normalize_comment_prefix(prefix)
+        if prefix and label:
+            prefixes.append((prefix, label))
+    return prefixes
+
+
+def split_comment_prefix(text: str, prefixes: list[tuple[str, str]]) -> tuple[str | None, str]:
+    lowered = text.lower()
+    for raw_prefix, label in prefixes:
+        prefix = raw_prefix.strip()
+        if not prefix:
+            continue
+        if lowered.startswith(prefix.lower()):
+            remainder = text[len(prefix) :].strip()
+            return label, remainder
+    return None, text
+
+
+def split_summary_and_details(text: str) -> tuple[str, list[str]]:
+    cleaned = text.strip()
+    if not cleaned:
+        return "", []
+    for pattern in (r"\s*\|\s*", r"\s*;\s*", r"\s+--\s+", r"\s+-\s+"):
+        if re.search(pattern, cleaned):
+            parts = [part.strip() for part in re.split(pattern, cleaned) if part.strip()]
+            if parts:
+                return parts[0], parts[1:]
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", cleaned) if part.strip()]
+    if len(sentences) > 1:
+        return sentences[0], sentences[1:]
+    return cleaned, []
+
+
+def format_comment_body_for_commit(body: str) -> str:
+    compact = normalize_comment_body_for_commit(body)
+    if not compact:
+        return ""
+    prefix_label, remainder = split_comment_prefix(compact, comment_prefixes_for_commit())
+    summary, details = split_summary_and_details(remainder)
+    if not summary:
+        summary = remainder or compact
+        if summary == compact and prefix_label:
+            prefix_label = None
+    if prefix_label:
+        summary = f"{prefix_label}: {summary}" if summary else prefix_label
+    if details:
+        details_text = "; ".join(details)
+        if details_text:
+            return f"{summary} | details: {details_text}"
+    return summary
+
+
+def infer_commit_emoji(text: str) -> str:
+    normalized = " ".join(str(text or "").lower().split())
+    if not normalized:
+        return INTERMEDIATE_COMMIT_EMOJI_FALLBACK
+    for emoji, keywords in COMMIT_EMOJI_KEYWORDS:
+        for keyword in keywords:
+            if not keyword:
+                continue
+            if re.search(rf"\b{re.escape(keyword)}\b", normalized):
+                return emoji
+    return INTERMEDIATE_COMMIT_EMOJI_FALLBACK
+
+
+def default_commit_emoji_for_status(status: str, *, comment_body: str | None = None) -> str:
+    normalized = status.strip().upper()
+    if normalized == "DOING":
+        return START_COMMIT_EMOJI
+    if normalized == "DONE":
+        return FINISH_COMMIT_EMOJI
+    return infer_commit_emoji(comment_body or "")
 
 
 def stage_allowlist(allow: list[str], *, allow_tasks: bool, cwd: Path) -> list[str]:
@@ -2852,7 +2953,7 @@ def cmd_start(args: argparse.Namespace) -> None:
         commit_info = commit_from_comment(
             task_id=args.task_id,
             comment_body=args.body,
-            emoji=args.commit_emoji or default_commit_emoji_for_status("DOING"),
+            emoji=args.commit_emoji or default_commit_emoji_for_status("DOING", comment_body=args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
             allow_tasks=bool(args.commit_allow_tasks),
@@ -2901,7 +3002,7 @@ def cmd_block(args: argparse.Namespace) -> None:
         commit_info = commit_from_comment(
             task_id=args.task_id,
             comment_body=args.body,
-            emoji=args.commit_emoji or default_commit_emoji_for_status("BLOCKED"),
+            emoji=args.commit_emoji or default_commit_emoji_for_status("BLOCKED", comment_body=args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
             allow_tasks=bool(args.commit_allow_tasks),
@@ -3293,7 +3394,7 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
         commit_from_comment(
             task_id=args.task_id,
             comment_body=args.body,
-            emoji=args.commit_emoji or default_commit_emoji_for_status(nxt),
+            emoji=args.commit_emoji or default_commit_emoji_for_status(nxt, comment_body=args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
             allow_tasks=bool(args.commit_allow_tasks),
@@ -3414,7 +3515,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
         code_commit_info = commit_from_comment(
             task_id=primary_task_id,
             comment_body=args.body,
-            emoji=args.commit_emoji or "✨",
+            emoji=args.commit_emoji or infer_commit_emoji(args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
             allow_tasks=bool(args.commit_allow_tasks),
@@ -3514,7 +3615,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
         commit_from_comment(
             task_id=primary_task_id,
             comment_body=args.body,
-            emoji=args.status_commit_emoji or default_commit_emoji_for_status("DONE"),
+            emoji=args.status_commit_emoji or default_commit_emoji_for_status("DONE", comment_body=args.body),
             allow=status_allow,
             auto_allow=bool(args.status_commit_auto_allow or not status_allow),
             allow_tasks=True,
@@ -5302,7 +5403,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_block.add_argument(
         "--commit-emoji",
-        help="Emoji prefix when building a commit message from the comment (default: ⛔)",
+        help="Emoji prefix when building a commit message from the comment (default: inferred from comment text)",
     )
     p_block.add_argument(
         "--commit-allow",
@@ -5490,7 +5591,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_status.add_argument(
         "--commit-emoji",
-        help="Emoji prefix when building a commit message from the comment (default depends on status)",
+        help=(
+            "Emoji prefix when building a commit message from the comment "
+            "(default: start/done fixed; otherwise inferred from comment text)"
+        ),
     )
     p_status.add_argument(
         "--commit-allow",
@@ -5544,7 +5648,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_finish.add_argument(
         "--commit-emoji",
-        help="Emoji prefix when building a commit message from the comment (default: ✨)",
+        help="Emoji prefix when building a commit message from the comment (default: inferred from comment text)",
     )
     p_finish.add_argument(
         "--commit-allow",

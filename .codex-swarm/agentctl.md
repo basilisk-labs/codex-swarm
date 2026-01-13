@@ -143,7 +143,8 @@ python .codex-swarm/agentctl.py start <task-id> --author CODER --body "Start: ..
 python .codex-swarm/agentctl.py block <task-id> --author CODER --body "Blocked: ... (what blocks, next step, owner)"
 
 # optional comment-driven commits (only when you intend to create a commit)
-# agentctl builds `<emoji> <suffix> <comment>` from your status body
+# agentctl builds `<emoji> <suffix> <formatted comment>` from your status body
+# comment text is normalized into a summary plus optional details
 python .codex-swarm/agentctl.py start <task-id> --author CODER --body "Start: ... " --commit-from-comment --commit-auto-allow
 python .codex-swarm/agentctl.py block <task-id> --author CODER --body "Blocked: ... " --commit-from-comment --commit-auto-allow
 python .codex-swarm/agentctl.py task set-status <task-id> DONE --author CODER --body "Done: ... " --commit-from-comment --commit-auto-allow
@@ -190,7 +191,39 @@ Use: `<emoji> <suffix> <detailed changelog ...>`.
 Notes:
 - `suffix` is the task ID segment after the last dash.
 - For batch commits, include every task suffix in the subject.
-- When using the comment-driven flags, the subject is auto-built as `<emoji> <suffix> <comment>` from your status/finish body; pick the emoji to match the action (e.g., 🚧/⛔/✅/✨).
+- When using the comment-driven flags, the subject is auto-built as `<emoji> <suffix> <formatted comment>` from your status/finish body.
+- Start commits use 🚧 and finish/status commits use ✅; intermediate commits infer emoji from the comment text unless you override with `--commit-emoji` / `--status-commit-emoji`.
+- Comment formatting: the prefix (Start/Blocked/Verified) is normalized to lowercase, and extra segments (separated by `;`, `|`, `--`, `-`, or sentence breaks) become `| details: ...`.
+
+Example:
+
+```
+Start: add emoji inference; update docs; adjust CLI help
+```
+
+becomes:
+
+```
+🚧 VXPBHQ start: add emoji inference | details: update docs; adjust CLI help
+```
+
+Emoji hints for inferred commits (first match wins):
+
+Emoji | Keywords
+--- | ---
+⛔ | blocked, blocker, stuck, waiting
+🚑 | hotfix, urgent, emergency
+🐛 | fix, bug, defect, crash, regression
+🔒 | security, vuln, auth, encryption
+⚡ | perf, performance, optimize, latency
+🧪 | test, tests, verify, coverage, spec
+📝 | doc, docs, readme, documentation, guide
+♻️ | refactor, cleanup, restructure, rename
+🏗️ | build, ci, pipeline, release
+🔧 | config, settings, env, flags
+📦 | deps, dependency, upgrade, bump
+🎨 | ui, ux, css, theme, layout
+🧹 | lint, format, typo, spelling
 
 ## Terminology
 
@@ -297,6 +330,7 @@ Task README sections (body):
   - Integration/closure is performed only by INTEGRATOR via `python .codex-swarm/agentctl.py integrate` / `python .codex-swarm/agentctl.py finish`.
 - `status_commit_policy: "allow" | "warn" | "confirm"`: controls comment-driven/status commits. `warn` prints a warning unless `--confirm-status-commit` is passed; `confirm` blocks unless `--confirm-status-commit` is passed.
 - `finish_auto_status_commit: true | false`: when true, `finish` will create a status commit using the comment body whenever `--author` and `--body` are provided (equivalent to `--status-commit`); still subject to `status_commit_policy`.
+- `closure_commit_requires_approval: true | false`: controls whether agents must request explicit user approval before the final task-closing commit.
 
 In `branch_pr`, executors leave handoff notes via `python .codex-swarm/agentctl.py pr note <task-id> ...`, which appends to `.codex-swarm/tasks/<task-id>/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to the task record at closure.
 
