@@ -16,7 +16,6 @@ doc_updated_by: "agentctl"
 description: "Drop old T-### compatibility from agentctl/clean.sh and backfill commit metadata on DONE tasks to keep lint clean."
 dirty: false
 id_source: "custom"
-redmine_id: 424
 ---
 ## Summary
 
@@ -48,3 +47,4 @@ We no longer need legacy T-### branches or task reid; branch_pr mode should only
 ## Notes
 
 - Owner warnings for 'AUTOMATION' remain; acceptable as lint warnings.
+

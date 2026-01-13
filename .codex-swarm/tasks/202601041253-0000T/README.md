@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Ensure the PLANNER splits every request into single-owner tasks with unique commits."
 dirty: false
 id_source: "custom"
-redmine_id: 306
 ---

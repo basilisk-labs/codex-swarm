@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Expand the README with details on emoji commits and atomic task tracking."
 dirty: false
 id_source: "custom"
-redmine_id: 285
 ---

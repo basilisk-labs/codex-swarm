@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Update AGENTS.md + .AGENTS/*.json to use scripts/agentctl.py for task operations (no manual tasks.json edits), add the new CLI to the repo, and make tasks.json pass agentctl task lint (meta+checksum, DONE tasks have commit metadata)."
 dirty: false
 id_source: "custom"
-redmine_id: 330
 ---

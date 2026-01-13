@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Remove references to the markdown task board and stop generating it; tasks.json remains the single source of truth."
 dirty: false
-redmine_id: 328
 ---

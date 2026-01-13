@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Render the `_Status`, `_Description`, and `_Commit` prefixes as bold text while leaving their italic suffixes intact."
 dirty: false
-redmine_id: 314
 ---

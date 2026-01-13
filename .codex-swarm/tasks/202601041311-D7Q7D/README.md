@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Fix local backend frontmatter parsing to prevent over-escaped strings, normalize existing task files, and allow short commit id suffixes in commit subject checks/docs."
 dirty: false
 id_source: "custom"
-redmine_id: 274
 ---
 # 202601041311-D7Q7D: Fix frontmatter parsing and commit id rules
 

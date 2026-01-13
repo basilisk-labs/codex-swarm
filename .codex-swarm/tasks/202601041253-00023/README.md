@@ -15,5 +15,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Implement the stricter branch_pr workflow spec: worktrees under .codex-swarm/worktrees, branch naming task/T-###/<slug>, new branch status, stricter pr open/update/check, integrate dry-run + verify in branch worktree, workflow_mode config in .codex-swarm/swarm.config.json, and stronger finish/guard/verify guardrails + standardized outputs."
 dirty: false
-redmine_id: 347
 ---

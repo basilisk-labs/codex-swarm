@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add a global reminder that any external libraries required by scripts must be installed only inside virtual environments."
 dirty: false
 id_source: "custom"
-redmine_id: 308
 ---

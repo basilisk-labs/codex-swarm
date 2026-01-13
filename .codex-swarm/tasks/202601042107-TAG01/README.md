@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Require PLANNER to review existing tags, apply the minimal set for navigation, and set dependencies when possible."
 dirty: false
 id_source: "custom"
-redmine_id: 277
 ---
 # Summary
 

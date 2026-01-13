@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Fix the Mermaid workflow diagram in @README.md so it renders correctly on GitHub (avoid problematic label characters like ### in node text).\\\\n\\\\nAcceptance criteria:\\\\n- Mermaid block renders on GitHub README view.\\\\n- Diagram still reflects current workflow (CODER->TESTER, DOCS before finish, 3-phase commits)."
 dirty: false
 id_source: "custom"
-redmine_id: 337
 ---

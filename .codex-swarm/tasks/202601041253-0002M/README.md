@@ -15,5 +15,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Audit scripts/agentctl.py capabilities and update .codex-swarm/agents/*.json prompts so each agent uses agentctl for any supported operation (tasks.json ops, branch/worktree management, PR artifacts, verify logs, commit guardrails, integrate/cleanup). Only fall back to raw git/shell commands when agentctl has no equivalent."
 dirty: false
-redmine_id: 364
 ---

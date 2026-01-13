@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Add a standalone HTML interface to view and filter tasks.json (search, status/owner/priority/tag filters, sorting, and file:// fallback via file picker)."
 dirty: false
-redmine_id: 329
 ---

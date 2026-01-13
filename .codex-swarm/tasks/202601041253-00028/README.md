@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Make the pipeline rule enforceable: update python scripts/agentctl.py task add to always write an explicit depends_on list (empty by default) so new tasks never omit the field. Also adjust AGENTS.md wording to clarify this requirement applies on task creation (legacy tasks may omit depends_on until updated)."
 dirty: false
 id_source: "custom"
-redmine_id: 352
 ---

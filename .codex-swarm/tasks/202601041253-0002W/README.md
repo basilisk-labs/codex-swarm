@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Document commit subject conventions for batch finish in agentctl quickstart."
 dirty: false
-redmine_id: 372
 ---

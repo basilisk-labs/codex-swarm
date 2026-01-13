@@ -16,7 +16,6 @@ doc_updated_by: "agentctl"
 description: "Add batch-friendly sync/migration with pauses to avoid Redmine timeouts; restore local backend after tests."
 dirty: false
 id_source: "custom"
-redmine_id: 428
 ---
 ## Summary
 

@@ -2,16 +2,20 @@
 id: "202601121711-GZ15T6"
 title: "Polish cleanup scripts and tasks viewer"
 status: "DOING"
-priority: "normal"
-owner: "CODER"
+priority: "Нормальный"
+owner: "REDMINE"
 depends_on: []
-tags: ["cleanup", "ui", "tasks"]
+tags: []
+verify: null
+commit: null
 comments:
   - { author: "CODER", body: "Polish tasks viewer UI (iOS palette, sticky header, order toggle, tooltip tags, metadata) and update clean scripts to remove dev files." }
 doc_version: 2
 doc_updated_at: "2026-01-12T17:12:41+00:00"
 doc_updated_by: "agentctl"
 description: "Remove dev-only files in clean scripts and refine tasks viewer UI (iOS palette, order toggle, sticky header, tooltip tags, metadata) and fix layout issues."
+dirty: false
+id_source: "custom"
 ---
 ## Summary
 

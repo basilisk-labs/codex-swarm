@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Ignore `.env*` so sensitive environment overrides stay out of the repo."
 dirty: false
-redmine_id: 323
 ---

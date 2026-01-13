@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add environment assumptions for local-only workflows without remote runtimes."
 dirty: false
 id_source: "custom"
-redmine_id: 294
 ---

@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add a Russian localization of the README plus supporting glossary entries."
 dirty: false
 id_source: "custom"
-redmine_id: 302
 ---

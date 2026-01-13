@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Refresh root README to reflect current docs entrypoint and ensure documentation links are easy to find."
 dirty: false
 id_source: "custom"
-redmine_id: 380
 ---

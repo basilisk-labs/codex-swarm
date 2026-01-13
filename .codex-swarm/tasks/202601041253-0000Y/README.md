@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Align the CODER role with actual responsibilities by expanding permissions and workflow details per the recent request."
 dirty: false
 id_source: "custom"
-redmine_id: 310
 ---

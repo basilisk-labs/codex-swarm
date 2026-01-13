@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add higher-level CLI helpers: task next (ready tasks), task search, task scaffold (docs/workflow template), guard suggest-allow (derive minimal --allow set), and agentctl commit wrapper (guard + git commit)."
 dirty: false
 id_source: "custom"
-redmine_id: 339
 ---

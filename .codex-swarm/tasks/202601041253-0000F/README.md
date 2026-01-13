@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Ensure prompts mention the IDE limitations so agents avoid referencing unavailable tools."
 dirty: false
 id_source: "custom"
-redmine_id: 295
 ---

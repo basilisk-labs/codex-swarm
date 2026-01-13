@@ -14,7 +14,6 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Re-ID existing tasks to the new timestamp + short ID format while preserving order and dependencies."
 dirty: false
-redmine_id: 279
 ---
 # 202601041253-0003R: Migrate legacy task IDs to new format
 

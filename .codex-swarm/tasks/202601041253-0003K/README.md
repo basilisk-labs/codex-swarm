@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Add a migration/export command to seed .codex-swarm/tasks from tasks.json and set tasks_backend.config_path to the local backend."
 dirty: false
 id_source: "custom"
-redmine_id: 269
 ---
 # 202601041253-0003K: agentctl: migrate tasks.json to local backend
 

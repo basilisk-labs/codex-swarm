@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Clarify how commits should start with emojis and summarize completed plan items."
 dirty: false
-redmine_id: 305
 ---

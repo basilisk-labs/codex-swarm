@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Confirm agentctl writes valid tasks.json entries and restate that agents must not edit tasks.json manually."
 dirty: false
 id_source: "custom"
-redmine_id: 378
 ---

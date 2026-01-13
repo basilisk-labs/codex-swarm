@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add example sessions, troubleshooting tips, and best practices to GUIDELINE.md so the framework flow is crystal clear."
 dirty: false
 id_source: "custom"
-redmine_id: 322
 ---

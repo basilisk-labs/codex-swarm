@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add a quick-start tour of key files and directories so contributors know where to work."
 dirty: false
 id_source: "custom"
-redmine_id: 288
 ---

@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Require agents to use only the unique task index (suffix after the last dash) in commit messages, omitting the timestamp portion."
 dirty: false
 id_source: "custom"
-redmine_id: 278
 ---
 # Summary
 

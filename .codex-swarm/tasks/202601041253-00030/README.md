@@ -14,5 +14,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Move agent-specific command references into agentctl.md and add an agent cheat sheet for operations."
 dirty: false
-redmine_id: 376
 ---

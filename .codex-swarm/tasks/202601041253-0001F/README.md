@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Write a Code of Conduct that outlines expected community behavior, reporting channels, and enforcement principles."
 dirty: false
-redmine_id: 327
 ---

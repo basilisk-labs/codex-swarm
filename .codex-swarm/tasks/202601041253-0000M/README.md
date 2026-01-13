@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Provide a Spanish version of the README while keeping glossary terms consistent."
 dirty: false
 id_source: "custom"
-redmine_id: 300
 ---

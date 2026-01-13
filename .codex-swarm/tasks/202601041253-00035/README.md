@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Add more badges, a Quickstart callout, and a table of contents in README for improved visual structure and navigation."
 dirty: false
-redmine_id: 381
 ---

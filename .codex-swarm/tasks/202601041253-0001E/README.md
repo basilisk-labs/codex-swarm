@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "The sync_tasks.py script now updates ProjectV2 items' Status fields and the workflow passes the project number; record this completion."
 dirty: false
-redmine_id: 326
 ---

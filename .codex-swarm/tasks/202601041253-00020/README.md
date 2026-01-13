@@ -14,5 +14,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Move all framework-specific artifacts under .codex-swarm (agents + agentctl docs + config), update references/docs, and update clean.sh accordingly."
 dirty: false
-redmine_id: 344
 ---

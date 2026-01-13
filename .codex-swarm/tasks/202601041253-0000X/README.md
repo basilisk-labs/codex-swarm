@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Review every agent prompt and workflow the user asked about to find practical optimizations and recommend next steps."
 dirty: false
 id_source: "custom"
-redmine_id: 309
 ---

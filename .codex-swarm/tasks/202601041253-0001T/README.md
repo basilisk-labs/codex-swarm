@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Add @docs/agentctl.md (usage cheat sheet), add agentctl quickstart command for printing it, and link from @AGENTS.md / CLI help so agents can learn the workflow faster."
 dirty: false
 id_source: "custom"
-redmine_id: 338
 ---

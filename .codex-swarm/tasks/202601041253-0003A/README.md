@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Review docs/ and apply edits to make wording, structure, and references consistent and easier to follow."
 dirty: false
-redmine_id: 386
 ---

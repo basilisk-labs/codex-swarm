@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Keep the frontmatter block intact when overwriting task README scaffolds."
 dirty: false
 id_source: "custom"
-redmine_id: 280
 ---
 # 202601041253-0003S: agentctl: preserve frontmatter on scaffold overwrite
 

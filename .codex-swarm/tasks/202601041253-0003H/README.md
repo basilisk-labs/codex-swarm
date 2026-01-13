@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Implement Redmine backend with custom field mappings, auto offline fallback to local cache, and diff-based conflict handling."
 dirty: false
 id_source: "custom"
-redmine_id: 267
 ---

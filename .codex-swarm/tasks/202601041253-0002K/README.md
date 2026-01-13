@@ -15,5 +15,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Fix the README.md Mermaid diagrams so they render on GitHub (adjust syntax/labels for compatibility)."
 dirty: false
-redmine_id: 363
 ---

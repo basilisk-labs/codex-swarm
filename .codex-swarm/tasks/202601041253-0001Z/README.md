@@ -14,5 +14,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Refresh @tasks.html to be simpler/lighter and clearly show task dependencies.\\n\\nScope:\\n- Update UI styling to a minimal, airy Codex Swarm-branded layout.\\n- Add a dependency inspector that makes it easy to see \\\"depends_on\\\" and reverse dependencies (tasks that depend on the selected task).\\n- Include a small visual graph (SVG) for the selected task to make upstream/downstream relationships obvious.\\n\\nAcceptance criteria:\\n- @tasks.html header is branded as Codex Swarm.\\n- Dependencies are visible both as lists and as a small graph for the selected task.\\n- Clicking a dependency navigates/updates the selection.\\n- No server required: keep file picker + drag/drop fallback for file://.\\n"
 dirty: false
-redmine_id: 343
 ---

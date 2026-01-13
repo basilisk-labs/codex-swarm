@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Relocate the ORCHESTRATOR spec from AGENTS.md to .codex-swarm/agents/ORCHESTRATOR.json, update AGENTS.md and README references, and keep start-of-run requirements explicit."
 dirty: false
 id_source: "custom"
-redmine_id: 370
 ---

@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Tighten the instructions around writing meaningful, emoji-prefixed commit messages."
 dirty: false
 id_source: "custom"
-redmine_id: 287
 ---

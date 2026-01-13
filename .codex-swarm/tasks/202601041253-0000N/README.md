@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Teach the translator agent how to maintain glossary metadata and usage counts automatically."
 dirty: false
 id_source: "custom"
-redmine_id: 301
 ---

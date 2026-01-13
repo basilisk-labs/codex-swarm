@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Strip references to unsupported helper tools to keep instructions aligned with the local stack."
 dirty: false
-redmine_id: 296
 ---

@@ -16,7 +16,6 @@ doc_updated_by: "agentctl"
 description: "Switch backend to Redmine using env config, migrate local tasks as source of truth, and validate CRUD/sync flows."
 dirty: false
 id_source: "custom"
-redmine_id: 426
 ---
 ## Summary
 
@@ -58,3 +57,4 @@ Switch backend to Redmine using env config and prove end-to-end sync from local 
 - Full migration of 150 tasks to Redmine hit HTTP timeouts; migrated a 3-task subset for smoke testing instead.
 - Created test task 202601111002-FZ099X via Redmine backend, updated docs, and added a comment to verify custom fields/journals.
 - `sync redmine --direction pull` succeeds; owners/priorities reflect Redmine assignee/priority names (e.g., Via Mentis Assistant / "Нормальный").
+

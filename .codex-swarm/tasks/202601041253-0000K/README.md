@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Introduce a translator agent that respects glossary entries when localizing README content."
 dirty: false
 id_source: "custom"
-redmine_id: 299
 ---

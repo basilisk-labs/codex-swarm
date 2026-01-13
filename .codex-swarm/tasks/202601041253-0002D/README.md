@@ -15,5 +15,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Add a safe cleanup command to remove stale task branches and worktrees after tasks are DONE.\\n\\nAcceptance:\\n- `python scripts/agentctl.py cleanup merged` prints a dry-run list of candidate `task/*` branches and `.codex-swarm/worktrees/*` paths.\\n- Requires explicit confirmation flag (e.g., `--yes`) to delete.\\n- Deletes only when:\\n  - task is `DONE` in `tasks.json`, AND\\n  - `git diff --name-only main...<branch>` is empty.\\n- Uses existing `python scripts/agentctl.py branch remove ...` implementation.\\n- Never writes `tasks.json`."
 dirty: false
-redmine_id: 357
 ---

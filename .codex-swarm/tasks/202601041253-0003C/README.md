@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Document the new backend-driven source-of-truth model (local vs Redmine), ID format, offline fallback, and sync behavior."
 dirty: false
 id_source: "custom"
-redmine_id: 387
 ---

@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Enhance README.md by introducing inline icons, refined formatting, and an ASCII-art title while keeping the workflow explanation intact."
 dirty: false
 id_source: "custom"
-redmine_id: 312
 ---

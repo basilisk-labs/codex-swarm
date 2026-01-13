@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Turn the summary list into an emoji-rich table and add extra decorative flair, keeping the `_Status` italic values as-is."
 dirty: false
-redmine_id: 316
 ---

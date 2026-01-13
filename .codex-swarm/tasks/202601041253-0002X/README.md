@@ -14,5 +14,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Fill the new docs/*.md templates with full user-facing content derived from AGENTS.md and agent specs."
 dirty: false
-redmine_id: 373
 ---

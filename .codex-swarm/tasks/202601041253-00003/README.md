@@ -2,8 +2,8 @@
 id: "202601041253-00003"
 title: "Move tasks data into .AGENTS/TASKS.json"
 status: "DONE"
-priority: "normal"
-owner: "CODER"
+priority: "Нормальный"
+owner: "REDMINE"
 depends_on: []
 tags: []
 verify: null
@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Ensure task state is available in a machine-readable JSON file for Codex automation."
 dirty: false
 id_source: "custom"
-redmine_id: 283
 ---

@@ -17,7 +17,6 @@ doc_updated_by: "agentctl"
 description: "Create/update/comment tasks directly against Redmine backend to verify CLI flows."
 dirty: false
 id_source: "custom"
-redmine_id: 427
 ---
 ## Summary
 
@@ -49,3 +48,4 @@ Validate that Redmine backend supports create/update/comment flows via agentctl 
 
 - Delete the test issue from Redmine if it pollutes the sandbox.
 - Re-run task list to confirm it is gone.
+

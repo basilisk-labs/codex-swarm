@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Introduce an agent dedicated to auditing the repository and proposing optimizations to existing agents when explicitly requested."
 dirty: false
 id_source: "custom"
-redmine_id: 307
 ---

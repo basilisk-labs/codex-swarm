@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Ensure README describes the codebase and includes local development steps (download Zip, run clean.sh)."
 dirty: false
-redmine_id: 318
 ---

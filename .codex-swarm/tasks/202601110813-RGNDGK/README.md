@@ -16,7 +16,6 @@ doc_updated_by: "agentctl"
 description: "Improve Redmine connector (no legacy mutations, retries, targeted lookup, safe assignee) and introduce REDMINE agent with backend-aware policies."
 dirty: false
 id_source: "custom"
-redmine_id: 425
 ---
 ## Summary
 
@@ -51,3 +50,4 @@ Redmine connector still does full scans per lookup, mutates missing task_id fiel
 ## Notes
 
 - Keep behavior backend-agnostic for other agents; REDMINE agent documents backend expectations.
+

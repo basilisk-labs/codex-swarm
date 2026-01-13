@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Fix python scripts/agentctl.py work start to be idempotent in branch_pr: if docs/workflow/T-###/README.md already exists in the new worktree (from the planning commit), do not fail or re-scaffold unless --overwrite is provided. This prevents frequent \\\"File already exists\\\" errors now that agents default to work start."
 dirty: false
 id_source: "custom"
-redmine_id: 365
 ---

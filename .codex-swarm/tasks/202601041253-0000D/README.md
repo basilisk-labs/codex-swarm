@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Update every agent spec so prompts match the GPT-5.1 best practices."
 dirty: false
 id_source: "custom"
-redmine_id: 293
 ---

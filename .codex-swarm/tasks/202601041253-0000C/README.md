@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Keep AGENTS.md focused on cross-agent protocol instead of baking in individual instructions."
 dirty: false
 id_source: "custom"
-redmine_id: 292
 ---

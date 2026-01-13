@@ -16,7 +16,6 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Add backend batch writes, fast in-memory indexes, structured error output with --json, lazy linting, and unified logging flags."
 dirty: false
-redmine_id: 276
 ---
 # 202601041346-YM3R8: Agentctl performance and UX improvements
 

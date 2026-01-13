@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Restructure docs into modular, numbered files and update the documentation index to match the new order."
 dirty: false
-redmine_id: 388
 ---

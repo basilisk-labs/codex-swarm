@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Rename docs/index.md to docs/README.md, update README references, and clarify clean.sh removes docs."
 dirty: false
 id_source: "custom"
-redmine_id: 377
 ---

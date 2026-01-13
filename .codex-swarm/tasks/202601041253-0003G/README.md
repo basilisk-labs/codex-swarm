@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Wire existing task commands through backend interface, add sync (redmine) and export (tasks.json) commands, and update CLI help."
 dirty: false
 id_source: "custom"
-redmine_id: 266
 ---

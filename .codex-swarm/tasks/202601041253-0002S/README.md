@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Move agentctl into .codex-swarm and relocate workflow artifacts to .codex-swarm/workspace; update framework docs, agent prompts, and clean.sh to use the new paths while leaving historical task text unchanged."
 dirty: false
 id_source: "custom"
-redmine_id: 369
 ---

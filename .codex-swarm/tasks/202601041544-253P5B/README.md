@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Ensure agentctl loads the repo .env before backend initialization so Redmine env config is honored."
 dirty: false
 id_source: "custom"
-redmine_id: 392
 ---
 # Summary
 

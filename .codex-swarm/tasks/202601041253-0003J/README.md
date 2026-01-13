@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Replace .codex-swarm/workspace usage with .codex-swarm/tasks in agentctl paths and PR artifact handling; update guardrails accordingly."
 dirty: false
 id_source: "custom"
-redmine_id: 268
 ---

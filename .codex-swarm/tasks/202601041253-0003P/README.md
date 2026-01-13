@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Update clean.sh to remove non-framework artifacts under the new tasks layout while preserving framework data."
 dirty: false
 id_source: "custom"
-redmine_id: 271
 ---
 # 202601041253-0003P: Update clean.sh for new structure
 

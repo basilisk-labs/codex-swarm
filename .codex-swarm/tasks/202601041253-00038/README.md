@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Update README Repository Layout section to match actual repo files and folders, including .codex-swarm and GitHub automation."
 dirty: false
-redmine_id: 384
 ---

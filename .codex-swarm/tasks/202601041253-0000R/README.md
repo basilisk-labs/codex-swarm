@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Restructure the glossary so English remains canonical while localized entries store metadata per language."
 dirty: false
-redmine_id: 304
 ---

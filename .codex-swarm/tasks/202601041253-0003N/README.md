@@ -12,7 +12,6 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Delete .codex-swarm/workspace after migration to .codex-swarm/tasks and update references."
 dirty: false
-redmine_id: 270
 ---
 # 202601041253-0003N: Remove legacy workspace directory
 

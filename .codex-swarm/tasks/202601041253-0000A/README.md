@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Explain how the orchestrator scans .AGENTS/*.json dynamically instead of relying on a manual list."
 dirty: false
-redmine_id: 290
 ---

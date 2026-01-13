@@ -12,5 +12,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Create GUIDELINE.md that explains prerequisites, setup, installation, and step-by-step usage of the Codex Swarm framework."
 dirty: false
-redmine_id: 321
 ---

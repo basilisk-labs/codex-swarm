@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Build a local Python server module that serves tasks.html as a kanban board loaded from .codex-swarm/tasks.json with drag-and-drop status updates via backend, filters/sort/search, and light/dark themes."
 dirty: false
 id_source: "custom"
-redmine_id: 273
 ---
 # Summary
 

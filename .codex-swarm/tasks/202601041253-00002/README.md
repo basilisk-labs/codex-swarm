@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance."
 dirty: false
 id_source: "custom"
-redmine_id: 423
 ---

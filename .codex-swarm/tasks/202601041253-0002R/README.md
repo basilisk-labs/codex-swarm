@@ -14,5 +14,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Record the clean.sh interactive workflow_mode selection + prompt scrubbing feature in tasks.json and add the per-task workflow README artifact."
 dirty: false
-redmine_id: 368
 ---

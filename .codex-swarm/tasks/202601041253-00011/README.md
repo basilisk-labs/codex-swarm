@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Bold every heading, wrap Priority/Owner/Tags values in code spans, display agent names uppercase with icons, and turn commit hashes into GitHub links on the generated board."
 dirty: false
 id_source: "custom"
-redmine_id: 313
 ---

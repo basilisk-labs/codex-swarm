@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Clarify which agent owns each state change and how statuses move between TODO/DOING/DONE/BLOCKED."
 dirty: false
 id_source: "custom"
-redmine_id: 289
 ---

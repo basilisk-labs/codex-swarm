@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Point GitHub sync workflow and script to .codex-swarm/tasks.json and align messaging with the current repository layout."
 dirty: false
 id_source: "custom"
-redmine_id: 383
 ---

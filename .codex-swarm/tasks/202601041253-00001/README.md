@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Summarize the overall multi-agent workflow so newcomers can understand the repository quickly."
 dirty: false
 id_source: "custom"
-redmine_id: 422
 ---

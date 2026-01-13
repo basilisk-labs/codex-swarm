@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Describe how new specialist agents are proposed, reviewed, and added to the registry."
 dirty: false
 id_source: "custom"
-redmine_id: 286
 ---

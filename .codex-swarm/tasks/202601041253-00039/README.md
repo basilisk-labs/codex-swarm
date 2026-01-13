@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Combine Suggested Reading Order and Document Map into a single unified section in docs/README.md."
 dirty: false
 id_source: "custom"
-redmine_id: 385
 ---

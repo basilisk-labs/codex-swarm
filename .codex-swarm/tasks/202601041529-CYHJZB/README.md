@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Extend Redmine sync to include additional local metadata (done ratio, start date, assignee) when pushing tasks."
 dirty: false
 id_source: "custom"
-redmine_id: 391
 ---
 ## Summary
 

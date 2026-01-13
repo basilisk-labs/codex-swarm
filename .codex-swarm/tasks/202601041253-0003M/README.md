@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Update agent prompts to require tasks.json export after finish/closure and align task source-of-truth wording with backend model."
 dirty: false
 id_source: "custom"
-redmine_id: 390
 ---
 # 202601041253-0003M: Agents: export tasks.json on close
 

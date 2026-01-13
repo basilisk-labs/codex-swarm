@@ -15,7 +15,6 @@ doc_updated_by: "agentctl"
 description: "Update .github sync scripts to treat tasks.json as a snapshot and export before syncing."
 dirty: false
 id_source: "custom"
-redmine_id: 272
 ---
 # 202601041253-0003Q: Fix GitHub sync scripts for snapshot backend
 

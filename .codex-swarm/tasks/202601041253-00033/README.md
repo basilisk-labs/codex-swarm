@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Fill the T-096 workflow README and add a rule that tasks cannot be finished with placeholder docs."
 dirty: false
 id_source: "custom"
-redmine_id: 379
 ---

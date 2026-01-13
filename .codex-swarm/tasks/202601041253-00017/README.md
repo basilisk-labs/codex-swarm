@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Adjust clean.sh so it also deletes CONTRIBUTING.md and cleans itself up after resetting the repo."
 dirty: false
-redmine_id: 319
 ---

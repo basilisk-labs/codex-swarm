@@ -15,5 +15,4 @@ doc_updated_by: "agentctl"
 description: "Convert mentions of repo files in docs/*.md into GitHub-friendly hyperlinks."
 dirty: false
 id_source: "custom"
-redmine_id: 264
 ---

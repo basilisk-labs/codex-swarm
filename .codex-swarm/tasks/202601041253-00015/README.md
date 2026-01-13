@@ -13,5 +13,4 @@ doc_updated_at: "2026-01-11T08:06:07+00:00"
 doc_updated_by: "agentctl"
 description: "Document the recommended contribution workflow and behavioral expectations for Codex Swarm."
 dirty: false
-redmine_id: 317
 ---
