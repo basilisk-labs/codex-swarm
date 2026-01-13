@@ -144,15 +144,27 @@
       "id": "202601131643-6Z977J",
       "title": "Auto-create tasks after plan approval",
       "description": "Update orchestrator guidance so it auto-creates the top-level tracking task after plan approval unless the user explicitly opts out; remove the post-approval prompt asking whether to create tasks. Align AGENTS.md, .codex-swarm/agents/ORCHESTRATOR.json, and .codex-swarm/agentctl.md with the new flow.",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "Нормальный",
       "owner": "REDMINE",
       "tags": [],
       "depends_on": [],
       "verify": null,
-      "commit": null,
-      "comments": [],
-      "id_source": "custom"
+      "commit": {
+        "hash": "e701172accefdfc0e34992471983363a9303ae33",
+        "message": "✨ 6Z977J auto-create tasks after plan approval: remove post-approval task prompt; update orchestrator guidance; sync agentctl doc"
+      },
+      "comments": [
+        {
+          "author": "REDMINE",
+          "body": "Verified: documentation-only updates; no tests run; confirmed auto-task creation guidance."
+        }
+      ],
+      "id_source": "custom",
+      "doc": "## Summary\n\nAuto-create the top-level task after plan approval and remove the post-approval task prompt.\n\n## Scope\n\nAGENTS.md; .codex-swarm/agents/ORCHESTRATOR.json; .codex-swarm/agentctl.md.\n\n## Risks\n\nLow: documentation/instruction changes only; risk is confusing guidance if misread.\n\n## Verify Steps\n\nNone (doc-only change).\n\n## Rollback Plan\n\nRevert commit e701172accef.\n\n## Notes\n\nTask creation is automatic after plan approval unless the user opts out.\n",
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T17:29:41+00:00",
+      "doc_updated_by": "agentctl"
     },
     {
       "id": "202601131643-VXPBHQ",
@@ -205,12 +217,42 @@
       "doc_version": 2,
       "doc_updated_at": "2026-01-13T17:26:19+00:00",
       "doc_updated_by": "agentctl"
+    },
+    {
+      "id": "202601131728-GPGCPQ",
+      "title": "Sync comment body with commit subject formatting",
+      "description": "Ensure comment-driven commits store the same formatted comment text used in commit subjects so length/content stay aligned and nothing is truncated across systems.",
+      "status": "DONE",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
+      "tags": [],
+      "depends_on": [],
+      "verify": null,
+      "commit": {
+        "hash": "3e56a20261227f0243ccffeecf1a4c8310abb68c",
+        "message": "✨ GPGCPQ sync stored comments with formatted commit subjects; reuse formatted text for comment-driven commits"
+      },
+      "comments": [
+        {
+          "author": "REDMINE",
+          "body": "verified: align stored comments with formatted commit subjects | details: docs updated; tests not run."
+        },
+        {
+          "author": "REDMINE",
+          "body": "verified: align stored comments with formatted commit subjects | details: docs updated; tests not run."
+        }
+      ],
+      "id_source": "custom",
+      "doc": "## Summary\n\nNormalize comment bodies used for comment-driven commits and store the normalized text in task comments to keep lengths aligned with commit subjects.\n\n## Context\n\nComment-driven commit subjects are formatted from the raw comment body, which can diverge in length/content from the stored task comment; align them to avoid truncation or mismatch.\n\n## Scope\n\nUpdate agentctl comment/commit handling so formatted comment text is reused for both storage and commit subjects; document the behavior in agentctl.md.\n\n## Risks\n\nNormalizing comments may alter formatting for multi-line notes; keep the normalization consistent with commit subject formatting and document the change.\n\n## Verify Steps\n\nManual: run a comment-driven start/block/finish and confirm the stored task comment matches the commit subject body.\n\n## Rollback Plan\n\nRevert the agentctl commit that normalizes stored comments to restore previous comment storage behavior.\n\n## Notes\n\nThe normalized comment text should be identical to the commit subject body fragment produced by comment-driven commits.\n",
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T17:29:24+00:00",
+      "doc_updated_by": "agentctl"
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b6381bb7392fef48cf559f0b68aee852d79b57cc2ace1194b9459919159be1b4"
+    "checksum": "2dcb69753fb31daa6e5755eab1cc2c7dc7209318df0b07be902b33251232a0bb"
   }
 }
