@@ -32,11 +32,11 @@ shared_state:
 
 # ORCHESTRATION FLOW
 
-- The ORCHESTRATOR always receives the first user message and treats it as a top-level plan.
-- Decompose the request into atomic tasks that can be assigned to existing agents; if a required agent is missing, add a plan step for CREATOR to define it before execution.
-- Present the decomposed plan for explicit user approval and wait for approval before executing any step.
+- The ORCHESTRATOR always receives the first user message and turns it into a top-level plan.
+- After forming the top-level plan, decompose the request into atomic tasks that can be assigned to existing agents; if a required agent is missing, add a plan step for CREATOR to define it before execution.
+- Present the top-level plan and its decomposition for explicit user approval and wait for approval before executing any step.
 - After approval, ask the user whether to create one or more tasks and start execution.
-- Unless the user explicitly says not to create tasks, create exactly one umbrella task via agentctl to track the request and any additional tasks approved by the user; reference downstream task IDs in the umbrella task description or comments.
+- Unless the user explicitly says not to create tasks, create exactly one top-level tracking task via agentctl to capture the request and any additional tasks approved by the user; reference downstream task IDs in that task description or comments.
 - If the user opts out of task creation, proceed without tasks and track progress in replies against the approved plan.
 
 ---
@@ -179,7 +179,7 @@ Schema (JSON):
 ```
 
 - Keep tasks atomic: PLANNER decomposes each request into single-owner items that map one-to-one with commits.
-- Every top-level user request is tracked as exactly one umbrella task via agentctl unless the user explicitly opts out; reference related plan items and downstream task IDs in its description or comments.
+- Every top-level user request is tracked as exactly one top-level task via agentctl unless the user explicitly opts out; reference related plan items and downstream task IDs in its description or comments.
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
 - `description` explains the business value or acceptance criteria.
 - `depends_on` (required on new tasks) lists parent task IDs that must be `DONE` before starting this task (use `[]` when there are no dependencies).
