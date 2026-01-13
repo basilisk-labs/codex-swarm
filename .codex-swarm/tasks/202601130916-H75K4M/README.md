@@ -1,0 +1,43 @@
+---
+id: "202601130916-H75K4M"
+title: "Hook install prompt in clean scripts"
+status: "TODO"
+priority: "med"
+owner: "CODER"
+depends_on: []
+tags: ["cleanup", "workflow"]
+doc_version: 2
+doc_updated_at: "2026-01-13T09:17:02+00:00"
+doc_updated_by: "agentctl"
+description: "Update clean.sh and clean.ps1 to use a Codex Swarm Initialized commit message and optionally install git hooks via an interactive prompt."
+---
+## Summary
+
+Add an opt-in hooks install prompt to clean scripts and update the initial commit message.
+
+## Context
+
+clean.sh and clean.ps1 initialize a fresh repo; add an explicit opt-in prompt to install codex-swarm hooks and update the initial commit subject.
+
+## Scope
+
+- Change clean.sh and clean.ps1 initial commit message to "Codex Swarm Initialized".
+- Add an interactive prompt after the initial commit to optionally install hooks via agentctl.
+- Keep the hooks opt-in (no silent install).
+
+## Risks
+
+Prompt could be missed in non-interactive runs; default remains no install to preserve opt-in behavior.
+
+## Verify Steps
+
+Manual: run clean.sh / clean.ps1 in a disposable repo and confirm the prompt appears after the initial commit.
+
+## Rollback Plan
+
+Revert the clean script changes and restore the previous commit message and no-hook prompt.
+
+## Notes
+
+Hooks remain opt-in; prompt appears only on interactive runs.
+
