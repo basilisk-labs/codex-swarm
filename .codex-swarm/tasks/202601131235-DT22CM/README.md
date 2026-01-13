@@ -1,11 +1,14 @@
 ---
 id: "202601131235-DT22CM"
 title: "Map agentctl commands by agent and phase"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "bc30c58e49fae183e38567424944e97a2e8fe2ab", message: "✨ DT22CM map agentctl commands by role and phase" }
+comments:
+  - { author: "ORCHESTRATOR", body: "Verified: Docs-only change; updated agentctl role/phase mapping and task artifact; no runtime impact." }
 doc_version: 2
 doc_updated_at: "2026-01-13T12:42:00+00:00"
 doc_updated_by: "agentctl"

@@ -4395,12 +4395,50 @@
       "doc_updated_by": "agentctl",
       "description": "Remove docs/ROADMAP.md and clean up any references so the repo doesn't point to a deleted file.",
       "doc": "## Summary\n\nRemove docs/ROADMAP.md and confirm no references remain.\n\n## Context\n\nUser requested removing the ROADMAP document from the repo.\n\n## Scope\n\nDelete docs/ROADMAP.md and scan the repo for lingering references.\n\n## Risks\n\nLow risk; only documentation removal. Residual risk is an unseen reference outside the repo search.\n\n## Verify Steps\n\nrg -n \"ROADMAP\" .\n\n## Rollback Plan\n\nRestore docs/ROADMAP.md from git history if needed.\n\n## Notes\n\nROADMAP.md was already deleted in the working tree; kept deletion and validated no references."
+    },
+    {
+      "id": "202601131235-DT22CM",
+      "title": "Map agentctl commands by agent and phase",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "bc30c58e49fae183e38567424944e97a2e8fe2ab",
+        "message": "✨ DT22CM map agentctl commands by role and phase"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: Docs-only change; updated agentctl role/phase mapping and task artifact; no runtime impact."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T12:42:00+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Analyze agentctl docs and agent specs to map which agent can use which agentctl commands at each workflow stage, then update agentctl.md so agents can avoid extra help calls.",
+      "doc": "## Summary\n\nAdded a role/phase command guide to agentctl.md so agents can map commands to workflow moments.\n\n## Context\n\nRequest was to map agentctl commands to agents and workflow phases based on agent specs and CLI docs.\n\n## Scope\n\nUpdated only .codex-swarm/agentctl.md; no CLI behavior changes.\n\n## Risks\n\nLow; docs could drift if commands change.\n\n## Verify Steps\n\nNone (docs-only).\n\n## Rollback Plan\n\nRevert the doc change and task artifacts.\n\n## Notes\n\nCommands listed align with .codex-swarm/agents/*.json and current agentctl.md examples."
+    },
+    {
+      "id": "202601131236-DBW16S",
+      "title": "Analyze config.json candidates for agent settings",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T12:44:56+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Review repo configs and agent guidance to propose settings that belong in config.json and how agentctl should toggle them.",
+      "doc": "## Summary\n\nPropose config.json additions (verify requirements, task doc sections, comment requirements, branch/worktree paths, commit guard tuning, base_branch) plus agentctl toggles to switch them.\n\n## Context\n\nUser asked to analyze the repo and suggest which settings should move into config.json so agents can honor them and switch them via agentctl.\n\n## Scope\n\nReviewed config usage in .codex-swarm/config.json, .codex-swarm/agentctl.py, AGENTS.md, and key docs; produced a prioritized list of candidate config keys and example agentctl toggles. No code changes.\n\n## Risks\n\nRecommendations require agentctl changes; too many knobs may drift from AGENTS.md if not kept in sync.\n\n## Verify Steps\n\nrg -n \"VERIFY_REQUIRED_TAGS|TASK_DOC_REQUIRED_SECTIONS|WORKTREES_DIRNAME|GENERIC_COMMIT_TOKENS\" .codex-swarm/agentctl.py\nrg -n \"workflow_mode|config.json\" AGENTS.md README.md docs/08-branching-and-pr-artifacts.md\n\n## Rollback Plan\n\nNo code changes; revert this task README or delete the task if the analysis is no longer needed.\n\n## Notes\n\nInspected agentctl constants (VERIFY_REQUIRED_TAGS, TASK_DOC_REQUIRED_SECTIONS, WORKTREES_DIRNAME, GENERIC_COMMIT_TOKENS) and docs that describe workflow_mode and config.json usage."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "b823f837debe4cbfe9a7d4f70d516d33f8d1310a63a7205eea43da2b50a13842"
+    "checksum": "72676e351f813827efef0c87b9fc4a2e9d232077b9b981d1d1adf940968dc2c2"
   }
 }
