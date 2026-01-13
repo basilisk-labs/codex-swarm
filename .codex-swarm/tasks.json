@@ -4538,11 +4538,21 @@
     {
       "id": "202601131304-MV3TPX",
       "title": "Configurable settings + CLI/docs + agent guidance",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "70c8c5d2eb0a3936a4c5475b047e2199531c5714",
+        "message": "✅ E1625C Verified: ran rg checks for config references in AGENTS.md and agent JSONs; changes align guidance to config-driven branch/worktree rules."
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: downstream tasks D4ZA6S, 7JXJF7, and E1625C are closed; umbrella tracks config, docs, and agent guidance updates."
+        }
+      ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-13T13:44:45+00:00",
       "doc_updated_by": "agentctl",
@@ -4578,6 +4588,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "10dac982327e230f9c17a002a75c3ae64c67990f01f6b75ac9568966bb0ca5b9"
+    "checksum": "2bda9bf30cd6496d130e4b3f2a5bdac43e4f169e35eb3dc54c214639e7701682"
   }
 }
