@@ -247,12 +247,38 @@
       "doc_version": 2,
       "doc_updated_at": "2026-01-13T17:29:24+00:00",
       "doc_updated_by": "agentctl"
+    },
+    {
+      "id": "202601131736-91R062",
+      "title": "Add human-readable comments in agentctl",
+      "description": "Add concise, human-readable inline comments in agentctl.py to clarify non-obvious logic and improve maintainability.",
+      "status": "DONE",
+      "priority": "Нормальный",
+      "owner": "REDMINE",
+      "tags": [],
+      "depends_on": [],
+      "verify": null,
+      "commit": {
+        "hash": "8058e33be3dc27df2fdad5802f1b45bb776fdb6b",
+        "message": "✨ 91R062 add human-readable comments in agentctl"
+      },
+      "comments": [
+        {
+          "author": "REDMINE",
+          "body": "verified: comment-only change in agentctl.py | details: task docs updated; no tests run."
+        }
+      ],
+      "id_source": "custom",
+      "doc": "## Summary\n\nAdded concise inline comments in agentctl.py to clarify backend capability checks, hook guardrails, config loading, and commit allowlist flow.\n\n## Context\n\nRequested to add human-readable comments in agentctl.py to make non-obvious logic easier to follow.\n\n## Scope\n\nComment-only updates in .codex-swarm/agentctl.py; no behavior changes.\n\n## Risks\n\nLow risk: comments only. Potential risk is comments drifting if logic changes later.\n\n## Verify Steps\n\nNot run (comment-only change).\n\n## Rollback Plan\n\nRevert commit 8058e33 to remove the comment additions.\n\n## Notes\n\nNo tests run.\n",
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T17:44:29+00:00",
+      "doc_updated_by": "agentctl"
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "2dcb69753fb31daa6e5755eab1cc2c7dc7209318df0b07be902b33251232a0bb"
+    "checksum": "11b6ceb54ad130152e6bd9bdddfedfb4179e6acbaf8598847fb0b4b1a75342fa"
   }
 }
