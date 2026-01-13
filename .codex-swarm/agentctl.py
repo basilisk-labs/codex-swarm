@@ -155,6 +155,11 @@ GENERIC_COMMIT_TOKENS: set[str] = {
     "tasks",
     "task",
 }
+HOOK_ENV_TASK_ID = "CODEX_SWARM_TASK_ID"
+HOOK_ENV_ALLOW_TASKS = "CODEX_SWARM_ALLOW_TASKS"
+HOOK_ENV_ALLOW_BASE = "CODEX_SWARM_ALLOW_BASE"
+HOOK_MARKER = "codex-swarm: managed by agentctl"
+HOOK_NAMES = ("commit-msg", "pre-commit")
 
 
 def load_env_file(path: Path) -> None:
@@ -178,14 +183,39 @@ def load_env_file(path: Path) -> None:
         os.environ[key] = value
 
 
-def run(cmd: list[str], *, cwd: Path = ROOT, check: bool = True) -> subprocess.CompletedProcess[str]:
+def run(
+    cmd: list[str],
+    *,
+    cwd: Path = ROOT,
+    check: bool = True,
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         cmd,
         cwd=str(cwd),
         text=True,
         capture_output=True,
         check=check,
+        env=env,
     )
+
+
+def merge_env(overrides: dict[str, str] | None) -> dict[str, str] | None:
+    if not overrides:
+        return None
+    merged = dict(os.environ)
+    merged.update(overrides)
+    return merged
+
+
+def build_hook_env(*, task_id: str | None, allow_tasks: bool, allow_base: bool) -> dict[str, str] | None:
+    overrides: dict[str, str] = {
+        HOOK_ENV_ALLOW_TASKS: "1" if allow_tasks else "0",
+        HOOK_ENV_ALLOW_BASE: "1" if allow_base else "0",
+    }
+    if task_id:
+        overrides[HOOK_ENV_TASK_ID] = task_id
+    return merge_env(overrides)
 
 
 def error_context() -> JsonDict:
@@ -244,6 +274,54 @@ def git_config_set(key: str, value: str, *, cwd: Path = ROOT) -> None:
         run(["git", "config", "--local", raw_key, raw_value], cwd=cwd, check=True)
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or f"Failed to set git config: {raw_key}")
+
+
+def git_common_dir(*, cwd: Path = ROOT) -> Path:
+    try:
+        result = run(["git", "rev-parse", "--git-common-dir"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to resolve git common dir")
+    raw = (result.stdout or "").strip()
+    if not raw:
+        die("Failed to resolve git common dir")
+    path = Path(raw)
+    if not path.is_absolute():
+        path = (git_toplevel(cwd=cwd) / path).resolve()
+    return path
+
+
+def git_hooks_dir(*, cwd: Path = ROOT) -> Path:
+    repo_root = git_toplevel(cwd=cwd).resolve()
+    common_dir = git_common_dir(cwd=cwd).resolve()
+    try:
+        result = run(["git", "rev-parse", "--git-path", "hooks"], cwd=cwd, check=True)
+    except subprocess.CalledProcessError as exc:
+        die(exc.stderr.strip() or "Failed to resolve git hooks path")
+    raw = (result.stdout or "").strip()
+    if not raw:
+        die("Failed to resolve git hooks path")
+    path = Path(raw)
+    if not path.is_absolute():
+        path = (repo_root / path).resolve()
+    else:
+        path = path.resolve()
+    allowed_roots = (repo_root, common_dir)
+    if not any(root == path or root in path.parents for root in allowed_roots):
+        die(
+            "\n".join(
+                [
+                    "Refusing to manage git hooks outside the repository.",
+                    f"hooks_path={path}",
+                    f"repo_root={repo_root}",
+                    f"common_dir={common_dir}",
+                    "Fix:",
+                    "  1) Use a repo-relative core.hooksPath (e.g., .git/hooks)",
+                    "  2) Re-run `python .codex-swarm/agentctl.py hooks install`",
+                ]
+            ),
+            code=2,
+        )
+    return path
 
 
 def is_task_worktree_checkout(*, cwd: Path = ROOT) -> bool:
@@ -450,6 +528,173 @@ def commit_subject_mentions_task(task_id: str, subject: str) -> bool:
 def commit_subject_missing_error(task_ids: list[str], subject: str, *, context: str | None = None) -> str:
     prefix = f"{context}: " if context else ""
     return f"{prefix}Commit subject does not mention task suffix(es) for {', '.join(task_ids)}: {subject!r}"
+
+
+def commit_subject_tokens(subject: str) -> set[str]:
+    tokens = re.findall(r"[0-9A-Za-z]+(?:-[0-9A-Za-z]+)*", subject or "")
+    normalized = {token.lower() for token in tokens if token}
+    normalized.update(token.split("-")[-1].lower() for token in tokens if token)
+    return normalized
+
+
+def collect_task_suffixes(tasks: TaskList) -> list[str]:
+    suffixes: set[str] = set()
+    for task in tasks:
+        task_id = str(task.get("id") or "").strip()
+        suffix = task_suffix(task_id)
+        if suffix:
+            suffixes.add(suffix)
+    return sorted(suffixes)
+
+
+def read_commit_subject(path: Path) -> str:
+    try:
+        content = path.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        die(f"Missing commit message file: {path}")
+    for line in content.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        return stripped
+    return ""
+
+
+def hook_commit_msg_check(message_path: Path) -> None:
+    subject = read_commit_subject(message_path)
+    if not subject:
+        die("Commit message subject is empty", code=2)
+    task_id = str(os.environ.get(HOOK_ENV_TASK_ID) or "").strip()
+    if task_id:
+        if not commit_subject_mentions_task(task_id, subject):
+            die(commit_subject_missing_error([task_id], subject), code=2)
+        return
+    tasks, _ = load_task_store()
+    suffixes = collect_task_suffixes(tasks)
+    if not suffixes:
+        die("No task IDs available to validate commit subject; run agentctl or uninstall hooks.", code=2)
+    tokens = commit_subject_tokens(subject)
+    if not any(suffix.lower() in tokens for suffix in suffixes):
+        sample = _format_list_short(suffixes)
+        die(
+            "\n".join(
+                [
+                    "Commit subject must mention at least one task ID suffix (segment after the last dash).",
+                    f"Subject: {subject!r}",
+                    f"Known suffixes (sample): {sample}",
+                    "Fix:",
+                    "  1) Update the subject to include the task suffix",
+                    "  2) Re-run `git commit`",
+                ]
+            ),
+            code=2,
+        )
+
+
+def hook_pre_commit_check(*, cwd: Path) -> None:
+    staged = git_staged_files(cwd=cwd)
+    if not staged:
+        return
+    allow_tasks = str(os.environ.get(HOOK_ENV_ALLOW_TASKS) or "").strip() == "1"
+    allow_base = str(os.environ.get(HOOK_ENV_ALLOW_BASE) or "").strip() == "1"
+    tasks_path = TASKS_PATH_REL
+    tasks_staged = tasks_path in staged
+
+    if tasks_staged and not allow_tasks:
+        die(
+            "\n".join(
+                [
+                    f"Refusing commit: {TASKS_PATH_REL} is protected by codex-swarm hooks.",
+                    "Fix:",
+                    "  1) Use `python .codex-swarm/agentctl.py commit <task-id> ... --allow-tasks`",
+                    "  2) Or uninstall hooks: `python .codex-swarm/agentctl.py hooks uninstall`",
+                ]
+            ),
+            code=2,
+        )
+
+    if tasks_staged:
+        if is_task_worktree_checkout(cwd=cwd):
+            die(
+                f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout (.codex-swarm/worktrees/*)\n"
+                f"Context: {format_command_context(cwd=cwd)}",
+                code=2,
+            )
+        if is_branch_pr_mode() and git_current_branch(cwd=cwd) != base_branch(cwd=cwd):
+            die(
+                f"Refusing commit: {TASKS_PATH_REL} allowed only on {base_branch(cwd=cwd)!r} "
+                "in workflow_mode='branch_pr'\n"
+                f"Context: {format_command_context(cwd=cwd)}",
+                code=2,
+            )
+
+    if is_branch_pr_mode():
+        current_branch = git_current_branch(cwd=cwd)
+        integration_branch = base_branch(cwd=cwd)
+        non_tasks = [path for path in staged if path != tasks_path]
+        if non_tasks:
+            if current_branch == integration_branch and not allow_base:
+                die(
+                    "\n".join(
+                        [
+                            "Refusing commit: code/docs commits are forbidden on the base branch "
+                            f"{integration_branch!r} in workflow_mode='branch_pr'",
+                            "Fix:",
+                            "  1) Create a task branch + worktree: "
+                            "`python .codex-swarm/agentctl.py work start <task-id> --agent <AGENT> --slug <slug> --worktree`",
+                            "  2) Commit from `task/<task-id>/<slug>`",
+                            f"Context: {format_command_context(cwd=cwd)}",
+                        ]
+                    ),
+                    code=2,
+                )
+            if current_branch != integration_branch and parse_task_id_from_task_branch(current_branch) is None:
+                die(
+                    "\n".join(
+                        [
+                            f"Refusing commit: branch {current_branch!r} is not a task branch in branch_pr mode",
+                            "Fix:",
+                            "  1) Switch to `task/<task-id>/<slug>`",
+                            "  2) Commit from the task branch",
+                            f"Context: {format_command_context(cwd=cwd)}",
+                        ]
+                    ),
+                    code=2,
+                )
+
+
+def hook_script_text(hook: str) -> str:
+    if hook not in HOOK_NAMES:
+        die(f"Unknown hook: {hook}", code=2)
+    lines = [
+        "#!/bin/sh",
+        f"# {HOOK_MARKER} (do not edit)",
+        "set -e",
+        'ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"',
+        'if [ -z "$ROOT" ]; then',
+        '  echo "codex-swarm hooks: unable to resolve repo root" >&2',
+        "  exit 1",
+        "fi",
+        "if command -v python >/dev/null 2>&1; then",
+        "  PYTHON_BIN=python",
+        "elif command -v python3 >/dev/null 2>&1; then",
+        "  PYTHON_BIN=python3",
+        "else",
+        '  echo "codex-swarm hooks: python not found" >&2',
+        "  exit 1",
+        "fi",
+        f'exec "$PYTHON_BIN" "$ROOT/.codex-swarm/agentctl.py" hooks run {hook} "$@"',
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def hook_is_managed(path: Path) -> bool:
+    try:
+        content = path.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        return False
+    return HOOK_MARKER in content
 
 
 def load_task_index() -> tuple[TaskList, TaskIndex, list[str], str]:
@@ -1857,6 +2102,7 @@ def commit_from_comment(
             cwd=str(cwd),
             text=True,
             check=True,
+            env=build_hook_env(task_id=task_id, allow_tasks=allow_tasks, allow_base=allow_tasks),
         )
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "git commit failed")
@@ -1974,6 +2220,7 @@ def command_path(args: argparse.Namespace) -> str:
         "task_cmd",
         "doc_cmd",
         "guard_cmd",
+        "hooks_cmd",
         "pr_cmd",
         "branch_cmd",
         "work_cmd",
@@ -2138,6 +2385,72 @@ def cmd_ready(args: argparse.Namespace) -> None:
     raise SystemExit(0 if ok else 2)
 
 
+def cmd_hooks_install(args: argparse.Namespace) -> None:
+    cwd = Path.cwd().resolve()
+    hooks_dir = git_hooks_dir(cwd=cwd)
+    hooks_dir.mkdir(parents=True, exist_ok=True)
+    installed: list[Path] = []
+    for hook in HOOK_NAMES:
+        path = hooks_dir / hook
+        if path.exists() and not hook_is_managed(path):
+            die(
+                "\n".join(
+                    [
+                        f"Refusing to overwrite existing hook: {path}",
+                        "Fix:",
+                        "  1) Move the existing hook aside",
+                        "  2) Re-run `python .codex-swarm/agentctl.py hooks install`",
+                    ]
+                ),
+                code=2,
+            )
+        path.write_text(hook_script_text(hook), encoding="utf-8")
+        path.chmod(0o755)
+        installed.append(path)
+    if not args.quiet:
+        for path in installed:
+            print(f"✅ installed hook: {path}")
+
+
+def cmd_hooks_uninstall(args: argparse.Namespace) -> None:
+    cwd = Path.cwd().resolve()
+    hooks_dir = git_hooks_dir(cwd=cwd)
+    removed: list[Path] = []
+    skipped: list[Path] = []
+    if hooks_dir.exists():
+        for hook in HOOK_NAMES:
+            path = hooks_dir / hook
+            if not path.exists():
+                continue
+            if not hook_is_managed(path):
+                skipped.append(path)
+                continue
+            path.unlink()
+            removed.append(path)
+    if not args.quiet:
+        if removed:
+            for path in removed:
+                print(f"✅ removed hook: {path}")
+        if skipped:
+            for path in skipped:
+                print(f"⚠️ skipped non-agentctl hook: {path}")
+        if not removed and not skipped:
+            print("✅ no agentctl hooks to remove")
+
+
+def cmd_hooks_run(args: argparse.Namespace) -> None:
+    cwd = Path.cwd().resolve()
+    if args.hook == "commit-msg":
+        if not args.hook_args:
+            die("commit-msg hook requires a commit message path", code=2)
+        hook_commit_msg_check(Path(args.hook_args[0]))
+        return
+    if args.hook == "pre-commit":
+        hook_pre_commit_check(cwd=cwd)
+        return
+    die(f"Unknown hook: {args.hook}", code=2)
+
+
 def cmd_guard_clean(args: argparse.Namespace) -> None:
     staged = git_staged_files(cwd=Path.cwd().resolve())
     if staged:
@@ -2204,6 +2517,11 @@ def cmd_commit(args: argparse.Namespace) -> None:
             cwd=str(cwd),
             text=True,
             check=True,
+            env=build_hook_env(
+                task_id=task_id,
+                allow_tasks=bool(args.allow_tasks),
+                allow_base=bool(args.allow_tasks),
+            ),
         )
     except subprocess.CalledProcessError as exc:
         die(exc.stderr.strip() or "git commit failed")
@@ -4324,7 +4642,11 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             subject = run(["git", "log", "-1", "--pretty=format:%s", branch], cwd=ROOT, check=True).stdout.strip()
             if not subject or task_id not in subject:
                 subject = f"🧩 {task_id} integrate {branch}"
-            proc = run(["git", "commit", "-m", subject], check=False)
+            proc = run(
+                ["git", "commit", "-m", subject],
+                check=False,
+                env=build_hook_env(task_id=task_id, allow_tasks=False, allow_base=True),
+            )
             if proc.returncode != 0:
                 run(["git", "reset", "--hard", head_before], check=False)
                 die(proc.stderr.strip() or proc.stdout.strip() or "git commit failed", code=2)
@@ -4343,6 +4665,7 @@ def cmd_integrate(args: argparse.Namespace) -> None:
             proc = run(
                 ["git", "merge", "--no-ff", branch, "-m", f"🔀 {task_id} merge {branch}"],
                 check=False,
+                env=build_hook_env(task_id=task_id, allow_tasks=False, allow_base=True),
             )
             if proc.returncode != 0:
                 run(["git", "reset", "--hard", head_before], check=False)
@@ -4606,6 +4929,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_integrate.add_argument("--quiet", action="store_true", help="Minimal output")
     p_integrate.set_defaults(func=cmd_integrate)
+
+    p_hooks = sub.add_parser("hooks", help="Install or remove optional git hooks")
+    hooks_sub = p_hooks.add_subparsers(dest="hooks_cmd", required=True)
+
+    p_hooks_install = hooks_sub.add_parser("install", help="Install optional git hooks (commit-msg, pre-commit)")
+    p_hooks_install.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_hooks_install.set_defaults(func=cmd_hooks_install)
+
+    p_hooks_uninstall = hooks_sub.add_parser("uninstall", help="Remove agentctl-managed git hooks")
+    p_hooks_uninstall.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_hooks_uninstall.set_defaults(func=cmd_hooks_uninstall)
+
+    p_hooks_run = hooks_sub.add_parser("run", help=argparse.SUPPRESS)
+    p_hooks_run.add_argument("hook", choices=list(HOOK_NAMES))
+    p_hooks_run.add_argument("hook_args", nargs="*")
+    p_hooks_run.set_defaults(func=cmd_hooks_run)
 
     p_guard = sub.add_parser("guard", help="Guardrails for git staging/commit hygiene")
     guard_sub = p_guard.add_subparsers(dest="guard_cmd", required=True)

@@ -81,6 +81,14 @@ python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> detailed
 # if you want a safe wrapper that also runs `git commit`
 python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --allow <path-prefix>
 
+# optional git hooks (opt-in; never auto-installed)
+python .codex-swarm/agentctl.py hooks install
+python .codex-swarm/agentctl.py hooks uninstall
+#
+# hooks enforce:
+# - commit-msg: commit subject includes task suffix tokens
+# - pre-commit: protected-path policy and branch_pr task rules
+
 # when closing a task in the branching workflow (INTEGRATOR on the base branch)
 python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author INTEGRATOR --body "Verified: ... (what ran, results, caveats)"
 # batch close (same commit metadata + comment applied to each task)

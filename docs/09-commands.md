@@ -46,6 +46,13 @@ python .codex-swarm/agentctl.py guard commit 202601031816-7F3K2Q -m "✨ 2026010
 git status --short
 ```
 
+## Optional Git Hooks
+```bash
+python .codex-swarm/agentctl.py hooks install
+python .codex-swarm/agentctl.py hooks uninstall
+```
+Hooks are opt-in and enforce commit subjects with task suffixes plus protected-path and branch_pr pre-commit rules.
+
 ## Backend Sync (Redmine)
 ```bash
 python .codex-swarm/agentctl.py sync redmine
