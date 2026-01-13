@@ -1,14 +1,43 @@
 ---
 id: "202601131708-ZPWTXA"
 title: "Configurable closure commit approval"
-status: "TODO"
-priority: "med"
-owner: "ORCHESTRATOR"
+status: "DONE"
+priority: "Нормальный"
+owner: "REDMINE"
 depends_on: []
 tags: []
+verify: null
+commit: { hash: "b2932bb9d99772f02381709112a2f84c579ea978", message: "✨ ZPWTXA add closure approval config flag: wire agent guidance; update overview; add task record" }
+comments:
+  - { author: "REDMINE", body: "Verified: doc/config updates only; no tests run; reviewed closure flag wiring and guidance." }
 doc_version: 2
-doc_updated_at: "2026-01-13T17:09:04+00:00"
+doc_updated_at: "2026-01-13T17:26:19+00:00"
 doc_updated_by: "agentctl"
 description: "Add a config flag to control whether final closure commits require explicit user approval, and update agent docs/specs to follow that flag (AGENTS.md, agent JSONs, agentctl.md, overview docs)."
 dirty: false
+id_source: "custom"
 ---
+## Summary
+
+Add closure_commit_requires_approval config flag and wire agent guidance to honor it.
+
+## Scope
+
+AGENTS.md; .codex-swarm/agents/ORCHESTRATOR.json; .codex-swarm/agents/INTEGRATOR.json; .codex-swarm/config.json; docs/01-overview.md.
+
+## Risks
+
+Low: config/documentation-only update; risk is misconfigured default behavior.
+
+## Verify Steps
+
+None (config/docs change only).
+
+## Rollback Plan
+
+Revert commit b2932bb9d997.
+
+## Notes
+
+Default closure approval set to false for automatic closure commits.
+
