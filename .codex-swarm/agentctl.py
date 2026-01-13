@@ -2190,6 +2190,60 @@ def cmd_quickstart(_: argparse.Namespace) -> None:
     )
 
 
+def _load_role_blocks(doc_text: str) -> tuple[dict[str, list[str]], list[str]]:
+    section_header = "## Role/phase command guide (when to use what)"
+    role_prefix = "### "
+    blocks: dict[str, list[str]] = {}
+    roles: list[str] = []
+    in_section = False
+    current_role = ""
+    current_lines: list[str] = []
+    for line in doc_text.splitlines():
+        stripped = line.strip()
+        if stripped == section_header:
+            in_section = True
+            continue
+        if in_section and stripped.startswith("## "):
+            break
+        if not in_section:
+            continue
+        if stripped.startswith(role_prefix):
+            if current_role:
+                blocks[current_role] = current_lines
+                current_lines = []
+            current_role = stripped[len(role_prefix) :].strip()
+            if current_role:
+                roles.append(current_role)
+                current_lines.append(line)
+            continue
+        if current_role:
+            current_lines.append(line)
+    if current_role:
+        blocks[current_role] = current_lines
+    return blocks, roles
+
+
+def cmd_role(args: argparse.Namespace) -> None:
+    if not AGENTCTL_DOCS_PATH.exists():
+        die(f"Missing {AGENTCTL_DOCS_PATH} (run agentctl quickstart to see default output)")
+    role_raw = str(args.role or "").strip()
+    if not role_raw:
+        die("ROLE is required", code=2)
+    role = role_raw.upper()
+    doc_text = AGENTCTL_DOCS_PATH.read_text(encoding="utf-8")
+    blocks, roles = _load_role_blocks(doc_text)
+    normalized = {key.upper(): key for key in blocks}
+    role_key = normalized.get(role)
+    if not role_key:
+        available = ", ".join(sorted(roles)) if roles else "none"
+        die(f"Unknown role: {role_raw}. Available roles: {available}", code=2)
+    output = "\n".join(blocks[role_key]).rstrip()
+    if output:
+        print(output)
+        return
+    die(f"No content found for role: {role_raw}", code=2)
+
+
 def load_agents_index() -> set[str]:
     if not AGENTS_DIR.exists():
         return set()
@@ -4796,6 +4850,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_quickstart = sub.add_parser("quickstart", help="Print agentctl usage quick reference (.codex-swarm/agentctl.md)")
     p_quickstart.set_defaults(func=cmd_quickstart)
+
+    p_role = sub.add_parser("role", help="Show role-specific command guidance from agentctl.md")
+    p_role.add_argument("role", help="Agent role id (e.g., CODER)")
+    p_role.set_defaults(func=cmd_role)
 
     p_agents = sub.add_parser("agents", help="List registered agents under .codex-swarm/agents/")
     p_agents.set_defaults(func=cmd_agents)

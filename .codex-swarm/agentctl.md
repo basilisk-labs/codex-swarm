@@ -25,13 +25,15 @@ INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -
 
 ## Role/phase command guide (when to use what)
 
-ORCHESTRATOR
+Use `python .codex-swarm/agentctl.py role <ROLE>` to print a single block from this section.
+
+### ORCHESTRATOR
 
 - Plan intake: `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show <task-id>`
 - After approval + task opt-in: `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner ORCHESTRATOR --depends-on "[]"`
 - Optional scaffold: `python .codex-swarm/agentctl.py task scaffold <task-id>`
 
-PLANNER
+### PLANNER
 
 - Backlog scan: `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task search "..."` / `python .codex-swarm/agentctl.py task next`
 - Create tasks: `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner <ROLE> --depends-on "[]"` (use `task add` only for imported IDs)
@@ -39,7 +41,7 @@ PLANNER
 - Scaffold artifacts: `python .codex-swarm/agentctl.py task scaffold <task-id>`
 - Task docs (when planning needs it): `python .codex-swarm/agentctl.py task doc set <task-id> --section Summary --text "..."`
 
-CODER/TESTER (execution)
+### CODER
 
 - direct mode: work in the current checkout; optional `python .codex-swarm/agentctl.py work start <task-id> --agent <ROLE> --slug <slug>` only scaffolds docs
 - branch_pr: `python .codex-swarm/agentctl.py work start <task-id> --agent <ROLE> --slug <slug> --worktree`
@@ -48,34 +50,43 @@ CODER/TESTER (execution)
 - PR artifacts (branch_pr): `python .codex-swarm/agentctl.py pr open <task-id> --branch task/<task-id>/<slug> --author <ROLE>` / `python .codex-swarm/agentctl.py pr update <task-id>` / `python .codex-swarm/agentctl.py pr note <task-id> --author <ROLE> --body "..."`
 - Commit: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
 
-DOCS
+### TESTER
+
+- direct mode: work in the current checkout; optional `python .codex-swarm/agentctl.py work start <task-id> --agent <ROLE> --slug <slug>` only scaffolds docs
+- branch_pr: `python .codex-swarm/agentctl.py work start <task-id> --agent <ROLE> --slug <slug> --worktree`
+- Status updates: `python .codex-swarm/agentctl.py start <task-id> --author <ROLE> --body "Start: ..."` / `python .codex-swarm/agentctl.py block <task-id> --author <ROLE> --body "Blocked: ..."`
+- Verify: `python .codex-swarm/agentctl.py verify <task-id>`
+- PR artifacts (branch_pr): `python .codex-swarm/agentctl.py pr open <task-id> --branch task/<task-id>/<slug> --author <ROLE>` / `python .codex-swarm/agentctl.py pr update <task-id>` / `python .codex-swarm/agentctl.py pr note <task-id> --author <ROLE> --body "..."`
+- Commit: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
+
+### DOCS
 
 - Task docs: `python .codex-swarm/agentctl.py task doc set <task-id> --section Summary --text "..."` (repeat per section or use `--file`)
 - PR notes: `python .codex-swarm/agentctl.py pr note <task-id> --author DOCS --body "..."`
 - Commit: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
 
-REVIEWER
+### REVIEWER
 
 - Review artifacts: `python .codex-swarm/agentctl.py pr check <task-id>` / `python .codex-swarm/agentctl.py task show <task-id>`
 - Handoff notes: `python .codex-swarm/agentctl.py pr note <task-id> --author REVIEWER --body "..."`
 
-INTEGRATOR (closure)
+### INTEGRATOR
 
 - branch_pr: `python .codex-swarm/agentctl.py pr check <task-id>` -> `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify` -> `python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author INTEGRATOR --body "Verified: ..."`
 - direct: task owner uses `python .codex-swarm/agentctl.py finish <task-id> --commit <git-rev> --author <OWNER> --body "Verified: ..."` after the implementation commit
 - Optional cleanup: `python .codex-swarm/agentctl.py cleanup merged --yes`
 
-CREATOR
+### CREATOR
 
 - Task bookkeeping: `python .codex-swarm/agentctl.py task update <task-id> ...` / `python .codex-swarm/agentctl.py start <task-id> --author CREATOR --body "Start: ..."`
 - Commits: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
 
-REDMINE
+### REDMINE
 
 - Sync before/after updates: `python .codex-swarm/agentctl.py sync redmine --direction pull` / `python .codex-swarm/agentctl.py sync redmine --direction push --yes`
 - Then use normal task/doc commands (`python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show` / `python .codex-swarm/agentctl.py task update` / `python .codex-swarm/agentctl.py task doc set`) as needed.
 
-UPDATER
+### UPDATER
 
 - Read-only audit: `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show` / `python .codex-swarm/agentctl.py task search "..."` / `python .codex-swarm/agentctl.py task next` (no write commands).
 
@@ -212,6 +223,9 @@ python .codex-swarm/agentctl.py task next
 
 # search tasks by text (title/description/tags/comments)
 python .codex-swarm/agentctl.py task search agentctl
+
+# show role-specific guidance from the role/phase section
+python .codex-swarm/agentctl.py role CODER
 
 # scaffold a workflow artifact (.codex-swarm/tasks/<task-id>/README.md)
 python .codex-swarm/agentctl.py task scaffold <task-id>
