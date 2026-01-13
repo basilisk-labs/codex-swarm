@@ -4604,11 +4604,21 @@
     {
       "id": "202601131749-TM6X6S",
       "title": "Switch tasks backend to local",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "57bea995c00b60ad744af0215db1b368883c7b06",
+        "message": "✅ 9PQ5D2 verified: formatting-only change in .codex-swarm/config.json | details: task docs updated; no tests run."
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: config already set to local backend | details: task was a no-op, no tests run."
+        }
+      ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-13T17:50:47+00:00",
       "doc_updated_by": "agentctl",
@@ -4644,6 +4654,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "c675f494b831455985d939fb994bf3caf44a065e938fff660eed196ac2e489e2"
+    "checksum": "f403bec1a5aba43507ece3648f329ccdfbc32ef99e3701b55963f2a60958a9ac"
   }
 }
