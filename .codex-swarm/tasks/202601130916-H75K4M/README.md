@@ -1,11 +1,14 @@
 ---
 id: "202601130916-H75K4M"
 title: "Hook install prompt in clean scripts"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["cleanup", "workflow"]
+commit: { hash: "4ad5ab8018fe75d23a7611035a807391e89f3609", message: "✨ H75K4M update clean scripts for hook prompt + init commit" }
+comments:
+  - { author: "CODER", body: "Verified: manual checks only; clean.sh/clean.ps1 prompt appears after init commit; no automated tests run." }
 doc_version: 2
 doc_updated_at: "2026-01-13T09:17:02+00:00"
 doc_updated_by: "agentctl"

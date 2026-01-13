@@ -4159,12 +4159,57 @@
       "doc_updated_by": "agentctl",
       "description": "Add status_commit_policy guardrails for comment-driven commits and cover enforcement with unit tests.",
       "doc": "## Summary\n\nAdd status_commit_policy guardrails for comment-driven commits and cover enforcement with unit tests.\n\n## Context\n\nClarify when status/comment-driven commits should be allowed so agents can update status without implicit commits.\n\n## Scope\n\n- Add status_commit_policy config and enforcement for comment-driven commits.\\n- Add unit tests for warn/confirm/invalid policy handling.\\n- Update agentctl docs to describe the policy and confirmation flag.\n\n## Risks\n\nPolicy warnings may be overlooked in noisy output; confirm mode blocks without explicit ack.\n\n## Verify Steps\n\nNone (no automated tests shipped).\n\n## Rollback Plan\n\nRevert the commit and remove status_commit_policy from config plus the enforcement hooks in agentctl.\n\n## Notes\n\nRan a temporary unittest for status_commit_policy enforcement before removing the test file per request."
+    },
+    {
+      "id": "202601130818-6Y8R1F",
+      "title": "Optional git hooks installer",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agentctl",
+        "git",
+        "workflow"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T08:19:43+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add opt-in git hooks via agentctl (install/uninstall) to enforce commit subject suffix and protected-path/branch_pr rules for direct git commits.",
+      "doc": "## Summary\n\nAdd opt-in git hooks installer/uninstaller to enforce commit policy outside agentctl.\n\n## Context\n\nDirect git commit can bypass agentctl guardrails; opt-in hooks close the gap without enforcing automatically.\n\n## Scope\n\n- Add `agentctl hooks install` and `agentctl hooks uninstall` commands.\n- Implement a `commit-msg` hook that enforces commit subject task suffix tokens.\n- Implement a `pre-commit` hook that enforces protected-path policy and branch_pr task rules.\n- Update docs to describe hook usage and opt-in behavior.\n\n## Risks\n\nHooks may block legitimate commits if policies are misconfigured; provide clear uninstall guidance.\n\n## Verify Steps\n\npython -m pytest -q\n\n## Rollback Plan\n\nRevert the agentctl hook commands and remove any installed git hooks via `agentctl hooks uninstall`.\n\n## Notes\n\nHooks are opt-in; installer never runs automatically."
+    },
+    {
+      "id": "202601130916-H75K4M",
+      "title": "Hook install prompt in clean scripts",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "cleanup",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "4ad5ab8018fe75d23a7611035a807391e89f3609",
+        "message": "✨ H75K4M update clean scripts for hook prompt + init commit"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: manual checks only; clean.sh/clean.ps1 prompt appears after init commit; no automated tests run."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T09:17:02+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update clean.sh and clean.ps1 to use a Codex Swarm Initialized commit message and optionally install git hooks via an interactive prompt.",
+      "doc": "## Summary\n\nAdd an opt-in hooks install prompt to clean scripts and update the initial commit message.\n\n## Context\n\nclean.sh and clean.ps1 initialize a fresh repo; add an explicit opt-in prompt to install codex-swarm hooks and update the initial commit subject.\n\n## Scope\n\n- Change clean.sh and clean.ps1 initial commit message to \"Codex Swarm Initialized\".\n- Add an interactive prompt after the initial commit to optionally install hooks via agentctl.\n- Keep the hooks opt-in (no silent install).\n\n## Risks\n\nPrompt could be missed in non-interactive runs; default remains no install to preserve opt-in behavior.\n\n## Verify Steps\n\nManual: run clean.sh / clean.ps1 in a disposable repo and confirm the prompt appears after the initial commit.\n\n## Rollback Plan\n\nRevert the clean script changes and restore the previous commit message and no-hook prompt.\n\n## Notes\n\nHooks remain opt-in; prompt appears only on interactive runs."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "49895fa5db8304f88c7db3c5bb6ec7cfed2a73862e84f5b92489589711a17626"
+    "checksum": "0f5c8b99bf13bcd33d90f930f43f096ecaa327bdccab803fe645ccae829449dd"
   }
 }
