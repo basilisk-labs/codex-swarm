@@ -4433,12 +4433,107 @@
       "doc_updated_by": "agentctl",
       "description": "Review repo configs and agent guidance to propose settings that belong in config.json and how agentctl should toggle them.",
       "doc": "## Summary\n\nPropose config.json additions (verify requirements, task doc sections, comment requirements, branch/worktree paths, commit guard tuning, base_branch) plus agentctl toggles to switch them.\n\n## Context\n\nUser asked to analyze the repo and suggest which settings should move into config.json so agents can honor them and switch them via agentctl.\n\n## Scope\n\nReviewed config usage in .codex-swarm/config.json, .codex-swarm/agentctl.py, AGENTS.md, and key docs; produced a prioritized list of candidate config keys and example agentctl toggles. No code changes.\n\n## Risks\n\nRecommendations require agentctl changes; too many knobs may drift from AGENTS.md if not kept in sync.\n\n## Verify Steps\n\nrg -n \"VERIFY_REQUIRED_TAGS|TASK_DOC_REQUIRED_SECTIONS|WORKTREES_DIRNAME|GENERIC_COMMIT_TOKENS\" .codex-swarm/agentctl.py\nrg -n \"workflow_mode|config.json\" AGENTS.md README.md docs/08-branching-and-pr-artifacts.md\n\n## Rollback Plan\n\nNo code changes; revert this task README or delete the task if the analysis is no longer needed.\n\n## Notes\n\nInspected agentctl constants (VERIFY_REQUIRED_TAGS, TASK_DOC_REQUIRED_SECTIONS, WORKTREES_DIRNAME, GENERIC_COMMIT_TOKENS) and docs that describe workflow_mode and config.json usage."
+    },
+    {
+      "id": "202601131302-D94Z3G",
+      "title": "Add agentctl role command",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "6e20f08a17a9cc114c8f2d43270fe2375623544d",
+        "message": "✨ D94Z3G add agentctl role command"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: Added agentctl role <ROLE> command; updated role headings and docs. Manual check: python .codex-swarm/agentctl.py role CODER"
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T13:07:16+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add a CLI command (agentctl role <ROLE>) that prints the role-specific command block from .codex-swarm/agentctl.md so agents can see only their guidance.",
+      "doc": "## Summary\n\nImplemented agentctl role <ROLE> to print a single role block from agentctl.md and updated headings for parsing.\n\n## Context\n\nAgents need a quick way to see only their command guidance without scanning the full agentctl.md.\n\n## Scope\n\nUpdate agentctl.py to add the role command and update agentctl.md headings/usage.\n\n## Risks\n\nLow; parsing errors could hide guidance or print the wrong section.\n\n## Verify Steps\n\nRun: python .codex-swarm/agentctl.py role CODER\n\n## Rollback Plan\n\nRevert the command and doc heading changes.\n\n## Notes\n\nVerified locally with: python .codex-swarm/agentctl.py role CODER"
+    },
+    {
+      "id": "202601131304-7JXJF7",
+      "title": "Document new config settings and CLI",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [
+        "202601131304-D4ZA6S"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T13:04:41+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update agentctl docs and project docs to explain new config.json keys and config CLI commands."
+    },
+    {
+      "id": "202601131304-D4ZA6S",
+      "title": "Add config keys and agentctl config CLI",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T13:04:31+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Extend .codex-swarm/config.json with new settings and update agentctl to read them plus provide config show/set commands."
+    },
+    {
+      "id": "202601131304-E1625C",
+      "title": "Optimize AGENTS and agent JSON instructions",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [
+        "202601131304-D4ZA6S",
+        "202601131304-7JXJF7"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T13:04:46+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Run UPDATER audit and apply the recommended optimizations to AGENTS.md and relevant .codex-swarm/agents/*.json."
+    },
+    {
+      "id": "202601131304-MV3TPX",
+      "title": "Configurable settings + CLI/docs + agent guidance",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T13:04:23+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Umbrella for adding configurable agentctl settings, updating config.json/CLI/docs, and optimizing AGENTS/agents per UPDATER. Downstream: 202601131304-D4ZA6S (config+CLI), 202601131304-7JXJF7 (docs), 202601131304-E1625C (AGENTS optimization)."
+    },
+    {
+      "id": "202601131307-ZR7CN1",
+      "title": "Remove umbrella wording and clarify orchestrator planning",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T13:09:45+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Remove umbrella task mentions and rephrase instructions so the orchestrator forms a top-level plan.",
+      "doc": "## Summary\n\n- ...\n\n## Context\n\n- ...\n\n## Scope\n\n- ...\n\n## Risks\n\n- ...\n\n## Verify Steps\n\n- ...\n\n## Rollback Plan\n\n- ...\n\n## Notes\n\n- ..."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "72676e351f813827efef0c87b9fc4a2e9d232077b9b981d1d1adf940968dc2c2"
+    "checksum": "2d3596205babaf4e1c4d8c4948814e667f5a9aefb3eec981bc37d6579ed48a5a"
   }
 }
