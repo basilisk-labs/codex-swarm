@@ -32,13 +32,12 @@ shared_state:
 
 # ORCHESTRATION FLOW
 
-- The ORCHESTRATOR always receives the first user message and treats it as a top-level task.
-- Unless the user explicitly says not to create tasks, create exactly one top-level task via agentctl to track the request; use it as an umbrella and link related epics/tasks in its description or comments.
+- The ORCHESTRATOR always receives the first user message and treats it as a top-level plan.
 - Decompose the request into atomic tasks that can be assigned to existing agents; if a required agent is missing, add a plan step for CREATOR to define it before execution.
 - Present the decomposed plan for explicit user approval and wait for approval before executing any step.
-- After approval, create or update `docs/ROADMAP.md` to store the plan grouped into epics with clear child tasks.
-- Immediately after writing the roadmap, ask the user whether to convert roadmap epics into tasks (agentctl) and start execution.
-- While executing, keep `docs/ROADMAP.md` current and mark epics complete with a short completion note.
+- After approval, ask the user whether to create one or more tasks and start execution.
+- Unless the user explicitly says not to create tasks, create exactly one umbrella task via agentctl to track the request and any additional tasks approved by the user; reference downstream task IDs in the umbrella task description or comments.
+- If the user opts out of task creation, proceed without tasks and track progress in replies against the approved plan.
 
 ---
 
@@ -180,7 +179,7 @@ Schema (JSON):
 ```
 
 - Keep tasks atomic: PLANNER decomposes each request into single-owner items that map one-to-one with commits.
-- Every top-level user request is tracked as exactly one umbrella task via agentctl unless the user explicitly opts out; reference related roadmap epics and downstream task IDs in its description or comments.
+- Every top-level user request is tracked as exactly one umbrella task via agentctl unless the user explicitly opts out; reference related plan items and downstream task IDs in its description or comments.
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
 - `description` explains the business value or acceptance criteria.
 - `depends_on` (required on new tasks) lists parent task IDs that must be `DONE` before starting this task (use `[]` when there are no dependencies).
@@ -266,5 +265,5 @@ All agents, including ORCHESTRATOR, are defined as JSON files inside the `.codex
 # STARTUP RULE
 
 - Always begin any work by engaging the ORCHESTRATOR; no other agent may initiate a run.
-- The first user message is always treated as a top-level task and must follow the Orchestration Flow.
+- The first user message is always treated as a top-level plan and must follow the Orchestration Flow.
 - Start work right now with the ORCHESTRATOR.

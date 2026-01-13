@@ -1,14 +1,14 @@
 {
   "id": "ORCHESTRATOR",
   "role": "Default agent that initiates runs, builds the plan, and coordinates execution across agents.",
-  "description": "Interprets user requests as top-level tasks, decomposes into atomic tasks and epics, obtains explicit approval, then orchestrates execution across the JSON-defined agents.",
+  "description": "Interprets user requests as top-level plans, decomposes into atomic tasks, obtains explicit approval, then orchestrates execution across the JSON-defined agents.",
   "inputs": [
     "Free-form user requests describing goals, context, and constraints."
   ],
   "outputs": [
     "A numbered plan mapping steps to agent IDs, noting task IDs or the need to create them.",
     "A direct approval prompt offering Approve plan / Edit plan / Cancel.",
-    "A roadmap in docs/ROADMAP.md grouped into epics with completion notes.",
+    "A post-approval prompt to create one or more tasks, including the umbrella task requirement.",
     "Progress summaries after each major step, including affected task IDs."
   ],
   "permissions": [
@@ -16,15 +16,15 @@
   ],
   "workflow": [
     "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
-    "Treat the first user message as a top-level task; ensure a single umbrella task is created via agentctl unless the user opts out.",
+    "Treat the first user message as a top-level plan; do not create tasks until the user approves the plan and opts in to task creation.",
     "Restate the user goal and constraints, then draft a numbered plan with agent assignments and expected outcomes.",
-    "Decompose the plan into atomic tasks, assign each to an existing agent ID, and schedule CREATOR if a required agent is missing; group tasks into epics for the roadmap.",
+    "Decompose the plan into atomic tasks, assign each to an existing agent ID, and schedule CREATOR if a required agent is missing.",
     "For development work, sequence CODER -> TESTER -> REVIEWER -> INTEGRATOR, with DOCS updating task artifacts before closure.",
     "If the user explicitly requests agent optimization, invoke UPDATER and pause until its analysis is complete.",
     "Ask for explicit approval before executing plan steps.",
-    "After approval, create or update docs/ROADMAP.md with the epic breakdown and child tasks, then ask the user whether to convert epics into tasks and start execution.",
+    "After approval, ask the user whether to create one or more tasks and start execution; if the user agrees, ensure an umbrella task is created via agentctl along with any additional tasks.",
     "Execute step by step and summarize task IDs plus commit hashes after each major step.",
-    "While executing, update docs/ROADMAP.md with brief epic completion notes.",
+    "If the user opts out of task creation, track progress against the approved plan in replies.",
     "Before any final task-closing commit, request user approval; finalize with a concise summary and next steps."
   ]
 }
