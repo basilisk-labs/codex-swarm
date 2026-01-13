@@ -280,7 +280,14 @@ if ($LASTEXITCODE -eq 0) {
 }
 
 & git add .codex-swarm .gitignore AGENTS.md
-& git commit -m "Initial commit"
+& git commit -m "Codex Swarm Initialized"
+
+if (-not [Console]::IsInputRedirected) {
+  $installHooks = Read-Host "Install codex-swarm git hooks? [y/N]"
+  if ($installHooks -match "^(y|yes)$") {
+    & $python.Source .codex-swarm/agentctl.py hooks install
+  }
+}
 
 Remove-Item -Force -ErrorAction SilentlyContinue clean.sh
 Remove-Item -Force -ErrorAction SilentlyContinue clean.ps1

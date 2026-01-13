@@ -261,6 +261,16 @@ else
 fi
 
 git add .codex-swarm .gitignore AGENTS.md
-git commit -m "Initial commit"
+git commit -m "Codex Swarm Initialized"
+
+if [[ -t 0 ]]; then
+  INSTALL_HOOKS=""
+  read -r -p "Install codex-swarm git hooks? [y/N]: " INSTALL_HOOKS || true
+  case "${INSTALL_HOOKS}" in
+    y|Y|yes|YES)
+      python3 .codex-swarm/agentctl.py hooks install
+      ;;
+  esac
+fi
 
 rm -rf clean.sh
