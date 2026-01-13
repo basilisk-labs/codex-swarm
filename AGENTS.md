@@ -24,8 +24,8 @@ shared_state:
 - The ORCHESTRATOR is the only agent that may initiate any start-of-run action.
 - Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
 - Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
-- Never run git directly (no `git status`/`add`/`commit`); agentctl owns staging + commits and derives commit subjects from your task comment as `<emoji> <task-suffix> <comment>`.
-- The workspace is always a git repository. After completing each atomic task tracked by the task backend, create a human-readable commit before continuing.
+- Git is allowed for inspection and local operations when needed (for example, `git status`, `git diff`, `git log`); use agentctl for commits and task status changes. Comment-driven commits still derive the subject as `<emoji> <task-suffix> <comment>` when you explicitly use those flags.
+- The workspace is always a git repository. After completing task work that changes tracked files, create a human-readable commit before continuing; status-only updates should not create commits.
 
 ---
 
@@ -55,7 +55,7 @@ shared_state:
 # COMMIT_WORKFLOW
 
 - Treat each plan task (`<task-id>`) as an atomic unit of work and keep commits minimal.
-- All staging/commits run through agentctl’s comment-driven flags (`start`/`block`/`task set-status` with `--commit-from-comment`, `finish` with `--commit-from-comment`/`--status-commit`); do not call git directly or craft commit subjects manually.
+- All staging/commits run through agentctl (guard commit/commit); use comment-driven flags only when you intend to create a commit. Status updates should default to no-commit, and you should not craft commit subjects manually.
 - Status comments become commit subjects in the format `<emoji> <task-suffix> <comment>`—pick a fitting emoji (🚧/⛔/✅/✨) and write meaningful bodies.
 - Default to a task-branch cadence (planning on the pinned base branch, execution on a task branch, closure on the pinned base branch):
   1) **Planning (base branch)**: add/update the task via `agentctl` + create/update `.codex-swarm/tasks/<task-id>/README.md` (skeleton/spec) and commit them together.
@@ -64,7 +64,7 @@ shared_state:
   4) **Verification/closure (base branch, INTEGRATOR)**: update `.codex-swarm/tasks/<task-id>/README.md`, mark the task `DONE` via `python .codex-swarm/agentctl.py finish …`, then follow the Task export rules below before committing closure artifacts.
 - Before creating the final **verification/closure** commit, explicitly ask the user to approve it and wait for confirmation.
 - Do not finish a task until `.codex-swarm/tasks/<task-id>/README.md` is fully filled in (no placeholder `...`).
-- Avoid dedicated commits for intermediate status-only changes (e.g., a standalone “start/DOING” commit). If you need to record WIP state, do it without adding extra commits.
+- Avoid dedicated commits for intermediate status-only changes (e.g., a standalone "start/DOING" commit). If you need to record WIP state, do it via status comments without adding extra commits.
 - Commit message format is defined in `@.codex-swarm/agentctl.md`; follow it and do not invent alternate formats.
 - Any agent editing tracked files must stage and commit its changes before handing control back to the orchestrator.
 - The agent that finishes a plan task is the one who commits, with a detailed changelog-style description of the completed work in that message.

@@ -651,6 +651,43 @@ def is_direct_mode() -> bool:
     return workflow_mode() == "direct"
 
 
+STATUS_COMMIT_POLICIES = {"allow", "warn", "confirm"}
+DEFAULT_STATUS_COMMIT_POLICY = "allow"
+
+
+def status_commit_policy() -> str:
+    raw = str(_SWARM_CONFIG.get("status_commit_policy") or "").strip().lower()
+    if not raw:
+        return DEFAULT_STATUS_COMMIT_POLICY
+    if raw not in STATUS_COMMIT_POLICIES:
+        die(
+            f"Invalid status_commit_policy in {SWARM_CONFIG_PATH}: {raw!r} "
+            f"(expected one of {', '.join(sorted(STATUS_COMMIT_POLICIES))})",
+            code=2,
+        )
+    return raw
+
+
+def enforce_status_commit_policy(*, action: str, confirmed: bool, quiet: bool) -> None:
+    policy = status_commit_policy()
+    if policy == "allow":
+        return
+    if policy == "warn":
+        if not quiet and not confirmed:
+            print(
+                f"⚠️ {action}: status/comment-driven commit requested; "
+                "policy=warn (pass --confirm-status-commit to acknowledge)",
+                file=sys.stderr,
+            )
+        return
+    if policy == "confirm" and not confirmed:
+        die(
+            f"{action}: status/comment-driven commit blocked by status_commit_policy='confirm' "
+            "(pass --confirm-status-commit to proceed)",
+            code=2,
+        )
+
+
 DEFAULT_BASE_BRANCH = "main"
 GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
 WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
@@ -2178,6 +2215,12 @@ def cmd_commit(args: argparse.Namespace) -> None:
 def cmd_start(args: argparse.Namespace) -> None:
     if not args.author or not args.body:
         die("--author and --body are required", code=2)
+    if getattr(args, "commit_from_comment", False):
+        enforce_status_commit_policy(
+            action="start",
+            confirmed=bool(getattr(args, "confirm_status_commit", False)),
+            quiet=bool(args.quiet),
+        )
     require_tasks_json_write_context(force=bool(args.force))
     if not args.force:
         require_structured_comment(args.body, prefix="Start:", min_chars=40)
@@ -2231,6 +2274,12 @@ def cmd_start(args: argparse.Namespace) -> None:
 def cmd_block(args: argparse.Namespace) -> None:
     if not args.author or not args.body:
         die("--author and --body are required", code=2)
+    if getattr(args, "commit_from_comment", False):
+        enforce_status_commit_policy(
+            action="block",
+            confirmed=bool(getattr(args, "confirm_status_commit", False)),
+            quiet=bool(args.quiet),
+        )
     require_tasks_json_write_context(force=bool(args.force))
     if not args.force:
         require_structured_comment(args.body, prefix="Blocked:", min_chars=40)
@@ -2602,6 +2651,12 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
         )
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)
+    if getattr(args, "commit_from_comment", False):
+        enforce_status_commit_policy(
+            action="task set-status",
+            confirmed=bool(getattr(args, "confirm_status_commit", False)),
+            quiet=bool(args.quiet),
+        )
 
     require_tasks_json_write_context(force=bool(args.force))
     tasks, save = load_task_store()
@@ -2663,6 +2718,12 @@ def cmd_finish(args: argparse.Namespace) -> None:
         die("--status-commit/--commit-from-comment supports exactly one task id", code=2)
     if (commit_from_comment_flag or status_commit_flag) and not args.body:
         die("--body is required when building commit messages from comments", code=2)
+    if commit_from_comment_flag or status_commit_flag:
+        enforce_status_commit_policy(
+            action="finish",
+            confirmed=bool(getattr(args, "confirm_status_commit", False)),
+            quiet=bool(args.quiet),
+        )
 
     require_tasks_json_write_context(force=bool(args.force))
     pr_context: dict[str, PrContext] = {}
@@ -4622,6 +4683,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Require a clean working tree when committing",
     )
+    p_start.add_argument(
+        "--confirm-status-commit",
+        action="store_true",
+        help="Acknowledge status/comment-driven commit when policy=warn/confirm",
+    )
     p_start.set_defaults(func=cmd_start)
 
     p_block = sub.add_parser("block", help="Mark task BLOCKED with a mandatory comment")
@@ -4659,6 +4725,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--commit-require-clean",
         action="store_true",
         help="Require a clean working tree when committing",
+    )
+    p_block.add_argument(
+        "--confirm-status-commit",
+        action="store_true",
+        help="Acknowledge status/comment-driven commit when policy=warn/confirm",
     )
     p_block.set_defaults(func=cmd_block)
 
@@ -4837,6 +4908,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Require a clean working tree when committing",
     )
+    p_status.add_argument(
+        "--confirm-status-commit",
+        action="store_true",
+        help="Acknowledge status/comment-driven commit when policy=warn/confirm",
+    )
     p_status.set_defaults(func=cmd_task_set_status)
 
     p_finish = sub.add_parser(
@@ -4908,6 +4984,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--status-commit-require-clean",
         action="store_true",
         help="Require a clean working tree when committing status/doc changes",
+    )
+    p_finish.add_argument(
+        "--confirm-status-commit",
+        action="store_true",
+        help="Acknowledge status/comment-driven commit when policy=warn/confirm",
     )
     p_finish.set_defaults(require_task_id_in_commit=True, func=cmd_finish)
 

@@ -14,16 +14,16 @@
   "permissions": [
     "AGENTS.md: read + write to update registry instructions.",
     ".codex-swarm/agents directory: read existing definitions and write new agent files.",
-    "git: do not run git directly; trigger commits via agentctl comment-driven flags once creation is complete."
+    "git: allowed for inspection/local ops when needed; use agentctl for commits."
   ],
   "workflow": [
     "Confirm via agentctl (see @.codex-swarm/agentctl.md for the current commands) that no current agent covers the requested specialty or permissions.",
     "Interview the provided context (constraints, tone, tools) and restate the intended capability in one sentence for alignment, emphasizing the local Cursor + Codex environment.",
-    "Default to agentctl-first: in the drafted agent workflow, require agentctl for any supported operation (task ops, PR artifacts, verify logging, comment-driven commits) and avoid raw git entirely; refer to @.codex-swarm/agentctl.md for the canonical command guidance.",
+    "Default to agentctl-first: in the drafted agent workflow, require agentctl for any supported operation (task ops, PR artifacts, verify logging, commits) and use git only when needed for inspection or unsupported operations; refer to @.codex-swarm/agentctl.md for the canonical command guidance.",
     "Author the new `.codex-swarm/agents/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT best practices plus Codex-specific guidance (local repo only, agentctl-first, @file references, command summaries).",
     "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run.",
     "Update AGENTS.md sections if new guidance or registry entries are required so the orchestrator can reference them immediately.",
-    "Validate the JSON (via linting or jq), proofread for clarity, then update task status with agentctl comment-driven flags so the commit is auto-built from your comment (emoji + task suffix + summary).",
+    "Validate the JSON (via linting or jq), proofread for clarity, then update task status via agentctl; use comment-driven commit flags only if you are intentionally creating a commit from the status comment.",
     "When crafting commit-triggering comments, follow the format in @.codex-swarm/agentctl.md (`<emoji> <suffix> <comment>`) and do not invent alternate formats."
   ]
 }
