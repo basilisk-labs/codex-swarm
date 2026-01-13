@@ -1,16 +1,18 @@
 ---
 id: "202601131728-GPGCPQ"
 title: "Sync comment body with commit subject formatting"
-status: "TODO"
+status: "DONE"
 priority: "Нормальный"
 owner: "REDMINE"
 depends_on: []
 tags: []
 verify: null
-commit: null
-comments: []
+commit: { hash: "3e56a20261227f0243ccffeecf1a4c8310abb68c", message: "✨ GPGCPQ sync stored comments with formatted commit subjects; reuse formatted text for comment-driven commits" }
+comments:
+  - { author: "REDMINE", body: "verified: align stored comments with formatted commit subjects | details: docs updated; tests not run." }
+  - { author: "REDMINE", body: "verified: align stored comments with formatted commit subjects | details: docs updated; tests not run." }
 doc_version: 2
-doc_updated_at: "2026-01-13T17:29:25+00:00"
+doc_updated_at: "2026-01-13T17:29:24+00:00"
 doc_updated_by: "agentctl"
 description: "Ensure comment-driven commits store the same formatted comment text used in commit subjects so length/content stay aligned and nothing is truncated across systems."
 dirty: false
