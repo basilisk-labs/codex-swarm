@@ -17,7 +17,7 @@
   ],
   "workflow": [
     "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
-    "Create/update task README content via agentctl task doc set; complete required sections before finish.",
+    "Create/update task README content via agentctl task doc set; required sections are config-driven (check config if they differ).",
     "Update user/developer docs minimally to reflect behavior and match existing tone.",
     "Keep PR artifact docs and notes current when required; add handoff notes for INTEGRATOR.",
     "Avoid extra commits unless the task is doc-only."

@@ -59,6 +59,7 @@ shared_state:
 - Describe every edit, command, or validation precisely (file + snippet + replacement) because no automation surface exists; keep changes incremental so Codex can apply them verbatim.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
 - For any task operation (add/update/comment/status/verify/finish), use `python .codex-swarm/agentctl.py`.
+- For config changes, prefer `python .codex-swarm/agentctl.py config show|set`; config controls branch prefix/worktree dir, task doc sections, verify-required tags, comment rules, and commit summary tokens.
 - For frontend or design work, enforce the design-system tokens described by the project before inventing new colors or components.
 - If running any script requires installing external libraries or packages, create or activate a virtual environment first and install those dependencies exclusively inside it.
 
@@ -94,6 +95,7 @@ shared_state:
 ## Workflow modes
 
 `workflow_mode` is configured in `.codex-swarm/config.json` and controls how strict the workflow guardrails are.
+Use `python .codex-swarm/agentctl.py config show` / `python .codex-swarm/agentctl.py config set ...` to inspect or change settings.
 
 - `direct`: low-ceremony, single-checkout workflow.
   - Work strictly in a single checkout: do not create task branches/worktrees (agentctl rejects branch/worktree creation in this mode).
@@ -101,7 +103,7 @@ shared_state:
   - Any agent may implement and close a task on the current branch (prefer doing planning/closure on the pinned base branch when possible).
 - `branch_pr`: strict branching workflow with local “PR artifacts”.
   - Planning and closure happen only in the repo root checkout on the pinned base branch.
-  - Implementation happens only on a per-task branch + worktree: `task/<task-id>/<slug>` in `.codex-swarm/worktrees/<task-id>-<slug>/`.
+  - Implementation happens only on a per-task branch + worktree: `<task_prefix>/<task-id>/<slug>` in `<worktrees_dir>/<task-id>-<slug>/` (defaults: `task` + `.codex-swarm/worktrees`; config: `branch.task_prefix`, `paths.worktrees_dir`).
   - Each task branch maintains tracked PR artifacts under `.codex-swarm/tasks/<task-id>/pr/`.
   - Only **INTEGRATOR** merges into the pinned base branch and runs `integrate`/`finish` to close the task.
 
@@ -113,8 +115,8 @@ shared_state:
 ## Core rules
 
 - **1 task = 1 branch** (branch is per task id, not per agent).
-- **Branch naming**: `task/<task-id>/<slug>` (slug = short, lowercase, dash-separated).
-- **Worktrees are mandatory** for parallel work and must live inside this repo only: `.codex-swarm/worktrees/<task-id>-<slug>/` (ignored by git).
+- **Branch naming**: `<task_prefix>/<task-id>/<slug>` (slug = short, lowercase, dash-separated; config: `branch.task_prefix`).
+- **Worktrees are mandatory** for parallel work and must live inside this repo only: `<worktrees_dir>/<task-id>-<slug>/` (config: `paths.worktrees_dir`).
 - **Task export**: follow the Task export rules below (do not create or commit exports from task branches).
 - **Local PR simulation**: every task branch maintains a tracked PR artifact folder under `.codex-swarm/tasks/<task-id>/pr/`.
 - **Mode toggle**: `agentctl` reads `.codex-swarm/config.json`; when `workflow_mode` is `branch_pr`, it enforces the branching + single-writer + PR artifact rules above.
@@ -133,16 +135,16 @@ For each task `<task-id>`:
 ## Executor cheat sheet (CODER/TESTER/DOCS)
 
 1. Create a task branch + worktree: `python .codex-swarm/agentctl.py branch create <task-id> --agent CODER --slug <slug> --worktree`.
-2. Work only inside `.codex-swarm/worktrees/<task-id>-<slug>/` on the task branch (`task/<task-id>/<slug>`).
+2. Work only inside `<worktrees_dir>/<task-id>-<slug>/` on the task branch (`<task_prefix>/<task-id>/<slug>`).
 3. Commit only via `python .codex-swarm/agentctl.py guard commit …` (or `python .codex-swarm/agentctl.py commit …`).
 4. Open/update PR artifacts: `python .codex-swarm/agentctl.py pr open …` and `python .codex-swarm/agentctl.py pr update …`.
 5. Hard bans: do not run `finish` and do not merge into the base branch (INTEGRATOR owns integration + closure).
 
 ## INTEGRATOR cheat sheet
 
-1. Work from the repo root checkout on the pinned base branch (never from `.codex-swarm/worktrees/*`).
+1. Work from the repo root checkout on the pinned base branch (never from `<worktrees_dir>/*`).
 2. Validate: `python .codex-swarm/agentctl.py pr check <task-id>`.
-3. Integrate (includes verify + finish + task lint on export write): `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`.
+3. Integrate (includes verify + finish + task lint on export write): `python .codex-swarm/agentctl.py integrate <task-id> --branch <task_prefix>/<task-id>/<slug> --merge-strategy squash --run-verify`.
 4. Commit closure on the pinned base branch: stage closure artifacts and commit `✅ <suffix> close: <detailed changelog ...>`.
 
 # SHARED_STATE

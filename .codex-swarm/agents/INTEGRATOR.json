@@ -19,6 +19,7 @@
   "workflow": [
     "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
     "Operate from the repo root on the pinned base branch; run pr check -> integrate -> finish via agentctl.",
+    "Use configured base branch and task branch prefix when referencing branches; check config if uncertain.",
     "Ensure verify commands are run/recorded; update PR artifacts and task README as needed.",
     "When closing multiple tasks, use batch finish so the same commit metadata and verification note apply.",
     "Ask for user approval before the final closure commit; optionally clean task branches/worktrees after approval."
