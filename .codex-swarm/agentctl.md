@@ -214,6 +214,7 @@ Task README sections (body):
   - Each task uses tracked PR artifacts under `.codex-swarm/tasks/<task-id>/pr/`.
   - Integration/closure is performed only by INTEGRATOR via `python .codex-swarm/agentctl.py integrate` / `python .codex-swarm/agentctl.py finish`.
 - `status_commit_policy: "allow" | "warn" | "confirm"`: controls comment-driven/status commits. `warn` prints a warning unless `--confirm-status-commit` is passed; `confirm` blocks unless `--confirm-status-commit` is passed.
+- `finish_auto_status_commit: true | false`: when true, `finish` will create a status commit using the comment body whenever `--author` and `--body` are provided (equivalent to `--status-commit`); still subject to `status_commit_policy`.
 
 In `branch_pr`, executors leave handoff notes via `python .codex-swarm/agentctl.py pr note <task-id> ...`, which appends to `.codex-swarm/tasks/<task-id>/pr/review.md` (under `## Handoff Notes`), and INTEGRATOR appends them to the task record at closure.
 

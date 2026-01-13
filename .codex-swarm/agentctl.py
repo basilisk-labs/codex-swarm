@@ -913,6 +913,19 @@ def status_commit_policy() -> str:
     return raw
 
 
+def finish_auto_status_commit() -> bool:
+    raw = _SWARM_CONFIG.get("finish_auto_status_commit")
+    if raw is None:
+        return False
+    if isinstance(raw, bool):
+        return raw
+    die(
+        f"Invalid finish_auto_status_commit in {SWARM_CONFIG_PATH}: {raw!r} "
+        "(expected true/false)",
+        code=2,
+    )
+
+
 def enforce_status_commit_policy(*, action: str, confirmed: bool, quiet: bool) -> None:
     policy = status_commit_policy()
     if policy == "allow":
@@ -3026,7 +3039,12 @@ def cmd_finish(args: argparse.Namespace) -> None:
     task_ids = normalize_task_ids(raw_task_ids)
     primary_task_id = task_ids[0] if task_ids else ""
     commit_from_comment_flag = bool(getattr(args, "commit_from_comment", False))
-    status_commit_flag = bool(getattr(args, "status_commit", False) or commit_from_comment_flag)
+    auto_status_commit = finish_auto_status_commit()
+    status_commit_flag = bool(
+        getattr(args, "status_commit", False)
+        or commit_from_comment_flag
+        or (auto_status_commit and bool(args.body))
+    )
 
     if (args.author and not args.body) or (args.body and not args.author):
         die("--author and --body must be provided together", code=2)

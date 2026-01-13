@@ -4273,9 +4273,10 @@
       "depends_on": [],
       "tags": [],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T11:25:32+00:00",
+      "doc_updated_at": "2026-01-13T11:52:55+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Scan the repo for hard-coded workflow settings and propose which ones should move into config.json for agent awareness and agentctl toggles."
+      "description": "Scan the repo for hard-coded workflow settings and propose which ones should move into config.json for agent awareness and agentctl toggles.",
+      "doc": "## Summary\n\n- ...\n\n## Context\n\n- ...\n\n## Scope\n\n- ...\n\n## Risks\n\n- ...\n\n## Verify Steps\n\n- ...\n\n## Rollback Plan\n\n- ...\n\n## Notes\n\n- ..."
     },
     {
       "id": "202601131125-PT7RCE",
@@ -4332,12 +4333,32 @@
       "doc_updated_by": "agentctl",
       "description": "Revise ORCHESTRATOR/PLANNER specs and AGENTS.md to treat each request as a top-level plan, then prompt the user to create one or more tasks instead of maintaining docs/ROADMAP.md.",
       "doc": "## Summary\n\nReplace roadmap-specific orchestration with top-level plan and task proposal flow.\n\n## Context\n\nUser prefers a top-level plan per request and a prompt to create one or more tasks, rather than maintaining docs/ROADMAP.md.\n\n## Scope\n\nUpdate AGENTS.md and ORCHESTRATOR/PLANNER JSON workflows to remove roadmap steps and require a post-plan task-creation prompt.\n\n## Risks\n\nLow risk; aligns agent expectations but must stay consistent across AGENTS.md and agent JSON.\n\n## Verify Steps\n\nNo tests (spec changes only).\n\n## Rollback Plan\n\nRevert the commit to restore the prior roadmap workflow."
+    },
+    {
+      "id": "202601131159-4YPF2T",
+      "title": "Auto-commit on finish via config",
+      "status": "DOING",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Start: add config-driven auto status commit on finish and document the behavior."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T12:00:23+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add a config option to auto-run finish status commits, update agentctl behavior and docs, and enable the setting in config.json.",
+      "doc": "## Summary\n\nAdd a config-controlled auto status commit for finish and document the behavior.\n\n## Context\n\nUser wants finish to commit task updates automatically when configured.\n\n## Scope\n\nAdd a config flag, wire it into agentctl finish, update docs, and enable it in .codex-swarm/config.json.\n\n## Risks\n\nLow risk; incorrect config parsing could block finish or trigger unexpected commits.\n\n## Verify Steps\n\nNo tests (behavior verified by inspection).\n\n## Rollback Plan\n\nRevert the commit and remove the config flag from config.json."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "e432e3df8d64ce0035e6668a0f1688a1d59cc139ad3c5d4d8f8378731282c38b"
+    "checksum": "771416c4c661ec86a90b00e37185c2fa30fae8491b2a9d464573ee55c13106f4"
   }
 }
