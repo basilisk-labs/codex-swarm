@@ -1,16 +1,17 @@
 ---
 id: "202601131643-VXPBHQ"
 title: "Revise comment-driven commit emoji and formatting rules"
-status: "TODO"
+status: "DONE"
 priority: "Нормальный"
 owner: "REDMINE"
 depends_on: []
 tags: []
 verify: null
-commit: null
-comments: []
+commit: { hash: "8fd29a0da544ca8b96eb9326d418863e3963a0bf", message: "✨ VXPBHQ infer emojis for intermediate comment commits; format comment bodies into summary/details; document rules" }
+comments:
+  - { author: "REDMINE", body: "Verified: mark task done; commit emoji inference and comment formatting updates; docs updated; tests not run." }
 doc_version: 2
-doc_updated_at: "2026-01-13T17:04:01+00:00"
+doc_updated_at: "2026-01-13T17:04:00+00:00"
 doc_updated_by: "agentctl"
 description: "Define fixed emojis for start/finish status commits, choose intermediate emojis based on comment intent, and improve commit message formatting/detail in the agentctl workflow."
 dirty: false
