@@ -4280,15 +4280,23 @@
     {
       "id": "202601131125-PT7RCE",
       "title": "Align ORCHESTRATOR/PLANNER with roadmap workflow",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "9d4a383c6d1e8a08933180886aba7db8287c30e4",
+        "message": "✨ PT7RCE align roadmap workflow: update AGENTS.md orchestration flow; sync ORCHESTRATOR/PLANNER specs; add umbrella-task tracking"
+      },
       "comments": [
         {
           "author": "ORCHESTRATOR",
           "body": "Start: sync ORCHESTRATOR/PLANNER agent specs with AGENTS.md roadmap and top-level task rules."
+        },
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: closing as unnecessary; roadmap flow was superseded by BK0QY5 top-level plan + task prompt."
         }
       ],
       "doc_version": 2,
@@ -4330,6 +4338,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4d931078060e57de17ea552c5f746a4f247bee474a0f24c6f7a51c00b875a87d"
+    "checksum": "e432e3df8d64ce0035e6668a0f1688a1d59cc139ad3c5d4d8f8378731282c38b"
   }
 }
