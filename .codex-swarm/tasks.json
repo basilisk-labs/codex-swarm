@@ -4337,15 +4337,23 @@
     {
       "id": "202601131159-4YPF2T",
       "title": "Auto-commit on finish via config",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "b893afa5c44be3efa381f3e47a266b032ee39f2a",
+        "message": "✨ 4YPF2T auto-commit on finish: add config flag; wire agentctl finish; document behavior"
+      },
       "comments": [
         {
           "author": "ORCHESTRATOR",
           "body": "Start: add config-driven auto status commit on finish and document the behavior."
+        },
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: spec-only change; finish auto status commit enabled and no runtime behavior beyond agentctl finish flag."
         }
       ],
       "doc_version": 2,
@@ -4359,6 +4367,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "771416c4c661ec86a90b00e37185c2fa30fae8491b2a9d464573ee55c13106f4"
+    "checksum": "9303dd7333cc7f49f9ecfd9cad334f8ed4cec30d2cfeb3771158bd007304b561"
   }
 }
