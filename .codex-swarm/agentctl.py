@@ -35,6 +35,7 @@ class PrContext(TypedDict):
     pr_meta: JsonDict
 
 
+# Backend capability interfaces for optional features (checked via supports_* helpers).
 class BackendTaskListWrite(Protocol):
     def list_tasks(self) -> TaskList: ...
 
@@ -88,6 +89,7 @@ class BackendSyncTasks(Protocol):
     ) -> None: ...
 
 
+# Duck-typing helpers to gate backend features without hard dependencies.
 def supports_task_list_write(backend: object) -> TypeGuard[BackendTaskListWrite]:
     return callable(getattr(backend, "list_tasks", None)) and callable(getattr(backend, "write_task", None))
 
@@ -197,6 +199,7 @@ COMMIT_EMOJI_KEYWORDS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("🎨", ("ui", "ux", "style", "css", "theme", "layout")),
     ("🧹", ("lint", "format", "formatting", "typo", "spelling")),
 )
+# Git hook environment keys and markers used by agentctl-managed hooks.
 HOOK_ENV_TASK_ID = "CODEX_SWARM_TASK_ID"
 HOOK_ENV_ALLOW_TASKS = "CODEX_SWARM_ALLOW_TASKS"
 HOOK_ENV_ALLOW_BASE = "CODEX_SWARM_ALLOW_BASE"
@@ -217,6 +220,7 @@ def load_env_file(path: Path) -> None:
             continue
         key, value = line.split("=", 1)
         key = key.strip()
+        # Do not override already-set env vars in the current process.
         if not key or key in os.environ:
             continue
         value = value.strip()
@@ -225,6 +229,7 @@ def load_env_file(path: Path) -> None:
         os.environ[key] = value
 
 
+# Wrapper to standardize subprocess calls (text mode + captured output).
 def run(
     cmd: list[str],
     *,
@@ -347,6 +352,7 @@ def git_hooks_dir(*, cwd: Path = ROOT) -> Path:
         path = (repo_root / path).resolve()
     else:
         path = path.resolve()
+    # Ensure hooks live inside the repo/common dir to avoid writing outside.
     allowed_roots = (repo_root, common_dir)
     if not any(root == path or root in path.parents for root in allowed_roots):
         die(
@@ -494,6 +500,7 @@ def require_branch(name: str, *, cwd: Path = ROOT, action: str) -> None:
 
 
 def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -> None:
+    # Protect tasks.json writes from worktrees or non-base branches in branch_pr mode.
     if force:
         return
     if is_task_worktree_checkout(cwd=cwd):
@@ -503,6 +510,7 @@ def require_tasks_json_write_context(*, cwd: Path = ROOT, force: bool = False) -
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
+# In-memory caches avoid repeated backend reads and dependency recomputation.
 _TASK_CACHE: TaskList | None = None
 _TASK_INDEX_CACHE: tuple[str, TaskIndex, list[str]] | None = None
 _TASK_DEP_CACHE: tuple[str, DependencyState, list[str]] | None = None
@@ -534,6 +542,7 @@ def normalize_task_ids(values: Iterable[str]) -> list[str]:
     return task_ids
 
 
+# Ensure the commit message contains meaningful content beyond the task id/suffix.
 def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
     task_token = task_id.strip().lower()
     if not task_token:
@@ -638,6 +647,7 @@ def hook_commit_msg_check(message_path: Path) -> None:
 
 
 def hook_pre_commit_check(*, cwd: Path) -> None:
+    # Enforce workflow guardrails for staged files before git commit runs.
     staged = git_staged_files(cwd=cwd)
     if not staged:
         return
@@ -798,6 +808,7 @@ def _resolve_optional_repo_relative_path(value: object, *, label: str) -> Path |
     return resolved
 
 
+# Load optional backend config and keep module paths constrained to the repo.
 def load_backend_config() -> JsonDict:
     backend = _SWARM_CONFIG.get("tasks_backend") or {}
     if not isinstance(backend, dict):
@@ -827,6 +838,7 @@ def load_backend_config() -> JsonDict:
     return data
 
 
+# Dynamically import the backend class declared by config.
 def load_backend_class(backend_config: JsonDict) -> type[object] | None:
     if not backend_config:
         return None
@@ -1017,6 +1029,7 @@ def task_doc_sections() -> tuple[str, ...]:
 
 
 def task_doc_required_sections() -> tuple[str, ...]:
+    # Validate required sections against the configured section list.
     doc_cfg = _config_dict(tasks_config().get("doc"), label="tasks.doc")
     raw = doc_cfg.get("required_sections")
     if raw is None:
@@ -1245,6 +1258,7 @@ def load_tasks() -> TaskList:
 
 
 def load_task_store() -> tuple[TaskList, Callable[[TaskList], None]]:
+    # Backends are optional; fall back to local tasks.json when absent.
     backend = backend_instance()
     if backend is None:
         data = load_json(TASKS_PATH)
@@ -2100,6 +2114,7 @@ def guard_commit_check(
     quiet: bool,
     cwd: Path,
 ) -> None:
+    # Enforce commit subject rules, allowlists, and branch/worktree constraints.
     if not commit_subject_mentions_task(task_id, message):
         die(commit_subject_missing_error([task_id], message), code=2)
     if not commit_message_has_meaningful_summary(task_id, message):
@@ -2292,6 +2307,7 @@ def split_summary_and_details(text: str) -> tuple[str, list[str]]:
 
 
 def format_comment_body_for_commit(body: str) -> str:
+    # Normalize structured comments into "summary | details: ..." commit text.
     compact = normalize_comment_body_for_commit(body)
     if not compact:
         return ""
@@ -2333,6 +2349,7 @@ def default_commit_emoji_for_status(status: str, *, comment_body: str | None = N
 
 
 def stage_allowlist(allow: list[str], *, allow_tasks: bool, cwd: Path) -> list[str]:
+    # Stage only changed paths that match the allowlist (optionally excluding tasks.json).
     changed = git_status_changed_paths(cwd=cwd)
     if not changed:
         die("No changes to stage", code=2)
