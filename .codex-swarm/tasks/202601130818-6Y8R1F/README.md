@@ -1,11 +1,14 @@
 ---
 id: "202601130818-6Y8R1F"
 title: "Optional git hooks installer"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "git", "workflow"]
+commit: { hash: "737b83169856fc0f118399f08b062bcf8fcd55fe", message: "✨ 6Y8R1F add opt-in git hooks installer + hook checks + docs" }
+comments:
+  - { author: "CODER", body: "Verified: manual review only; no automated tests run; hooks install/uninstall and enforcement changes reviewed." }
 doc_version: 2
 doc_updated_at: "2026-01-13T08:19:43+00:00"
 doc_updated_by: "agentctl"

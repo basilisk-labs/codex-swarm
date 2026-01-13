@@ -4163,7 +4163,7 @@
     {
       "id": "202601130818-6Y8R1F",
       "title": "Optional git hooks installer",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [],
@@ -4171,6 +4171,16 @@
         "agentctl",
         "git",
         "workflow"
+      ],
+      "commit": {
+        "hash": "737b83169856fc0f118399f08b062bcf8fcd55fe",
+        "message": "✨ 6Y8R1F add opt-in git hooks installer + hook checks + docs"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: manual review only; no automated tests run; hooks install/uninstall and enforcement changes reviewed."
+        }
       ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-13T08:19:43+00:00",
@@ -4210,6 +4220,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0f5c8b99bf13bcd33d90f930f43f096ecaa327bdccab803fe645ccae829449dd"
+    "checksum": "4d2dd2e15f32adc796202ac4e5956699327c797f8d304b4fcadfdd97be7094cf"
   }
 }
