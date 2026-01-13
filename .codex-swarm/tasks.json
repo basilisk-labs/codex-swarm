@@ -4518,22 +4518,32 @@
     {
       "id": "202601131307-ZR7CN1",
       "title": "Remove umbrella wording and clarify orchestrator planning",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "7cd26ceb1def078ab4426a44fe0c2629601220c1",
+        "message": "✨ ZR7CN1 remove umbrella wording; clarify top-level plan language; update planner/orchestrator specs"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: remove umbrella mentions in AGENTS.md; update ORCHESTRATOR/PLANNER specs; doc-only change; no tests run."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T13:09:45+00:00",
+      "doc_updated_at": "2026-01-13T13:10:32+00:00",
       "doc_updated_by": "agentctl",
       "description": "Remove umbrella task mentions and rephrase instructions so the orchestrator forms a top-level plan.",
-      "doc": "## Summary\n\n- ...\n\n## Context\n\n- ...\n\n## Scope\n\n- ...\n\n## Risks\n\n- ...\n\n## Verify Steps\n\n- ...\n\n## Rollback Plan\n\n- ...\n\n## Notes\n\n- ..."
+      "doc": "## Summary\n\n- Remove umbrella wording from orchestration and task rules.\n- Clarify that the orchestrator forms a top-level plan before decomposition.\n\n## Context\n\n- User requested removing \"umbrella\" mentions and rephrasing instructions to emphasize top-level planning.\n\n## Scope\n\n- Update @AGENTS.md orchestration flow and task tracking language.\n- Update @.codex-swarm/agents/ORCHESTRATOR.json outputs and workflow text.\n- Update @.codex-swarm/agents/PLANNER.json outputs and workflow text.\n\n## Risks\n\n- Low risk: documentation-only changes.\n\n## Verify Steps\n\n- No tests required (doc-only change).\n\n## Rollback Plan\n\n- Revert the commit that updates the agent specs and AGENTS.md.\n\n## Notes\n\n- None."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "2d3596205babaf4e1c4d8c4948814e667f5a9aefb3eec981bc37d6579ed48a5a"
+    "checksum": "5d6c452fe24c33c156e40a3fc3d481057e1f40ecebae31934e887bd9bd899843"
   }
 }

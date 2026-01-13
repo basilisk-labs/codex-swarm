@@ -1,11 +1,14 @@
 ---
 id: "202601131307-ZR7CN1"
 title: "Remove umbrella wording and clarify orchestrator planning"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "7cd26ceb1def078ab4426a44fe0c2629601220c1", message: "✨ ZR7CN1 remove umbrella wording; clarify top-level plan language; update planner/orchestrator specs" }
+comments:
+  - { author: "ORCHESTRATOR", body: "Verified: remove umbrella mentions in AGENTS.md; update ORCHESTRATOR/PLANNER specs; doc-only change; no tests run." }
 doc_version: 2
 doc_updated_at: "2026-01-13T13:10:32+00:00"
 doc_updated_by: "agentctl"
