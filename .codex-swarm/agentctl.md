@@ -192,6 +192,7 @@ Notes:
 - `suffix` is the task ID segment after the last dash.
 - For batch commits, include every task suffix in the subject.
 - When using the comment-driven flags, the subject is auto-built as `<emoji> <suffix> <formatted comment>` from your status/finish body.
+- When a comment-driven commit is created, the stored task comment is normalized to the same formatted text used in the commit subject.
 - Start commits use 🚧 and finish/status commits use ✅; intermediate commits infer emoji from the comment text unless you override with `--commit-emoji` / `--status-commit-emoji`.
 - Comment formatting: the prefix (Start/Blocked/Verified) is normalized to lowercase, and extra segments (separated by `;`, `|`, `--`, `-`, or sentence breaks) become `| details: ...`.
 

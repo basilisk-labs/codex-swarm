@@ -2219,8 +2219,15 @@ def guard_commit_check(
         print("✅ guard passed")
 
 
-def derive_commit_message_from_comment(task_id: str, body: str, emoji: str) -> str:
-    summary = format_comment_body_for_commit(body)
+def derive_commit_message_from_comment(
+    task_id: str,
+    body: str,
+    emoji: str,
+    *,
+    formatted_comment: str | None = None,
+) -> str:
+    summary = formatted_comment if formatted_comment is not None else format_comment_body_for_commit(body)
+    summary = " ".join((summary or "").split())
     if not summary:
         die("Comment body is required to build a commit message from the task comment", code=2)
     prefix = (emoji or "").strip()
@@ -2356,6 +2363,7 @@ def commit_from_comment(
     *,
     task_id: str,
     comment_body: str,
+    formatted_comment: str | None,
     emoji: str,
     allow: list[str],
     auto_allow: bool,
@@ -2372,7 +2380,12 @@ def commit_from_comment(
         die("Provide at least one --allow prefix or enable --commit-auto-allow", code=2)
 
     staged = stage_allowlist(allow_prefixes, allow_tasks=allow_tasks, cwd=cwd)
-    message = derive_commit_message_from_comment(task_id, comment_body, emoji)
+    message = derive_commit_message_from_comment(
+        task_id,
+        comment_body,
+        emoji,
+        formatted_comment=formatted_comment,
+    )
 
     guard_commit_check(
         task_id=task_id,
@@ -2938,13 +2951,18 @@ def cmd_start(args: argparse.Namespace) -> None:
         die(f"Refusing status transition {current} -> DOING (use --force to override)", code=2)
 
     target["status"] = "DOING"
+    formatted_comment = None
+    comment_body = args.body
+    if getattr(args, "commit_from_comment", False):
+        formatted_comment = format_comment_body_for_commit(args.body)
+        comment_body = formatted_comment
     comments_value = target.get("comments")
     comments: list[JsonDict] = (
         [cast(JsonDict, item) for item in comments_value if isinstance(item, dict)]
         if isinstance(comments_value, list)
         else []
     )
-    comments.append({"author": args.author, "body": args.body})
+    comments.append({"author": args.author, "body": comment_body})
     target["comments"] = comments
     save(tasks)
     export_tasks_snapshot(quiet=bool(args.quiet))
@@ -2953,6 +2971,7 @@ def cmd_start(args: argparse.Namespace) -> None:
         commit_info = commit_from_comment(
             task_id=args.task_id,
             comment_body=args.body,
+            formatted_comment=formatted_comment,
             emoji=args.commit_emoji or default_commit_emoji_for_status("DOING", comment_body=args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
@@ -2990,10 +3009,15 @@ def cmd_block(args: argparse.Namespace) -> None:
     if not is_transition_allowed(current, "BLOCKED") and not args.force:
         die(f"Refusing status transition {current} -> BLOCKED (use --force to override)", code=2)
     target["status"] = "BLOCKED"
+    formatted_comment = None
+    comment_body = args.body
+    if getattr(args, "commit_from_comment", False):
+        formatted_comment = format_comment_body_for_commit(args.body)
+        comment_body = formatted_comment
     comments = target.get("comments")
     if not isinstance(comments, list):
         comments = []
-    comments.append({"author": args.author, "body": args.body})
+    comments.append({"author": args.author, "body": comment_body})
     target["comments"] = comments
     save(tasks)
     export_tasks_snapshot(quiet=bool(args.quiet))
@@ -3002,6 +3026,7 @@ def cmd_block(args: argparse.Namespace) -> None:
         commit_info = commit_from_comment(
             task_id=args.task_id,
             comment_body=args.body,
+            formatted_comment=formatted_comment,
             emoji=args.commit_emoji or default_commit_emoji_for_status("BLOCKED", comment_body=args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
@@ -3375,12 +3400,17 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
             die(f"Task is not ready: {args.task_id} (use --force to override)", code=2)
 
     target["status"] = nxt
+    formatted_comment = None
+    comment_body = args.body
+    if getattr(args, "commit_from_comment", False) and args.body:
+        formatted_comment = format_comment_body_for_commit(args.body)
+        comment_body = formatted_comment
 
     if args.author and args.body:
         comments = target.get("comments")
         if not isinstance(comments, list):
             comments = []
-        comments.append({"author": args.author, "body": args.body})
+        comments.append({"author": args.author, "body": comment_body})
         target["comments"] = comments
 
     if args.commit:
@@ -3394,6 +3424,7 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
         commit_from_comment(
             task_id=args.task_id,
             comment_body=args.body,
+            formatted_comment=formatted_comment,
             emoji=args.commit_emoji or default_commit_emoji_for_status(nxt, comment_body=args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
@@ -3442,6 +3473,9 @@ def cmd_finish(args: argparse.Namespace) -> None:
     if args.author and args.body and not args.force:
         prefix, min_chars = comment_rule("verified")
         require_structured_comment(args.body, prefix=prefix, min_chars=min_chars)
+    formatted_comment: str | None = None
+    if args.body and (commit_from_comment_flag or status_commit_flag):
+        formatted_comment = format_comment_body_for_commit(args.body)
 
     if not backend_enabled():
         lint = lint_tasks_json()
@@ -3515,6 +3549,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
         code_commit_info = commit_from_comment(
             task_id=primary_task_id,
             comment_body=args.body,
+            formatted_comment=formatted_comment,
             emoji=args.commit_emoji or infer_commit_emoji(args.body),
             allow=list(args.commit_allow or []),
             auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
@@ -3604,7 +3639,8 @@ def cmd_finish(args: argparse.Namespace) -> None:
             comments = target.get("comments")
             if not isinstance(comments, list):
                 comments = []
-            comments.append({"author": args.author, "body": args.body})
+            comment_body = formatted_comment or args.body
+            comments.append({"author": args.author, "body": comment_body})
             target["comments"] = comments
 
     save(tasks)
@@ -3615,6 +3651,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
         commit_from_comment(
             task_id=primary_task_id,
             comment_body=args.body,
+            formatted_comment=formatted_comment,
             emoji=args.status_commit_emoji or default_commit_emoji_for_status("DONE", comment_body=args.body),
             allow=status_allow,
             auto_allow=bool(args.status_commit_auto_allow or not status_allow),
