@@ -14,8 +14,8 @@ Configured in [`.codex-swarm/config.json`](../.codex-swarm/config.json).
 - INTEGRATOR performs verify, merge, and finish.
 
 ## Task Branches and Worktrees
-- Branch naming: `task/<task-id>/<slug>`.
-- Worktrees live under [`.codex-swarm/worktrees/`](../.codex-swarm/worktrees/).
+- Branch naming: `task/<task-id>/<slug>` by default (config: `branch.task_prefix`).
+- Worktrees live under [`.codex-swarm/worktrees/`](../.codex-swarm/worktrees/) by default (config: `paths.worktrees_dir`).
 
 ## PR Artifacts
 - Location: [`.codex-swarm/tasks/<task-id>/pr/`](../.codex-swarm/tasks/).

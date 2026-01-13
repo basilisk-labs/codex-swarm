@@ -14,6 +14,7 @@ PLANNER: list/show tasks | `python .codex-swarm/agentctl.py task list` / `python
 PLANNER: create task (auto ID) | `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner CODER`
 PLANNER: add/update task | `python .codex-swarm/agentctl.py task add <task-id> ...` / `python .codex-swarm/agentctl.py task update <task-id> ...`
 PLANNER: scaffold artifact | `python .codex-swarm/agentctl.py task scaffold <task-id>`
+Config: show/set | `python .codex-swarm/agentctl.py config show` / `python .codex-swarm/agentctl.py config set <key> <value> [--json]`
 CODER/TESTER/DOCS: start checkout (branch_pr) | `python .codex-swarm/agentctl.py work start <task-id> --agent <ROLE> --slug <slug> --worktree`
 CODER/TESTER/DOCS: update PR artifacts | `python .codex-swarm/agentctl.py pr update <task-id>`
 CODER/TESTER/DOCS/REVIEWER: add handoff note | `python .codex-swarm/agentctl.py pr note <task-id> --author <ROLE> --body \"...\"`
@@ -22,6 +23,12 @@ REVIEWER: check PR artifacts | `python .codex-swarm/agentctl.py pr check <task-i
 INTEGRATOR: integrate task | `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`
 INTEGRATOR: finish task(s) | `python .codex-swarm/agentctl.py finish <task-id> [<task-id> ...] --commit <git-rev> --author INTEGRATOR --body \"Verified: ...\"`
 INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -m \"✅ <suffix> close: <detailed changelog ...>\" --auto-allow --allow-tasks --require-clean`
+
+## Config management
+
+- Show the current config: `python .codex-swarm/agentctl.py config show`
+- Set a value by dotted key: `python .codex-swarm/agentctl.py config set workflow_mode branch_pr`
+- Set JSON values (lists/objects): `python .codex-swarm/agentctl.py config set tasks.verify.required_tags '["code","backend"]' --json`
 
 ## Role/phase command guide (when to use what)
 
@@ -117,6 +124,11 @@ python .codex-swarm/agentctl.py task show <task-id>
 # create a new task with an auto-generated id
 python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner CODER
 
+# config
+python .codex-swarm/agentctl.py config show
+python .codex-swarm/agentctl.py config set workflow_mode branch_pr
+python .codex-swarm/agentctl.py config set tasks.verify.required_tags '["code","backend"]' --json
+
 # validate the task snapshot (schema/deps/checksum)
 python .codex-swarm/agentctl.py task lint
 
@@ -192,8 +204,8 @@ Notes:
 python .codex-swarm/agentctl.py work start <task-id> --agent CODER --slug <slug> --worktree
 
 # create a task branch + worktree (inside this repo only)
-# - branch: task/<task-id>/<slug>
-# - worktree: .codex-swarm/worktrees/<task-id>-<slug>/
+# - branch: <task_prefix>/<task-id>/<slug> (default: task; config: branch.task_prefix)
+# - worktree: <worktrees_dir>/<task-id>-<slug>/ (default: .codex-swarm/worktrees; config: paths.worktrees_dir)
 python .codex-swarm/agentctl.py branch create <task-id> --agent CODER --slug <slug> --worktree
 
 # show quick status (ahead/behind, worktree path)

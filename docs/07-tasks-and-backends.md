@@ -104,6 +104,18 @@ The active backend is selected in [`.codex-swarm/config.json`](../.codex-swarm/c
 }
 ```
 
+## Config keys (agentctl)
+Additional workflow knobs in [`.codex-swarm/config.json`](../.codex-swarm/config.json):
+- `base_branch`: override the pinned base branch used for merges and checks.
+- `paths.worktrees_dir`: worktree root directory for branch_pr mode.
+- `branch.task_prefix`: branch name prefix (default `task`).
+- `tasks.id_suffix_length_default`: default ID suffix length for `task new`.
+- `tasks.verify.required_tags`: tags that require verify commands on tasks.
+- `tasks.doc.sections`: ordered README sections for task docs.
+- `tasks.doc.required_sections`: required sections for PR/task doc validation.
+- `tasks.comments.start|blocked|verified`: structured comment rules (`prefix`, `min_chars`).
+- `commit.generic_tokens`: words ignored when checking commit summary quality.
+
 ## Exported JSON Snapshot
 [`tasks.json`](../.codex-swarm/tasks.json) is generated from the canonical backend:
 ```bash

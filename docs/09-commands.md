@@ -5,6 +5,13 @@
 python .codex-swarm/agentctl.py quickstart
 ```
 
+## Config
+```bash
+python .codex-swarm/agentctl.py config show
+python .codex-swarm/agentctl.py config set workflow_mode branch_pr
+python .codex-swarm/agentctl.py config set tasks.verify.required_tags '["code","backend"]' --json
+```
+
 ## Tasks
 ```bash
 python .codex-swarm/agentctl.py task list
