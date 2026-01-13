@@ -139,13 +139,37 @@ SWARM_CONFIG_PATH = SWARM_DIR / "config.json"
 
 ALLOWED_WORKFLOW_MODES: set[str] = {"direct", "branch_pr"}
 DEFAULT_WORKFLOW_MODE = "direct"
+DEFAULT_TASK_ID_SUFFIX_LENGTH = 6
+DEFAULT_TASK_BRANCH_PREFIX = "task"
+DEFAULT_WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
 
 ALLOWED_STATUSES: set[str] = {"TODO", "DOING", "BLOCKED", "DONE"}
 TASKS_SCHEMA_VERSION = 1
 TASKS_META_KEY = "meta"
 TASKS_META_MANAGED_BY = "agentctl"
-
-GENERIC_COMMIT_TOKENS: set[str] = {
+DEFAULT_VERIFY_REQUIRED_TAGS: set[str] = {"code", "backend", "frontend"}
+DEFAULT_TASK_DOC_SECTIONS: tuple[str, ...] = (
+    "Summary",
+    "Context",
+    "Scope",
+    "Risks",
+    "Verify Steps",
+    "Rollback Plan",
+    "Notes",
+)
+DEFAULT_TASK_DOC_REQUIRED_SECTIONS: tuple[str, ...] = (
+    "Summary",
+    "Scope",
+    "Risks",
+    "Verify Steps",
+    "Rollback Plan",
+)
+DEFAULT_COMMENT_RULES: dict[str, dict[str, object]] = {
+    "start": {"prefix": "Start:", "min_chars": 40},
+    "blocked": {"prefix": "Blocked:", "min_chars": 40},
+    "verified": {"prefix": "Verified:", "min_chars": 60},
+}
+DEFAULT_GENERIC_COMMIT_TOKENS: set[str] = {
     "start",
     "status",
     "mark",
@@ -326,8 +350,11 @@ def git_hooks_dir(*, cwd: Path = ROOT) -> Path:
 
 def is_task_worktree_checkout(*, cwd: Path = ROOT) -> bool:
     top = git_toplevel(cwd=cwd)
-    parts = top.parts
-    return any(parts[idx] == ".codex-swarm" and parts[idx + 1] == "worktrees" for idx in range(len(parts) - 1))
+    try:
+        top.resolve().relative_to(WORKTREES_DIR.resolve())
+    except ValueError:
+        return False
+    return True
 
 
 def ensure_git_clean(*, cwd: Path = ROOT, action: str) -> None:
@@ -418,7 +445,7 @@ def require_not_task_worktree(*, cwd: Path = ROOT, action: str) -> None:
         die(
             "\n".join(
                 [
-                    f"Refusing {action}: run from the repo root checkout (not from .codex-swarm/worktrees/*)",
+                    f"Refusing {action}: run from the repo root checkout (not from {WORKTREES_DIRNAME}/*)",
                     "Fix:",
                     f"  1) `cd {ROOT}`",
                     "  2) Ensure you're on `main` (if required)",
@@ -495,7 +522,8 @@ def commit_message_has_meaningful_summary(task_id: str, message: str) -> bool:
         return True
     task_suffix = task_token.split("-")[-1] if "-" in task_token else task_token
     tokens = re.findall(r"[0-9A-Za-z]+(?:-[0-9A-Za-z]+)*", message.lower())
-    meaningful = [t for t in tokens if t not in {task_token, task_suffix} and t not in GENERIC_COMMIT_TOKENS]
+    generic_tokens = commit_generic_tokens()
+    meaningful = [t for t in tokens if t not in {task_token, task_suffix} and t not in generic_tokens]
     return bool(meaningful)
 
 
@@ -616,7 +644,7 @@ def hook_pre_commit_check(*, cwd: Path) -> None:
     if tasks_staged:
         if is_task_worktree_checkout(cwd=cwd):
             die(
-                f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout (.codex-swarm/worktrees/*)\n"
+                f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout ({WORKTREES_DIRNAME}/*)\n"
                 f"Context: {format_command_context(cwd=cwd)}",
                 code=2,
             )
@@ -642,7 +670,7 @@ def hook_pre_commit_check(*, cwd: Path) -> None:
                             "Fix:",
                             "  1) Create a task branch + worktree: "
                             "`python .codex-swarm/agentctl.py work start <task-id> --agent <AGENT> --slug <slug> --worktree`",
-                            "  2) Commit from `task/<task-id>/<slug>`",
+                            f"  2) Commit from `{task_branch_example()}`",
                             f"Context: {format_command_context(cwd=cwd)}",
                         ]
                     ),
@@ -654,7 +682,7 @@ def hook_pre_commit_check(*, cwd: Path) -> None:
                         [
                             f"Refusing commit: branch {current_branch!r} is not a task branch in branch_pr mode",
                             "Fix:",
-                            "  1) Switch to `task/<task-id>/<slug>`",
+                            f"  1) Switch to `{task_branch_example()}`",
                             "  2) Commit from the task branch",
                             f"Context: {format_command_context(cwd=cwd)}",
                         ]
@@ -841,10 +869,41 @@ def _path_setting(key: str) -> str:
     return value
 
 
+def _optional_path_setting(key: str, *, default: str) -> str:
+    value = _PATHS.get(key)
+    if value is None:
+        return default
+    if not isinstance(value, str) or not value.strip():
+        die(f"{SWARM_CONFIG_PATH} paths.{key} must be a non-empty string", code=2)
+    return value
+
+
+def _config_dict(value: object, *, label: str) -> JsonDict:
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        die(f"{SWARM_CONFIG_PATH} {label} must be a JSON object", code=2)
+    return cast(JsonDict, value)
+
+
+def tasks_config() -> JsonDict:
+    return _config_dict(_SWARM_CONFIG.get("tasks"), label="tasks")
+
+
+def branch_config() -> JsonDict:
+    return _config_dict(_SWARM_CONFIG.get("branch"), label="branch")
+
+
+def commit_config() -> JsonDict:
+    return _config_dict(_SWARM_CONFIG.get("commit"), label="commit")
+
+
 TASKS_PATH = _resolve_repo_relative_path(_path_setting("tasks_path"), label="tasks_path")
 AGENTS_DIR = _resolve_repo_relative_path(_path_setting("agents_dir"), label="agents_dir")
 AGENTCTL_DOCS_PATH = _resolve_repo_relative_path(_path_setting("agentctl_docs_path"), label="agentctl_docs_path")
 WORKFLOW_DIR = _resolve_repo_relative_path(_path_setting("workflow_dir"), label="workflow_dir")
+WORKTREES_DIRNAME = _optional_path_setting("worktrees_dir", default=DEFAULT_WORKTREES_DIRNAME)
+WORKTREES_DIR = _resolve_repo_relative_path(WORKTREES_DIRNAME, label="paths.worktrees_dir")
 TASKS_PATH_REL = str(TASKS_PATH.relative_to(ROOT))
 load_env_file(ROOT / ".env")
 BACKEND_CONFIG = load_backend_config()
@@ -894,6 +953,116 @@ def is_branch_pr_mode() -> bool:
 
 def is_direct_mode() -> bool:
     return workflow_mode() == "direct"
+
+
+def task_id_suffix_length_default() -> int:
+    raw = tasks_config().get("id_suffix_length_default")
+    if raw is None:
+        return DEFAULT_TASK_ID_SUFFIX_LENGTH
+    if isinstance(raw, bool) or not isinstance(raw, int):
+        die(
+            f"{SWARM_CONFIG_PATH} tasks.id_suffix_length_default must be an integer "
+            f"(got: {raw!r})",
+            code=2,
+        )
+    if raw < 4 or raw > 12:
+        die(
+            f"{SWARM_CONFIG_PATH} tasks.id_suffix_length_default must be between 4 and 12 "
+            f"(got: {raw})",
+            code=2,
+        )
+    return raw
+
+
+def verify_required_tags() -> set[str]:
+    verify_cfg = _config_dict(tasks_config().get("verify"), label="tasks.verify")
+    raw = verify_cfg.get("required_tags")
+    if raw is None:
+        return set(DEFAULT_VERIFY_REQUIRED_TAGS)
+    if not isinstance(raw, list):
+        die(f"{SWARM_CONFIG_PATH} tasks.verify.required_tags must be a list", code=2)
+    tags = [str(tag).strip().lower() for tag in raw if str(tag).strip()]
+    return set(tags)
+
+
+def task_doc_sections() -> tuple[str, ...]:
+    doc_cfg = _config_dict(tasks_config().get("doc"), label="tasks.doc")
+    raw = doc_cfg.get("sections")
+    if raw is None:
+        return DEFAULT_TASK_DOC_SECTIONS
+    if not isinstance(raw, list):
+        die(f"{SWARM_CONFIG_PATH} tasks.doc.sections must be a list", code=2)
+    sections = [str(section).strip() for section in raw if str(section).strip()]
+    if not sections:
+        die(f"{SWARM_CONFIG_PATH} tasks.doc.sections must include at least one entry", code=2)
+    return tuple(dict.fromkeys(sections))
+
+
+def task_doc_required_sections() -> tuple[str, ...]:
+    doc_cfg = _config_dict(tasks_config().get("doc"), label="tasks.doc")
+    raw = doc_cfg.get("required_sections")
+    if raw is None:
+        return DEFAULT_TASK_DOC_REQUIRED_SECTIONS
+    if not isinstance(raw, list):
+        die(f"{SWARM_CONFIG_PATH} tasks.doc.required_sections must be a list", code=2)
+    required = [str(section).strip() for section in raw if str(section).strip()]
+    if not required:
+        return tuple()
+    sections = task_doc_sections()
+    missing = [section for section in required if section not in sections]
+    if missing:
+        die(
+            f"{SWARM_CONFIG_PATH} tasks.doc.required_sections contains unknown section(s): "
+            f"{', '.join(missing)}",
+            code=2,
+        )
+    return tuple(dict.fromkeys(required))
+
+
+def comment_rule(kind: str) -> tuple[str, int]:
+    defaults = DEFAULT_COMMENT_RULES.get(kind) or {}
+    default_prefix = str(defaults.get("prefix") or "").strip()
+    default_min_chars = int(defaults.get("min_chars") or 0)
+    if not default_prefix or default_min_chars < 1:
+        die(f"Invalid default comment rule for {kind!r}", code=2)
+    comments_cfg = _config_dict(tasks_config().get("comments"), label="tasks.comments")
+    raw = comments_cfg.get(kind)
+    if raw is None:
+        return default_prefix, default_min_chars
+    if not isinstance(raw, dict):
+        die(f"{SWARM_CONFIG_PATH} tasks.comments.{kind} must be a JSON object", code=2)
+    prefix = str(raw.get("prefix") or default_prefix).strip()
+    if not prefix:
+        die(f"{SWARM_CONFIG_PATH} tasks.comments.{kind}.prefix must be a non-empty string", code=2)
+    min_chars = raw.get("min_chars", default_min_chars)
+    if isinstance(min_chars, bool) or not isinstance(min_chars, int) or min_chars < 1:
+        die(
+            f"{SWARM_CONFIG_PATH} tasks.comments.{kind}.min_chars must be an integer >= 1",
+            code=2,
+        )
+    return prefix, min_chars
+
+
+def task_branch_prefix() -> str:
+    raw = branch_config().get("task_prefix")
+    if raw is None:
+        return DEFAULT_TASK_BRANCH_PREFIX
+    if not isinstance(raw, str) or not raw.strip():
+        die(f"{SWARM_CONFIG_PATH} branch.task_prefix must be a non-empty string", code=2)
+    prefix = raw.strip()
+    if "/" in prefix:
+        die(f"{SWARM_CONFIG_PATH} branch.task_prefix must not contain '/'", code=2)
+    return prefix
+
+
+def commit_generic_tokens() -> set[str]:
+    raw = commit_config().get("generic_tokens")
+    if raw is None:
+        return set(DEFAULT_GENERIC_COMMIT_TOKENS)
+    if not isinstance(raw, list):
+        die(f"{SWARM_CONFIG_PATH} commit.generic_tokens must be a list", code=2)
+    tokens = [str(token).strip().lower() for token in raw if str(token).strip()]
+    return set(tokens)
 
 
 STATUS_COMMIT_POLICIES = {"allow", "warn", "confirm"}
@@ -948,8 +1117,6 @@ def enforce_status_commit_policy(*, action: str, confirmed: bool, quiet: bool) -
 
 DEFAULT_BASE_BRANCH = "main"
 GIT_CONFIG_BASE_BRANCH_KEY = "codexswarm.baseBranch"
-WORKTREES_DIRNAME = str(Path(".codex-swarm") / "worktrees")
-WORKTREES_DIR = SWARM_DIR / "worktrees"
 
 
 def config_base_branch() -> str:
@@ -970,7 +1137,7 @@ def maybe_pin_base_branch(*, cwd: Path = ROOT) -> str | None:
     branch = git_current_branch(cwd=cwd)
     if not branch or branch == "HEAD":
         return None
-    if branch.startswith("task/"):
+    if branch.startswith(f"{TASK_BRANCH_PREFIX}/"):
         return None
     git_config_set(GIT_CONFIG_BASE_BRANCH_KEY, branch, cwd=cwd)
     return branch
@@ -1800,7 +1967,10 @@ def path_is_under(path: str, prefix: str) -> bool:
     return p == root or p.startswith(root + "/")
 
 
-_TASK_BRANCH_RE = re.compile(r"^task/(\d{12}-[0-9A-Z]{4,})/[^/]+$")
+TASK_BRANCH_PREFIX = task_branch_prefix()
+_TASK_BRANCH_RE = re.compile(
+    rf"^{re.escape(TASK_BRANCH_PREFIX)}/(\d{{12}}-[0-9A-Z]{{4,}})/[^/]+$"
+)
 _VERIFIED_SHA_RE = re.compile(r"verified_sha=([0-9a-f]{7,40})", re.IGNORECASE)
 
 
@@ -1810,6 +1980,10 @@ def parse_task_id_from_task_branch(branch: str) -> str | None:
     if not match:
         return None
     return match.group(1)
+
+
+def task_branch_example(task_id: str = "<task-id>", slug: str = "<slug>") -> str:
+    return f"{TASK_BRANCH_PREFIX}/{task_id}/{slug}"
 
 
 def load_local_frontmatter_helpers() -> (
@@ -1939,7 +2113,7 @@ def guard_commit_check(
                         base_msg,
                         "Fix:",
                         branch_hint,
-                        f"  2) Commit from `task/{task_id}/<slug>`",
+                        f"  2) Commit from `{task_branch_example(task_id, '<slug>')}`",
                         f"Context: {format_command_context(cwd=cwd)}",
                     ]
                 ),
@@ -1968,7 +2142,7 @@ def guard_commit_check(
             if is_task_worktree_checkout(cwd=cwd):
                 msg = (
                     f"Refusing commit: {TASKS_PATH_REL} from a worktree checkout "
-                    "(.codex-swarm/worktrees/*)\n"
+                    f"({WORKTREES_DIRNAME}/*)\n"
                     f"Context: {format_command_context(cwd=cwd)}"
                 )
                 die(
@@ -1989,7 +2163,7 @@ def guard_commit_check(
                         [
                             f"Refusing commit: branch {current_branch!r} does not match task {task_id}",
                             "Fix:",
-                            f"  1) Switch to `task/{task_id}/<slug>`",
+                            f"  1) Switch to `{task_branch_example(task_id, '<slug>')}`",
                             f"  2) Re-run `python .codex-swarm/agentctl.py guard commit {task_id} ...`",
                             f"Context: {format_command_context(cwd=cwd)}",
                         ]
@@ -2160,6 +2334,47 @@ def cmd_agents(_: argparse.Namespace) -> None:
         die(f"Duplicate agent ids: {', '.join(sorted(set(duplicates)))}", code=2)
 
 
+def parse_config_key_path(raw: str) -> list[str]:
+    parts = [part.strip() for part in (raw or "").split(".") if part.strip()]
+    if not parts:
+        die("Config key path must be non-empty (example: tasks.verify.required_tags)", code=2)
+    return parts
+
+
+def set_config_value(data: JsonDict, path: list[str], value: object) -> None:
+    target = data
+    for key in path[:-1]:
+        existing = target.get(key)
+        if existing is None:
+            target[key] = {}
+            existing = target[key]
+        if not isinstance(existing, dict):
+            die(f"Config path conflict: {'.'.join(path)} (segment {key!r} is not an object)", code=2)
+        target = cast(JsonDict, existing)
+    target[path[-1]] = value
+
+
+def cmd_config_show(args: argparse.Namespace) -> None:
+    data = load_json(SWARM_CONFIG_PATH)
+    output = json.dumps(data, indent=2, ensure_ascii=False)
+    print(output)
+
+
+def cmd_config_set(args: argparse.Namespace) -> None:
+    data = load_json(SWARM_CONFIG_PATH)
+    path = parse_config_key_path(args.key)
+    if getattr(args, "json", False):
+        try:
+            value = json.loads(args.value)
+        except json.JSONDecodeError as exc:
+            die(f"Invalid JSON for --json value: {exc}", code=2)
+    else:
+        value = args.value
+    set_config_value(data, path, value)
+    write_json(SWARM_CONFIG_PATH, data)
+    print(f"✅ updated {SWARM_CONFIG_PATH} ({'.'.join(path)})")
+
+
 def cmd_quickstart(_: argparse.Namespace) -> None:
     if AGENTCTL_DOCS_PATH.exists():
         print(AGENTCTL_DOCS_PATH.read_text(encoding="utf-8").rstrip())
@@ -2271,12 +2486,9 @@ def validate_owner(owner: str, *, allow_missing_agents: bool = False) -> None:
         )
 
 
-VERIFY_REQUIRED_TAGS = {"code", "backend", "frontend"}
-
-
 def requires_verify(tags: list[str]) -> bool:
     tag_set = {t.strip().lower() for t in tags if isinstance(t, str)}
-    return bool(VERIFY_REQUIRED_TAGS & tag_set)
+    return bool(verify_required_tags() & tag_set)
 
 
 def command_path(args: argparse.Namespace) -> str:
@@ -2293,6 +2505,7 @@ def command_path(args: argparse.Namespace) -> str:
         "work_cmd",
         "cleanup_cmd",
         "sync_cmd",
+        "config_cmd",
     ):
         val = getattr(args, name, None)
         if val:
@@ -2608,7 +2821,8 @@ def cmd_start(args: argparse.Namespace) -> None:
         )
     require_tasks_json_write_context(force=bool(args.force))
     if not args.force:
-        require_structured_comment(args.body, prefix="Start:", min_chars=40)
+        prefix, min_chars = comment_rule("start")
+        require_structured_comment(args.body, prefix=prefix, min_chars=min_chars)
     if not args.force:
         ok, warnings = readiness(args.task_id)
         if not ok:
@@ -2667,7 +2881,8 @@ def cmd_block(args: argparse.Namespace) -> None:
         )
     require_tasks_json_write_context(force=bool(args.force))
     if not args.force:
-        require_structured_comment(args.body, prefix="Blocked:", min_chars=40)
+        prefix, min_chars = comment_rule("blocked")
+        require_structured_comment(args.body, prefix=prefix, min_chars=min_chars)
     tasks, save = load_task_store()
     target = _ensure_task_object(tasks, args.task_id)
     current = str(target.get("status") or "").strip().upper() or "TODO"
@@ -3124,7 +3339,8 @@ def cmd_finish(args: argparse.Namespace) -> None:
         if str(args.author).strip().upper() != "INTEGRATOR":
             die("--author must be INTEGRATOR in workflow_mode='branch_pr'", code=2)
     if args.author and args.body and not args.force:
-        require_structured_comment(args.body, prefix="Verified:", min_chars=60)
+        prefix, min_chars = comment_rule("verified")
+        require_structured_comment(args.body, prefix=prefix, min_chars=min_chars)
 
     if not backend_enabled():
         lint = lint_tasks_json()
@@ -3447,7 +3663,7 @@ def task_title(task_id: str) -> str:
 
 def default_task_branch(task_id: str, slug: str) -> str:
     slug_norm = normalize_slug(slug)
-    return f"task/{task_id}/{slug_norm}"
+    return f"{TASK_BRANCH_PREFIX}/{task_id}/{slug_norm}"
 
 
 def cmd_branch_create(args: argparse.Namespace) -> None:
@@ -3772,7 +3988,7 @@ def cmd_work_start(args: argparse.Namespace) -> None:
 def git_list_task_branches(*, cwd: Path = ROOT) -> list[str]:
     try:
         result = run(
-            ["git", "for-each-ref", "--format=%(refname:short)", "refs/heads/task"],
+            ["git", "for-each-ref", "--format=%(refname:short)", f"refs/heads/{TASK_BRANCH_PREFIX}"],
             cwd=cwd,
             check=True,
         )
@@ -3853,60 +4069,14 @@ def pr_dir(task_id: str) -> Path:
     return workflow_task_dir(task_id) / "pr"
 
 
-TASK_DOC_SECTIONS: tuple[str, ...] = (
-    "Summary",
-    "Context",
-    "Scope",
-    "Risks",
-    "Verify Steps",
-    "Rollback Plan",
-    "Notes",
-)
-TASK_DOC_REQUIRED_SECTIONS: tuple[str, ...] = (
-    "Summary",
-    "Scope",
-    "Risks",
-    "Verify Steps",
-    "Rollback Plan",
-)
-PR_DESCRIPTION_REQUIRED_SECTIONS = TASK_DOC_REQUIRED_SECTIONS
-
-
 def task_readme_template(task_id: str) -> str:
     title = task_title(task_id)
     header = f"# {task_id}: {title}" if title else f"# {task_id}"
-    return "\n".join(
+    lines = [header, ""]
+    for section in task_doc_sections():
+        lines.extend([f"## {section}", "", "- ...", ""])
+    lines.extend(
         [
-            header,
-            "",
-            "## Summary",
-            "",
-            "- ...",
-            "",
-            "## Context",
-            "",
-            "- ...",
-            "",
-            "## Scope",
-            "",
-            "- ...",
-            "",
-            "## Risks",
-            "",
-            "- ...",
-            "",
-            "## Verify Steps",
-            "",
-            "- ...",
-            "",
-            "## Rollback Plan",
-            "",
-            "- ...",
-            "",
-            "## Notes",
-            "",
-            "- ...",
-            "",
             "## Changes Summary (auto)",
             "",
             "<!-- BEGIN AUTO SUMMARY -->",
@@ -3915,6 +4085,7 @@ def task_readme_template(task_id: str) -> str:
             "",
         ]
     )
+    return "\n".join(lines)
 
 
 def split_frontmatter_block(text: str) -> tuple[str, str]:
@@ -4044,7 +4215,7 @@ def _trim_blank_lines(lines: list[str]) -> list[str]:
 def _insert_section_order(order: list[str], section: str) -> list[str]:
     if section in order:
         return order
-    canonical = list(TASK_DOC_SECTIONS)
+    canonical = list(task_doc_sections())
     if section in canonical:
         idx = canonical.index(section)
         for next_name in canonical[idx + 1 :]:
@@ -4055,7 +4226,7 @@ def _insert_section_order(order: list[str], section: str) -> list[str]:
 
 
 def ensure_required_doc_sections(sections: dict[str, list[str]], order: list[str]) -> list[str]:
-    for name in TASK_DOC_REQUIRED_SECTIONS:
+    for name in task_doc_required_sections():
         if name not in sections:
             sections[name] = ["- ..."]
             order = _insert_section_order(order, name)
@@ -4064,9 +4235,10 @@ def ensure_required_doc_sections(sections: dict[str, list[str]], order: list[str
 
 def render_doc_sections(sections: dict[str, list[str]], order: list[str]) -> str:
     lines: list[str] = []
+    canonical = set(task_doc_sections())
     for name in order:
         content = _trim_blank_lines(sections.get(name, []))
-        if not content and name in TASK_DOC_SECTIONS:
+        if not content and name in canonical:
             content = ["- ..."]
         lines.append(f"## {name}")
         lines.append("")
@@ -4080,7 +4252,7 @@ def normalize_doc_section_name(name: str) -> str:
     if not raw:
         return raw
     lowered = raw.lower()
-    for section in TASK_DOC_SECTIONS:
+    for section in task_doc_sections():
         if section.lower() == lowered:
             return section
     return raw
@@ -4090,7 +4262,7 @@ def pr_validate_description(text: str) -> tuple[list[str], list[str]]:
     missing_sections: list[str] = []
     empty_sections: list[str] = []
     sections = extract_markdown_sections(text)
-    for section in PR_DESCRIPTION_REQUIRED_SECTIONS:
+    for section in task_doc_required_sections():
         if section not in sections:
             missing_sections.append(section)
             continue
@@ -4174,7 +4346,7 @@ def pr_read_file_text(task_id: str, filename: str, *, branch: str | None) -> str
                     "Missing PR artifact dir in this checkout.",
                     "Fix:",
                     (
-                        f"  1) Re-run with `--branch task/{task_id}/<slug>` so agentctl can read PR "
+                        f"  1) Re-run with `--branch {task_branch_example(task_id, '<slug>')}` so agentctl can read PR "
                         "artifacts from that branch"
                     ),
                     "  2) Or check out the task branch that contains the PR artifact files",
@@ -4270,7 +4442,7 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
         parsed = parse_task_id_from_task_branch(branch)
         if parsed != task_id:
             die(
-                f"Branch {branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)",
+                f"Branch {branch!r} does not match task id {task_id} (expected {task_branch_example(task_id, '<slug>')})",
                 code=2,
             )
     if not git_branch_exists(branch):
@@ -4405,7 +4577,7 @@ def pr_check(
     parsed_task_id = parse_task_id_from_task_branch(pr_branch)
     if is_branch_pr_mode() and parsed_task_id != task_id:
         die(
-            f"Branch {pr_branch!r} does not match task id {task_id} (expected task/{task_id}/<slug>)",
+            f"Branch {pr_branch!r} does not match task id {task_id} (expected {task_branch_example(task_id, '<slug>')})",
             code=2,
         )
 
@@ -4512,7 +4684,7 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
                     "Fix:",
                     (
                         f"  1) Run `python .codex-swarm/agentctl.py pr open {task_id} --author {author} "
-                        f"--branch task/{task_id}/<slug>`"
+                        f"--branch {task_branch_example(task_id, '<slug>')}`"
                     ),
                     "  2) Commit the PR artifact files on the task branch",
                     f'  3) Re-run `python .codex-swarm/agentctl.py pr note {task_id} --author {author} --body "..."`',
@@ -4858,6 +5030,18 @@ def build_parser() -> argparse.ArgumentParser:
     p_agents = sub.add_parser("agents", help="List registered agents under .codex-swarm/agents/")
     p_agents.set_defaults(func=cmd_agents)
 
+    p_config = sub.add_parser("config", help="Inspect or update .codex-swarm/config.json")
+    config_sub = p_config.add_subparsers(dest="config_cmd", required=True)
+
+    p_config_show = config_sub.add_parser("show", help="Print config.json")
+    p_config_show.set_defaults(func=cmd_config_show)
+
+    p_config_set = config_sub.add_parser("set", help="Set a config value by dotted path")
+    p_config_set.add_argument("key", help="Dotted path (e.g., tasks.verify.required_tags)")
+    p_config_set.add_argument("value", help="Value to set (string unless --json)")
+    p_config_set.add_argument("--json", action="store_true", help="Parse value as JSON")
+    p_config_set.set_defaults(func=cmd_config_set)
+
     p_ready = sub.add_parser("ready", help="Check if a task is ready to start (dependencies DONE)")
     p_ready.add_argument("task_id")
     p_ready.set_defaults(func=cmd_ready)
@@ -5166,7 +5350,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_new.add_argument("--verify", action="append", help="Repeatable: shell command")
     p_new.add_argument("--comment-author", dest="comment_author")
     p_new.add_argument("--comment-body", dest="comment_body")
-    p_new.add_argument("--id-length", type=int, default=6, help="ID suffix length (default: 6)")
+    default_id_len = task_id_suffix_length_default()
+    p_new.add_argument(
+        "--id-length",
+        type=int,
+        default=default_id_len,
+        help=f"ID suffix length (default: {default_id_len})",
+    )
     p_new.add_argument("--quiet", action="store_true", help="Print only the task id")
     p_new.set_defaults(func=cmd_task_new)
 
