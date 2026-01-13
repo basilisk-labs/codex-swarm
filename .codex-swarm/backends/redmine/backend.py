@@ -302,11 +302,9 @@ class RedmineBackend:
         try:
             existing_issue: JsonDict | None = None
             self._ensure_doc_metadata(task, force=False)
-            issue_id = task.get("redmine_id")
-            if not issue_id:
-                issue = self._find_issue_by_task_id(task_id)
-                issue_id = issue.get("id") if issue else None
-                existing_issue = issue
+            issue = self._find_issue_by_task_id(task_id)
+            issue_id = issue.get("id") if issue else None
+            existing_issue = issue
             if issue_id and existing_issue is None:
                 existing_issue = self._issue_from_payload(self._request_json("GET", f"issues/{issue_id}.json"))
             payload = self._task_to_issue_payload(task, existing_issue=existing_issue)
@@ -331,8 +329,6 @@ class RedmineBackend:
                 self._append_comment_notes(
                     issue_id, existing_comments=existing_comments, desired_comments=desired_comments
                 )
-            if issue_id:
-                task["redmine_id"] = issue_id
             task["dirty"] = False
             self._cache_task(task, dirty=False)
             self._issue_cache = {}
@@ -548,15 +544,10 @@ class RedmineBackend:
                     self._issue_cache[task_id_str] = candidate_issue
                     return candidate_issue
 
-        issues = self._list_tasks_remote()
-        for task in issues:
-            if task.get("id") == task_id_str:
-                issue_id = task.get("redmine_id")
-                if issue_id:
-                    issue_payload = self._issue_from_payload(self._request_json("GET", f"issues/{issue_id}.json"))
-                    if issue_payload:
-                        self._issue_cache[task_id_str] = issue_payload
-                    return issue_payload
+        self._list_tasks_remote()
+        cached = self._issue_cache.get(task_id_str)
+        if isinstance(cached, dict):
+            return cached
         return None
 
     def _issue_to_task(
@@ -598,7 +589,6 @@ class RedmineBackend:
             "verify": self._maybe_parse_json(verify_val),
             "commit": self._maybe_parse_json(commit_val),
             "comments": self._normalize_comments(self._maybe_parse_json(comments_val)),
-            "redmine_id": issue.get("id"),
             "id_source": "custom",
         }
         if doc_val:

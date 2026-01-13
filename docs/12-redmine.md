@@ -5,7 +5,7 @@ Redmine is a canonical backend option for tasks. When enabled, Redmine issues st
 
 ## Canonical Mapping
 - Task IDs map to the `task_id` custom field in Redmine.
-- Redmine issue IDs are stored in task payloads as `redmine_id`.
+- Redmine issue IDs are not stored locally; issues are resolved via the `task_id` custom field.
 - When Redmine is unreachable, `agentctl` falls back to the local cache (if enabled).
 - Use `python .codex-swarm/agentctl.py sync redmine` to reconcile changes after connectivity returns.
 
