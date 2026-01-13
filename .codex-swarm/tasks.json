@@ -4267,16 +4267,26 @@
     {
       "id": "202601131125-20Z43B",
       "title": "Analyze config.json candidates",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "208b8f601a53d4164a225ffc4e72fbb2bbc5b46f",
+        "message": "✨ 20Z43B docs: mark task obsolete and update roadmap"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Verified: closed as obsolete per user request; no execution performed; no verify steps run."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T11:52:55+00:00",
+      "doc_updated_at": "2026-01-13T12:11:53+00:00",
       "doc_updated_by": "agentctl",
       "description": "Scan the repo for hard-coded workflow settings and propose which ones should move into config.json for agent awareness and agentctl toggles.",
-      "doc": "## Summary\n\n- ...\n\n## Context\n\n- ...\n\n## Scope\n\n- ...\n\n## Risks\n\n- ...\n\n## Verify Steps\n\n- ...\n\n## Rollback Plan\n\n- ...\n\n## Notes\n\n- ..."
+      "doc": "## Summary\n\n- Closed as obsolete per user request; no repository analysis performed.\n\n## Context\n\n- Original request superseded by a close-without-work decision.\n\n## Scope\n\n- No code or config changes beyond task doc and roadmap housekeeping.\n\n## Risks\n\n- None; no product changes were made.\n\n## Verify Steps\n\n- Not run (task closed as obsolete).\n\n## Rollback Plan\n\n- None (no changes shipped).\n\n## Notes\n\n- Reopen with a new task if analysis becomes necessary."
     },
     {
       "id": "202601131125-PT7RCE",
@@ -4367,6 +4377,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "9303dd7333cc7f49f9ecfd9cad334f8ed4cec30d2cfeb3771158bd007304b561"
+    "checksum": "7d246fc48a51794a2e6aacac2aebf95e1ac9aacc3bb6aa53a594cf5755abbbf5"
   }
 }
