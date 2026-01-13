@@ -4511,7 +4511,7 @@
     {
       "id": "202601131304-E1625C",
       "title": "Optimize AGENTS and agent JSON instructions",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [
@@ -4519,6 +4519,16 @@
         "202601131304-7JXJF7"
       ],
       "tags": [],
+      "commit": {
+        "hash": "af6584106ff4d2f06a3bface18236931e53a5c66",
+        "message": "✨ E1625C align AGENTS guidance with config-driven rules"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "Verified: ran rg checks for config references in AGENTS.md and agent JSONs; changes align guidance to config-driven branch/worktree rules."
+        }
+      ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-13T13:44:21+00:00",
       "doc_updated_by": "agentctl",
@@ -4568,6 +4578,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "cb272bfbbefc2fe63c2039dfc75a3e712c7e5fe89f3b06c73a7735477260e595"
+    "checksum": "10dac982327e230f9c17a002a75c3ae64c67990f01f6b75ac9568966bb0ca5b9"
   }
 }
