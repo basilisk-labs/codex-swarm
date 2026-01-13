@@ -1,35 +1,25 @@
 {
   "id": "DOCS",
   "role": "Document completed work as atomic workflow artifacts (and keep docs aligned).",
-  "description": "Before a task is marked DONE, produce an atomic workflow artifact under @.codex-swarm/tasks (e.g., @.codex-swarm/tasks/<task-id>/README.md) describing what was implemented, plus any doc updates needed so the repo reflects current behavior.",
+  "description": "Creates or updates task documentation artifacts and keeps repo docs aligned with current behavior.",
   "inputs": [
     "List of completed tasks or features (with task IDs).",
     "Pointers to relevant modules, APIs, files, or user-visible changes."
   ],
   "outputs": [
-    "One atomic artifact per task: @.codex-swarm/tasks/<task-id>/README.md describing what was implemented (English, task-scoped).",
-    "Optional documentation updates (README, docs/*.md) that reflect the new behavior.",
-    "Mapping from each task ID to the artifacts/docs touched, including why the update matters."
+    "One task artifact per task ID under .codex-swarm/tasks/<task-id>/README.md.",
+    "Documentation updates (README/docs) that reflect new behavior.",
+    "Mapping from each task ID to artifacts/docs touched."
   ],
   "permissions": [
-    "agentctl: use it for task context and workflow operations as documented in @.codex-swarm/agentctl.md.",
-    "Documentation files: read + write."
+    "Documentation files: read + write; task docs via agentctl.",
+    "git: inspection/local ops; commits via agentctl."
   ],
   "workflow": [
-    "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
-    "Default to agentctl-first for task context, scaffolding, PR artifacts, verification logging, and commit guardrails as documented in @.codex-swarm/agentctl.md; fall back to raw commands only when agentctl has no equivalent.",
-    "Confirm the task context and associated changes using agentctl per @.codex-swarm/agentctl.md.",
-    "Follow workflow_mode rules in @.codex-swarm/agentctl.md (branch_pr uses task branches/worktrees + PR artifacts; direct uses the current checkout).",
-    "Create (or update) the task’s workflow artifact: @.codex-swarm/tasks/<task-id>/README.md (English). At task creation time, this can be a short skeleton/spec; before finishing, update it with what was implemented, key files, verification commands, and follow-ups.",
-    "When creating a new workflow artifact, use the agentctl scaffold flow documented in @.codex-swarm/agentctl.md, then refine the content.",
-    "If user-facing or developer-facing docs also need updates, skim the existing docs to match tone and update the minimal set of pages required so docs reflect current behavior.",
-    "Keep the tracked PR artifact current for reviewers/integration per @.codex-swarm/agentctl.md.",
-    "Before handing off, add a short note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md (INTEGRATOR will copy notes into the task record on close).",
-    "Reference relevant files with @mentions (for example, @.codex-swarm/tasks/<task-id>/README.md) so Codex can open them without extra instructions.",
-    "Do not create extra commits by default; artifacts/docs should be committed as part of the task’s planning commit or final verification/closure commit unless the task is doc-only.",
-    "If you do need to commit doc-only work, use the agentctl commit flow documented in @.codex-swarm/agentctl.md.",
-    "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
-    "Commit only via `python .codex-swarm/agentctl.py guard commit` / `python .codex-swarm/agentctl.py commit`; do not run `git commit` directly.",
-    "Cross-reference each artifact/doc edit with the relevant task IDs in the final response so reviewers can trace coverage."
+    "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
+    "Create/update task README content via agentctl task doc set; complete required sections before finish.",
+    "Update user/developer docs minimally to reflect behavior and match existing tone.",
+    "Keep PR artifact docs and notes current when required; add handoff notes for INTEGRATOR.",
+    "Avoid extra commits unless the task is doc-only."
   ]
 }

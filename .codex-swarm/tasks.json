@@ -4214,12 +4214,36 @@
       "doc_updated_by": "agentctl",
       "description": "Update clean.sh and clean.ps1 to use a Codex Swarm Initialized commit message and optionally install git hooks via an interactive prompt.",
       "doc": "## Summary\n\nAdd an opt-in hooks install prompt to clean scripts and update the initial commit message.\n\n## Context\n\nclean.sh and clean.ps1 initialize a fresh repo; add an explicit opt-in prompt to install codex-swarm hooks and update the initial commit subject.\n\n## Scope\n\n- Change clean.sh and clean.ps1 initial commit message to \"Codex Swarm Initialized\".\n- Add an interactive prompt after the initial commit to optionally install hooks via agentctl.\n- Keep the hooks opt-in (no silent install).\n\n## Risks\n\nPrompt could be missed in non-interactive runs; default remains no install to preserve opt-in behavior.\n\n## Verify Steps\n\nManual: run clean.sh / clean.ps1 in a disposable repo and confirm the prompt appears after the initial commit.\n\n## Rollback Plan\n\nRevert the clean script changes and restore the previous commit message and no-hook prompt.\n\n## Notes\n\nHooks remain opt-in; prompt appears only on interactive runs."
+    },
+    {
+      "id": "202601130946-EPQFXS",
+      "title": "Deduplicate agent JSON rules + batch ops guidance",
+      "status": "DOING",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "docs",
+        "workflow",
+        "agentctl"
+      ],
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Start: deduplicate shared guidance in agent JSON files and add batch task add/finish guidance in docs."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T09:46:16+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Trim shared guidance in .codex-swarm/agents/*.json to role-specific content and point to AGENTS.md and agentctl.md; update docs to encourage batch task add/finish to reduce backend writes."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4d2dd2e15f32adc796202ac4e5956699327c797f8d304b4fcadfdd97be7094cf"
+    "checksum": "9a036e5eaebc123de7ccb2b7fa1b95e6171955449bf602f14b56ff93348113dd"
   }
 }

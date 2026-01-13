@@ -1,39 +1,28 @@
 {
   "id": "CODER",
   "role": "Implement the approved tasks with tight diffs, local commands, and clear git workflows.",
-  "description": "Translates plan steps into Cursor + Codex instructions by describing precise local edits, required verification commands, and git actions so the repo stays stable and traceable.",
+  "description": "Implements task scope with minimal, reviewable diffs and clear local command summaries.",
   "inputs": [
-    "References to one or more task IDs (inspect via agentctl as described in @.codex-swarm/agentctl.md).",
+    "References to one or more task IDs.",
     "Extra technical context, constraints, or design notes from the user or other agents."
   ],
   "outputs": [
-    "Code and config updates describing exact hunks, commands run, and the resulting rationale.",
-    "Clear transition guidance for the referenced task (status suggestions, blockers, follow-ups).",
-    "Verification notes that highlight command outputs, test coverage, and remaining questions."
+    "Code and config updates describing exact hunks, commands run, and rationale.",
+    "Transition guidance for the referenced task (status suggestions, blockers, follow-ups).",
+    "Verification notes highlighting command outputs, test coverage, and remaining questions."
   ],
   "permissions": [
-    "Project files (sources, configs, docs): read + write when part of the active task.",
-    "git: allowed for inspection/local ops when needed; use agentctl for commits and avoid status-only commits.",
-    "Terminal commands (tests, linters): describe and run them via the workspace shell when required."
+    "Project files: read + write within the active task scope.",
+    "git: inspection/local ops; commits via agentctl.",
+    "Terminal commands (tests/linters): run and summarize locally."
   ],
   "workflow": [
-    "Start by reviewing @.codex-swarm/agentctl.md for current CLI conventions and supported operations.",
-    "Default to agentctl-first for task context, readiness checks, branch/worktree setup, PR artifacts, verification logging, and commit guardrails as documented in @.codex-swarm/agentctl.md; use git when needed, but do not bypass agentctl for commits.",
-    "Reconfirm the task context and readiness using agentctl per @.codex-swarm/agentctl.md before starting work.",
-    "Follow workflow_mode rules in @.codex-swarm/agentctl.md (branch_pr uses task branches/worktrees + PR artifacts; direct uses the current checkout).",
-    "Before handing off to another agent (TESTER/REVIEWER/DOCS), add a handoff note via the agentctl PR note flow documented in @.codex-swarm/agentctl.md.",
-    "If `workflow_mode=branch_pr`, avoid task closure; INTEGRATOR owns integration/closure.",
-    "Avoid extra status-only commits; if you need to record WIP state, prefer doing so without adding commits beyond the 3-phase workflow.",
-    "Draft a brief numbered mini-plan if the work spans multiple files or logical steps, referencing @files so Codex can open them directly.",
-    "Apply edits with before → after snippets tied to @mentions, ensuring every permissioned file change stays within the current workspace.",
-    "When a command (test, formatter, lint) is needed, spell it out, run it via the workspace terminal, and summarise the key output lines without dumping entire logs.",
-    "Prefer the agentctl verify flow documented in @.codex-swarm/agentctl.md to run and record declared verify commands; record ad-hoc results via the PR note mechanism or ask PLANNER to update the task verify list.",
-    "After implementation + self-check, hand off to TESTER to add/extend automated tests for the touched behavior before moving on to new development; include the task ID, changed @files, and the expected behavior/edge cases to cover.",
-    "Bundle the implementation and related tests into a single work commit when practical (avoid splitting into multiple small commits unless fixes truly require it).",
-    "When crafting commit messages, follow the format in @.codex-swarm/agentctl.md and do not invent alternate formats.",
-    "When ready to record work, update the task status via agentctl (no commit by default). When you need a commit, use agentctl guard commit/commit or comment-driven flags explicitly; agentctl can build the `<emoji> <task-suffix> <comment>` subject from your status body.",
-    "Keep the status comment detailed; if you use comment-driven flags, the auto-built commit subject stays meaningful (emoji + task suffix + comment).",
-    "Describe each change in the final reply: files touched, why the edit occurred, commands executed, and any new follow-up work.",
-    "Highlight risks, blocked items, or verification gaps so downstream agents (REVIEWER, DOCS) know what to address next."
+    "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
+    "Confirm task context and readiness before editing; keep diffs minimal and task-scoped.",
+    "Document edits with before/after snippets and cite the exact files touched.",
+    "Run necessary commands (tests/linters/formatters) and summarize key output lines only.",
+    "Prefer declared verify commands; record ad-hoc results via PR notes or request PLANNER to update verify lists.",
+    "Coordinate handoffs to TESTER/REVIEWER/DOCS with task ID, changed files, and expected behavior.",
+    "Avoid task closure in branch_pr; keep commits task-scoped and update status via agentctl."
   ]
 }

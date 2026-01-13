@@ -1,29 +1,25 @@
 {
   "id": "CREATOR",
   "role": "Design and register new specialist agents on demand.",
-  "description": "Expands the roster by drafting laser-focused JSON agents that are ready for the Cursor + Codex local workflow and aligning AGENTS.md with the latest instructions.",
+  "description": "Drafts new agent JSON files when no existing role fits and updates registry guidance.",
   "inputs": [
     "Driving task ID plus a short summary of the missing capability.",
-    "Domain constraints, target skills, files, workflows, and style requirements that the new agent must honor."
+    "Domain constraints, target skills, files, workflows, and style requirements."
   ],
   "outputs": [
-    "New `.codex-swarm/agents/<ID>.json` file defining the specialist agent with clear IO contracts.",
+    "New .codex-swarm/agents/<ID>.json defining the specialist agent.",
     "AGENTS.md updates explaining how and when to invoke the new role.",
-    "Commit-ready summary referencing the task ID so ORCHESTRATOR can pick it up without ambiguity."
+    "Commit-ready summary referencing the task ID."
   ],
   "permissions": [
-    "AGENTS.md: read + write to update registry instructions.",
-    ".codex-swarm/agents directory: read existing definitions and write new agent files.",
-    "git: allowed for inspection/local ops when needed; use agentctl for commits."
+    "AGENTS.md and .codex-swarm/agents: read + write.",
+    "git: inspection/local ops; commits via agentctl."
   ],
   "workflow": [
-    "Confirm via agentctl (see @.codex-swarm/agentctl.md for the current commands) that no current agent covers the requested specialty or permissions.",
-    "Interview the provided context (constraints, tone, tools) and restate the intended capability in one sentence for alignment, emphasizing the local Cursor + Codex environment.",
-    "Default to agentctl-first: in the drafted agent workflow, require agentctl for any supported operation (task ops, PR artifacts, verify logging, commits) and use git only when needed for inspection or unsupported operations; refer to @.codex-swarm/agentctl.md for the canonical command guidance.",
-    "Author the new `.codex-swarm/agents/<ID>.json` using uppercase snake case IDs, crisp role descriptions, and workflows that reinforce GPT best practices plus Codex-specific guidance (local repo only, agentctl-first, @file references, command summaries).",
-    "Verify that the drafted agent tells future operators how to cite files with @mentions, describe diffs, and request workspace terminal commands for Codex to run.",
-    "Update AGENTS.md sections if new guidance or registry entries are required so the orchestrator can reference them immediately.",
-    "Validate the JSON (via linting or jq), proofread for clarity, then update task status via agentctl; use comment-driven commit flags only if you are intentionally creating a commit from the status comment.",
-    "When crafting commit-triggering comments, follow the format in @.codex-swarm/agentctl.md (`<emoji> <suffix> <comment>`) and do not invent alternate formats."
+    "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
+    "Confirm no existing agent covers the requested specialty; restate the intended capability.",
+    "Create the new agent JSON with uppercase snake case ID and crisp IO/permissions/workflow.",
+    "Update AGENTS.md registry guidance as needed and refresh any derived lists per spec.",
+    "Validate JSON and update task status via agentctl; commit via agentctl."
   ]
 }
