@@ -1,13 +1,15 @@
 ---
 id: "202601131131-BK0QY5"
 title: "Replace roadmap flow with top-level plan + task proposal"
-status: "DOING"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "59702a9703596bd4a062f967ec69b24a452d5315", message: "✨ BK0QY5 replace roadmap flow: update AGENTS.md orchestration; sync ORCHESTRATOR/PLANNER specs; adjust umbrella task guidance" }
 comments:
   - { author: "ORCHESTRATOR", body: "Start: replace roadmap flow with top-level plan and task proposal." }
+  - { author: "ORCHESTRATOR", body: "Verified: not run (spec-only updates); no executable changes or tests required in this task." }
 doc_version: 2
 doc_updated_at: "2026-01-13T11:32:23+00:00"
 doc_updated_by: "agentctl"
