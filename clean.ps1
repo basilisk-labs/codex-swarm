@@ -279,8 +279,18 @@ if ($LASTEXITCODE -eq 0) {
   }
 }
 
-& git add .codex-swarm .gitignore AGENTS.md
-& git commit -m "Codex Swarm Initialized"
+$agentsSpecLine = (Select-String -Path AGENTS.md -Pattern '^AGENTS_SPEC:' -ErrorAction SilentlyContinue | Select-Object -First 1).Line
+$agentsSpecVersion = ""
+if ($agentsSpecLine) {
+  $agentsSpecVersion = ($agentsSpecLine -split ":", 2)[1].Trim()
+}
+$commitMessage = "Codex Swarm Initialized"
+if ($agentsSpecVersion) {
+  $commitMessage = "Codex Swarm Initialized (AGENTS_SPEC $agentsSpecVersion)"
+}
+
+& git add .codex-swarm .gitignore AGENTS.md viewer.sh
+& git commit -m $commitMessage
 
 if (-not [Console]::IsInputRedirected) {
   $installHooks = Read-Host "Install codex-swarm git hooks? [y/N]"

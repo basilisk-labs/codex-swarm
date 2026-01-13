@@ -260,8 +260,14 @@ else
   fi
 fi
 
-git add .codex-swarm .gitignore AGENTS.md
-git commit -m "Codex Swarm Initialized"
+agents_spec_version="$(awk -F': ' '/^AGENTS_SPEC:/ {print $2; exit}' AGENTS.md)"
+commit_msg="Codex Swarm Initialized"
+if [[ -n "${agents_spec_version}" ]]; then
+  commit_msg="Codex Swarm Initialized (AGENTS_SPEC ${agents_spec_version})"
+fi
+
+git add .codex-swarm .gitignore AGENTS.md viewer.sh
+git commit -m "${commit_msg}"
 
 if [[ -t 0 ]]; then
   INSTALL_HOOKS=""
