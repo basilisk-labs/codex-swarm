@@ -4263,12 +4263,45 @@
       "doc_updated_by": "agentctl",
       "description": "Ensure clean.sh/clean.ps1 add viewer.sh to the init commit and include AGENTS_SPEC version in the init commit message so the file is not left uncommitted.",
       "doc": "## Summary\n\nInclude viewer.sh in the init commit and annotate the init commit subject with the AGENTS_SPEC version.\n\n## Context\n\nClean scripts reinitialize the repo after cleanup; viewer.sh was left untracked and the init commit message needed a version tag.\n\n## Scope\n\n- Add viewer.sh to the init commit staging in clean.sh and clean.ps1.\n- Build the init commit message with AGENTS_SPEC version from AGENTS.md (fallback to default when missing).\n- Leave the rest of the cleanup flow unchanged.\n\n## Risks\n\nIf AGENTS.md header changes or viewer.sh is missing, the init commit could fall back to the default message or fail to stage that file.\n\n## Verify Steps\n\nManual: run ./clean.sh or clean.ps1 in a disposable copy; confirm the init commit includes viewer.sh and the subject includes AGENTS_SPEC v0.2.\n\n## Rollback Plan\n\nRevert clean.sh and clean.ps1 to the previous staging list and commit message logic.\n\n## Notes\n\nCommit message uses the AGENTS_SPEC header value when present."
+    },
+    {
+      "id": "202601131125-20Z43B",
+      "title": "Analyze config.json candidates",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T11:25:32+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Scan the repo for hard-coded workflow settings and propose which ones should move into config.json for agent awareness and agentctl toggles."
+    },
+    {
+      "id": "202601131125-PT7RCE",
+      "title": "Align ORCHESTRATOR/PLANNER with roadmap workflow",
+      "status": "DOING",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Start: sync ORCHESTRATOR/PLANNER agent specs with AGENTS.md roadmap and top-level task rules."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-13T11:25:51+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update ORCHESTRATOR and PLANNER agent specs to enforce top-level task handling, decomposition/CREATOR fallback, explicit plan approval, roadmap creation with epics, offer to convert epics to tasks, and roadmap completion notes.",
+      "doc": "## Summary\n\nAlign ORCHESTRATOR and PLANNER agent specs with the roadmap-first workflow and top-level task handling.\n\n## Context\n\nUser requested that ORCHESTRATOR always treats the first message as a top-level task, decomposes into atomic tasks or CREATOR, requires approval, and maintains a roadmap with epic completion notes.\n\n## Scope\n\nUpdate AGENTS.md orchestration rules and sync ORCHESTRATOR/PLANNER JSON workflows; no runtime code changes.\n\n## Risks\n\nLow risk; spec changes could misalign expectations if not mirrored in agent JSON.\n\n## Verify Steps\n\nNo tests (spec changes only).\n\n## Rollback Plan\n\nRevert the commit to restore the previous agent specs."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5dd06175326ff2163ec65ada5127a1635f2ea21249ff82e329a34cc9cded978d"
+    "checksum": "ffb2d5885378ebe5c02547392b310a6ea90011e96ad4dc6dccfe25055757ab20"
   }
 }
