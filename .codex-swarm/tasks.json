@@ -4469,22 +4469,34 @@
       ],
       "tags": [],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T13:04:41+00:00",
+      "doc_updated_at": "2026-01-13T13:43:49+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Update agentctl docs and project docs to explain new config.json keys and config CLI commands."
+      "description": "Update agentctl docs and project docs to explain new config.json keys and config CLI commands.",
+      "doc": "## Summary\n\nDocumented new config keys and CLI config show/set usage across agentctl docs and project docs.\n\n## Context\n\nAgentctl gained config-driven behavior, so docs needed to explain keys, defaults, and the new config commands.\n\n## Scope\n\nUpdated .codex-swarm/agentctl.md, docs/07-tasks-and-backends.md, docs/08-branching-and-pr-artifacts.md, docs/09-commands.md, and README.md.\n\n## Risks\n\nDocs may drift if the config schema changes; no runtime impact.\n\n## Verify Steps\n\nrg -n \"config show|config set\" .codex-swarm/agentctl.md docs/09-commands.md; rg -n \"branch\\.task_prefix|paths\\.worktrees_dir\" docs/07-tasks-and-backends.md docs/08-branching-and-pr-artifacts.md\n\n## Rollback Plan\n\nRevert doc changes in the listed files.\n\n## Notes\n\nConfig coverage includes base_branch, branch.task_prefix, paths.worktrees_dir, tasks.doc sections, tasks.verify.required_tags, tasks.comments rules, and commit.generic_tokens."
     },
     {
       "id": "202601131304-D4ZA6S",
       "title": "Add config keys and agentctl config CLI",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "dddeba676b1818a4b66c49ed91f3db1cdc47cb97",
+        "message": "✨ D4ZA6S add config-driven settings and config CLI"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "Verified: ran python .codex-swarm/agentctl.py --help to confirm config show/set is registered; changes add config-driven defaults in agentctl and config.json."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T13:04:31+00:00",
+      "doc_updated_at": "2026-01-13T13:36:49+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Extend .codex-swarm/config.json with new settings and update agentctl to read them plus provide config show/set commands."
+      "description": "Extend .codex-swarm/config.json with new settings and update agentctl to read them plus provide config show/set commands.",
+      "doc": "## Summary\n\nAdd config-driven settings for tasks/branch/commit and a config show/set CLI in agentctl.\n\n## Context\n\nUser requested configurable settings in config.json plus CLI support for toggling them.\n\n## Scope\n\nUpdated .codex-swarm/config.json with new keys and adjusted .codex-swarm/agentctl.py to read them, enforce branch/worktree prefix config, and add config show/set commands.\n\n## Risks\n\nMisconfigured config.json values could cause agentctl validation errors; new defaults should be verified in the repo.\n\n## Verify Steps\n\npython .codex-swarm/agentctl.py --help\n\n## Rollback Plan\n\nRevert .codex-swarm/config.json and .codex-swarm/agentctl.py to the previous commit.\n\n## Notes\n\nAdded config keys: base_branch, paths.worktrees_dir, branch.task_prefix, tasks.id_suffix_length_default, tasks.verify.required_tags, tasks.doc sections, tasks.comments rules, commit.generic_tokens; added agentctl config show/set."
     },
     {
       "id": "202601131304-E1625C",
@@ -4498,9 +4510,10 @@
       ],
       "tags": [],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T13:04:46+00:00",
+      "doc_updated_at": "2026-01-13T13:44:21+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Run UPDATER audit and apply the recommended optimizations to AGENTS.md and relevant .codex-swarm/agents/*.json."
+      "description": "Run UPDATER audit and apply the recommended optimizations to AGENTS.md and relevant .codex-swarm/agents/*.json.",
+      "doc": "## Summary\n\nOptimized AGENTS.md and agent JSONs to reference config-driven settings and CLI config show/set.\n\n## Context\n\nNew config keys required agent guidance to point to config management and parametrize branch/worktree paths.\n\n## Scope\n\nUpdated AGENTS.md, .codex-swarm/agents/ORCHESTRATOR.json, .codex-swarm/agents/DOCS.json, and .codex-swarm/agents/INTEGRATOR.json.\n\n## Risks\n\nInstruction-only changes; risk is outdated guidance if config keys change.\n\n## Verify Steps\n\nrg -n \"config show|config set|branch\\.task_prefix|paths\\.worktrees_dir\" AGENTS.md .codex-swarm/agents/ORCHESTRATOR.json .codex-swarm/agents/DOCS.json .codex-swarm/agents/INTEGRATOR.json\n\n## Rollback Plan\n\nRevert changes in AGENTS.md and the updated agent JSON files.\n\n## Notes\n\nUPDATER audit focus: replace hardcoded branch/worktree strings with placeholders and add config CLI guidance."
     },
     {
       "id": "202601131304-MV3TPX",
@@ -4511,9 +4524,10 @@
       "depends_on": [],
       "tags": [],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T13:04:23+00:00",
+      "doc_updated_at": "2026-01-13T13:44:45+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Umbrella for adding configurable agentctl settings, updating config.json/CLI/docs, and optimizing AGENTS/agents per UPDATER. Downstream: 202601131304-D4ZA6S (config+CLI), 202601131304-7JXJF7 (docs), 202601131304-E1625C (AGENTS optimization)."
+      "description": "Umbrella for adding configurable agentctl settings, updating config.json/CLI/docs, and optimizing AGENTS/agents per UPDATER. Downstream: 202601131304-D4ZA6S (config+CLI), 202601131304-7JXJF7 (docs), 202601131304-E1625C (AGENTS optimization).",
+      "doc": "## Summary\n\nUmbrella tracking config, CLI/docs, and agent guidance updates.\n\n## Context\n\nCoordinates downstream tasks for config changes, documentation updates, and agent guidance alignment.\n\n## Scope\n\nTracks 202601131304-D4ZA6S (config+CLI), 202601131304-7JXJF7 (docs), and 202601131304-E1625C (agent guidance).\n\n## Risks\n\nNo direct changes; risks are covered by downstream tasks.\n\n## Verify Steps\n\nSee downstream task verify steps; no separate verification for umbrella.\n\n## Rollback Plan\n\nRevert downstream commits for the config, docs, and agent guidance tasks.\n\n## Notes\n\nUmbrella task only; completion depends on downstream tasks being closed."
     },
     {
       "id": "202601131307-ZR7CN1",
@@ -4544,6 +4558,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5d6c452fe24c33c156e40a3fc3d481057e1f40ecebae31934e887bd9bd899843"
+    "checksum": "d0b864ab152c47544d405cc052a727c9569665d876d4d66211a6a2c7535c2e19"
   }
 }
