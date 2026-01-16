@@ -1,11 +1,14 @@
 ---
 id: "202601161024-D3BPVB"
 title: "Remove framework upgrade tests"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "05bc03f42fffec8f445cd18289fa47cae633874f", message: "✨ D3BPVB remove upgrade tests" }
+comments:
+  - { author: "CODER", body: "verified: Removed the unused upgrade regression tests and documented their removal." }
 doc_version: 2
 doc_updated_at: "2026-01-16T10:24:39+00:00"
 doc_updated_by: "agentctl"

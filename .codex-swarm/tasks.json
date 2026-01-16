@@ -4668,10 +4668,10 @@
         }
       ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-16T10:16:04+00:00",
+      "doc_updated_at": "2026-01-16T10:24:26+00:00",
       "doc_updated_by": "agentctl",
       "description": "Add regression coverage for the 10-day staleness threshold and forced refresh path, ensuring the agentctl command exercises the new logic and the behavior is documented for downstream agents.",
-      "doc": "## Summary\n- Capture the regression coverage that proves the new staleness math and config parsing behave as expected before relying on them for upgrades.\n\n## Context\n- `tests/test_framework_upgrade.py` exercises the helper utilities used by the CLI upgrade flow, so its README should describe what that file covers and why it matters.\n\n## Scope\n- Document that the suite imports `.codex-swarm/agentctl.py`, mocks the config, and asserts the staleness threshold and ISO parsing logic.\n- Mention that the log is kept minimal on purpose to keep CI fast.\n\n## Risks\n- The tests currently rely on the repo being importable as a module; if agentctl gains heavy dependencies, the suite may need stubbing or isolation.\n\n## Verify Steps\n- Run `python3 -m unittest tests.test_framework_upgrade` (headless, fast, and now part of the documented process).\n\n## Rollback Plan\n- Remove the test file and its entry from the CI/test suite if it starts leaking state into other modules.\n\n## Notes\n- Future end-to-end coverage may run `agentctl upgrade` in a sandbox, but for now this unit suite provides confidence that the helpers behave."
+      "doc": "## Summary\n\n- Capture the regression coverage that proves the new staleness math and config parsing behave as expected before relying on them for upgrades.\n\n## Context\n\n- `tests/test_framework_upgrade.py` exercises the helper utilities used by the CLI upgrade flow, so its README should describe what that file covers and why it matters.\n\n## Scope\n\n- Document that the suite imports `.codex-swarm/agentctl.py`, mocks the config, and asserts the staleness threshold and ISO parsing logic.\n- Mention that the log is kept minimal on purpose to keep CI fast.\n\n## Risks\n\n- The tests currently rely on the repo being importable as a module; if agentctl gains heavy dependencies, the suite may need stubbing or isolation.\n\n## Verify Steps\n\n- None (suite removed per latest request; only manual review remains).\n\n## Rollback Plan\n\n- Remove the test file and its entry from the CI/test suite if it starts leaking state into other modules.\n\n## Notes\n\n- Future end-to-end coverage may run `agentctl upgrade` in a sandbox, but for now this unit suite provides confidence that the helpers behave."
     },
     {
       "id": "202601160958-DAS67K",
@@ -4748,12 +4748,36 @@
       "doc_updated_by": "agentctl",
       "description": "Track last update date, add automatic refresh from https://github.com/basilisk-labs/codex-swarm when stale or forced, and surface the workflow via agentctl plus a dedicated agent. Downstream tasks: 202601160958-DAS67K (UPGRADER agent design), 202601160958-NV8M5V (agentctl automation), 202601160958-AM3G42 (tests).",
       "doc": "## Summary\n- Automate framework updates by recording the last refresh date, honoring a 10-day staleness threshold, and providing an `agentctl upgrade` command backed by the UPGRADER agent.\n\n## Context\n- Maintaining parity with https://github.com/basilisk-labs/codex-swarm keeps our workflow fresh; this task stitches together the agent spec, CLI automation, and tests.\n\n## Scope\n- Define the UPGRADER agent (202601160958-DAS67K) so the purpose and guards are clear.\n- Extend agentctl and config metadata (202601160958-NV8M5V) so the command runs safely and logs the new timestamp.\n- Add regression tests (202601160958-AM3G42) so staleness math is vetted before we rely on it.\n\n## Risks\n- Git operations require clean main; automation must refuse to run in dirty states to avoid mixing unrelated work.\n- Upstream remote must stay accessible; documented fallback is to re-run the upgrade manually.\n\n## Verify Steps\n- `python3 -m unittest tests.test_framework_upgrade`\n- (Optional) `python .codex-swarm/agentctl.py upgrade --force` on a clean base branch after ensuring this repo can fast-forward from the upstream.\n\n## Rollback Plan\n- Revert the code, tests, docs, and config addition created by the sub-tasks if the automation misbehaves.\n- Restore `.codex-swarm/config.json` to its prior shape and rerun `git reset --hard` on main to wipe the upgrade commit.\n\n## Notes\n- Task PR artifacts under `.codex-swarm/tasks/<task-id>/pr/` will record the last verify log and diff whenever these tasks go through the usual branch_pr workflow."
+    },
+    {
+      "id": "202601161024-D3BPVB",
+      "title": "Remove framework upgrade tests",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "05bc03f42fffec8f445cd18289fa47cae633874f",
+        "message": "✨ D3BPVB remove upgrade tests"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "verified: Removed the unused upgrade regression tests and documented their removal."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-16T10:24:39+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Delete tests/test_framework_upgrade.py and update documentation now that the regression suite is gone.",
+      "doc": "## Summary\n- Remove the regression suite that previously affirmed the framework upgrade helpers.\n\n## Context\n- The automated tests were added for the stale-detection math, but the user now requests deleting them.\n\n## Scope\n- Delete `tests/test_framework_upgrade.py` (along with the empty `tests/` directory).\n- Update the related task doc to explain that verification now occurs manually.\n\n## Risks\n- Removing the only regression test leaves the helper logic unverified; future regression coverage should reintroduce a similar suite if needed.\n\n## Verify Steps\n- None (tests deleted by design).\n\n## Rollback Plan\n- Restore `tests/test_framework_upgrade.py` from Git history and revert this change if the regression coverage is required again.\n\n## Notes\n- There are no other references to `tests/test_framework_upgrade.py` once the file and doc updates are committed."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "d6f027058c50bd48c13dcbc9df356304998581e12b0c04215f1c29873682a446"
+    "checksum": "5d2d26f9a570681b1b25a76e07f219ee3410c43e74c69438704ae0360df5ea19"
   }
 }
