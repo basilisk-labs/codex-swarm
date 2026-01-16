@@ -1,11 +1,14 @@
 ---
 id: "202601160958-AM3G42"
 title: "Test framework update workflow"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "TESTER"
 depends_on: []
 tags: []
+commit: { hash: "65d3ce2af2cd46f83c8dfd3adb09fa18189464be", message: "✨ AM3G42 add upgrade tests" }
+comments:
+  - { author: "TESTER", body: "verified: Ran python3 -m unittest tests.test_framework_upgrade to cover the staleness math before finalizing the workflow." }
 doc_version: 2
 doc_updated_at: "2026-01-16T10:16:04+00:00"
 doc_updated_by: "agentctl"

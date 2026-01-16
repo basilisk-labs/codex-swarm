@@ -4652,11 +4652,21 @@
     {
       "id": "202601160958-AM3G42",
       "title": "Test framework update workflow",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "TESTER",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "65d3ce2af2cd46f83c8dfd3adb09fa18189464be",
+        "message": "✨ AM3G42 add upgrade tests"
+      },
+      "comments": [
+        {
+          "author": "TESTER",
+          "body": "verified: Ran python3 -m unittest tests.test_framework_upgrade to cover the staleness math before finalizing the workflow."
+        }
+      ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-16T10:16:04+00:00",
       "doc_updated_by": "agentctl",
@@ -4734,6 +4744,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "d8ec8073247afaea02afd9f2aa030451276bcc6c79243b3ae215d33c1216607e"
+    "checksum": "81906b2b2c280ae0ef5dc22e75d11835c2eeca21e62c7196537c2b77d498c5ca"
   }
 }
