@@ -1,11 +1,14 @@
 ---
 id: "202601160958-DAS67K"
 title: "Define UPGRADER agent and workflow"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CREATOR"
-depends_on: ["202601160958-QQ4CT3"]
+depends_on: []
 tags: []
+commit: { hash: "f58936f62dc99a48a59dc6481ee2477602267672", message: "✨ DAS67K tidy deps" }
+comments:
+  - { author: "CREATOR", body: "verified: Documented the UPGRADER agent lifecycle, triggers, and config expectations for automation readiness." }
 doc_version: 2
 doc_updated_at: "2026-01-16T10:15:49+00:00"
 doc_updated_by: "agentctl"

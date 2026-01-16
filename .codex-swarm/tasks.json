@@ -4648,12 +4648,82 @@
       "doc_updated_by": "agentctl",
       "description": "Format .codex-swarm/config.json for consistent multi-line JSON styling without changing values.",
       "doc": "## Summary\n\nReformatted .codex-swarm/config.json into multi-line JSON for readability; no values changed.\n\n## Context\n\nUser requested a separate task/commit for the existing config.json formatting changes.\n\n## Scope\n\nFormatting-only change in .codex-swarm/config.json; no behavioral changes.\n\n## Risks\n\nLow risk: formatting only. Possible merge conflicts if config.json is edited concurrently.\n\n## Verify Steps\n\nNot run (formatting-only change).\n\n## Rollback Plan\n\nRevert commit b9ae966 to restore previous formatting.\n\n## Notes\n\nNo tests run."
+    },
+    {
+      "id": "202601160958-AM3G42",
+      "title": "Test framework update workflow",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "TESTER",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-16T10:16:04+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add regression coverage for the 10-day staleness threshold and forced refresh path, ensuring the agentctl command exercises the new logic and the behavior is documented for downstream agents.",
+      "doc": "## Summary\n- Capture the regression coverage that proves the new staleness math and config parsing behave as expected before relying on them for upgrades.\n\n## Context\n- `tests/test_framework_upgrade.py` exercises the helper utilities used by the CLI upgrade flow, so its README should describe what that file covers and why it matters.\n\n## Scope\n- Document that the suite imports `.codex-swarm/agentctl.py`, mocks the config, and asserts the staleness threshold and ISO parsing logic.\n- Mention that the log is kept minimal on purpose to keep CI fast.\n\n## Risks\n- The tests currently rely on the repo being importable as a module; if agentctl gains heavy dependencies, the suite may need stubbing or isolation.\n\n## Verify Steps\n- Run `python3 -m unittest tests.test_framework_upgrade` (headless, fast, and now part of the documented process).\n\n## Rollback Plan\n- Remove the test file and its entry from the CI/test suite if it starts leaking state into other modules.\n\n## Notes\n- Future end-to-end coverage may run `agentctl upgrade` in a sandbox, but for now this unit suite provides confidence that the helpers behave."
+    },
+    {
+      "id": "202601160958-DAS67K",
+      "title": "Define UPGRADER agent and workflow",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CREATOR",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "f58936f62dc99a48a59dc6481ee2477602267672",
+        "message": "✨ DAS67K tidy deps"
+      },
+      "comments": [
+        {
+          "author": "CREATOR",
+          "body": "verified: Documented the UPGRADER agent lifecycle, triggers, and config expectations for automation readiness."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-16T10:15:49+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Review agentctl layout and specify UPGRADER responsibilities for automatic framework refresh, covering trigger conditions, config timestamp handling, and interactions with other agents.",
+      "doc": "## Summary\n- Capture the new UPGRADER agent's purpose so the automation keeps framework metadata accurate and actions predictable.\n- Describe the trigger rules, configuration dependencies, and downstream reporting that make the agent actionable.\n\n## Context\n- agentctl now exposes `upgrade`, a CLI path that must honor the `framework` section of `.codex-swarm/config.json` and stay aligned with the pinned base branch.\n- CREATOR owns communicating how UPGRADER should be invoked (stale/forced), what it writes back to the config, and how other agents rely on it.\n\n## Scope\n- Document the staleness threshold (10 days) and forced path that decide when the agent runs.\n- Spell out the required clean-tree/base-branch preconditions and the metadata (`framework.last_update`, `framework.source`) the agent reads/writes.\n- Explain the expected outputs (updated config, run report, PR notes) so REVIEWER/INTEGRATOR know what to look for.\n\n## Risks\n- Forced pulls assume `git pull --ff-only` will succeed; if upstream diverges the command fails and the agent must surface that error.\n- Network or GitHub availability affects automation; the agent must log retries/failures so humans can intervene.\n\n## Verify Steps\n- Review `.codex-swarm/agentctl.py` to ensure the upgrade command follows the documented behavior.\n- Run `python3 -m unittest tests.test_framework_upgrade` to prove helper math that enters the spec works.\n- Optionally execute `python .codex-swarm/agentctl.py upgrade --force` from a clean base branch to validate the end-to-end flow.\n\n## Rollback Plan\n- Revert the agent spec (`.codex-swarm/agents/UPGRADER.json`) and the section additions in `.codex-swarm/config.json` to drop the new metadata if problems surface.\n- Revert any upgrade command invocations by resetting the branch to the prior commit, then re-run tests.\n\n## Notes\n- Downstream tasks cover the actual CLI implementation (`202601160958-NV8M5V`) and regression tests (`202601160958-AM3G42`), so keep this spec in sync with those artifacts."
+    },
+    {
+      "id": "202601160958-NV8M5V",
+      "title": "Implement automated framework update",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-16T10:15:57+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Extend agentctl to track last framework update date in config, compare against today, refresh from https://github.com/basilisk-labs/codex-swarm when stale or forced, and add CLI flags that trigger UPGRADER logic.",
+      "doc": "## Summary\n- Implement agentctl support for tracking when the framework was last refreshed and automatically pulling upstream when the data is stale (older than 10 days) or a user forces the upgrade.\n- Expose `python .codex-swarm/agentctl.py upgrade` and keep `.codex-swarm/config.json` aligned with the new metadata fields.\n\n## Context\n- The UPGRADER spec drives what data needs to be present in the config, so this task wires those pieces into agentctl and ensures the framework source is used consistently.\n- The automation must protect itself with branch/worktree guards and only run from the pinned base branch.\n\n## Scope\n- Add helpers for `framework.last_update`, staleness detection, and persisting ISO timestamps.\n- Introduce the `upgrade` command that enforces clean trees, branch checks, and `git pull --ff-only` from the configured source.\n- Document the command in `.codex-swarm/agentctl.md` so agents know how to invoke it.\n\n## Risks\n- Pulling via `git pull --ff-only` will fail if the repo has diverged or the remote is unreachable; the command must surface errors cleanly so a human can fix the divergence.\n- Running the upgrade on a dirty tree could accidentally stage unrelated changes; branch checks and `ensure_git_clean` protect us, but operators must heed those warnings.\n\n## Verify Steps\n- `python3 -m unittest tests.test_framework_upgrade` (covers the helper math that drives the decision to upgrade).\n- `python .codex-swarm/agentctl.py upgrade --force` from a clean base branch to validate the end-to-end git pull plus timestamp update.\n\n## Rollback Plan\n- Revert the helper additions and the CLI definition in `.codex-swarm/agentctl.py` plus the `.codex-swarm/agentctl.md` reference if we detect unexpected behavior.\n- Restore `.codex-swarm/config.json` to drop the `framework` section if persistence proves problematic.\n\n## Notes\n- This task feeds directly into the regression tests covered by `202601160958-AM3G42` so keep any future changes synchronized with that suite."
+    },
+    {
+      "id": "202601160958-QQ4CT3",
+      "title": "Automate framework upgrades",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601160958-DAS67K",
+        "202601160958-NV8M5V",
+        "202601160958-AM3G42"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-16T10:16:11+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Track last update date, add automatic refresh from https://github.com/basilisk-labs/codex-swarm when stale or forced, and surface the workflow via agentctl plus a dedicated agent. Downstream tasks: 202601160958-DAS67K (UPGRADER agent design), 202601160958-NV8M5V (agentctl automation), 202601160958-AM3G42 (tests).",
+      "doc": "## Summary\n- Automate framework updates by recording the last refresh date, honoring a 10-day staleness threshold, and providing an `agentctl upgrade` command backed by the UPGRADER agent.\n\n## Context\n- Maintaining parity with https://github.com/basilisk-labs/codex-swarm keeps our workflow fresh; this task stitches together the agent spec, CLI automation, and tests.\n\n## Scope\n- Define the UPGRADER agent (202601160958-DAS67K) so the purpose and guards are clear.\n- Extend agentctl and config metadata (202601160958-NV8M5V) so the command runs safely and logs the new timestamp.\n- Add regression tests (202601160958-AM3G42) so staleness math is vetted before we rely on it.\n\n## Risks\n- Git operations require clean main; automation must refuse to run in dirty states to avoid mixing unrelated work.\n- Upstream remote must stay accessible; documented fallback is to re-run the upgrade manually.\n\n## Verify Steps\n- `python3 -m unittest tests.test_framework_upgrade`\n- (Optional) `python .codex-swarm/agentctl.py upgrade --force` on a clean base branch after ensuring this repo can fast-forward from the upstream.\n\n## Rollback Plan\n- Revert the code, tests, docs, and config addition created by the sub-tasks if the automation misbehaves.\n- Restore `.codex-swarm/config.json` to its prior shape and rerun `git reset --hard` on main to wipe the upgrade commit.\n\n## Notes\n- Task PR artifacts under `.codex-swarm/tasks/<task-id>/pr/` will record the last verify log and diff whenever these tasks go through the usual branch_pr workflow."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f403bec1a5aba43507ece3648f329ccdfbc32ef99e3701b55963f2a60958a9ac"
+    "checksum": "79c7e3d92706e6922dc68dd1bf1a61b46201c0dd7a757932c2a42fe566a7e6a8"
   }
 }

@@ -4,7 +4,7 @@ title: "Automate framework upgrades"
 status: "TODO"
 priority: "med"
 owner: "ORCHESTRATOR"
-depends_on: []
+depends_on: ["202601160958-DAS67K", "202601160958-NV8M5V", "202601160958-AM3G42"]
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-16T10:16:11+00:00"

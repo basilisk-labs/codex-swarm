@@ -4,7 +4,7 @@ title: "Test framework update workflow"
 status: "TODO"
 priority: "med"
 owner: "TESTER"
-depends_on: ["[\"202601160958-QQ4CT3\"]"]
+depends_on: []
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-16T10:16:04+00:00"
