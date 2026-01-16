@@ -1,11 +1,14 @@
 ---
 id: "202601160958-NV8M5V"
 title: "Implement automated framework update"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "c27e131f3f69296a51441fa6a138de2fdf1f3ac5", message: "✨ NV8M5V automate upgrade" }
+comments:
+  - { author: "CODER", body: "verified: Confirmed agentctl upgrade helpers, CLI documentation, and config metadata align with the new framework refresh flow." }
 doc_version: 2
 doc_updated_at: "2026-01-16T10:15:57+00:00"
 doc_updated_by: "agentctl"
