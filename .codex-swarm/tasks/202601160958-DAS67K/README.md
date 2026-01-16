@@ -4,7 +4,7 @@ title: "Define UPGRADER agent and workflow"
 status: "TODO"
 priority: "med"
 owner: "CREATOR"
-depends_on: ["[\"202601160958-QQ4CT3\"]"]
+depends_on: ["202601160958-QQ4CT3"]
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-16T10:15:49+00:00"
