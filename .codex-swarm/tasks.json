@@ -4724,7 +4724,7 @@
     {
       "id": "202601160958-QQ4CT3",
       "title": "Automate framework upgrades",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [
@@ -4733,6 +4733,16 @@
         "202601160958-AM3G42"
       ],
       "tags": [],
+      "commit": {
+        "hash": "333785394330d48ae8d409304af1bdd0040a19cd",
+        "message": "✨ QQ4CT3 document automation"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: Automated framework upgrade plan, related docs, and regression tests are complete so the workflow can self-update."
+        }
+      ],
       "doc_version": 2,
       "doc_updated_at": "2026-01-16T10:16:11+00:00",
       "doc_updated_by": "agentctl",
@@ -4744,6 +4754,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "81906b2b2c280ae0ef5dc22e75d11835c2eeca21e62c7196537c2b77d498c5ca"
+    "checksum": "d6f027058c50bd48c13dcbc9df356304998581e12b0c04215f1c29873682a446"
   }
 }
