@@ -1,11 +1,14 @@
 ---
 id: "202601161248-3NGP5C"
 title: "Reduce confirmation prompts"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "121fa479c53a781c08adec29ded0122dd4938c1e", message: "✅ 3NGP5C update docs" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: Reduced redundant confirmations by treating plan approval as the main gate and emphasizing autonomous execution." }
 doc_version: 2
 doc_updated_at: "2026-01-16T12:54:25+00:00"
 doc_updated_by: "agentctl"
