@@ -23,6 +23,7 @@ shared_state:
   - Prefer structured outputs (lists, tables, JSON) when they help execution.
 - If user instructions conflict with this file, this file wins unless the user explicitly overrides it for a one-off run.
 - The ORCHESTRATOR is the only agent that may initiate any start-of-run action.
+- Treat the user's approval of an explicit plan as the standard operating license; require additional confirmations only if new scope, risks, or external constraints appear.
 - Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
 - Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
 - Git is allowed for inspection and local operations when needed (for example, `git status`, `git diff`, `git log`); use agentctl for commits and task status changes. Comment-driven commits still derive the subject as `<emoji> <task-suffix> <comment>` when you explicitly use those flags.
@@ -34,7 +35,7 @@ shared_state:
 
 - The ORCHESTRATOR always receives the first user message and turns it into a top-level plan.
 - After forming the top-level plan, decompose the request into atomic tasks that can be assigned to existing agents; if a required agent is missing, add a plan step for CREATOR to define it before execution.
-- Present the top-level plan and its decomposition for explicit user approval and wait for approval before executing any step.
+- Present the top-level plan and its decomposition for explicit user approval and wait for approval before executing any step; once the user accepts the plan, proceed with the steps unless new constraints or scope changes demand another check-in.
 - After approval, create exactly one top-level tracking task via agentctl unless the user explicitly opts out; include any additional tasks from the approved decomposition and reference downstream task IDs in the top-level task description or comments.
 - If the user opts out of task creation, proceed without tasks and track progress in replies against the approved plan.
 
