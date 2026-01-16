@@ -1,0 +1,41 @@
+---
+id: "202601160958-NV8M5V"
+title: "Implement automated framework update"
+status: "TODO"
+priority: "med"
+owner: "CODER"
+depends_on: ["[\"202601160958-QQ4CT3\"]"]
+tags: []
+doc_version: 2
+doc_updated_at: "2026-01-16T10:15:57+00:00"
+doc_updated_by: "agentctl"
+description: "Extend agentctl to track last framework update date in config, compare against today, refresh from https://github.com/basilisk-labs/codex-swarm when stale or forced, and add CLI flags that trigger UPGRADER logic."
+---
+## Summary
+- Implement agentctl support for tracking when the framework was last refreshed and automatically pulling upstream when the data is stale (older than 10 days) or a user forces the upgrade.
+- Expose `python .codex-swarm/agentctl.py upgrade` and keep `.codex-swarm/config.json` aligned with the new metadata fields.
+
+## Context
+- The UPGRADER spec drives what data needs to be present in the config, so this task wires those pieces into agentctl and ensures the framework source is used consistently.
+- The automation must protect itself with branch/worktree guards and only run from the pinned base branch.
+
+## Scope
+- Add helpers for `framework.last_update`, staleness detection, and persisting ISO timestamps.
+- Introduce the `upgrade` command that enforces clean trees, branch checks, and `git pull --ff-only` from the configured source.
+- Document the command in `.codex-swarm/agentctl.md` so agents know how to invoke it.
+
+## Risks
+- Pulling via `git pull --ff-only` will fail if the repo has diverged or the remote is unreachable; the command must surface errors cleanly so a human can fix the divergence.
+- Running the upgrade on a dirty tree could accidentally stage unrelated changes; branch checks and `ensure_git_clean` protect us, but operators must heed those warnings.
+
+## Verify Steps
+- `python3 -m unittest tests.test_framework_upgrade` (covers the helper math that drives the decision to upgrade).
+- `python .codex-swarm/agentctl.py upgrade --force` from a clean base branch to validate the end-to-end git pull plus timestamp update.
+
+## Rollback Plan
+- Revert the helper additions and the CLI definition in `.codex-swarm/agentctl.py` plus the `.codex-swarm/agentctl.md` reference if we detect unexpected behavior.
+- Restore `.codex-swarm/config.json` to drop the `framework` section if persistence proves problematic.
+
+## Notes
+- This task feeds directly into the regression tests covered by `202601160958-AM3G42` so keep any future changes synchronized with that suite.
+

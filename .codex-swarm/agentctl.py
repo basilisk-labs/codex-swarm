@@ -16,7 +16,7 @@ import re
 import subprocess
 import sys
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, NoReturn, Protocol, TypedDict, TypeGuard, cast
 
@@ -205,6 +205,11 @@ HOOK_ENV_ALLOW_TASKS = "CODEX_SWARM_ALLOW_TASKS"
 HOOK_ENV_ALLOW_BASE = "CODEX_SWARM_ALLOW_BASE"
 HOOK_MARKER = "codex-swarm: managed by agentctl"
 HOOK_NAMES = ("commit-msg", "pre-commit")
+
+FRAMEWORK_CONFIG_LABEL = "framework"
+FRAMEWORK_SOURCE_DEFAULT = "https://github.com/basilisk-labs/codex-swarm"
+FRAMEWORK_LAST_UPDATE_KEY = "last_update"
+FRAMEWORK_STALE_DAYS = 10
 
 
 def load_env_file(path: Path) -> None:
@@ -926,6 +931,76 @@ def branch_config() -> JsonDict:
 
 def commit_config() -> JsonDict:
     return _config_dict(_SWARM_CONFIG.get("commit"), label="commit")
+
+
+def framework_config() -> JsonDict:
+    return _config_dict(_SWARM_CONFIG.get(FRAMEWORK_CONFIG_LABEL), label=FRAMEWORK_CONFIG_LABEL)
+
+
+def framework_source() -> str:
+    source = str(framework_config().get("source") or FRAMEWORK_SOURCE_DEFAULT).strip()
+    if not source:
+        die(
+            f"{SWARM_CONFIG_PATH} {FRAMEWORK_CONFIG_LABEL}.source must be a non-empty string",
+            code=2,
+        )
+    return source
+
+
+def parse_iso_datetime(value: object | None) -> datetime | None:
+    if not value:
+        return None
+    if isinstance(value, datetime):
+        parsed = value
+    elif isinstance(value, str):
+        raw = value.strip()
+        if not raw:
+            return None
+        try:
+            parsed = datetime.fromisoformat(raw)
+        except ValueError:
+            return None
+    else:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=UTC)
+    else:
+        parsed = parsed.astimezone(UTC)
+    return parsed
+
+
+def framework_last_update() -> datetime | None:
+    return parse_iso_datetime(framework_config().get(FRAMEWORK_LAST_UPDATE_KEY))
+
+
+def framework_upgrade_due(
+    last_update: datetime | None,
+    *,
+    now: datetime | None = None,
+    stale_days: int = FRAMEWORK_STALE_DAYS,
+) -> tuple[bool, str | None]:
+    now = now or datetime.now(UTC)
+    if last_update is None:
+        return True, "never"
+    delta = now - last_update
+    if delta.total_seconds() < 0:
+        return False, None
+    threshold = timedelta(days=stale_days)
+    if delta >= threshold:
+        return True, f"stale ({delta.days}d)"
+    return False, None
+
+
+def persist_framework_update(timestamp: str) -> None:
+    data = load_json(SWARM_CONFIG_PATH)
+    framework = data.get(FRAMEWORK_CONFIG_LABEL)
+    if not isinstance(framework, dict):
+        framework = {}
+        data[FRAMEWORK_CONFIG_LABEL] = framework
+    framework[FRAMEWORK_LAST_UPDATE_KEY] = timestamp
+    write_json(SWARM_CONFIG_PATH, data)
+    global _SWARM_CONFIG
+    _SWARM_CONFIG = data
 
 
 TASKS_PATH = _resolve_repo_relative_path(_path_setting("tasks_path"), label="tasks_path")
@@ -3369,6 +3444,60 @@ def cmd_verify(args: argparse.Namespace) -> None:
         pr_write_meta(pr_meta_path, pr_meta_write)
 
 
+def cmd_upgrade(args: argparse.Namespace) -> None:
+    action = "framework upgrade"
+    ensure_invoked_from_repo_root(action=action)
+    require_not_task_worktree(action=action)
+    ensure_git_clean(action=action)
+    branch = base_branch()
+    require_branch(branch, action=action)
+
+    last_update = framework_last_update()
+    should_upgrade, reason = framework_upgrade_due(last_update)
+    if getattr(args, "force", False):
+        should_upgrade = True
+        reason = "forced"
+
+    if not should_upgrade:
+        if not GLOBAL_QUIET:
+            note = reason or "recent update"
+            print_block("SKIP", f"Framework upgrade skipped ({note}); use --force to override.")
+        return
+
+    source = framework_source()
+    if not GLOBAL_QUIET:
+        print_block("INFO", f"Upgrading framework from {source} -> {branch}")
+
+    try:
+        result = run(["git", "pull", "--ff-only", source, branch], cwd=ROOT)
+    except subprocess.CalledProcessError as exc:
+        message = (exc.stderr or exc.stdout or "").strip() or str(exc)
+        die(
+            "\n".join(
+                [
+                    f"Failed to upgrade framework: {message}",
+                    "Fix:",
+                    "  1) Ensure the base branch can fast-forward from upstream",
+                    "  2) Re-run the command (use --force if needed)",
+                    f"Context: {format_command_context(cwd=Path.cwd().resolve())}",
+                ]
+            ),
+            code=exc.returncode or 1,
+        )
+
+    if not GLOBAL_QUIET:
+        if result.stdout:
+            print(result.stdout.strip())
+        if result.stderr:
+            print_block("WARNING", result.stderr.strip())
+
+    timestamp = now_iso_utc()
+    persist_framework_update(timestamp)
+    if not GLOBAL_QUIET:
+        print_block("FRAMEWORK", f"Synced {source} -> {branch}")
+        print_block("UPDATED_AT", timestamp)
+
+
 def is_transition_allowed(current: str, nxt: str) -> bool:
     if current == nxt:
         return True
@@ -5219,6 +5348,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify.add_argument("--quiet", action="store_true", help="Minimal output")
     p_verify.add_argument("--require", action="store_true", help="Fail if no verify commands exist")
     p_verify.set_defaults(func=cmd_verify)
+
+    p_upgrade = sub.add_parser(
+        "upgrade", help="Refresh the Codex Swarm framework from the upstream release"
+    )
+    p_upgrade.add_argument("--force", action="store_true", help="Force the upgrade regardless of the last date")
+    p_upgrade.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_upgrade.set_defaults(func=cmd_upgrade)
 
     p_work = sub.add_parser("work", help="One-command helpers to start a task checkout")
     work_sub = p_work.add_subparsers(dest="work_cmd", required=True)

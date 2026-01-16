@@ -155,6 +155,9 @@ python .codex-swarm/agentctl.py finish <task-id> --author INTEGRATOR --body "Ver
 python .codex-swarm/agentctl.py verify <task-id> --skip-if-unchanged
 # (when .codex-swarm/tasks/<task-id>/pr/verify.log exists, agentctl will append to it by default)
 
+# keep the framework aligned with upstream
+python .codex-swarm/agentctl.py upgrade --force
+
 # before committing, validate staged allowlist + message quality
 python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --auto-allow
 
