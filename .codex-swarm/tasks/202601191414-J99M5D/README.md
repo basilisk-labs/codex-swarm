@@ -4,7 +4,7 @@ title: "Viewer data aggregation"
 status: "TODO"
 priority: "med"
 owner: "CODER"
-depends_on: ["[\"202601191414-4ZX6FD\"]"]
+depends_on: []
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-19T14:20:19+00:00"

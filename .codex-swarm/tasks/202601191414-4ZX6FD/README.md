@@ -4,7 +4,7 @@ title: "Expand viewer dashboards"
 status: "TODO"
 priority: "med"
 owner: "ORCHESTRATOR"
-depends_on: []
+depends_on: ["202601191414-2N28WV", "202601191414-J99M5D", "202601191414-WP4B8E"]
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-19T14:14:46+00:00"
