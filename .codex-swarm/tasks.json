@@ -5580,12 +5580,56 @@
       "doc_updated_by": "agentctl",
       "description": "Run any required verification, ensure task artifacts are complete, and close the recipes CLI/doc tasks in direct workflow.",
       "doc": "## Summary\n\nIntegrated the recipes CLI and docs updates, confirming the end-to-end workflow artifacts are present.\n\n## Context\n\nClosed out tasks for recipes CLI implementation and documentation wiring in direct workflow mode.\n\n## Scope\n\nValidated that recipes.py is implemented, RECIPES.md is wired through AGENTS.md/README/docs, and task records are up to date.\n\n## Risks\n\nNo additional risks beyond those captured in the implementation and docs tasks.\n\n## Verify Steps\n\nConfirmed python .codex-swarm/recipes.py --help in CLI task; reviewed docs updates in AGENTS.md/README/docs.\n\n## Rollback Plan\n\nRevert the recipes CLI and documentation commits if integration needs to be undone.\n\n## Notes\n\nIntegration complete in direct mode; no branch/worktree merge required."
+    },
+    {
+      "id": "202601191530-HJTDZK",
+      "title": "Require tags on new tasks",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "tasks",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "55943b360a037b343be0a24b2514600ba6c63092",
+        "message": "✨ HJTDZK require tags on task creation; update agentctl guidance; align orchestrator/planner rules; add task doc"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: not run (doc/guidance updates only) | details: manual review only, no code execution."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:47:13+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Ensure task creation enforces non-empty tags and update agent guidance to always pass tags when creating tasks.",
+      "doc": "## Summary\n\nEnforce non-empty tags when creating tasks and document the requirement for agents.\n\n## Scope\n\nUpdate agentctl task creation validation and adjust agentctl/AGENTS/agent guidance to mention required tags.\n\n## Risks\n\nTask creation without tags will now error, which may break existing automation. Document the requirement and keep the error message clear.\n\n## Verify Steps\n\n1) python .codex-swarm/agentctl.py task new --title 'Tmp' --description 'Tmp' --priority low --owner ORCHESTRATOR --depends-on '[]' --tag smoke. 2) python .codex-swarm/agentctl.py task new --title 'Tmp2' --description 'Tmp2' --priority low --owner ORCHESTRATOR --depends-on '[]' (expect error for missing tags).\n\n## Rollback Plan\n\nRevert the commit and rerun agentctl task lint if needed."
+    },
+    {
+      "id": "202601191551-5YN5YQ",
+      "title": "Explain feature-spec-to-tasks recipe",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "docs"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:51:18+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Summarize how the feature-spec-to-tasks recipe works, including inputs, steps, outputs, and usage guidance."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "c10165e786c7c95c38935a0416993f98d973eb236bd255ad62dcaf4ba7fc26b3"
+    "checksum": "7adb4de4999094a6ee8e5aefa4383a9e0866ecc79d54aae6b184ca536b868fbd"
   }
 }

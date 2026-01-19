@@ -1,11 +1,14 @@
 ---
 id: "202601191530-HJTDZK"
 title: "Require tags on new tasks"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["agents", "tasks", "workflow"]
+commit: { hash: "55943b360a037b343be0a24b2514600ba6c63092", message: "✨ HJTDZK require tags on task creation; update agentctl guidance; align orchestrator/planner rules; add task doc" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: not run (doc/guidance updates only) | details: manual review only, no code execution." }
 doc_version: 2
 doc_updated_at: "2026-01-19T15:47:13+00:00"
 doc_updated_by: "agentctl"
