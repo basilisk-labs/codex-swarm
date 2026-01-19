@@ -1,11 +1,14 @@
 ---
 id: "202601191449-RM6JRR"
 title: "Normalize status indicators in docs"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "DOCS"
 depends_on: ["[\"202601191449-YN9FWW\"]"]
 tags: ["docs", "workflow"]
+commit: { hash: "8e1f29d9eff0ec9608ba8f7826ee08c14dfe1633", message: "✨ YN9FWW plan status normalization and retro priority tasks" }
+comments:
+  - { author: "DOCS", body: "verified: status wording aligned and priorities standardized in docs." }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:58:40+00:00"
 doc_updated_by: "agentctl"
