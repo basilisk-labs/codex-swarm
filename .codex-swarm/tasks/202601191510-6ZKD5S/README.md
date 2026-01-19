@@ -4,7 +4,7 @@ title: "Document recipes prompts and wire into AGENTS"
 status: "TODO"
 priority: "med"
 owner: "DOCS"
-depends_on: ["[\"202601191510-0AWCPY\"]"]
+depends_on: ["202601191510-0AWCPY"]
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-19T15:10:58+00:00"

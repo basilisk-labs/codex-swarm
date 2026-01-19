@@ -4,7 +4,7 @@ title: "Integrate and verify recipes CLI changes"
 status: "TODO"
 priority: "med"
 owner: "INTEGRATOR"
-depends_on: ["[\"202601191510-0AWCPY\",\"202601191510-6ZKD5S\"]"]
+depends_on: ["202601191510-0AWCPY", "202601191510-6ZKD5S"]
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-19T15:11:03+00:00"

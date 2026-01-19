@@ -4,7 +4,7 @@ title: "Ship recipes framework + CLI integration"
 status: "TODO"
 priority: "med"
 owner: "ORCHESTRATOR"
-depends_on: ["[\"202601191511-BZPKM2\"]"]
+depends_on: ["202601191511-BZPKM2"]
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-19T15:11:08+00:00"

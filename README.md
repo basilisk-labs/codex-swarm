@@ -86,6 +86,9 @@ If you're contributing, read `docs/05-workflow.md` for the full workflow expecta
 │   ├── agentctl.md
 │   ├── agentctl.py
 │   ├── config.json
+│   ├── RECIPES.md
+│   ├── recipes
+│   ├── recipes.py
 │   ├── tasks.json (exported view)
 │   ├── tasks
 │   └── agents
@@ -136,6 +139,9 @@ If you're contributing, read `docs/05-workflow.md` for the full workflow expecta
 | `.codex-swarm/agentctl.md` | 🧾 Quick reference for `python .codex-swarm/agentctl.py` commands + commit guardrails. |
 | `.codex-swarm/agentctl.py` | 🧰 Workflow helper for task ops (ready/start/block/task/verify/guard/finish) + backend routing. |
 | `.codex-swarm/config.json` | ⚙️ Framework config (paths + workflow_mode + branch/tasks/commit settings). |
+| `.codex-swarm/RECIPES.md` | 🧩 Global recipe prompt rules and bundle usage conventions. |
+| `.codex-swarm/recipes/` | 📦 Recipe manifests, scenarios, tools, and PRD specs. |
+| `.codex-swarm/recipes.py` | 🧪 CLI for scanning recipes, normalizing manifests, and compiling bundles. |
 | `.codex-swarm/backends/` | 🧩 Backend plugin configs and implementations. |
 | `.codex-swarm/agents/ORCHESTRATOR.json` | 🧭 Default agent that initiates runs, plans, and coordinates execution. |
 | `.codex-swarm/agents/PLANNER.json` | 🗒️ Defines how tasks are added/updated via `python .codex-swarm/agentctl.py` and kept aligned with each plan. |

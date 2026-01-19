@@ -15,6 +15,7 @@ This is the entry point for Codex Swarm documentation. The root `README.md` is a
 9. Commands reference: [`09-commands.md`](09-commands.md)
 10. Troubleshooting: [`10-troubleshooting.md`](10-troubleshooting.md)
 11. Glossary: [`11-glossary.md`](11-glossary.md)
+12. Recipes prompt rules: [`../.codex-swarm/RECIPES.md`](../.codex-swarm/RECIPES.md)
 
 ## Updates
 - Documentation changes should keep [`AGENTS.md`](../AGENTS.md) and [`.codex-swarm/agents/`](../.codex-swarm/agents/) as the source of truth.

@@ -32,6 +32,14 @@ python .codex-swarm/agentctl.py task export --format json --out .codex-swarm/tas
 - `--json`: emit JSON-formatted errors (for CI/integrations).
 - `--lint`: force export lint at command start (useful for read-only commands).
 
+## Recipes CLI
+```bash
+python .codex-swarm/recipes.py scan --recipes-dir .codex-swarm/recipes --output docs/recipes-inventory.json
+python .codex-swarm/recipes.py show <slug> --json
+python .codex-swarm/recipes.py compile <slug> --scenario <id> --inputs .codex-swarm/.runs/<run-id>/inputs.json --out .codex-swarm/.runs/<run-id>/bundle.json
+python .codex-swarm/recipes.py explain <slug> --scenario <id> --inputs .codex-swarm/.runs/<run-id>/inputs.json
+```
+
 ## Branching and PR Artifacts
 ```bash
 python .codex-swarm/agentctl.py branch create 202601031816-7F3K2Q --agent CODER --slug <slug> --worktree

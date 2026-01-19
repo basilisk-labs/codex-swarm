@@ -11,6 +11,7 @@ shared_state:
 - Use `python .codex-swarm/agentctl.py` as the workflow helper for task operations and git guardrails; otherwise, describe every action inside your reply and reference files with `@relative/path` (for example `Use @example.tsx as a reference...`).
 - Quick reference: run `python .codex-swarm/agentctl.py quickstart` (source: `.codex-swarm/agentctl.md`).
 - Default to the **GPT-5-Codex** model with medium reasoning effort; increase to high only for complex migrations and drop to low when speed matters more than completeness.
+- Recipe prompts and bundle conventions live in `.codex-swarm/RECIPES.md` and apply to all recipe-related workflows.
 - For setup tips review https://developers.openai.com/codex/ide/; for advanced CLI usage see https://github.com/openai/codex/.
 
 # GLOBAL_RULES

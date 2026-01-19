@@ -440,15 +440,15 @@ Bundle решает сразу 4 задачи:
 - Pending Actions
 
 
-## 10. Helper CLI: `recipetool.py` (дополнение к agentctl)
+## 10. Helper CLI: `recipes.py` (дополнение к agentctl)
 
 ### 10.1. Путь и статус
 
 Файл:
-- `.codex-swarm/recipetool.py`
+- `.codex-swarm/recipes.py`
 
 Запуск:
-- `python .codex-swarm/recipetool.py <command> ...`
+- `python .codex-swarm/recipes.py <command> ...`
 
 Важно: это CLI-интерфейс для IDE/агентов, но он **не предназначен** как “пользовательский CLI workflow”.
 
@@ -459,7 +459,7 @@ Bundle решает сразу 4 задачи:
 Сканировать recipes и собрать inventory.
 
 ```
-python .codex-swarm/recipetool.py scan \
+python .codex-swarm/recipes.py scan \
   --recipes-dir .codex-swarm/recipes \
   --output docs/recipes-inventory.json
 ```
@@ -476,14 +476,14 @@ python .codex-swarm/recipetool.py scan \
 Показать нормализованный manifest (для дебага IDE).
 
 ```
-python .codex-swarm/recipetool.py show research-company --json
+python .codex-swarm/recipes.py show research-company --json
 ```
 
 #### C) `compile`
 Скомпилировать bundle.
 
 ```
-python .codex-swarm/recipetool.py compile research-company \
+python .codex-swarm/recipes.py compile research-company \
   --scenario company \
   --inputs .codex-swarm/.runs/<run-id>/inputs.json \
   --out .codex-swarm/.runs/<run-id>/bundle.json \
@@ -504,7 +504,7 @@ python .codex-swarm/recipetool.py compile research-company \
 Сгенерировать человекочитаемое объяснение.
 
 ```
-python .codex-swarm/recipetool.py explain research-company --scenario company --inputs ...
+python .codex-swarm/recipes.py explain research-company --scenario company --inputs ...
 ```
 
 Использование:
@@ -630,15 +630,15 @@ python .codex-swarm/recipetool.py explain research-company --scenario company --
 
 Компоненты:
 1) **IDE extension** (VS Code / Cursor / Windsurf API-совместимый слой)
-2) **recipetool.py** как backend “recipe service”
+2) **recipes.py** как backend “recipe service”
 3) **agentctl.py** для задач/гита (не часть recipe service)
 
 IDE extension:
-- вызывает `recipetool.py scan` при активации/по команде
+- вызывает `recipes.py scan` при активации/по команде
 - показывает recipes/scenarios
 - при запуске сценария:
   - собирает inputs через форму
-  - вызывает `recipetool.py compile --stdout`
+  - вызывает `recipes.py compile --stdout`
   - показывает explain + pending_actions
   - после согласования плана ORCHESTRATOR:
     - либо IDE запускает tool напрямую (subprocess)
@@ -690,10 +690,10 @@ IDE делает `compile` и показывает:
 Когда потребуется настоящий CLI запуск:
 
 ### 14.1. Новый `run`
-Добавить в recipetool:
+Добавить в recipes.py:
 
 ```
-python .codex-swarm/recipetool.py run <slug> --scenario <id> --inputs ...
+python .codex-swarm/recipes.py run <slug> --scenario <id> --inputs ...
 ```
 
 Реализация `run` = `compile` + `execute`.
@@ -722,16 +722,16 @@ python .codex-swarm/recipetool.py run <slug> --scenario <id> --inputs ...
 
 ### 15.2. Стратегия миграции
 
-- `recipetool scan` умеет читать оба формата и нормализовать в inventory.
-- `recipetool show` может выводить “normalized manifest” всегда в v1.
+- `recipes.py scan` умеет читать оба формата и нормализовать в inventory.
+- `recipes.py show` может выводить “normalized manifest” всегда в v1.
 - Полный перевод manifests делается постепенно.
 
 
-## 16. Реализация `recipetool.py`: структура кода
+## 16. Реализация `recipes.py`: структура кода
 
 ### 16.1. Модули
 
-- `recipetool.py` (entry)
+- `recipes.py` (entry)
 - `.codex-swarm/recipes_lib/` (опционально)
   - `manifest.py` (load + normalize)
   - `schema.py` (validate)
