@@ -4796,12 +4796,30 @@
       "doc_updated_by": "agentctl",
       "description": "Review AGENTS.md and agent JSON instruction files to remove redundant confirmation requests and encourage autonomous judgment aligned with the user request.",
       "doc": "## Summary\n\nEliminated repetitive gating so plan approval becomes the main consent point and agents move forward autonomously thereafter.\n\n## Scope\n\nAdjusted AGENTS.md and ORCHESTRATOR.json wording so plan approval acts as the default authorization, and agents only re-check when scope or risk changes.\n\n## Risks\n\nRisk: agents may skip necessary confirmations if an unexpected scope/risk shift occurs, so we explicitly note when to re-check.\n\n## Verify Steps\n\nNone (documentation-only change).\n\n## Rollback Plan\n\nRevert AGENTS.md and ORCHESTRATOR.json to their prior versions if the new guidance causes confusion or skips critical approvals."
+    },
+    {
+      "id": "202601191406-0M7XWG",
+      "title": "Refresh tasks viewer",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "b9555c09a8e4e4da350a2a5752e7ca30e92abee2",
+        "message": "✨ 0M7XWG refresh tasks viewer"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:07:09+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Capture the recent viewer redesign as a tracked task so the changes are documented and committed cleanly.",
+      "doc": "## Summary\n\nDocument the viewer redesign so it is tracked and committed as a standalone task.\n\n## Scope\n\n- Package the existing changes in the tasks viewer UI and server endpoint into this task.\n- Keep the scope limited to the viewer refresh already implemented in `.codex-swarm/viewer/`.\n\n## Risks\n\nRisk: the refreshed UI could introduce regressions in filtering or status updates, so we should spot-check the main flows.\n\n## Verify Steps\n\n- Run the viewer locally and ensure the tabs, task list, and status updates render.\n\n## Rollback Plan\n\nRevert the viewer changes in `.codex-swarm/viewer/tasks.html` and `.codex-swarm/viewer/tasks_server.py` if issues arise.\n\n## Notes\n\nNo additional dependencies or migrations."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "aae384e9ed0fd22c71a49bd827c8121edb18f339e395eb517ed42cec41c52ed5"
+    "checksum": "6ba417c066e13f685e1844dd733e2216d220562b1a0d44b24e0b855dd6f8f413"
   }
 }
