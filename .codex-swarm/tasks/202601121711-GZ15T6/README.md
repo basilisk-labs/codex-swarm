@@ -2,10 +2,10 @@
 id: "202601121711-GZ15T6"
 title: "Polish cleanup scripts and tasks viewer"
 status: "DOING"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["cleanup", "ui"]
 verify: null
 commit: null
 comments:

@@ -2,7 +2,7 @@
 id: "202601131304-MV3TPX"
 title: "Configurable settings + CLI/docs + agent guidance"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

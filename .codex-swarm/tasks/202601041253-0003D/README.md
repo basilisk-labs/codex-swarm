@@ -2,7 +2,7 @@
 id: "202601041253-0003D"
 title: "Docs: modularize + numbered docs"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: []

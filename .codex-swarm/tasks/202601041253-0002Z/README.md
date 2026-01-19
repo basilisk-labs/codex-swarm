@@ -2,7 +2,7 @@
 id: "202601041253-0002Z"
 title: "Align README docs index with new docs"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601071333-WRD9N1"
 title: "Reduce snapshot wording in docs"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: ["docs", "cleanup"]

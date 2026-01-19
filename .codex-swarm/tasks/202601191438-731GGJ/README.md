@@ -2,7 +2,7 @@
 id: "202601191438-731GGJ"
 title: "Add sort reverse toggle"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

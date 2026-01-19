@@ -2,7 +2,7 @@
 id: "202601041253-0001K"
 title: "Remove legacy tasks.py + migrate docs to agentctl"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

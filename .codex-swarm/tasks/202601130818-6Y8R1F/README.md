@@ -2,7 +2,7 @@
 id: "202601130818-6Y8R1F"
 title: "Optional git hooks installer"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "git", "workflow"]

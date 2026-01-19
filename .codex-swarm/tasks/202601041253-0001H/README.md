@@ -2,7 +2,7 @@
 id: "202601041253-0001H"
 title: "Add tasks.html UI for browsing tasks.json"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["ui", "tasks", "workflow"]
 commit: { hash: "5cc30b601bb86f224a984851dae8137374db7ded", message: "Legacy completion (backfill)" }

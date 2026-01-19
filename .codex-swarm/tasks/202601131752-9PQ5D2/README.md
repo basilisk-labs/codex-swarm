@@ -2,7 +2,7 @@
 id: "202601131752-9PQ5D2"
 title: "Format config.json"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

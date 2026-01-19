@@ -2,7 +2,7 @@
 id: "202601131728-GPGCPQ"
 title: "Sync comment body with commit subject formatting"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

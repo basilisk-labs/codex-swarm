@@ -2,7 +2,7 @@
 id: "202601041253-00036"
 title: "Harden agentctl depends_on parsing"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["agentctl", "tasks"]

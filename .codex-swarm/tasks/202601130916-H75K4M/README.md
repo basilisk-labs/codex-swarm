@@ -2,7 +2,7 @@
 id: "202601130916-H75K4M"
 title: "Hook install prompt in clean scripts"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["cleanup", "workflow"]

@@ -2,7 +2,7 @@
 id: "202601041253-0003F"
 title: "local backend: tasks/ storage + ID generation"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: ["202601041253-0003E"]
 tags: []

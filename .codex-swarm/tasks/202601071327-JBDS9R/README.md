@@ -2,7 +2,7 @@
 id: "202601071327-JBDS9R"
 title: "Reduce snapshot references in agent instructions"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: ["agents", "docs"]

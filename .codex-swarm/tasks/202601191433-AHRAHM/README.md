@@ -2,7 +2,7 @@
 id: "202601191433-AHRAHM"
 title: "Fix viewer board/list toggle"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

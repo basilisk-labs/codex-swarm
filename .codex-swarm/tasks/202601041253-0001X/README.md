@@ -2,7 +2,7 @@
 id: "202601041253-0001X"
 title: "Require user approval before final task-closing commit"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "REVIEWER"
 tags: ["workflow", "agents", "git"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents"]

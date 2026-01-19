@@ -2,7 +2,7 @@
 id: "202601041253-00021"
 title: "Move architecture.md content into README"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["docs", "refactor"]
 verify: ["python scripts/agentctl.py task lint"]

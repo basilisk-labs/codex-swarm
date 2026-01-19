@@ -2,7 +2,7 @@
 id: "202601191449-RM6JRR"
 title: "Normalize status indicators in docs"
 status: "TODO"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: ["[\"202601191449-YN9FWW\"]"]
 tags: ["docs", "workflow"]

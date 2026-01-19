@@ -2,10 +2,10 @@
 id: "202601131236-DBW16S"
 title: "Analyze config.json candidates for agent settings"
 status: "TODO"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["config", "agentctl"]
 doc_version: 2
 doc_updated_at: "2026-01-13T12:44:56+00:00"
 doc_updated_by: "agentctl"

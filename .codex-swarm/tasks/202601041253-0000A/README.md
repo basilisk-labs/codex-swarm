@@ -2,7 +2,7 @@
 id: "202601041253-0000A"
 title: "Automate agent registry updates"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["agents", "automation"]
 commit: { hash: "0b4a14ca3a4c48f4c19dee823103cb927dcae2f1", message: "Legacy completion (backfill)" }

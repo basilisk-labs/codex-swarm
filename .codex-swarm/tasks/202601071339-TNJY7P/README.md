@@ -2,7 +2,7 @@
 id: "202601071339-TNJY7P"
 title: "Normalize diagram/badge wording for task export"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: ["docs"]

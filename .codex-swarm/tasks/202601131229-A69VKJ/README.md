@@ -2,7 +2,7 @@
 id: "202601131229-A69VKJ"
 title: "Remove ROADMAP doc"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

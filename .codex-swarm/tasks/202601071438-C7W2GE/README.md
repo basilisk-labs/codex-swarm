@@ -2,7 +2,7 @@
 id: "202601071438-C7W2GE"
 title: "Update Redmine custom field IDs"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "backend", "docs"]

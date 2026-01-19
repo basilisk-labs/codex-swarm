@@ -2,7 +2,7 @@
 id: "202601110745-AAQVJW"
 title: "Fix branch_pr ID parsing and clean.sh scrub"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "branch_pr", "cleanup"]

@@ -2,7 +2,7 @@
 id: "202601131643-6Z977J"
 title: "Auto-create tasks after plan approval"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

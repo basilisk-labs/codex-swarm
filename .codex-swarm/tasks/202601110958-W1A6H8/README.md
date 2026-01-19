@@ -2,7 +2,7 @@
 id: "202601110958-W1A6H8"
 title: "Redmine sync smoke test"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601041253-0003N"
 title: "Remove legacy workspace directory"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: ["202601041253-0003K"]
 tags: []

@@ -2,7 +2,7 @@
 id: "202601041253-00023"
 title: "Align agentctl with branch_pr spec (worktrees, PR checks, integrate)"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 tags: ["agentctl", "workflow", "git"]
 verify: ["python scripts/agentctl.py task lint", "python -m compileall scripts/agentctl.py"]

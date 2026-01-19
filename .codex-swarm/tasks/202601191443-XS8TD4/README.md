@@ -2,7 +2,7 @@
 id: "202601191443-XS8TD4"
 title: "Add view toggle indicator"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

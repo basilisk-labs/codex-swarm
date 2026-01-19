@@ -2,7 +2,7 @@
 id: "202601131307-ZR7CN1"
 title: "Remove umbrella wording and clarify orchestrator planning"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601110746-RETWRH"
 title: "Repair task doc metadata and fill missing sections"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "tasks"]

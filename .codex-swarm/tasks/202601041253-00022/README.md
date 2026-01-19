@@ -2,7 +2,7 @@
 id: "202601041253-00022"
 title: "Branch workflow: task branches + worktrees + local PR artifacts"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 tags: ["workflow", "git", "agentctl"]
 verify: ["python scripts/agentctl.py task lint", "python -m compileall scripts/agentctl.py"]

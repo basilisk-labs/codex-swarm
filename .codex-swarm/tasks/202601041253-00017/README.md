@@ -2,7 +2,7 @@
 id: "202601041253-00017"
 title: "Update cleanup script to remove CONTRIBUTING.md and itself"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["automation", "cleanup"]
 commit: { hash: "25d2b916ec4f2fbdf3caa0553c6271974acffdab", message: "Legacy completion (backfill)" }

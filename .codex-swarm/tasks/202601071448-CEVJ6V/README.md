@@ -2,7 +2,7 @@
 id: "202601071448-CEVJ6V"
 title: "Improve agentctl task output context"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "cli", "tasks"]

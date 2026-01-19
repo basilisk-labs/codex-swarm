@@ -2,7 +2,7 @@
 id: "202601110913-Z10Z68"
 title: "Replace automation owners and refresh newcomer docs"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "tasks"]

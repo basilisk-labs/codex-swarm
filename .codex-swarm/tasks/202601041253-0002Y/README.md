@@ -2,7 +2,7 @@
 id: "202601041253-0002Y"
 title: "Add docs index links and reading order"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: []

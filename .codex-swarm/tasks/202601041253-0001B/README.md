@@ -2,7 +2,7 @@
 id: "202601041253-0001B"
 title: "Update .gitignore to include .env files"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["git", "workflow"]
 commit: { hash: "a63694f182aff97ce18b5b9458bf54982e787120", message: "Legacy completion (backfill)" }

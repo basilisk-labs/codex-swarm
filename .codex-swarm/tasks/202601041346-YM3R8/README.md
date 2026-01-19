@@ -2,7 +2,7 @@
 id: "202601041346-YM3R8"
 title: "Agentctl performance and UX improvements"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

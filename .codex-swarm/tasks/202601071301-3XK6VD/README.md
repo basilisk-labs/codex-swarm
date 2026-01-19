@@ -2,7 +2,7 @@
 id: "202601071301-3XK6VD"
 title: "Centralize commit format rules in agentctl"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: ["agents", "docs"]

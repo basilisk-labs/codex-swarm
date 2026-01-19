@@ -2,7 +2,7 @@
 id: "202601191449-YN9FWW"
 title: "Normalize task status indicators + retro priorities"
 status: "TODO"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["docs", "tasks", "workflow"]

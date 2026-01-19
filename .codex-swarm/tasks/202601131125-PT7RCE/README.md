@@ -2,7 +2,7 @@
 id: "202601131125-PT7RCE"
 title: "Align ORCHESTRATOR/PLANNER with roadmap workflow"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

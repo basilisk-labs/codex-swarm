@@ -2,7 +2,7 @@
 id: "202601110937-ABC7XZ"
 title: "Add status summary output to agentctl"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "ux"]

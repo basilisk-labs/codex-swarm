@@ -2,7 +2,7 @@
 id: "202601131304-D4ZA6S"
 title: "Add config keys and agentctl config CLI"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

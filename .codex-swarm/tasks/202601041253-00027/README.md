@@ -2,7 +2,7 @@
 id: "202601041253-00027"
 title: "Require explicit depends_on on task add"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 tags: ["workflow", "tasks", "dependencies"]
 verify: ["python scripts/agentctl.py agents", "python scripts/agentctl.py task lint"]

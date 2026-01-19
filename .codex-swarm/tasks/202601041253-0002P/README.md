@@ -2,7 +2,7 @@
 id: "202601041253-0002P"
 title: "Define workflow_mode variants (direct vs branch_pr)"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["workflow", "docs", "agents"]

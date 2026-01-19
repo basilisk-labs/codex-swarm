@@ -2,7 +2,7 @@
 id: "202601160958-NV8M5V"
 title: "Implement automated framework update"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601131302-D94Z3G"
 title: "Add agentctl role command"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

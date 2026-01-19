@@ -2,7 +2,7 @@
 id: "202601041253-0003E"
 title: "agentctl: backend plugin loader + config support"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: []

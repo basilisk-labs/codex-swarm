@@ -2,7 +2,7 @@
 id: "202601041253-00024"
 title: "agentctl verify: log output + skip if unchanged"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["agentctl", "workflow", "pipeline"]
 verify: ["python -m compileall scripts/agentctl.py", "python scripts/agentctl.py task lint"]

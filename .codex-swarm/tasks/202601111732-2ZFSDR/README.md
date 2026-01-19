@@ -2,7 +2,7 @@
 id: "202601111732-2ZFSDR"
 title: "Update GitHub sync scripts and cleanup"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["github", "sync", "cleanup", "scripting"]

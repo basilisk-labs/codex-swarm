@@ -2,7 +2,7 @@
 id: "202601041253-0001F"
 title: "Create Code of Conduct"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["docs", "policy"]
 commit: { hash: "113c748a1f5c9bd56bc96ccb5616930310f7776d", message: "Legacy completion (backfill)" }

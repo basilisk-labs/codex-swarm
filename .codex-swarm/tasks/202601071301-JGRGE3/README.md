@@ -2,7 +2,7 @@
 id: "202601071301-JGRGE3"
 title: "Deduplicate workflow_mode, handoff, and terminology rules"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: ["agents", "docs"]

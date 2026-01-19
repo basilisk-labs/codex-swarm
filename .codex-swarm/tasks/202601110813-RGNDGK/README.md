@@ -2,7 +2,7 @@
 id: "202601110813-RGNDGK"
 title: "Harden Redmine backend and add REDMINE agent"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

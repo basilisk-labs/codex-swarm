@@ -2,7 +2,7 @@
 id: "202601131131-BK0QY5"
 title: "Replace roadmap flow with top-level plan + task proposal"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

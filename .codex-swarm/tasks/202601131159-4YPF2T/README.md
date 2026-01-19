@@ -2,7 +2,7 @@
 id: "202601131159-4YPF2T"
 title: "Auto-commit on finish via config"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

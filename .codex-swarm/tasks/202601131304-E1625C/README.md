@@ -2,7 +2,7 @@
 id: "202601131304-E1625C"
 title: "Optimize AGENTS and agent JSON instructions"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: ["202601131304-D4ZA6S", "202601131304-7JXJF7"]
 tags: []

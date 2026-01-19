@@ -2,7 +2,7 @@
 id: "202601191446-6CXD6R"
 title: "Remove rounded corners from viewer"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

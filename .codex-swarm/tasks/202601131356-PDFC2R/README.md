@@ -2,10 +2,10 @@
 id: "202601131356-PDFC2R"
 title: "Validate Redmine backend sync against local backend"
 status: "TODO"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["redmine", "sync"]
 doc_version: 2
 doc_updated_at: "2026-01-13T14:03:25+00:00"
 doc_updated_by: "agentctl"

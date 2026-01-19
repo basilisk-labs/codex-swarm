@@ -2,7 +2,7 @@
 id: "202601041253-0002R"
 title: "Backfill task tracking for clean.sh interactive workflow_mode"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["clean", "workflow", "agents"]

@@ -2,7 +2,7 @@
 id: "202601130533-NFT0GX"
 title: "Guard status commit policy"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["agentctl", "workflow"]

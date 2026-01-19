@@ -2,7 +2,7 @@
 id: "202601071301-QBFVNZ"
 title: "Role-specific guardrails for commit and handoff"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 depends_on: []
 tags: ["agents", "docs"]

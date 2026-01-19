@@ -2,7 +2,7 @@
 id: "202601160958-DAS67K"
 title: "Define UPGRADER agent and workflow"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CREATOR"
 depends_on: []
 tags: []

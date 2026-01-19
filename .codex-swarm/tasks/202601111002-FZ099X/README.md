@@ -2,7 +2,7 @@
 id: "202601111002-FZ099X"
 title: "Redmine backend CRUD check"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

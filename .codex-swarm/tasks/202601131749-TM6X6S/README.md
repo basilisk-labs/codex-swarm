@@ -2,7 +2,7 @@
 id: "202601131749-TM6X6S"
 title: "Switch tasks backend to local"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

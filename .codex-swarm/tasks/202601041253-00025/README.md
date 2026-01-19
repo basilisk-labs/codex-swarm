@@ -2,7 +2,7 @@
 id: "202601041253-00025"
 title: "agentctl pr note: append handoff notes"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: ["202601041253-00024"]
 tags: ["agentctl", "workflow", "pipeline"]

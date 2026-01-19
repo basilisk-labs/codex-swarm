@@ -2,7 +2,7 @@
 id: "202601161024-D3BPVB"
 title: "Remove framework upgrade tests"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

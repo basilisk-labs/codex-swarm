@@ -2,7 +2,7 @@
 id: "202601191406-0M7XWG"
 title: "Refresh tasks viewer"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []

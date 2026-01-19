@@ -2,7 +2,7 @@
 id: "202601041253-0002Q"
 title: "Pin current git branch as base branch"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "human"
 depends_on: []
 tags: ["workflow", "git", "branching"]

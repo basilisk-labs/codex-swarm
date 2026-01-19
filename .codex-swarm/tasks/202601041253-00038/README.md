@@ -2,7 +2,7 @@
 id: "202601041253-00038"
 title: "Align README repository layout with current structure"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["readme", "docs"]

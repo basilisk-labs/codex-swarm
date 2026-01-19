@@ -2,7 +2,7 @@
 id: "202601041253-0003A"
 title: "Audit docs for clarity and consistency"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs"]

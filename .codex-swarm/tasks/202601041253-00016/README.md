@@ -2,7 +2,7 @@
 id: "202601041253-00016"
 title: "Document README usage guidance"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["docs", "readme"]
 commit: { hash: "bec7e7de9cbeaed166adefb51ff2c497e1ffa1fc", message: "Legacy completion (backfill)" }

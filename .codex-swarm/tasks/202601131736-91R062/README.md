@@ -2,7 +2,7 @@
 id: "202601131736-91R062"
 title: "Add human-readable comments in agentctl"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

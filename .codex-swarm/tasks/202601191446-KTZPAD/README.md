@@ -2,7 +2,7 @@
 id: "202601191446-KTZPAD"
 title: "Move order toggle to navbar"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

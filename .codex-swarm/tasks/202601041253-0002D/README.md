@@ -2,7 +2,7 @@
 id: "202601041253-0002D"
 title: "agentctl: cleanup merged task branches/worktrees"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: ["202601041253-0002A"]
 tags: ["agentctl", "workflow", "cleanup"]

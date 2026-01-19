@@ -2,7 +2,7 @@
 id: "202601131708-ZPWTXA"
 title: "Configurable closure commit approval"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

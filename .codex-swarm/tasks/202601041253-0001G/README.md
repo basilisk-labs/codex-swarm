@@ -2,7 +2,7 @@
 id: "202601041253-0001G"
 title: "Remove markdown task board references"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["docs", "workflow", "tasks"]
 commit: { hash: "759a800bde828ebb252bac2bb8f24fb7531989de", message: "Legacy completion (backfill)" }

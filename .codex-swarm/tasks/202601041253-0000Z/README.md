@@ -2,7 +2,7 @@
 id: "202601041253-0000Z"
 title: "Sync README with current agent lineup"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["docs", "readme"]
 commit: { hash: "08a0c4b4451bafc5e8b75bf1b4a8f4c74594dc05", message: "Legacy completion (backfill)" }

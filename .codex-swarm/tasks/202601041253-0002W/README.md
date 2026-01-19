@@ -2,7 +2,7 @@
 id: "202601041253-0002W"
 title: "Align batch finish commit naming docs"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs"]

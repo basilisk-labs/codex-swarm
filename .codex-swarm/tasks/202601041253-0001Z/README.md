@@ -2,7 +2,7 @@
 id: "202601041253-0001Z"
 title: "Redesign tasks.html (Codex Swarm) + dependency visualization"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["ui", "tasks", "deps"]
 verify: ["python scripts/agentctl.py task lint"]

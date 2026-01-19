@@ -2,7 +2,7 @@
 id: "202601041253-00019"
 title: "Document framework guideline"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 tags: ["docs", "guideline"]
 commit: { hash: "21ddede356590745546962fedebbead23b2edae2", message: "Legacy completion (backfill)" }

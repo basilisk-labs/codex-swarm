@@ -2,10 +2,10 @@
 id: "202601130946-EPQFXS"
 title: "Deduplicate agent JSON rules + batch ops guidance"
 status: "DOING"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: ["agents", "docs", "workflow", "agentctl"]
+tags: ["agents", "docs", "agentctl"]
 comments:
   - { author: "CODER", body: "Start: deduplicate shared guidance in agent JSON files and add batch task add/finish guidance in docs." }
 doc_version: 2

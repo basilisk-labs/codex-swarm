@@ -2,7 +2,7 @@
 id: "202601071526-GH5YSV"
 title: "Clarify README onboarding guidance"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs"]

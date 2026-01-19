@@ -2,7 +2,7 @@
 id: "202601191414-J99M5D"
 title: "Viewer data aggregation"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

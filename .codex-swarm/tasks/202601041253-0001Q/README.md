@@ -2,7 +2,7 @@
 id: "202601041253-0001Q"
 title: "Reduce per-task commits to 3-phase workflow"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CREATOR"
 tags: ["workflow", "git", "agents"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents"]

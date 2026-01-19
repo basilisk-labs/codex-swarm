@@ -2,7 +2,7 @@
 id: "202601041253-00020"
 title: "Restructure framework folders into .codex-swarm"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["framework", "refactor"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents", "python scripts/agentctl.py quickstart > /dev/null", "bash -n clean.sh"]

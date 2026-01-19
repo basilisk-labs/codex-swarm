@@ -2,7 +2,7 @@
 id: "202601041253-00030"
 title: "Centralize agentctl guidance"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs"]

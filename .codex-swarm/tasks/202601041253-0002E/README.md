@@ -2,7 +2,7 @@
 id: "202601041253-0002E"
 title: "agentctl: pr check validates README completeness"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: ["202601041253-0002A"]
 tags: ["agentctl", "workflow", "quality"]

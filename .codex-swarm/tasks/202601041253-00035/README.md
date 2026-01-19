@@ -2,7 +2,7 @@
 id: "202601041253-00035"
 title: "Refresh README badges and quickstart callout"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "readme"]

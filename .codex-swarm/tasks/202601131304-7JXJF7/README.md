@@ -2,7 +2,7 @@
 id: "202601131304-7JXJF7"
 title: "Document new config settings and CLI"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "DOCS"
 depends_on: ["202601131304-D4ZA6S"]
 tags: []

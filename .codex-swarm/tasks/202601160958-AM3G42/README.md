@@ -2,7 +2,7 @@
 id: "202601160958-AM3G42"
 title: "Test framework update workflow"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "TESTER"
 depends_on: []
 tags: []

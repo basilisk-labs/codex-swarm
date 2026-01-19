@@ -2,7 +2,7 @@
 id: "202601191414-WP4B8E"
 title: "Verify viewer dashboards"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "TESTER"
 depends_on: ["202601191414-2N28WV", "202601191414-J99M5D"]
 tags: []

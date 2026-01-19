@@ -2,7 +2,7 @@
 id: "202601110804-H6TNMM"
 title: "Remove legacy compatibility and backfill commit metadata"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

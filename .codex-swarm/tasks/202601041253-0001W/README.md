@@ -2,7 +2,7 @@
 id: "202601041253-0001W"
 title: "Update agents to use agentctl docs + helpers"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "PLANNER"
 tags: ["agentctl", "agents"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents"]

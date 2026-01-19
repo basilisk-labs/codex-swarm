@@ -2,7 +2,7 @@
 id: "202601041253-0001P"
 title: "Extend clean.sh to remove framework dev files"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["cleanup", "workflow"]
 verify: ["bash -n clean.sh", "python scripts/agentctl.py task lint"]

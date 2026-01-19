@@ -2,7 +2,7 @@
 id: "202601041253-0001M"
 title: "Add TESTER agent + enforce post-CODER testing"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CREATOR"
 tags: ["agents", "testing"]
 verify: ["python scripts/agentctl.py agents", "python scripts/agentctl.py task lint"]

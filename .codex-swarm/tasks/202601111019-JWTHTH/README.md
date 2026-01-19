@@ -2,7 +2,7 @@
 id: "202601111019-JWTHTH"
 title: "Redmine sync batching/backoff"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["redmine", "sync"]

@@ -2,7 +2,7 @@
 id: "202601131643-VXPBHQ"
 title: "Revise comment-driven commit emoji and formatting rules"
 status: "DONE"
-priority: "Нормальный"
+priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: []

@@ -2,7 +2,7 @@
 id: "202601131117-K6PMW1"
 title: "Include viewer.sh in init commit"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

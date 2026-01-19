@@ -2,7 +2,7 @@
 id: "202601041253-00013"
 title: "Remove italic on description label"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 tags: ["docs", "workflow"]
 commit: { hash: "6c5bc662a3f71b8e206a48133cc401033142ccd2", message: "Legacy completion (backfill)" }

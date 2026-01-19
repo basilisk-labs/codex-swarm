@@ -2,7 +2,7 @@
 id: "202601041253-0003R"
 title: "Migrate legacy task IDs to new format"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

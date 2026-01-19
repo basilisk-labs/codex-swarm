@@ -2,7 +2,7 @@
 id: "202601191414-2N28WV"
 title: "Viewer dashboards + presets UI"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: []

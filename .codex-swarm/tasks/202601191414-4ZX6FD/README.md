@@ -2,7 +2,7 @@
 id: "202601191414-4ZX6FD"
 title: "Expand viewer dashboards"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: ["202601191414-2N28WV", "202601191414-J99M5D", "202601191414-WP4B8E"]
 tags: []

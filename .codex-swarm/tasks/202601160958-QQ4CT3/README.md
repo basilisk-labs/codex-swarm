@@ -2,7 +2,7 @@
 id: "202601160958-QQ4CT3"
 title: "Automate framework upgrades"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: ["202601160958-DAS67K", "202601160958-NV8M5V", "202601160958-AM3G42"]
 tags: []

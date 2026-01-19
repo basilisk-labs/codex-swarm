@@ -2,7 +2,7 @@
 id: "202601131235-DT22CM"
 title: "Map agentctl commands by agent and phase"
 status: "DONE"
-priority: "med"
+priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
