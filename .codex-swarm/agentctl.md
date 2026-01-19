@@ -42,7 +42,7 @@ Use `python .codex-swarm/agentctl.py role <ROLE>` to print a single block from t
 
 ### PLANNER
 
-- Backlog scan: `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task search "..."` / `python .codex-swarm/agentctl.py task next`
+- TODO scan: `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task search "..."` / `python .codex-swarm/agentctl.py task next`
 - Create tasks: `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner <ROLE> --depends-on "[]"` (use `task add` only for imported IDs)
 - Update tasks: `python .codex-swarm/agentctl.py task update <task-id> --title "..." --description "..." --priority med --owner <ROLE> --depends-on <task-id>`
 - Scaffold artifacts: `python .codex-swarm/agentctl.py task scaffold <task-id>`

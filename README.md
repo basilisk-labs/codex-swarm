@@ -203,7 +203,7 @@ In `workflow_mode=branch_pr`, the typical development workflow is: plan on `main
 ```mermaid
 flowchart TD
   U["User"] --> O["ORCHESTRATOR"]
-  O -->|Backlog + task breakdown| P["PLANNER (main)"]
+  O -->|TODO + task breakdown| P["PLANNER (main)"]
   P --> TB["Canonical backend (local tasks/ or Redmine)"]
   P -->|Planning artifact| WF[".codex-swarm/tasks/<task-id>/README.md"]
   O -->|Task branch + worktree| E["CODER/TESTER/DOCS (task/<task-id>/SLUG in .codex-swarm/worktrees/)"]
