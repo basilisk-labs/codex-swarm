@@ -1573,6 +1573,16 @@
       letter-spacing: 0.08em;
     }
 
+    .order-toggle .order-icon {
+      font-size: 12px;
+      margin-right: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .order-toggle.reverse .order-icon {
+      transform: rotate(180deg);
+    }
+
     .table-wrap {
       margin-top: 20px;
       border: 1px solid var(--border);
@@ -1951,6 +1961,7 @@
             <label>
               Order
               <button class="btn order-toggle" id="orderToggle" type="button">
+                <span class="order-icon" aria-hidden="true">▲</span>
                 <span id="orderLabel">Order: Normal</span>
               </button>
             </label>
@@ -2664,19 +2675,24 @@
       document.querySelectorAll(".view-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.view === mode);
       });
+      syncViewVisibility();
+    }
+
+    function syncViewVisibility() {
       const board = document.getElementById("board");
       const table = document.getElementById("tableView");
       if (board) {
-        board.hidden = mode !== "kanban";
-        board.style.display = mode === "kanban" ? "grid" : "none";
+        board.hidden = VIEW_MODE !== "kanban";
+        board.style.display = VIEW_MODE === "kanban" ? "grid" : "none";
       }
       if (table) {
-        table.hidden = mode !== "table";
-        table.style.display = mode === "table" ? "block" : "none";
+        table.hidden = VIEW_MODE !== "table";
+        table.style.display = VIEW_MODE === "table" ? "block" : "none";
       }
     }
 
     function renderView() {
+      syncViewVisibility();
       const filtered = applyFilters(STATE.tasks);
       renderSummary(filtered);
       if (VIEW_MODE === "table") {
@@ -3205,16 +3221,18 @@
       wireTabs();
       updateOrderToggle();
 
-      document.querySelectorAll(".view-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
+      const viewToggle = document.getElementById("viewToggle");
+      if (viewToggle) {
+        viewToggle.addEventListener("click", (e) => {
+          const btn = e.target.closest(".view-btn");
+          if (!btn) return;
           e.preventDefault();
           e.stopPropagation();
           const mode = btn.dataset.view;
-          console.log("View toggle clicked:", mode);
           setViewMode(mode);
           renderView();
         });
-      });
+      }
       setViewMode(VIEW_MODE);
       renderView(); // Ensure initial render
 
