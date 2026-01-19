@@ -1,11 +1,14 @@
 ---
 id: "202601191511-A1GYQB"
 title: "Ship recipes framework + CLI integration"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: ["202601191511-BZPKM2"]
 tags: []
+commit: { hash: "6aecb4d3a6fc86a0020032ac0a232c9ff6d77597", message: "✨ A1GYQB document overall recipes delivery" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: all recipe PRD tasks completed and documented | details: CLI and docs changes integrated." }
 doc_version: 2
 doc_updated_at: "2026-01-19T15:44:23+00:00"
 doc_updated_by: "agentctl"
