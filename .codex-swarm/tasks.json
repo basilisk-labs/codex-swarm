@@ -4935,12 +4935,30 @@
       "doc_updated_by": "agentctl",
       "description": "Add a UI control to flip task list sort order between normal and reverse in the viewer.",
       "doc": "## Summary\n\nAdd a reverse-sort toggle to the task list UI so users can flip ordering without reloading.\n\n## Context\n\nSorting currently supports asc/desc internally but lacks a control in the cyberpunk UI.\n\n## Scope\n\n- Add a reverse-sort toggle near the sort dropdown.\n- Wire the toggle to ORDER_MODE and refresh rendering.\n\n## Risks\n\nRisk: UI clutter; keep the control compact.\n\n## Verify Steps\n\n- Click the reverse-sort toggle and ensure tasks reorder immediately.\n\n## Rollback Plan\n\nRevert the toggle control and handler changes in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nReuse existing ORDER_MODE state and updateOrderToggle behavior."
+    },
+    {
+      "id": "202601191443-XS8TD4",
+      "title": "Add view toggle indicator",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "ffcdb2da7012172300e53cd8ac5f2d6b412a64f5",
+        "message": "🐛 XS8TD4 fix view toggle and add order indicator"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:43:49+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add an order direction indicator and harden the board/list toggle behavior in the viewer.",
+      "doc": "## Summary\n\nAdd an order direction indicator and fix immediate board/list switching.\n\n## Context\n\nThe viewer needs a visible sort direction cue and should switch views without a reload.\n\n## Scope\n\n- Add a direction icon to the order toggle.\n- Harden the board/list toggle with explicit view sync.\n\n## Risks\n\nRisk: UI regressions if view visibility logic conflicts with CSS; keep changes localized.\n\n## Verify Steps\n\n- Click BOARD/LIST and confirm the view swaps instantly.\n- Click Order and confirm the icon flips and ordering changes.\n\n## Rollback Plan\n\nRevert the updated toggle and visibility logic in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nNo backend changes required."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "bfbdbe3c188d51aba5eaee5817a0d0099d647fea3993f96f349b0ba875f4b61e"
+    "checksum": "2dd3f31a36c554b4ff7963b029b562600a91815085f3c387affd2d0f717d8e85"
   }
 }

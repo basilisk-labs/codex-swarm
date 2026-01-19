@@ -1,11 +1,12 @@
 ---
 id: "202601191443-XS8TD4"
 title: "Add view toggle indicator"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "ffcdb2da7012172300e53cd8ac5f2d6b412a64f5", message: "🐛 XS8TD4 fix view toggle and add order indicator" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:43:49+00:00"
 doc_updated_by: "agentctl"
