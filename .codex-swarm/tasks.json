@@ -5481,17 +5481,28 @@
     {
       "id": "202601191510-6ZKD5S",
       "title": "Document recipes prompts and wire into AGENTS",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [
         "202601191510-0AWCPY"
       ],
       "tags": [],
+      "commit": {
+        "hash": "154970d7be5a455048d1fc55b85ff7f922f9a9bd",
+        "message": "✨ 6ZKD5S update recipes prompt rules: add outputs guidance"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "verified: updated RECIPES.md outputs guidance and reviewed recipes doc references for consistency."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-19T15:10:58+00:00",
+      "doc_updated_at": "2026-01-19T15:32:55+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Add .codex-swarm/RECIPES.md with global prompt guidance, reference it from AGENTS.md, and update docs/README/PRD as needed to reflect recipes CLI."
+      "description": "Add .codex-swarm/RECIPES.md with global prompt guidance, reference it from AGENTS.md, and update docs/README/PRD as needed to reflect recipes CLI.",
+      "doc": "## Summary\n\nDocumented recipe prompt rules and updated docs to reference the new recipes CLI.\n\n## Context\n\nUpdated .codex-swarm/RECIPES.md and referenced it from AGENTS.md, README.md, docs/README.md, docs/09-commands.md, and .codex-swarm/recipes/prd.md.\n\n## Scope\n\nAdded global recipe prompt guidance and refreshed documentation pointers to recipes.py and inventory/bundle usage.\n\n## Risks\n\nDocs can drift if recipe CLI behavior changes; keep RECIPES.md aligned with recipes.py updates.\n\n## Verify Steps\n\nManual review of recipe docs for correct recipes.py references.\n\n## Rollback Plan\n\nRevert the documentation commit for this task if the recipes guidance needs to be rolled back.\n\n## Notes\n\nRECIPES.md now includes outputs/artifacts guidance plus explicit bundle usage rules."
     },
     {
       "id": "202601191510-QN0W0P",
@@ -5553,6 +5564,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "6df19841005ed8c5b9492b0ce7185958d1323a0e6cd381773954992c71485a00"
+    "checksum": "5d0aca95b4a97165fdea335684e43933a7ed20b37f930402513f099a2746d8aa"
   }
 }
