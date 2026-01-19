@@ -3224,9 +3224,6 @@ def cmd_task_add(args: argparse.Namespace) -> None:
     normalized_depends_on = list(
         dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
     )
-    tags = list(dict.fromkeys(coerce_str_list(args.tag)))
-    if not tags:
-        die("at least one --tag is required when creating tasks", code=2)
     for task_id in task_ids:
         task: TaskRecord = {
             "id": task_id,
@@ -3235,7 +3232,7 @@ def cmd_task_add(args: argparse.Namespace) -> None:
             "status": status,
             "priority": args.priority,
             "owner": args.owner,
-            "tags": tags,
+            "tags": list(dict.fromkeys(args.tag or [])),
             "depends_on": normalized_depends_on,
         }
         if args.verify:
@@ -3258,9 +3255,6 @@ def cmd_task_new(args: argparse.Namespace) -> None:
         dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
     )
     validate_owner(args.owner)
-    tags = list(dict.fromkeys(coerce_str_list(args.tag)))
-    if not tags:
-        die("at least one --tag is required when creating tasks", code=2)
     task_id = generate_task_id_for(existing_ids, length=args.id_length)
     task: TaskRecord = {
         "id": task_id,
@@ -3269,7 +3263,7 @@ def cmd_task_new(args: argparse.Namespace) -> None:
         "status": status,
         "priority": args.priority,
         "owner": args.owner,
-        "tags": tags,
+        "tags": list(dict.fromkeys(args.tag or [])),
         "depends_on": normalized_depends_on,
     }
     verify_list = list(dict.fromkeys(args.verify)) if args.verify else []

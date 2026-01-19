@@ -54,8 +54,3 @@ The tool plan is a declaration, not execution:
 - Run from the declared `cwd`.
 - Write outputs only to `writes_allowlist` locations.
 - Report tool outputs and artifacts back to the ORCHESTRATOR.
-
-## Outputs and artifacts
-
-- Use `outputs_expected` as the source of truth for deliverables.
-- Report created or updated files as relative paths for easy review.
