@@ -2650,8 +2650,16 @@
       document.querySelectorAll(".view-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.view === mode);
       });
-      document.getElementById("board").hidden = mode !== "kanban";
-      document.getElementById("tableView").hidden = mode !== "table";
+      const board = document.getElementById("board");
+      const table = document.getElementById("tableView");
+      if (board) {
+        board.hidden = mode !== "kanban";
+        board.style.display = mode === "kanban" ? "grid" : "none";
+      }
+      if (table) {
+        table.hidden = mode !== "table";
+        table.style.display = mode === "table" ? "block" : "none";
+      }
     }
 
     function renderView() {
