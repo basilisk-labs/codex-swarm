@@ -27,6 +27,7 @@ RESOURCE_ROOT = Path(getattr(sys, "_MEIPASS", REPO_ROOT))
 VIEWER_DIR = RESOURCE_ROOT / ".codex-swarm" / "viewer"
 TASKS_HTML = VIEWER_DIR / "tasks.html"
 TASKS_JSON = REPO_ROOT / ".codex-swarm" / "tasks.json"
+AGENTS_DIR = REPO_ROOT / ".codex-swarm" / "agents"
 AGENTCTL = REPO_ROOT / ".codex-swarm" / "agentctl.py"
 
 STATUS_SET = {"TODO", "DOING", "BLOCKED", "DONE"}
@@ -169,6 +170,20 @@ class TasksHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": str(exc)}, status=500)
                 return
             self._send_json(data)
+            return
+        if parsed.path == "/api/agents":
+            agents = []
+            if AGENTS_DIR.exists():
+                for item in sorted(AGENTS_DIR.glob("*.json")):
+                    try:
+                        data = json.loads(item.read_text(encoding="utf-8"))
+                        if isinstance(data, dict):
+                            if "id" not in data:
+                                data["id"] = item.stem
+                            agents.append(data)
+                    except Exception:
+                        pass
+            self._send_json({"ok": True, "agents": agents})
             return
         self._send_text("Not found", status=404)
 
