@@ -4953,12 +4953,30 @@
       "doc_updated_by": "agentctl",
       "description": "Add an order direction indicator and harden the board/list toggle behavior in the viewer.",
       "doc": "## Summary\n\nAdd an order direction indicator and fix immediate board/list switching.\n\n## Context\n\nThe viewer needs a visible sort direction cue and should switch views without a reload.\n\n## Scope\n\n- Add a direction icon to the order toggle.\n- Harden the board/list toggle with explicit view sync.\n\n## Risks\n\nRisk: UI regressions if view visibility logic conflicts with CSS; keep changes localized.\n\n## Verify Steps\n\n- Click BOARD/LIST and confirm the view swaps instantly.\n- Click Order and confirm the icon flips and ordering changes.\n\n## Rollback Plan\n\nRevert the updated toggle and visibility logic in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nNo backend changes required."
+    },
+    {
+      "id": "202601191446-KTZPAD",
+      "title": "Move order toggle to navbar",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "a9e6272ec10cf312be4d2050950a75aab87e2d54",
+        "message": "🎨 KTZPAD move order toggle to navbar"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:46:11+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Relocate the order direction toggle button to the control deck navbar near Refresh Stream.",
+      "doc": "## Summary\n\nMove the order direction toggle into the control deck navbar for quicker access.\n\n## Context\n\nThe order indicator currently sits in the filter grid; the request is to place it near Refresh Stream.\n\n## Scope\n\n- Relocate the order toggle button to the control deck.\n- Adjust styling to fit the navbar layout.\n\n## Risks\n\nRisk: layout crowding in the header on narrow widths; keep the button compact.\n\n## Verify Steps\n\n- Confirm the order toggle appears left of Refresh Stream and still flips sorting.\n\n## Rollback Plan\n\nMove the order toggle back to the filter grid in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nNo behavior changes beyond placement."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "2dd3f31a36c554b4ff7963b029b562600a91815085f3c387affd2d0f717d8e85"
+    "checksum": "72ce4040b885fabcf80c79e3490cc49ad3f6c7b7c6e5b7c2d8b145610c126d61"
   }
 }
