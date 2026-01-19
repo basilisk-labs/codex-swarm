@@ -11,3 +11,5 @@ dmypy.json
 .venv
 .codex-swarm/worktrees
 .codex-swarm/tasks.json
+.codex-swarm/.runs
+.codex-swarm/cache
