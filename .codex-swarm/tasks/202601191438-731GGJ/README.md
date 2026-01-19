@@ -1,11 +1,12 @@
 ---
 id: "202601191438-731GGJ"
 title: "Add sort reverse toggle"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "8ec4f84a917d8c4664d3ce47c5d3dbdb72755645", message: "✨ 731GGJ add sort order toggle" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:38:18+00:00"
 doc_updated_by: "agentctl"

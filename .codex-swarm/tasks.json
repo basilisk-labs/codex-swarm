@@ -4917,12 +4917,30 @@
       "doc_updated_by": "agentctl",
       "description": "Ensure the board/list toggle switches views immediately without requiring a page reload.",
       "doc": "## Summary\n\nFix the board/list toggle so switching views updates immediately.\n\n## Context\n\nThe current toggle updates only after a reload. We need to force the DOM display state to update on click.\n\n## Scope\n\n- Adjust view toggle logic in `.codex-swarm/viewer/tasks.html`.\n\n## Risks\n\nRisk: display logic could conflict with existing CSS; ensure both hidden and display attributes align.\n\n## Verify Steps\n\n- Click BOARD/LIST in the viewer and confirm the view switches immediately.\n\n## Rollback Plan\n\nRevert the toggle logic in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nKeep the change small and localized to the view mode handler."
+    },
+    {
+      "id": "202601191438-731GGJ",
+      "title": "Add sort reverse toggle",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "8ec4f84a917d8c4664d3ce47c5d3dbdb72755645",
+        "message": "✨ 731GGJ add sort order toggle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:38:18+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add a UI control to flip task list sort order between normal and reverse in the viewer.",
+      "doc": "## Summary\n\nAdd a reverse-sort toggle to the task list UI so users can flip ordering without reloading.\n\n## Context\n\nSorting currently supports asc/desc internally but lacks a control in the cyberpunk UI.\n\n## Scope\n\n- Add a reverse-sort toggle near the sort dropdown.\n- Wire the toggle to ORDER_MODE and refresh rendering.\n\n## Risks\n\nRisk: UI clutter; keep the control compact.\n\n## Verify Steps\n\n- Click the reverse-sort toggle and ensure tasks reorder immediately.\n\n## Rollback Plan\n\nRevert the toggle control and handler changes in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nReuse existing ORDER_MODE state and updateOrderToggle behavior."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "effd97905b65bf02b8ff045fa4cb8c306b61c9d5b00979700bcf5bde1777af2f"
+    "checksum": "bfbdbe3c188d51aba5eaee5817a0d0099d647fea3993f96f349b0ba875f4b61e"
   }
 }
