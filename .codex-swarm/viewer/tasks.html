@@ -1566,9 +1566,8 @@
     }
 
     .order-toggle {
-      width: 100%;
       justify-content: center;
-      padding: 10px 12px;
+      padding: 8px 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
@@ -1901,6 +1900,10 @@
     <div class="control-deck">
       <div class="view-title" id="pageTitle">Tasks</div>
       <div class="deck-actions">
+        <button class="btn order-toggle" id="orderToggle" type="button" title="Switch to reverse order">
+          <span class="order-icon" aria-hidden="true">▲</span>
+          <span id="orderLabel">Order: Normal</span>
+        </button>
         <button class="btn" id="reload">Refresh Stream</button>
         <div class="view-toggle" id="viewToggle">
           <button class="view-btn active" data-view="kanban" type="button">BOARD</button>
@@ -1957,13 +1960,6 @@
                 <option value="priority">PRIORITY</option>
                 <option value="owner">OWNER</option>
               </select>
-            </label>
-            <label>
-              Order
-              <button class="btn order-toggle" id="orderToggle" type="button">
-                <span class="order-icon" aria-hidden="true">▲</span>
-                <span id="orderLabel">Order: Normal</span>
-              </button>
             </label>
           </div>
           <div
