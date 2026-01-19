@@ -5433,7 +5433,7 @@
     {
       "id": "202601191459-ZG4320",
       "title": "Show priority as icons in viewer",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
@@ -5442,16 +5442,21 @@
         "tasks",
         "viewer"
       ],
+      "commit": {
+        "hash": "968b221a08b4b7a7832f87404f1b6db5195351d2",
+        "message": "✨ 202601191459-ZG4320 show priority icons in viewer"
+      },
       "doc_version": 2,
-      "doc_updated_at": "2026-01-19T14:59:42+00:00",
+      "doc_updated_at": "2026-01-19T15:02:19+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Replace textual low/normal/high priority labels in the task viewer with icon-based indicators for cards, tables, tooltips, and drawer."
+      "description": "Replace textual low/normal/high priority labels in the task viewer with icon-based indicators for cards, tables, tooltips, and drawer.",
+      "doc": "## Summary\n\nReplace priority text labels in the task viewer with icon indicators for low/normal/high.\n\n## Context\n\nThe viewer currently renders priority as plain text across cards, table rows, tooltips, and the drawer.\n\n## Scope\n\nIntroduce priority icon styles and SVGs, then swap priority renderers to show icons in the viewer UI.\n\n## Risks\n\nIcons could be unclear without hover context; include title/aria labels to preserve meaning.\n\n## Verify Steps\n\nRun ./viewer.sh, open the viewer, and confirm priority renders as icons in kanban cards, table rows, tooltips, and the drawer.\n\n## Rollback Plan\n\nRevert the changes in .codex-swarm/viewer/tasks.html and reload the viewer."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "f854b053a70d8ca41198283348b436cd1eeb6ec169bf6c6961d8e667cf438e62"
+    "checksum": "a0420aa4618e1033cfa1a38d2e676603445551c49a548ec013eb34d79ad31e19"
   }
 }

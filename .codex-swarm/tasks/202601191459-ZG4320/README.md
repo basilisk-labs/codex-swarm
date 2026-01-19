@@ -1,11 +1,12 @@
 ---
 id: "202601191459-ZG4320"
 title: "Show priority as icons in viewer"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["ui", "tasks", "viewer"]
+commit: { hash: "968b221a08b4b7a7832f87404f1b6db5195351d2", message: "✨ 202601191459-ZG4320 show priority icons in viewer" }
 doc_version: 2
 doc_updated_at: "2026-01-19T15:02:19+00:00"
 doc_updated_by: "agentctl"
