@@ -11,7 +11,7 @@ commit: { hash: "0e5bacb3095951ee4f4d7a36658dfc733b580f4b", message: "✨ W1A6H8
 comments:
   - { author: "CODER", body: "Verified: ran python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/redmine/backend.py; migrated a 3-task subset to Redmine (full 150-task migration timed out); task list + sync pull show remote tasks; created and exercised test task 202601111002-FZ099X (doc + comment) via Redmine backend." }
 doc_version: 2
-doc_updated_at: "2026-01-11T10:08:39+00:00"
+doc_updated_at: "2026-01-19T14:56:21+00:00"
 doc_updated_by: "agentctl"
 description: "Switch backend to Redmine using env config, migrate local tasks as source of truth, and validate CRUD/sync flows."
 dirty: false
@@ -54,7 +54,5 @@ Switch backend to Redmine using env config and prove end-to-end sync from local 
 
 ## Notes
 
-- Full migration of 150 tasks to Redmine hit HTTP timeouts; migrated a 3-task subset for smoke testing instead.
-- Created test task 202601111002-FZ099X via Redmine backend, updated docs, and added a comment to verify custom fields/journals.
-- `sync redmine --direction pull` succeeds; owners/priorities reflect Redmine assignee/priority names (e.g., Via Mentis Assistant / "Нормальный").
+- Full migration of 150 tasks to Redmine hit HTTP timeouts; migrated a 3-task subset for smoke testing instead.\n- Created test task 202601111002-FZ099X via Redmine backend, updated docs, and added a comment to verify custom fields/journals.\n-  succeeds; owners/priorities reflect Redmine assignee/priority names (e.g., Via Mentis Assistant / "normal").
 
