@@ -1,11 +1,14 @@
 ---
 id: "202601191449-XTMQRZ"
 title: "Set priority for retrospective tasks"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "PLANNER"
 depends_on: ["[\"202601191449-YN9FWW\"]"]
 tags: ["tasks", "backlog"]
+commit: { hash: "872134c71b4267716ff48a35bccd34c9b9825c53", message: "✨ XTMQRZ normalize task priorities to low/normal/high" }
+comments:
+  - { author: "PLANNER", body: "verified: task priorities normalized to low/normal/high across metadata." }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:58:44+00:00"
 doc_updated_by: "agentctl"
