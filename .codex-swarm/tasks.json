@@ -5451,12 +5451,96 @@
       "doc_updated_by": "agentctl",
       "description": "Replace textual low/normal/high priority labels in the task viewer with icon-based indicators for cards, tables, tooltips, and drawer.",
       "doc": "## Summary\n\nReplace priority text labels in the task viewer with icon indicators for low/normal/high.\n\n## Context\n\nThe viewer currently renders priority as plain text across cards, table rows, tooltips, and the drawer.\n\n## Scope\n\nIntroduce priority icon styles and SVGs, then swap priority renderers to show icons in the viewer UI.\n\n## Risks\n\nIcons could be unclear without hover context; include title/aria labels to preserve meaning.\n\n## Verify Steps\n\nRun ./viewer.sh, open the viewer, and confirm priority renders as icons in kanban cards, table rows, tooltips, and the drawer.\n\n## Rollback Plan\n\nRevert the changes in .codex-swarm/viewer/tasks.html and reload the viewer."
+    },
+    {
+      "id": "202601191510-0AWCPY",
+      "title": "Implement recipes CLI and bundle compiler",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [
+        "[\"202601191510-QN0W0P\"]"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:10:53+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Build .codex-swarm/recipes.py with scan/show/compile/explain, manifest normalization, context assembly, and inventory generation per recipes PRD."
+    },
+    {
+      "id": "202601191510-6ZKD5S",
+      "title": "Document recipes prompts and wire into AGENTS",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [
+        "[\"202601191510-0AWCPY\"]"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:10:58+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add .codex-swarm/RECIPES.md with global prompt guidance, reference it from AGENTS.md, and update docs/README/PRD as needed to reflect recipes CLI."
+    },
+    {
+      "id": "202601191510-QN0W0P",
+      "title": "Analyze recipes PRD and implementation notes",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "0ea527fc32c0ae37ade477632126e3dff3becb8c",
+        "message": "✨ QN0W0P document recipes PRD analysis: capture CLI/doc requirements and risks"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: analysis notes captured | details: no runtime checks required."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:13:05+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Review the recipes PRD, map requirements to CLI/doc updates, and record implementation notes needed for execution.",
+      "doc": "## Summary\n\nReviewed the recipes PRD and mapped core CLI + documentation deliverables for implementation.\n\n## Context\n\nSources reviewed: .codex-swarm/recipes/prd.md; repository currently has no recipes CLI or recipe manifests beyond the PRD.\n\n## Scope\n\nDefine requirements for recipes CLI commands (scan/show/compile/explain), manifest normalization (v1 + legacy), bundle/context assembly, and documentation additions (RECIPES.md + AGENTS.md + README/prd updates).\n\n## Risks\n\nContext scanning could exceed size limits without strict enforcement; minimal schema validation may drift from full JSON Schema; path template sanitization must block unsafe values.\n\n## Verify Steps\n\nNone (analysis-only task).\n\n## Rollback Plan\n\nRevert the analysis notes commit for this task if the PRD mapping needs to be removed or replaced.\n\n## Notes\n\nKey requirements: inventory generation from .codex-swarm/recipes/*/manifest.json; compile bundles with context policy + tool plan; support legacy manifest mapping; add RECIPES.md and wire into AGENTS.md; create new .codex-swarm/recipes.py CLI without network or task writes."
+    },
+    {
+      "id": "202601191511-A1GYQB",
+      "title": "Ship recipes framework + CLI integration",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "[\"202601191511-BZPKM2\"]"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:11:08+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Top-level tracking for recipes PRD implementation. Subtasks: 202601191510-QN0W0P (analysis), 202601191510-0AWCPY (CLI), 202601191510-6ZKD5S (docs), 202601191511-BZPKM2 (integration)."
+    },
+    {
+      "id": "202601191511-BZPKM2",
+      "title": "Integrate and verify recipes CLI changes",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "INTEGRATOR",
+      "depends_on": [
+        "[\"202601191510-0AWCPY\",\"202601191510-6ZKD5S\"]"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:11:03+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Run any required verification, ensure task artifacts are complete, and close the recipes CLI/doc tasks in direct workflow."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a0420aa4618e1033cfa1a38d2e676603445551c49a548ec013eb34d79ad31e19"
+    "checksum": "32eb71c383a0a2d8b4658752906e24d57a44af2f2bad76cfefb6683a44a2cad1"
   }
 }

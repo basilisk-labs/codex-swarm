@@ -1,11 +1,14 @@
 ---
 id: "202601191510-QN0W0P"
 title: "Analyze recipes PRD and implementation notes"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "0ea527fc32c0ae37ade477632126e3dff3becb8c", message: "✨ QN0W0P document recipes PRD analysis: capture CLI/doc requirements and risks" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: analysis notes captured | details: no runtime checks required." }
 doc_version: 2
 doc_updated_at: "2026-01-19T15:13:05+00:00"
 doc_updated_by: "agentctl"
