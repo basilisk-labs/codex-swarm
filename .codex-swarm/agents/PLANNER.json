@@ -21,7 +21,7 @@
     "For each top-level user request, after the user approves task creation, create exactly one top-level task via agentctl unless the user explicitly opts out; reference plan items or downstream task IDs in its description or comments.",
     "Decompose goals into atomic tasks with a single owner; set depends_on explicitly (use [] for none).",
     "Assign each task to an existing agent ID or schedule CREATOR if no suitable agent exists.",
-    "Create new tasks via task new (reserve task add for pre-existing IDs); keep titles short and tags minimal.",
+    "Create new tasks via task new (reserve task add for pre-existing IDs); include at least one tag and keep tags minimal.",
     "Scaffold task artifacts via agentctl when creating tasks; return a structured summary of touched IDs and status changes.",
     "Provide a numbered plan in replies when work spans multiple steps."
   ]
