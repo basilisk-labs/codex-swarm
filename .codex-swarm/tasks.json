@@ -4899,12 +4899,30 @@
       "doc_updated_by": "agentctl",
       "description": "Smoke-test new dashboards and document verify steps.",
       "doc": "## Summary\n\nSmoke-test the dashboard flows and record verification notes.\n\n## Context\n\nDashboards add new filters and UI affordances; a quick manual check ensures counts and interactions match expectations.\n\n## Scope\n\n- Verify dashboard rendering and preset interactions.\n- Record quick sanity checks for counts and filters.\n\n## Risks\n\nRisk: missing data could appear as blank cards; validate empty states.\n\n## Verify Steps\n\n- Launch the viewer and click KPI cards/presets to confirm filter behavior.\n- Confirm owner/priority/tag bars update filters as expected.\n\n## Rollback Plan\n\nRevert dashboard changes if critical failures are observed.\n\n## Notes\n\nNo automated tests expected for this UI pass."
+    },
+    {
+      "id": "202601191433-AHRAHM",
+      "title": "Fix viewer board/list toggle",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "85e3a6149c131b329fea8576cf49bda4d86bec9f",
+        "message": "🐛 AHRAHM fix board/list toggle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:33:40+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Ensure the board/list toggle switches views immediately without requiring a page reload.",
+      "doc": "## Summary\n\nFix the board/list toggle so switching views updates immediately.\n\n## Context\n\nThe current toggle updates only after a reload. We need to force the DOM display state to update on click.\n\n## Scope\n\n- Adjust view toggle logic in `.codex-swarm/viewer/tasks.html`.\n\n## Risks\n\nRisk: display logic could conflict with existing CSS; ensure both hidden and display attributes align.\n\n## Verify Steps\n\n- Click BOARD/LIST in the viewer and confirm the view switches immediately.\n\n## Rollback Plan\n\nRevert the toggle logic in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nKeep the change small and localized to the view mode handler."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4edfede8a34983d36411441321d0f92f34ee35e566ffd8d4d0b807296c119fbe"
+    "checksum": "effd97905b65bf02b8ff045fa4cb8c306b61c9d5b00979700bcf5bde1777af2f"
   }
 }
