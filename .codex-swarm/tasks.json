@@ -4955,6 +4955,24 @@
       "doc": "## Summary\n\nAdd an order direction indicator and fix immediate board/list switching.\n\n## Context\n\nThe viewer needs a visible sort direction cue and should switch views without a reload.\n\n## Scope\n\n- Add a direction icon to the order toggle.\n- Harden the board/list toggle with explicit view sync.\n\n## Risks\n\nRisk: UI regressions if view visibility logic conflicts with CSS; keep changes localized.\n\n## Verify Steps\n\n- Click BOARD/LIST and confirm the view swaps instantly.\n- Click Order and confirm the icon flips and ordering changes.\n\n## Rollback Plan\n\nRevert the updated toggle and visibility logic in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nNo backend changes required."
     },
     {
+      "id": "202601191446-6CXD6R",
+      "title": "Remove rounded corners from viewer",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "9be13a57b69bfa60ade046c26dadea809c971aba",
+        "message": "🎨 6CXD6R remove rounded corners"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:46:57+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update the viewer UI to avoid rounded corners across controls and cards.",
+      "doc": "## Summary\n\nRemove rounded corners from the viewer UI to match the requested sharp-edged style.\n\n## Context\n\nThe current cyberpunk UI uses rounded corners across panels, cards, and controls. The request is to eliminate rounding.\n\n## Scope\n\n- Set border-radius values to 0 for viewer UI elements.\n- Keep layout, spacing, and colors unchanged.\n\n## Risks\n\nRisk: Some elements may look harsh on small screens; keep spacing intact.\n\n## Verify Steps\n\n- Open the viewer and confirm panels, buttons, cards, and tables have square corners.\n\n## Rollback Plan\n\nRevert the border-radius changes in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nApply consistently across dashboard and task views."
+    },
+    {
       "id": "202601191446-KTZPAD",
       "title": "Move order toggle to navbar",
       "status": "DONE",
@@ -4977,6 +4995,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "72ce4040b885fabcf80c79e3490cc49ad3f6c7b7c6e5b7c2d8b145610c126d61"
+    "checksum": "dd30a6a1f969942e933b8bbda0bb2e2480531d0a6f5da33c98e89f646bd92fd2"
   }
 }

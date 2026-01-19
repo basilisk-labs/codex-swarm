@@ -1,11 +1,12 @@
 ---
 id: "202601191446-6CXD6R"
 title: "Remove rounded corners from viewer"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "9be13a57b69bfa60ade046c26dadea809c971aba", message: "🎨 6CXD6R remove rounded corners" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:46:57+00:00"
 doc_updated_by: "agentctl"
