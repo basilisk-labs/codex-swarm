@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["tasks"]
 commit: { hash: "57bea995c00b60ad744af0215db1b368883c7b06", message: "✅ 9PQ5D2 verified: formatting-only change in .codex-swarm/config.json | details: task docs updated; no tests run." }
 comments:
   - { author: "ORCHESTRATOR", body: "verified: config already set to local backend | details: task was a no-op, no tests run." }

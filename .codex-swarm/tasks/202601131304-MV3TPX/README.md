@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["docs", "agents"]
 commit: { hash: "70c8c5d2eb0a3936a4c5475b047e2199531c5714", message: "✅ E1625C Verified: ran rg checks for config references in AGENTS.md and agent JSONs; changes align guidance to config-driven branch/worktree rules." }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: downstream tasks D4ZA6S, 7JXJF7, and E1625C are closed; umbrella tracks config, docs, and agent guidance updates." }

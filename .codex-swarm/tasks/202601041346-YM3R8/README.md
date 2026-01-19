@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["agentctl", "ux"]
 commit: { hash: "6b7b0c6182cf7dd1f0833e4044300db6b32fe3cd", message: "Legacy completion (backfill)" }
 comments:
   - { author: "INTEGRATOR", body: "Verified: batch writes, caching, JSON errors, lazy lint, and logging flags implemented." }

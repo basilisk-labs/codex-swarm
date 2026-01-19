@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["readme", "docs", "agentctl"]
 commit: { hash: "95bfbb7f4d285be96102403b7946db516fa7358e", message: "✨ 697Z41 harden task README metadata guard across backends" }
 comments:
   - { author: "CODER", body: "Verified: ran python -m py_compile .codex-swarm/agentctl.py .codex-swarm/backends/local/backend.py .codex-swarm/backends/redmine/backend.py and python .codex-swarm/agentctl.py task lint; README metadata guard now applies across backends and task doc notes updated." }

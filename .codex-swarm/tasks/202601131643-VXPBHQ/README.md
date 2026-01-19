@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["git", "workflow"]
 verify: null
 commit: { hash: "8fd29a0da544ca8b96eb9326d418863e3963a0bf", message: "✨ VXPBHQ infer emojis for intermediate comment commits; format comment bodies into summary/details; document rules" }
 comments:

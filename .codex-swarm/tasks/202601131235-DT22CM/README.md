@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["agentctl", "agents"]
 commit: { hash: "bc30c58e49fae183e38567424944e97a2e8fe2ab", message: "✨ DT22CM map agentctl commands by role and phase" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: Docs-only change; updated agentctl role/phase mapping and task artifact; no runtime impact." }

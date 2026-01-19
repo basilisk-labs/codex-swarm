@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["agents", "redmine", "backend"]
 verify: ["python -m py_compile .codex-swarm/backends/redmine/backend.py"]
 commit: { hash: "1a5d38264519ada0bf7042c57b11a4b3464d8cad", message: "✨ RGNDGK harden redmine backend and add agent" }
 comments:

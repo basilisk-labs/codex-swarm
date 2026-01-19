@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["workflow"]
 commit: { hash: "05bc03f42fffec8f445cd18289fa47cae633874f", message: "✨ D3BPVB remove upgrade tests" }
 comments:
   - { author: "CODER", body: "verified: Removed the unused upgrade regression tests and documented their removal." }

@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["workflow"]
 commit: { hash: "c27e131f3f69296a51441fa6a138de2fdf1f3ac5", message: "✨ NV8M5V automate upgrade" }
 comments:
   - { author: "CODER", body: "verified: Confirmed agentctl upgrade helpers, CLI documentation, and config metadata align with the new framework refresh flow." }

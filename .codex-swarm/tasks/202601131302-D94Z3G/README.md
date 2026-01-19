@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["agentctl"]
 commit: { hash: "6e20f08a17a9cc114c8f2d43270fe2375623544d", message: "✨ D94Z3G add agentctl role command" }
 comments:
   - { author: "CODER", body: "Verified: Added agentctl role <ROLE> command; updated role headings and docs. Manual check: python .codex-swarm/agentctl.py role CODER" }

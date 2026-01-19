@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["git", "workflow"]
 verify: null
 commit: { hash: "22de83cff2560324e36b4904e559141b1bef206b", message: "✅ H6TNMM backfill commit metadata export" }
 comments:

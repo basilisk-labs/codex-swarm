@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["agentctl", "config"]
 commit: { hash: "dddeba676b1818a4b66c49ed91f3db1cdc47cb97", message: "✨ D4ZA6S add config-driven settings and config CLI" }
 comments:
   - { author: "CODER", body: "Verified: ran python .codex-swarm/agentctl.py --help to confirm config show/set is registered; changes add config-driven defaults in agentctl and config.json." }

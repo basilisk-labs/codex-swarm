@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["agentctl", "refactor"]
 verify: null
 commit: { hash: "a13b7c8bf9ce6143bad33fb58ac0fed49089c83c", message: "✅ P7AMW3 close task" }
 comments: []

@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["docs", "agentctl", "tasks"]
 verify: ["python scripts/agentctl.py task lint", "python scripts/agentctl.py agents"]
 commit: { hash: "d6517d61191b4d80e80acc63117b6e55ba02c557", message: "Legacy completion (backfill)" }
 comments:

@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: ["202601160958-DAS67K", "202601160958-NV8M5V", "202601160958-AM3G42"]
-tags: []
+tags: ["automation"]
 commit: { hash: "333785394330d48ae8d409304af1bdd0040a19cd", message: "✨ QQ4CT3 document automation" }
 comments:
   - { author: "ORCHESTRATOR", body: "verified: Automated framework upgrade plan, related docs, and regression tests are complete so the workflow can self-update." }

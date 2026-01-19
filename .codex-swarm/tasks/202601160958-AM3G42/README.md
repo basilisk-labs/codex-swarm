@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "TESTER"
 depends_on: []
-tags: []
+tags: ["workflow", "testing"]
 commit: { hash: "65d3ce2af2cd46f83c8dfd3adb09fa18189464be", message: "✨ AM3G42 add upgrade tests" }
 comments:
   - { author: "TESTER", body: "verified: Ran python3 -m unittest tests.test_framework_upgrade to cover the staleness math before finalizing the workflow." }

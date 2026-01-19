@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["workflow"]
 commit: { hash: "7cd26ceb1def078ab4426a44fe0c2629601220c1", message: "✨ ZR7CN1 remove umbrella wording; clarify top-level plan language; update planner/orchestrator specs" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: remove umbrella mentions in AGENTS.md; update ORCHESTRATOR/PLANNER specs; doc-only change; no tests run." }

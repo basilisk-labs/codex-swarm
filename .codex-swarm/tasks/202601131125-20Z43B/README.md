@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["config"]
 commit: { hash: "208b8f601a53d4164a225ffc4e72fbb2bbc5b46f", message: "✨ 20Z43B docs: mark task obsolete and update roadmap" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: closed as obsolete per user request; no execution performed; no verify steps run." }

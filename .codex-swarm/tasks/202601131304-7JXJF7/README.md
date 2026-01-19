@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "DOCS"
 depends_on: ["202601131304-D4ZA6S"]
-tags: []
+tags: ["docs", "config"]
 commit: { hash: "a31da01f6c954cddda71b9dd9d27348f2a355d03", message: "✨ 7JXJF7 document config settings and config CLI" }
 comments:
   - { author: "DOCS", body: "Verified: ran rg checks for config show/set and branch/worktree keys in docs; changes update agentctl.md, docs/07-09, and README." }

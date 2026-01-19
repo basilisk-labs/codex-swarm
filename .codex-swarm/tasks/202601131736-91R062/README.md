@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["agentctl"]
 verify: null
 commit: { hash: "8058e33be3dc27df2fdad5802f1b45bb776fdb6b", message: "✨ 91R062 add human-readable comments in agentctl" }
 comments:

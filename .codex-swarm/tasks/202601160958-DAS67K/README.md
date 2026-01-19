@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CREATOR"
 depends_on: []
-tags: []
+tags: ["agents", "workflow"]
 commit: { hash: "f58936f62dc99a48a59dc6481ee2477602267672", message: "✨ DAS67K tidy deps" }
 comments:
   - { author: "CREATOR", body: "verified: Documented the UPGRADER agent lifecycle, triggers, and config expectations for automation readiness." }

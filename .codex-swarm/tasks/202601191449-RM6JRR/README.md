@@ -7,7 +7,36 @@ owner: "DOCS"
 depends_on: ["[\"202601191449-YN9FWW\"]"]
 tags: ["docs", "workflow"]
 doc_version: 2
-doc_updated_at: "2026-01-19T14:49:06+00:00"
+doc_updated_at: "2026-01-19T14:58:40+00:00"
 doc_updated_by: "agentctl"
 description: "Choose a single status indicator scheme and update all relevant docs/templates to match."
 ---
+## Summary
+
+Standardized task priority labels to the core set and aligned status wording in docs.
+
+## Context
+
+The repo had mixed priority labels (med/Нормальный) that needed normalization to the standard scheme.
+
+## Scope
+
+- Normalize task priorities to low/normal/high across task docs and export.
+- Update docs wording to reference the standard status labels.
+
+## Risks
+
+- Mislabeling priorities could affect reporting expectations if consumers assumed legacy labels.
+
+## Verify Steps
+
+- N/A (doc-only normalization).
+
+## Rollback Plan
+
+- Revert the commits linked in task metadata to restore prior labels.
+
+## Notes
+
+- Status wording in README/agentctl docs now references TODO instead of Backlog.
+

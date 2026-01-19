@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["prompting"]
 commit: { hash: "121fa479c53a781c08adec29ded0122dd4938c1e", message: "✅ 3NGP5C update docs" }
 comments:
   - { author: "ORCHESTRATOR", body: "verified: Reduced redundant confirmations by treating plan approval as the main gate and emphasizing autonomous execution." }

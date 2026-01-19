@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["git", "workflow", "sync"]
 verify: null
 commit: { hash: "3e56a20261227f0243ccffeecf1a4c8310abb68c", message: "✨ GPGCPQ sync stored comments with formatted commit subjects; reuse formatted text for comment-driven commits" }
 comments:

@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["workflow"]
 commit: { hash: "9d4a383c6d1e8a08933180886aba7db8287c30e4", message: "✨ PT7RCE align roadmap workflow: update AGENTS.md orchestration flow; sync ORCHESTRATOR/PLANNER specs; add umbrella-task tracking" }
 comments:
   - { author: "ORCHESTRATOR", body: "Start: sync ORCHESTRATOR/PLANNER agent specs with AGENTS.md roadmap and top-level task rules." }

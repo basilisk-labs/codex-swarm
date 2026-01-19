@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["ui", "tasks"]
 commit: { hash: "b9555c09a8e4e4da350a2a5752e7ca30e92abee2", message: "✨ 0M7XWG refresh tasks viewer" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:07:09+00:00"

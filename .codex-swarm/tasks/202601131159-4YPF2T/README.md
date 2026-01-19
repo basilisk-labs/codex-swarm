@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["git", "workflow", "config"]
 commit: { hash: "b893afa5c44be3efa381f3e47a266b032ee39f2a", message: "✨ 4YPF2T auto-commit on finish: add config flag; wire agentctl finish; document behavior" }
 comments:
   - { author: "ORCHESTRATOR", body: "Start: add config-driven auto status commit on finish and document the behavior." }

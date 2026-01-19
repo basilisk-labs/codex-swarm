@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["git", "workflow", "ui"]
 commit: { hash: "d4adf93a7f4cf03ffa85195579824cf51837b277", message: "✨ K6PMW1 AGENTS_SPEC v0.2: add viewer.sh to init commit; include AGENTS_SPEC in init commit message" }
 comments:
   - { author: "CODER", body: "Verified: not run; changes reviewed in clean.sh and clean.ps1 only, no automated tests executed." }

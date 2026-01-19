@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "DOCS"
 depends_on: []
-tags: []
+tags: ["docs"]
 commit: { hash: "c1adda8fb29cda65889f32cc09bab6bf268fe315", message: "Legacy completion (backfill)" }
 comments:
   - { author: "INTEGRATOR", body: "Verified: docs-only changes; manual review only (no automated checks)." }

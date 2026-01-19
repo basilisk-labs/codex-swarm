@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["config"]
 commit: { hash: "b9ae9669bcf1b892d8b9f45ef78a82f0379b0ecd", message: "✨ 9PQ5D2 format config.json" }
 comments:
   - { author: "CODER", body: "verified: formatting-only change in .codex-swarm/config.json | details: task docs updated; no tests run." }

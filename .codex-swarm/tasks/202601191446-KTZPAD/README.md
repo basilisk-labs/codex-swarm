@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["workflow"]
 commit: { hash: "a9e6272ec10cf312be4d2050950a75aab87e2d54", message: "🎨 KTZPAD move order toggle to navbar" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:46:11+00:00"

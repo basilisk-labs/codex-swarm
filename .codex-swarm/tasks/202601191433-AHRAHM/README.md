@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["ui", "tasks"]
 commit: { hash: "85e3a6149c131b329fea8576cf49bda4d86bec9f", message: "🐛 AHRAHM fix board/list toggle" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:33:40+00:00"

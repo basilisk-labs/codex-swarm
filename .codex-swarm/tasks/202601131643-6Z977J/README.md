@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["tasks"]
 verify: null
 commit: { hash: "e701172accefdfc0e34992471983363a9303ae33", message: "✨ 6Z977J auto-create tasks after plan approval: remove post-approval task prompt; update orchestrator guidance; sync agentctl doc" }
 comments:

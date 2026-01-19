@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["tasks"]
 commit: { hash: "59702a9703596bd4a062f967ec69b24a452d5315", message: "✨ BK0QY5 replace roadmap flow: update AGENTS.md orchestration; sync ORCHESTRATOR/PLANNER specs; adjust umbrella task guidance" }
 comments:
   - { author: "ORCHESTRATOR", body: "Start: replace roadmap flow with top-level plan and task proposal." }

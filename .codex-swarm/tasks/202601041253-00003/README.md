@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["agents", "tasks"]
 verify: null
 commit: { hash: "645a960e59145717d77f4bfab367c2a14234cc03", message: "Legacy completion (backfill)" }
 comments: []

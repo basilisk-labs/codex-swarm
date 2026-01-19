@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["workflow"]
 commit: { hash: "ffcdb2da7012172300e53cd8ac5f2d6b412a64f5", message: "🐛 XS8TD4 fix view toggle and add order indicator" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:43:49+00:00"

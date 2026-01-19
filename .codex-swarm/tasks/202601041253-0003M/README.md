@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["agents", "tasks"]
 verify: null
 commit: { hash: "188350307b487d91a3ef004847f87f8b6d1a3995", message: "Legacy completion (backfill)" }
 comments: []

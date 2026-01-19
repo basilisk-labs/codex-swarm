@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "DOCS"
 depends_on: ["202601041253-0003K"]
-tags: []
+tags: ["workflow"]
 commit: { hash: "25a6c054b1b513003186c6b337437547c6fb4a79", message: "Legacy completion (backfill)" }
 doc_version: 2
 doc_updated_at: "2026-01-11T08:06:07+00:00"

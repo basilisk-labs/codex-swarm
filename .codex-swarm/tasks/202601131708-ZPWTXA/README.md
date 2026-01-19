@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["git", "workflow"]
 verify: null
 commit: { hash: "b2932bb9d99772f02381709112a2f84c579ea978", message: "✨ ZPWTXA add closure approval config flag: wire agent guidance; update overview; add task record" }
 comments:

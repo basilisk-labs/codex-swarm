@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "DOCS"
 depends_on: ["202601131304-D4ZA6S", "202601131304-7JXJF7"]
-tags: []
+tags: ["agents"]
 commit: { hash: "af6584106ff4d2f06a3bface18236931e53a5c66", message: "✨ E1625C align AGENTS guidance with config-driven rules" }
 comments:
   - { author: "DOCS", body: "Verified: ran rg checks for config references in AGENTS.md and agent JSONs; changes align guidance to config-driven branch/worktree rules." }

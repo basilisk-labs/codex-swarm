@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["cleanup"]
 verify: null
 commit: { hash: "04fdd37dca3c7541e1d957e263b473547c94d6ad", message: "Legacy completion (backfill)" }
 comments: []

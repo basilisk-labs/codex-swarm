@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: ["202601191414-2N28WV", "202601191414-J99M5D", "202601191414-WP4B8E"]
-tags: []
+tags: ["ui", "tasks"]
 commit: { hash: "3fb91cf7aaed42142d8e706dbda629c54a13b089", message: "✨ 2N28WV J99M5D add dashboard UI and aggregation" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:14:46+00:00"

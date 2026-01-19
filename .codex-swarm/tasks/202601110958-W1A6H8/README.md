@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
-tags: []
+tags: ["sync", "redmine"]
 verify: null
 commit: { hash: "0e5bacb3095951ee4f4d7a36658dfc733b580f4b", message: "✨ W1A6H8 FZ099X switch to redmine backend and add redmine sync smoke tests" }
 comments:

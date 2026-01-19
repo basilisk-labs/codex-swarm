@@ -5,7 +5,7 @@ status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["docs"]
 commit: { hash: "d2c30973a02c2839cb19f896cc00f77dedb9bc01", message: "✨ A69VKJ remove ROADMAP doc; record task doc sections" }
 comments:
   - { author: "ORCHESTRATOR", body: "Verified: ran rg -n \"ROADMAP\" . and found no references; docs/ROADMAP.md is removed in commit d2c30973a02c; no other doc links required." }
