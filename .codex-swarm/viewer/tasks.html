@@ -1643,6 +1643,209 @@
       font-size: 12px;
       color: var(--muted);
     }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      padding-bottom: 20px;
+    }
+
+    .dash-card {
+      padding: 18px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(12, 16, 22, 0.9), rgba(10, 12, 18, 0.6));
+      box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.08), 0 18px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .dash-hero {
+      grid-column: span 12;
+    }
+
+    .dash-half {
+      grid-column: span 6;
+    }
+
+    .dash-third {
+      grid-column: span 4;
+    }
+
+    .dash-title {
+      font-family: var(--display);
+      font-size: 20px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .dash-meta {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .kpi-card {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(8, 12, 16, 0.8);
+      border: 1px solid var(--border);
+      display: grid;
+      gap: 6px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-active);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .kpi-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-family: var(--display);
+      color: var(--text);
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .bar-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 48px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.08);
+      overflow: hidden;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(0, 240, 255, 0.6), rgba(255, 0, 85, 0.4));
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    .bar-value {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    .dash-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .dash-list-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(8, 12, 16, 0.85);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .dash-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--chip-border);
+      background: var(--chip-bg);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .preset-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--text);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .preset-btn.active {
+      border-color: var(--border-active);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+
+    @media (max-width: 1100px) {
+      .dash-half {
+        grid-column: span 12;
+      }
+
+      .dash-third {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .dash-third {
+        grid-column: span 12;
+      }
+
+      .bar-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .bar-value {
+        text-align: left;
+      }
+    }
   </style>
 </head>
 
@@ -1657,6 +1860,9 @@
     <nav class="nav-menu">
       <div class="nav-item active" data-tab="tasks">
         <span>Tasks</span>
+      </div>
+      <div class="nav-item" data-tab="dashboard">
+        <span>Dashboard</span>
       </div>
       <div class="nav-item" data-tab="agents">
         <span>Agents</span>
@@ -1761,6 +1967,60 @@
 
       </div>
 
+      <!-- TAB: DASHBOARD -->
+      <div id="tab-dashboard" class="tab-content">
+        <div class="dashboard-grid">
+          <div class="panel dash-card dash-hero">
+            <div class="dash-title">Signal Board</div>
+            <div class="dash-meta" id="dashboardMeta">Awaiting data stream...</div>
+            <div class="kpi-grid" id="kpiGrid"></div>
+          </div>
+
+          <div class="panel dash-card dash-half">
+            <div class="dash-title">Presets</div>
+            <div class="dash-meta">Apply quick filters to the task stream.</div>
+            <div class="preset-grid" id="presetGrid"></div>
+            <div class="dash-meta" id="presetStatus"></div>
+          </div>
+
+          <div class="panel dash-card dash-half">
+            <div class="dash-title">Health Signals</div>
+            <div class="dash-meta">Risk and hygiene indicators.</div>
+            <div class="dash-list" id="healthList"></div>
+          </div>
+
+          <div class="panel dash-card dash-third">
+            <div class="dash-title">Owner Load</div>
+            <div class="dash-meta">Top task owners.</div>
+            <div class="bar-grid" id="ownerBars"></div>
+          </div>
+
+          <div class="panel dash-card dash-third">
+            <div class="dash-title">Priority Mix</div>
+            <div class="dash-meta">Distribution by priority.</div>
+            <div class="bar-grid" id="priorityBars"></div>
+          </div>
+
+          <div class="panel dash-card dash-third">
+            <div class="dash-title">Top Tags</div>
+            <div class="dash-meta">Dominant tag signals.</div>
+            <div class="bar-grid" id="tagBars"></div>
+          </div>
+
+          <div class="panel dash-card dash-half">
+            <div class="dash-title">Dependencies</div>
+            <div class="dash-meta">Tasks with dependency signals.</div>
+            <div class="dash-list" id="dependencyList"></div>
+          </div>
+
+          <div class="panel dash-card dash-half">
+            <div class="dash-title">Documentation</div>
+            <div class="dash-meta">Docs and verification coverage.</div>
+            <div class="dash-list" id="docList"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB: AGENTS -->
       <div id="tab-agents" class="tab-content">
         <div class="panel" style="padding: 20px;">
@@ -1806,11 +2066,20 @@
       BLOCKED: "Blocked",
       DONE: "Done",
     };
+    const PRESETS = [
+      { id: "blocked", label: "Blocked Only", status: "BLOCKED" },
+      { id: "no-commit", label: "No Commit", flag: "no-commit" },
+      { id: "no-verify", label: "No Verify", flag: "no-verify" },
+      { id: "no-tags", label: "No Tags", flag: "no-tags" },
+      { id: "has-deps", label: "Has Dependencies", flag: "has-deps" },
+      { id: "dirty", label: "Dirty Flag", flag: "dirty" },
+    ];
 
     let STATE = {
       tasks: [],
       byId: new Map(),
       dependentsById: new Map(),
+      presetKey: localStorage.getItem("preset-key") || "",
     };
     let SELECTED_ID = "";
     let VIEW_MODE = localStorage.getItem("view-mode") || "kanban";
@@ -1840,6 +2109,10 @@
       const parts = [];
       if (q) parts.push(`search="${shorten(q, 18)}"`);
       if (status) parts.push(`status=${STATUS_LABELS[status] || status}`);
+      if (STATE.presetKey) {
+        const preset = PRESETS.find((p) => p.id === STATE.presetKey);
+        if (preset) parts.push(`preset=${preset.label}`);
+      }
       if (owner) parts.push(`owner=${shorten(owner, 14)}`);
       if (priority) parts.push(`priority=${priority}`);
       if (tag) parts.push(`tag=${shorten(tag, 14)}`);
@@ -1943,6 +2216,10 @@
         comments: Array.isArray(task.comments) ? task.comments : [],
         verify: Array.isArray(task.verify) ? task.verify : [],
         commit: task.commit || null,
+        dirty: Boolean(task.dirty),
+        doc: typeof task.doc === "string" ? task.doc : "",
+        docUpdatedAt: task.doc_updated_at || "",
+        idSource: task.id_source || "",
       };
     }
 
@@ -1968,6 +2245,7 @@
       fillSelect("priority", optionify(tasks.map((t) => t.priority).filter(Boolean)));
       fillSelect("tag", optionify(tasks.flatMap((t) => t.tags || [])));
       renderSummary(tasks);
+      renderDashboard();
       renderView();
     }
 
@@ -2028,6 +2306,7 @@
       const tag = String(document.getElementById("tag").value || "");
 
       return tasks.filter((t) => {
+        if (!passesPreset(t)) return false;
         if (status && t.status !== status) return false;
         if (owner && t.owner !== owner) return false;
         if (priority && t.priority !== priority) return false;
@@ -2035,6 +2314,240 @@
         if (!q) return true;
         return t.title.toLowerCase().includes(q);
       });
+    }
+
+    function passesPreset(task) {
+      const preset = STATE.presetKey;
+      if (!preset) return true;
+      if (preset === "blocked") return task.status === "BLOCKED";
+      if (preset === "no-commit") return !task.commit;
+      if (preset === "no-verify") return !task.verify.length;
+      if (preset === "no-tags") return !task.tags.length;
+      if (preset === "has-deps") return task.dependsOn.length > 0;
+      if (preset === "dirty") return task.dirty === true;
+      return true;
+    }
+
+    function setPreset(key) {
+      STATE.presetKey = key || "";
+      localStorage.setItem("preset-key", STATE.presetKey);
+      if (STATE.presetKey === "blocked") {
+        document.getElementById("status").value = "BLOCKED";
+      } else if (STATE.presetKey) {
+        document.getElementById("status").value = "";
+      }
+      renderDashboard();
+      renderView();
+    }
+
+    function countBy(tasks, selector) {
+      const map = new Map();
+      tasks.forEach((t) => {
+        const key = selector(t);
+        if (!key) return;
+        map.set(key, (map.get(key) || 0) + 1);
+      });
+      return [...map.entries()].sort((a, b) => b[1] - a[1]);
+    }
+
+    function renderBarList(targetId, rows, max = 6, clickHandler) {
+      const root = document.getElementById(targetId);
+      if (!root) return;
+      root.innerHTML = "";
+      if (!rows.length) {
+        root.innerHTML = `<div class="dash-list-item">No signals detected.</div>`;
+        return;
+      }
+      const top = rows.slice(0, max);
+      const peak = top[0][1] || 1;
+      top.forEach(([label, value]) => {
+        const row = document.createElement("div");
+        row.className = "bar-row";
+        const safeLabel = escapeHtml(label);
+        row.innerHTML = `
+          <div class="bar-label" data-label="${safeLabel}">${safeLabel}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${Math.round((value / peak) * 100)}%"></div></div>
+          <div class="bar-value">${value}</div>
+        `;
+        if (clickHandler) {
+          row.querySelector(".bar-label")?.addEventListener("click", () => clickHandler(label));
+        }
+        root.appendChild(row);
+      });
+    }
+
+    function renderList(targetId, items) {
+      const root = document.getElementById(targetId);
+      if (!root) return;
+      root.innerHTML = "";
+      if (!items.length) {
+        root.innerHTML = `<div class="dash-list-item">No signals detected.</div>`;
+        return;
+      }
+      items.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "dash-list-item";
+        row.innerHTML = `
+          <span>${item.label}</span>
+          <span class="dash-pill" data-action="${escapeHtml(item.action || "")}">${escapeHtml(item.value)}</span>
+        `;
+        if (item.onClick) {
+          row.querySelector(".dash-pill")?.addEventListener("click", item.onClick);
+        }
+        root.appendChild(row);
+      });
+    }
+
+    function renderDashboard() {
+      const tasks = STATE.tasks;
+      const filtered = applyFilters(tasks);
+      const total = tasks.length;
+      const counts = STATUS_ORDER.reduce((acc, st) => {
+        acc[st] = tasks.filter((t) => t.status === st).length;
+        return acc;
+      }, {});
+      const filteredPct = total ? Math.round((filtered.length / total) * 100) : 0;
+      const docCount = tasks.filter((t) => t.doc).length;
+      const commitCount = tasks.filter((t) => t.commit).length;
+      const verifyCount = tasks.filter((t) => t.verify.length).length;
+      const dirtyCount = tasks.filter((t) => t.dirty).length;
+      const depCount = tasks.filter((t) => t.dependsOn.length).length;
+
+      const meta = document.getElementById("dashboardMeta");
+      if (meta) {
+        meta.textContent = `Total ${total} tasks. Active filters cover ${filtered.length} (${filteredPct}%).`;
+      }
+
+      const kpiGrid = document.getElementById("kpiGrid");
+      if (kpiGrid) {
+        kpiGrid.innerHTML = "";
+        const kpis = [
+          { label: "Total Tasks", value: total, sub: "All records", action: () => setPreset("") },
+          { label: "Doing", value: counts.DOING, sub: "In progress", action: () => setPreset(""), status: "DOING" },
+          { label: "Blocked", value: counts.BLOCKED, sub: "Needs attention", action: () => setPreset("blocked") },
+          { label: "Done", value: counts.DONE, sub: "Completed", action: () => setPreset("") },
+          { label: "No Commit", value: total - commitCount, sub: "Missing commit hash", action: () => setPreset("no-commit") },
+          { label: "No Verify", value: total - verifyCount, sub: "Missing verify steps", action: () => setPreset("no-verify") },
+          { label: "Dirty Flag", value: dirtyCount, sub: "Needs cleanup", action: () => setPreset("dirty") },
+          { label: "Dependencies", value: depCount, sub: "Has deps", action: () => setPreset("has-deps") },
+        ];
+
+        kpis.forEach((kpi) => {
+          const card = document.createElement("div");
+          card.className = "kpi-card";
+          card.innerHTML = `
+            <div class="kpi-label">${escapeHtml(kpi.label)}</div>
+            <div class="kpi-value">${kpi.value}</div>
+            <div class="kpi-sub">${escapeHtml(kpi.sub)}</div>
+          `;
+          card.addEventListener("click", () => {
+            if (kpi.status) {
+              document.getElementById("status").value = kpi.status;
+            }
+            kpi.action?.();
+          });
+          kpiGrid.appendChild(card);
+        });
+      }
+
+      renderBarList("ownerBars", countBy(tasks, (t) => t.owner || "Unknown"), 6, (value) => {
+        document.getElementById("owner").value = value === "Unknown" ? "" : value;
+        setPreset("");
+      });
+      renderBarList("priorityBars", countBy(tasks, (t) => t.priority || "none"), 6, (value) => {
+        document.getElementById("priority").value = value === "none" ? "" : value;
+        setPreset("");
+      });
+      renderBarList("tagBars", countBy(tasks.flatMap((t) => t.tags.map((tag) => ({ tag }))), (t) => t.tag), 6, (value) => {
+        document.getElementById("tag").value = value;
+        setPreset("");
+      });
+
+      const healthItems = [
+        {
+          label: "No commit attached",
+          value: `${total - commitCount}`,
+          onClick: () => setPreset("no-commit"),
+        },
+        {
+          label: "Missing verify steps",
+          value: `${total - verifyCount}`,
+          onClick: () => setPreset("no-verify"),
+        },
+        {
+          label: "No tags",
+          value: `${tasks.filter((t) => !t.tags.length).length}`,
+          onClick: () => setPreset("no-tags"),
+        },
+        {
+          label: "Dirty flagged",
+          value: `${dirtyCount}`,
+          onClick: () => setPreset("dirty"),
+        },
+      ];
+      renderList("healthList", healthItems);
+
+      const depItems = [
+        {
+          label: "Has dependencies",
+          value: `${depCount}`,
+          onClick: () => setPreset("has-deps"),
+        },
+        {
+          label: "No dependencies",
+          value: `${tasks.filter((t) => !t.dependsOn.length).length}`,
+          onClick: () => setPreset(""),
+        },
+        {
+          label: "Blocked with deps",
+          value: `${tasks.filter((t) => t.status === "BLOCKED" && t.dependsOn.length).length}`,
+          onClick: () => setPreset("blocked"),
+        },
+      ];
+      renderList("dependencyList", depItems);
+
+      const docItems = [
+        {
+          label: "Docs present",
+          value: `${docCount}`,
+          onClick: () => setPreset(""),
+        },
+        {
+          label: "Docs missing",
+          value: `${total - docCount}`,
+          onClick: () => setPreset(""),
+        },
+        {
+          label: "Verify steps",
+          value: `${verifyCount}`,
+          onClick: () => setPreset(""),
+        },
+      ];
+      renderList("docList", docItems);
+
+      const presetGrid = document.getElementById("presetGrid");
+      if (presetGrid) {
+        presetGrid.innerHTML = "";
+        PRESETS.forEach((preset) => {
+          const btn = document.createElement("button");
+          btn.className = "preset-btn";
+          btn.textContent = preset.label;
+          btn.classList.toggle("active", preset.id === STATE.presetKey);
+          btn.addEventListener("click", () => {
+            if (preset.status) {
+              document.getElementById("status").value = preset.status;
+            }
+            setPreset(preset.id === STATE.presetKey ? "" : preset.id);
+          });
+          presetGrid.appendChild(btn);
+        });
+      }
+
+      const presetStatus = document.getElementById("presetStatus");
+      if (presetStatus) {
+        const active = PRESETS.find((p) => p.id === STATE.presetKey);
+        presetStatus.textContent = active ? `Active preset: ${active.label}` : "No preset active.";
+      }
     }
 
     function sortTasks(tasks, mode, reverse) {
@@ -2150,6 +2663,7 @@
         renderBoard(filtered);
       }
       updateHeaderMeta(filtered.length, STATE.tasks.length);
+      renderDashboard();
     }
 
     function renderCard(task, idx) {
@@ -2532,7 +3046,13 @@
             document.getElementById("pageTitle").textContent = span.textContent;
           }
 
+          const viewToggle = document.getElementById("viewToggle");
+          if (viewToggle) {
+            viewToggle.style.display = targetId === "tasks" ? "flex" : "none";
+          }
+
           // Lazy load
+          if (targetId === "dashboard") renderDashboard();
           if (targetId === "agents") loadAgents();
           if (targetId === "system") renderSystemStats();
         });
@@ -2599,6 +3119,13 @@
       // Static stats for now + live task counts
       const taskCount = STATE.tasks.length;
       const doing = STATE.tasks.filter(t => t.status === "DOING").length;
+      const withSource = STATE.tasks.filter((t) => t.idSource).length;
+      const latestDoc = STATE.tasks
+        .map((t) => t.docUpdatedAt)
+        .filter(Boolean)
+        .map((t) => new Date(t))
+        .filter((d) => !Number.isNaN(d.valueOf()))
+        .sort((a, b) => b - a)[0];
 
       stats.innerHTML = `
         <div class="stat-row">
@@ -2612,6 +3139,14 @@
         <div class="stat-row">
            <div class="stat-label">Total Indexes</div>
            <div class="stat-val">${taskCount}</div>
+        </div>
+        <div class="stat-row">
+           <div class="stat-label">Source Coverage</div>
+           <div class="stat-val">${withSource}/${taskCount}</div>
+        </div>
+        <div class="stat-row">
+           <div class="stat-label">Last Doc Update</div>
+           <div class="stat-val">${latestDoc ? latestDoc.toLocaleString() : "n/a"}</div>
         </div>
         <div class="stat-row">
            <div class="stat-label">Theme Mode</div>
