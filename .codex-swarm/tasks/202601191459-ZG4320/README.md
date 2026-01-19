@@ -7,7 +7,31 @@ owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["ui", "tasks", "viewer"]
 doc_version: 2
-doc_updated_at: "2026-01-19T14:59:42+00:00"
+doc_updated_at: "2026-01-19T15:02:19+00:00"
 doc_updated_by: "agentctl"
 description: "Replace textual low/normal/high priority labels in the task viewer with icon-based indicators for cards, tables, tooltips, and drawer."
 ---
+## Summary
+
+Replace priority text labels in the task viewer with icon indicators for low/normal/high.
+
+## Context
+
+The viewer currently renders priority as plain text across cards, table rows, tooltips, and the drawer.
+
+## Scope
+
+Introduce priority icon styles and SVGs, then swap priority renderers to show icons in the viewer UI.
+
+## Risks
+
+Icons could be unclear without hover context; include title/aria labels to preserve meaning.
+
+## Verify Steps
+
+Run ./viewer.sh, open the viewer, and confirm priority renders as icons in kanban cards, table rows, tooltips, and the drawer.
+
+## Rollback Plan
+
+Revert the changes in .codex-swarm/viewer/tasks.html and reload the viewer.
+

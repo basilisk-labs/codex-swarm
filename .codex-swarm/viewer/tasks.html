@@ -1324,6 +1324,41 @@
       border-color: rgba(52, 199, 89, 0.32);
     }
 
+    .priority-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border: 1px solid currentColor;
+      border-radius: 2px;
+      background: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+      vertical-align: middle;
+    }
+
+    .priority-icon svg {
+      width: 10px;
+      height: 10px;
+      fill: currentColor;
+    }
+
+    .priority-high {
+      color: var(--bad);
+    }
+
+    .priority-med {
+      color: var(--warn);
+    }
+
+    .priority-low {
+      color: var(--good);
+    }
+
+    .priority-none {
+      color: var(--muted);
+    }
+
     .empty {
       font-size: 12px;
       color: var(--muted);
@@ -2168,6 +2203,38 @@
       return `<span class="status-badge status-${key}"><span class="badge-dot"></span>${escapeHtml(status || "TODO")}</span>`;
     }
 
+    function normalizePriority(priority) {
+      const key = String(priority || "").trim().toLowerCase();
+      if (!key) return "";
+      if (key === "normal" || key === "medium") return "med";
+      return key;
+    }
+
+    function priorityLabel(priority) {
+      const key = normalizePriority(priority);
+      if (key === "high") return "High";
+      if (key === "med") return "Normal";
+      if (key === "low") return "Low";
+      return String(priority || "").trim() || "None";
+    }
+
+    function prioritySvg(key) {
+      const icons = {
+        high: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1l4.5 7H1.5L6 1z"></path></svg>',
+        med: '<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="2" width="8" height="8"></rect></svg>',
+        low: '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11L1.5 4h9L6 11z"></path></svg>',
+        none: '<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5" width="8" height="2"></rect></svg>',
+      };
+      return icons[key] || icons.none;
+    }
+
+    function priorityIcon(priority) {
+      const key = normalizePriority(priority);
+      const label = priorityLabel(priority);
+      const iconKey = key || "none";
+      return `<span class="priority-icon priority-${iconKey}" title="${escapeHtml(label)} priority" aria-label="${escapeHtml(label)} priority">${prioritySvg(iconKey)}</span>`;
+    }
+
     function tagHue(tag) {
       let hash = 0;
       for (let i = 0; i < tag.length; i++) {
@@ -2198,7 +2265,7 @@
       return `
           <div style="font-weight:600; margin-bottom:4px;">${escapeHtml(task.title)}</div>
           <div class="table-sub">${escapeHtml(idLine)} ${statusBadge(task.status)}</div>
-          <div class="table-sub">Owner: ${escapeHtml(task.owner || "-")} - Priority: ${escapeHtml(task.priority || "-")}</div>
+          <div class="table-sub">Owner: ${escapeHtml(task.owner || "-")} - Priority: ${priorityIcon(task.priority)}</div>
           <div class="tooltip-tags">${tags}</div>
         `;
     }
@@ -2657,7 +2724,7 @@
             </td>
             <td>${statusBadge(task.status)}</td>
             <td>${escapeHtml(task.owner || "-")}</td>
-            <td>${escapeHtml(task.priority || "-")}</td>
+            <td>${priorityIcon(task.priority)}</td>
             <td>${renderTags(task.tags, false)}</td>
           `;
         tbody.appendChild(row);
@@ -2721,14 +2788,14 @@
         openDrawer(task.id);
       });
 
-      const meta = [displayId(task.id)];
-      if (task.owner) meta.push(task.owner);
-      if (task.priority) meta.push(task.priority);
+      const meta = [`<span>${escapeHtml(displayId(task.id))}</span>`];
+      if (task.owner) meta.push(`<span>${escapeHtml(task.owner)}</span>`);
+      if (task.priority) meta.push(priorityIcon(task.priority));
 
       card.innerHTML = `
           <div class="card-title">${escapeHtml(task.title)}</div>
           <div class="card-meta">
-            ${meta.map((m) => `<span>${escapeHtml(m)}</span>`).join(" - ")}
+            ${meta.join(" - ")}
             ${statusBadge(task.status)}
           </div>
           ${task.description
@@ -2934,7 +3001,7 @@
             </div>
             <div class="drawer-section drawer-meta">
               <div class="drawer-label">Priority</div>
-              <div class="drawer-value">${escapeHtml(task.priority || "-")}</div>
+              <div class="drawer-value">${priorityIcon(task.priority)}</div>
             </div>
             <div class="drawer-section drawer-meta">
               <div class="drawer-label">Tags</div>
