@@ -1,11 +1,14 @@
 ---
 id: "202601191511-BZPKM2"
 title: "Integrate and verify recipes CLI changes"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "INTEGRATOR"
 depends_on: ["202601191510-0AWCPY", "202601191510-6ZKD5S"]
 tags: []
+commit: { hash: "32756c66b7a73956cd183fa8c8aae937ccb4afef", message: "✨ BZPKM2 document integration summary for recipes CLI" }
+comments:
+  - { author: "INTEGRATOR", body: "verified: reviewed recipes CLI and docs commits | details: no additional verification required." }
 doc_version: 2
 doc_updated_at: "2026-01-19T15:43:29+00:00"
 doc_updated_by: "agentctl"

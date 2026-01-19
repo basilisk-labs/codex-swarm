@@ -5546,7 +5546,7 @@
     {
       "id": "202601191511-BZPKM2",
       "title": "Integrate and verify recipes CLI changes",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "INTEGRATOR",
       "depends_on": [
@@ -5554,16 +5554,27 @@
         "202601191510-6ZKD5S"
       ],
       "tags": [],
+      "commit": {
+        "hash": "32756c66b7a73956cd183fa8c8aae937ccb4afef",
+        "message": "✨ BZPKM2 document integration summary for recipes CLI"
+      },
+      "comments": [
+        {
+          "author": "INTEGRATOR",
+          "body": "verified: reviewed recipes CLI and docs commits | details: no additional verification required."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-19T15:11:03+00:00",
+      "doc_updated_at": "2026-01-19T15:43:29+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Run any required verification, ensure task artifacts are complete, and close the recipes CLI/doc tasks in direct workflow."
+      "description": "Run any required verification, ensure task artifacts are complete, and close the recipes CLI/doc tasks in direct workflow.",
+      "doc": "## Summary\n\nIntegrated the recipes CLI and docs updates, confirming the end-to-end workflow artifacts are present.\n\n## Context\n\nClosed out tasks for recipes CLI implementation and documentation wiring in direct workflow mode.\n\n## Scope\n\nValidated that recipes.py is implemented, RECIPES.md is wired through AGENTS.md/README/docs, and task records are up to date.\n\n## Risks\n\nNo additional risks beyond those captured in the implementation and docs tasks.\n\n## Verify Steps\n\nConfirmed python .codex-swarm/recipes.py --help in CLI task; reviewed docs updates in AGENTS.md/README/docs.\n\n## Rollback Plan\n\nRevert the recipes CLI and documentation commits if integration needs to be undone.\n\n## Notes\n\nIntegration complete in direct mode; no branch/worktree merge required."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5d0aca95b4a97165fdea335684e43933a7ed20b37f930402513f099a2746d8aa"
+    "checksum": "a5e835e7aae1ad73852c2ec52f5b4bc6fce930b2e008f4dde28ccbf31ae3bf6d"
   }
 }
