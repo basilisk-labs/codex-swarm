@@ -1565,6 +1565,14 @@
       border-left: 2px solid var(--accent);
     }
 
+    .order-toggle {
+      width: 100%;
+      justify-content: center;
+      padding: 10px 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
     .table-wrap {
       margin-top: 20px;
       border: 1px solid var(--border);
@@ -1939,6 +1947,12 @@
                 <option value="priority">PRIORITY</option>
                 <option value="owner">OWNER</option>
               </select>
+            </label>
+            <label>
+              Order
+              <button class="btn order-toggle" id="orderToggle" type="button">
+                <span id="orderLabel">Order: Normal</span>
+              </button>
             </label>
           </div>
           <div
@@ -3180,8 +3194,16 @@
       const reloadBtn = document.getElementById("reload");
       if (reloadBtn) reloadBtn.addEventListener("click", () => window.location.reload());
 
+      const orderToggle = document.getElementById("orderToggle");
+      if (orderToggle) {
+        orderToggle.addEventListener("click", () => {
+          setOrderMode(ORDER_MODE === "asc" ? "desc" : "asc");
+        });
+      }
+
       wireControls();
       wireTabs();
+      updateOrderToggle();
 
       document.querySelectorAll(".view-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
