@@ -4814,12 +4814,82 @@
       "doc_updated_by": "agentctl",
       "description": "Capture the recent viewer redesign as a tracked task so the changes are documented and committed cleanly.",
       "doc": "## Summary\n\nDocument the viewer redesign so it is tracked and committed as a standalone task.\n\n## Scope\n\n- Package the existing changes in the tasks viewer UI and server endpoint into this task.\n- Keep the scope limited to the viewer refresh already implemented in `.codex-swarm/viewer/`.\n\n## Risks\n\nRisk: the refreshed UI could introduce regressions in filtering or status updates, so we should spot-check the main flows.\n\n## Verify Steps\n\n- Run the viewer locally and ensure the tabs, task list, and status updates render.\n\n## Rollback Plan\n\nRevert the viewer changes in `.codex-swarm/viewer/tasks.html` and `.codex-swarm/viewer/tasks_server.py` if issues arise.\n\n## Notes\n\nNo additional dependencies or migrations."
+    },
+    {
+      "id": "202601191414-2N28WV",
+      "title": "Viewer dashboards + presets UI",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "3fb91cf7aaed42142d8e706dbda629c54a13b089",
+        "message": "✨ 2N28WV J99M5D add dashboard UI and aggregation"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:20:13+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Implement dashboard tab/cards, KPI widgets, and filter presets in the cyberpunk UI.",
+      "doc": "## Summary\n\nBuild the dashboard UI and preset controls in the cyberpunk viewer.\n\n## Context\n\nDashboards should surface KPIs and breakdowns using fields already present in tasks.json, while keeping the existing neon/CRT aesthetic.\n\n## Scope\n\n- Add dashboard tab layout and styling.\n- Render KPI cards, breakdown bars, and health lists.\n- Add preset buttons and drill-down interactions.\n\n## Risks\n\nRisk: the UI may become dense on small screens; ensure responsive layout scales for mobile widths.\n\n## Verify Steps\n\n- Open the viewer and confirm dashboard cards render and respond to clicks.\n- Check presets update task filters.\n\n## Rollback Plan\n\nRevert dashboard UI changes in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nKeep CSS aligned with existing cyberpunk palette and typography."
+    },
+    {
+      "id": "202601191414-4ZX6FD",
+      "title": "Expand viewer dashboards",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601191414-2N28WV",
+        "202601191414-J99M5D",
+        "202601191414-WP4B8E"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:14:46+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add cyberpunk dashboards and additional viewer functionality based on available repo data, with supporting backend/API updates and verification.",
+      "doc": "## Summary\n\nPlan and track the viewer dashboard expansion, covering UI, data aggregation, and verification.\n\n## Context\n\nThe current viewer already provides task lists, agents, and system tabs using tasks.json and agents.json. We want a dashboard layer using only available repo data and keep the cyberpunk visual language.\n\n## Scope\n\n- Add a dashboard tab with KPI cards and breakdowns derived from tasks.json.\n- Add filter presets and drill-down interactions within the viewer.\n- If needed, add API helpers in the viewer server to support dashboards.\n- Run a smoke-check for the new dashboard UX and document verify steps.\n\n## Risks\n\nRisk: aggregations may be misleading if fields are missing or inconsistent, so the UI should handle empty/unknown values gracefully.\n\n## Verify Steps\n\n- Open the viewer and confirm dashboard KPIs render and presets filter tasks.\n- Spot-check counts against visible task list for accuracy.\n\n## Rollback Plan\n\nRevert changes to `.codex-swarm/viewer/tasks.html` and `.codex-swarm/viewer/tasks_server.py`.\n\n## Notes\n\nUse only task fields present in `.codex-swarm/tasks.json` and agent definitions in `.codex-swarm/agents/*.json`."
+    },
+    {
+      "id": "202601191414-J99M5D",
+      "title": "Viewer data aggregation",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "3fb91cf7aaed42142d8e706dbda629c54a13b089",
+        "message": "✨ 2N28WV J99M5D add dashboard UI and aggregation"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:20:19+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add any backend/API or client aggregation needed for dashboards using tasks.json and agents.json.",
+      "doc": "## Summary\n\nWire data aggregation for dashboard metrics using existing task fields.\n\n## Context\n\nThe viewer can derive counts and breakdowns from tasks.json without new storage, but needs client logic to normalize fields consistently.\n\n## Scope\n\n- Extend normalization to include doc/id_source/dirty metadata.\n- Add aggregation helpers and dashboard rendering logic.\n\n## Risks\n\nRisk: missing or inconsistent fields could skew metrics; handle empty values gracefully.\n\n## Verify Steps\n\n- Spot-check dashboard counts against visible task list and filters.\n\n## Rollback Plan\n\nRevert dashboard aggregation logic in `.codex-swarm/viewer/tasks.html`.\n\n## Notes\n\nAvoid new API endpoints unless required for performance."
+    },
+    {
+      "id": "202601191414-WP4B8E",
+      "title": "Verify viewer dashboards",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "TESTER",
+      "depends_on": [
+        "[\"202601191414-2N28WV\",\"202601191414-J99M5D\"]"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T14:20:26+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Smoke-test new dashboards and document verify steps.",
+      "doc": "## Summary\n\nSmoke-test the dashboard flows and record verification notes.\n\n## Context\n\nDashboards add new filters and UI affordances; a quick manual check ensures counts and interactions match expectations.\n\n## Scope\n\n- Verify dashboard rendering and preset interactions.\n- Record quick sanity checks for counts and filters.\n\n## Risks\n\nRisk: missing data could appear as blank cards; validate empty states.\n\n## Verify Steps\n\n- Launch the viewer and click KPI cards/presets to confirm filter behavior.\n- Confirm owner/priority/tag bars update filters as expected.\n\n## Rollback Plan\n\nRevert dashboard changes if critical failures are observed.\n\n## Notes\n\nNo automated tests expected for this UI pass."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "6ba417c066e13f685e1844dd733e2216d220562b1a0d44b24e0b855dd6f8f413"
+    "checksum": "914fe2f6282a5d68d7e3655528dcb2e91deb8f2e2928dc172726f19b0b054d05"
   }
 }

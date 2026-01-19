@@ -1,11 +1,12 @@
 ---
 id: "202601191414-J99M5D"
 title: "Viewer data aggregation"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "3fb91cf7aaed42142d8e706dbda629c54a13b089", message: "✨ 2N28WV J99M5D add dashboard UI and aggregation" }
 doc_version: 2
 doc_updated_at: "2026-01-19T14:20:19+00:00"
 doc_updated_by: "agentctl"
