@@ -1,11 +1,14 @@
 ---
 id: "202601131356-PDFC2R"
 title: "Validate Redmine backend sync against local backend"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["redmine", "sync"]
+commit: { hash: "e5e77d4e630794608b392d4b458422a6d88b7ca1", message: "✨ PDFC2R validate redmine sync with sandbox cache" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: sync pull/push executed against Redmine sandbox using isolated cache | details: report saved in task notes." }
 doc_version: 2
 doc_updated_at: "2026-01-20T09:08:20+00:00"
 doc_updated_by: "agentctl"
