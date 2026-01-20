@@ -39,6 +39,7 @@ python .codex-swarm/recipes.py show <slug> --json
 python .codex-swarm/recipes.py compile <slug> --scenario <id> --inputs .codex-swarm/.runs/<run-id>/inputs.json --out .codex-swarm/.runs/<run-id>/bundle.json
 python .codex-swarm/recipes.py explain <slug> --scenario <id> --inputs .codex-swarm/.runs/<run-id>/inputs.json
 ```
+The scan output is the tracked recipe list at `docs/recipes-inventory.json`.
 
 ## Branching and PR Artifacts
 ```bash
