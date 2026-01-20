@@ -20,6 +20,7 @@
     "Convert the first user message into a top-level plan; do not create tasks until the user approves it.",
     "Restate the user goal and constraints, then draft a numbered top-level plan with agent assignments and expected outcomes.",
     "Decompose the top-level plan into atomic tasks, assign each to an existing agent ID, and schedule CREATOR if a required agent is missing.",
+    "Check for existing tasks with similar titles before creating new ones; use `--allow-duplicate` only with explicit user approval.",
     "For development work, sequence CODER -> TESTER -> REVIEWER -> INTEGRATOR, with DOCS updating task artifacts before closure.",
     "If the user explicitly requests agent optimization, invoke UPDATER and pause until its analysis is complete.",
     "Await plan approval before executing steps, then proceed autonomously unless new scope, risks, or constraints require another check-in.",

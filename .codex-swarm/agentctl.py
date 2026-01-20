@@ -1326,6 +1326,29 @@ def coerce_str_list(value: object) -> list[str]:
     return [item.strip() for item in value if isinstance(item, str) and item.strip()]
 
 
+def normalize_task_text(value: object) -> str:
+    return " ".join(str(value or "").strip().lower().split())
+
+
+def find_duplicate_titles(
+    tasks: TaskList,
+    title: str,
+    *,
+    include_done: bool = False,
+) -> list[TaskRecord]:
+    normalized = normalize_task_text(title)
+    if not normalized:
+        return []
+    duplicates: list[TaskRecord] = []
+    for task in tasks:
+        status = str(task.get("status") or "TODO").strip().upper()
+        if status == "DONE" and not include_done:
+            continue
+        if normalize_task_text(task.get("title")) == normalized:
+            duplicates.append(task)
+    return duplicates
+
+
 def load_tasks() -> TaskList:
     data = load_json(TASKS_PATH)
     tasks = data.get("tasks", [])
@@ -2053,11 +2076,17 @@ def git_status_changed_paths(*, cwd: Path) -> list[str]:
     return paths
 
 
-def suggest_allow_prefixes(paths: Iterable[str]) -> list[str]:
+def suggest_allow_prefixes(paths: Iterable[str], *, mode: str = "dirs") -> list[str]:
+    normalized = (mode or "").strip().lower()
+    if normalized not in {"dirs", "files"}:
+        die(f"allowlist mode must be 'dirs' or 'files' (got {mode!r})", code=2)
     prefixes: list[str] = []
     for raw in paths:
         path = raw.strip().lstrip("./")
         if not path:
+            continue
+        if normalized == "files":
+            prefixes.append(path)
             continue
         if "/" not in path:
             prefixes.append(path)
@@ -2072,6 +2101,44 @@ def path_is_under(path: str, prefix: str) -> bool:
     if not root:
         return False
     return p == root or p.startswith(root + "/")
+
+
+def guard_scope_check(
+    *,
+    allow: list[str],
+    allow_tasks: bool,
+    quiet: bool,
+    cwd: Path,
+) -> None:
+    allowed = [a.strip().lstrip("./") for a in allow if str(a or "").strip()]
+    if not allowed:
+        die("Provide at least one --allow <path> prefix", code=2)
+
+    changed = git_status_changed_paths(cwd=cwd)
+    if not changed:
+        if not quiet:
+            print("✅ scope OK (no changes)")
+        return
+
+    denied: set[str] = set()
+    if not allow_tasks:
+        denied.add(TASKS_PATH_REL)
+
+    outside: list[str] = []
+    for path in changed:
+        if path in denied:
+            outside.append(path)
+            continue
+        if not any(path_is_under(path, prefix) for prefix in allowed):
+            outside.append(path)
+
+    if outside:
+        for path in outside:
+            print(f"❌ outside: {path}", file=sys.stderr)
+        die("Changes exist outside the allowlist", code=2)
+
+    if not quiet:
+        print("✅ scope OK")
 
 
 TASK_BRANCH_PREFIX = task_branch_prefix()
@@ -2466,7 +2533,7 @@ def commit_from_comment(
 ) -> dict[str, str]:
     allow_prefixes = [a for a in (allow or []) if str(a or "").strip()]
     if auto_allow and not allow_prefixes:
-        allow_prefixes = suggest_allow_prefixes(git_status_changed_paths(cwd=cwd))
+        allow_prefixes = suggest_allow_prefixes(git_status_changed_paths(cwd=cwd), mode="files")
     allow_prefixes = [a.strip() for a in allow_prefixes if str(a or "").strip()]
     if not allow_prefixes:
         die("Provide at least one --allow prefix or enable --commit-auto-allow", code=2)
@@ -2947,11 +3014,20 @@ def cmd_guard_clean(args: argparse.Namespace) -> None:
         print("✅ index clean (no staged files)")
 
 
+def cmd_guard_scope(args: argparse.Namespace) -> None:
+    guard_scope_check(
+        allow=list(args.allow or []),
+        allow_tasks=bool(args.allow_tasks),
+        quiet=bool(args.quiet),
+        cwd=Path.cwd().resolve(),
+    )
+
+
 def cmd_guard_suggest_allow(args: argparse.Namespace) -> None:
     staged = git_staged_files(cwd=Path.cwd().resolve())
     if not staged:
         die("No staged files", code=2)
-    prefixes = suggest_allow_prefixes(staged)
+    prefixes = suggest_allow_prefixes(staged, mode=args.mode)
     if args.format == "args":
         print(" ".join(f"--allow {p}" for p in prefixes))
         return
@@ -2963,7 +3039,7 @@ def cmd_guard_commit(args: argparse.Namespace) -> None:
     cwd = Path.cwd().resolve()
     allow = list(args.allow or [])
     if args.auto_allow and not allow:
-        allow = suggest_allow_prefixes(git_staged_files(cwd=cwd))
+        allow = suggest_allow_prefixes(git_staged_files(cwd=cwd), mode="files")
         if not allow:
             die("No staged files", code=2)
     guard_commit_check(
@@ -2983,7 +3059,7 @@ def cmd_commit(args: argparse.Namespace) -> None:
     allow = list(args.allow or [])
     cwd = Path.cwd().resolve()
     if args.auto_allow:
-        allow = suggest_allow_prefixes(git_staged_files(cwd=cwd))
+        allow = suggest_allow_prefixes(git_staged_files(cwd=cwd), mode="files")
         if not allow:
             die("No staged files", code=2)
 
@@ -3066,7 +3142,7 @@ def cmd_start(args: argparse.Namespace) -> None:
             formatted_comment=formatted_comment,
             emoji=args.commit_emoji or default_commit_emoji_for_status("DOING", comment_body=args.body),
             allow=list(args.commit_allow or []),
-            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            auto_allow=bool(args.commit_auto_allow),
             allow_tasks=bool(args.commit_allow_tasks),
             require_clean=bool(args.commit_require_clean),
             quiet=bool(args.quiet),
@@ -3121,7 +3197,7 @@ def cmd_block(args: argparse.Namespace) -> None:
             formatted_comment=formatted_comment,
             emoji=args.commit_emoji or default_commit_emoji_for_status("BLOCKED", comment_body=args.body),
             allow=list(args.commit_allow or []),
-            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            auto_allow=bool(args.commit_auto_allow),
             allow_tasks=bool(args.commit_allow_tasks),
             require_clean=bool(args.commit_require_clean),
             quiet=bool(args.quiet),
@@ -3250,6 +3326,18 @@ def cmd_task_new(args: argparse.Namespace) -> None:
     status = (args.status or "TODO").strip().upper()
     if status not in ALLOWED_STATUSES:
         die(f"Invalid status: {status}")
+    if not args.allow_duplicate:
+        duplicates = find_duplicate_titles(tasks, args.title, include_done=False)
+        if duplicates:
+            sample = ", ".join(
+                f"{str(task.get('id') or '').strip()}({str(task.get('status') or '').strip().upper() or 'TODO'})"
+                for task in duplicates[:5]
+                if str(task.get("id") or "").strip()
+            )
+            message = "Duplicate active task title detected; pick an existing task or pass --allow-duplicate."
+            if sample:
+                message += f"\nExisting: {sample}"
+            die(message, code=2)
     raw_depends_on = [dep for dep in (args.depends_on or []) if isinstance(dep, str)]
     normalized_depends_on = list(
         dict.fromkeys(dep.strip() for dep in raw_depends_on if dep.strip() and dep.strip() != "[]")
@@ -3573,7 +3661,7 @@ def cmd_task_set_status(args: argparse.Namespace) -> None:
             formatted_comment=formatted_comment,
             emoji=args.commit_emoji or default_commit_emoji_for_status(nxt, comment_body=args.body),
             allow=list(args.commit_allow or []),
-            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            auto_allow=bool(args.commit_auto_allow),
             allow_tasks=bool(args.commit_allow_tasks),
             require_clean=bool(args.commit_require_clean),
             quiet=bool(args.quiet),
@@ -3698,7 +3786,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             formatted_comment=formatted_comment,
             emoji=args.commit_emoji or infer_commit_emoji(args.body),
             allow=list(args.commit_allow or []),
-            auto_allow=bool(args.commit_auto_allow or not args.commit_allow),
+            auto_allow=bool(args.commit_auto_allow),
             allow_tasks=bool(args.commit_allow_tasks),
             require_clean=bool(args.commit_require_clean),
             quiet=bool(args.quiet),
@@ -3800,7 +3888,7 @@ def cmd_finish(args: argparse.Namespace) -> None:
             formatted_comment=formatted_comment,
             emoji=args.status_commit_emoji or default_commit_emoji_for_status("DONE", comment_body=args.body),
             allow=status_allow,
-            auto_allow=bool(args.status_commit_auto_allow or not status_allow),
+            auto_allow=bool(args.status_commit_auto_allow),
             allow_tasks=True,
             require_clean=bool(args.status_commit_require_clean),
             quiet=bool(args.quiet),
@@ -5504,7 +5592,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_guard_clean.add_argument("--quiet", action="store_true", help="Minimal output")
     p_guard_clean.set_defaults(func=cmd_guard_clean)
 
+    p_guard_scope = guard_sub.add_parser("scope", help="Fail if changes exist outside the allowlist")
+    p_guard_scope.add_argument("--allow", action="append", help="Allowed path prefix (repeatable)")
+    p_guard_scope.add_argument("--allow-tasks", action="store_true", help="Allow staging tasks.json")
+    p_guard_scope.add_argument("--quiet", action="store_true", help="Minimal output")
+    p_guard_scope.set_defaults(func=cmd_guard_scope)
+
     p_guard_suggest = guard_sub.add_parser("suggest-allow", help="Suggest minimal --allow prefixes for staged files")
+    p_guard_suggest.add_argument("--mode", choices=["dirs", "files"], default="dirs", help="Allowlist granularity")
     p_guard_suggest.add_argument("--format", choices=["lines", "args"], default="lines", help="Output format")
     p_guard_suggest.set_defaults(func=cmd_guard_suggest_allow)
 
@@ -5641,6 +5736,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_new.add_argument("--verify", action="append", help="Repeatable: shell command")
     p_new.add_argument("--comment-author", dest="comment_author")
     p_new.add_argument("--comment-body", dest="comment_body")
+    p_new.add_argument(
+        "--allow-duplicate",
+        action="store_true",
+        help="Allow creating a task with a title matching an active task",
+    )
     default_id_len = task_id_suffix_length_default()
     p_new.add_argument(
         "--id-length",

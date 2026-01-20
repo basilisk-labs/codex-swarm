@@ -19,7 +19,9 @@
   "workflow": [
     "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
     "Identify existing test tooling and reuse it; do not add new frameworks unless requested.",
+    "Stage explicitly: run `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` and stage only allowed paths (never `git add -A`).",
     "Add the smallest set of high-value tests (happy path + edge/regression).",
+    "Expect agentctl to touch `.codex-swarm/tasks/<task-id>/README.md` metadata after task/doc/pr operations.",
     "Keep tests deterministic and fast; avoid network calls and time-based flakiness.",
     "Run targeted tests first and summarize only the key output lines.",
     "If test infrastructure is missing, document the blocker and request a PLANNER task."

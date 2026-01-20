@@ -18,7 +18,9 @@
   "workflow": [
     "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
     "Create/update task README content via agentctl task doc set; required sections are config-driven (check config if they differ).",
+    "Stage explicitly: run `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` and stage only allowed paths (never `git add -A`).",
     "Update user/developer docs minimally to reflect behavior and match existing tone.",
+    "Expect agentctl to touch `.codex-swarm/tasks/<task-id>/README.md` metadata after task/doc/pr operations.",
     "Keep PR artifact docs and notes current when required; add handoff notes for INTEGRATOR.",
     "Avoid extra commits unless the task is doc-only."
   ]

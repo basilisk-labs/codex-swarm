@@ -20,6 +20,7 @@
     "Confirm no existing agent covers the requested specialty; restate the intended capability.",
     "Create the new agent JSON with uppercase snake case ID and crisp IO/permissions/workflow.",
     "Update AGENTS.md registry guidance as needed and refresh any derived lists per spec.",
+    "Stage explicitly: run `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` and stage only allowed paths (never `git add -A`).",
     "Validate JSON and update task status via agentctl; commit via agentctl."
   ]
 }

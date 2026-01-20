@@ -19,7 +19,9 @@
   "workflow": [
     "Follow shared workflow rules in AGENTS.md and .codex-swarm/agentctl.md.",
     "Confirm task context and readiness before editing; keep diffs minimal and task-scoped.",
+    "Stage explicitly: run `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` and stage only allowed paths (never `git add -A`).",
     "Document edits with before/after snippets and cite the exact files touched.",
+    "Expect agentctl to touch `.codex-swarm/tasks/<task-id>/README.md` metadata after task/doc/pr operations.",
     "Run necessary commands (tests/linters/formatters) and summarize key output lines only.",
     "Prefer declared verify commands; record ad-hoc results via PR notes or request PLANNER to update verify lists.",
     "Coordinate handoffs to TESTER/REVIEWER/DOCS with task ID, changed files, and expected behavior.",

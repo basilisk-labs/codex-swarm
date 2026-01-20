@@ -11,7 +11,7 @@ This file is the canonical reference for agent task/PR/verify/commit operations.
 Operation | Command
 --- | ---
 PLANNER: list/show tasks | `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task show <task-id>`
-PLANNER: create task (auto ID) | `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner CODER`
+PLANNER: create task (auto ID) | `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner CODER [--allow-duplicate]`
 PLANNER: add/update task | `python .codex-swarm/agentctl.py task add <task-id> ...` / `python .codex-swarm/agentctl.py task update <task-id> ...`
 PLANNER: scaffold artifact | `python .codex-swarm/agentctl.py task scaffold <task-id>`
 Config: show/set | `python .codex-swarm/agentctl.py config show` / `python .codex-swarm/agentctl.py config set <key> <value> [--json]`
@@ -22,7 +22,7 @@ CODER/TESTER: verify task | `python .codex-swarm/agentctl.py verify <task-id>`
 REVIEWER: check PR artifacts | `python .codex-swarm/agentctl.py pr check <task-id>`
 INTEGRATOR: integrate task | `python .codex-swarm/agentctl.py integrate <task-id> --branch task/<task-id>/<slug> --merge-strategy squash --run-verify`
 INTEGRATOR: finish task(s) | `python .codex-swarm/agentctl.py finish <task-id> [<task-id> ...] --commit <git-rev> --author INTEGRATOR --body \"Verified: ...\"`
-INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -m \"✅ <suffix> close: <detailed changelog ...>\" --auto-allow --allow-tasks --require-clean`
+INTEGRATOR: commit closure | `python .codex-swarm/agentctl.py commit <task-id> -m \"✅ <suffix> close: <detailed changelog ...>\" --allow .codex-swarm/tasks --allow .codex-swarm/tasks.json --allow-tasks --require-clean`
 
 ## Config management
 
@@ -43,7 +43,7 @@ Use `python .codex-swarm/agentctl.py role <ROLE>` to print a single block from t
 ### PLANNER
 
 - TODO scan: `python .codex-swarm/agentctl.py task list` / `python .codex-swarm/agentctl.py task search "..."` / `python .codex-swarm/agentctl.py task next`
-- Create tasks: `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner <ROLE> --depends-on "[]"` (use `task add` only for imported IDs)
+- Create tasks: `python .codex-swarm/agentctl.py task new --title "..." --description "..." --priority med --owner <ROLE> --depends-on "[]"` (blocks duplicate active titles unless `--allow-duplicate`)
 - Update tasks: `python .codex-swarm/agentctl.py task update <task-id> --title "..." --description "..." --priority med --owner <ROLE> --depends-on <task-id>`
 - Scaffold artifacts: `python .codex-swarm/agentctl.py task scaffold <task-id>`
 - Task docs (when planning needs it): `python .codex-swarm/agentctl.py task doc set <task-id> --section Summary --text "..."`
@@ -55,7 +55,7 @@ Use `python .codex-swarm/agentctl.py role <ROLE>` to print a single block from t
 - Status updates: `python .codex-swarm/agentctl.py start <task-id> --author <ROLE> --body "Start: ..."` / `python .codex-swarm/agentctl.py block <task-id> --author <ROLE> --body "Blocked: ..."`
 - Verify: `python .codex-swarm/agentctl.py verify <task-id>`
 - PR artifacts (branch_pr): `python .codex-swarm/agentctl.py pr open <task-id> --branch task/<task-id>/<slug> --author <ROLE>` / `python .codex-swarm/agentctl.py pr update <task-id>` / `python .codex-swarm/agentctl.py pr note <task-id> --author <ROLE> --body "..."`
-- Commit: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
+- Commit: `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` -> `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean`
 
 ### TESTER
 
@@ -64,13 +64,13 @@ Use `python .codex-swarm/agentctl.py role <ROLE>` to print a single block from t
 - Status updates: `python .codex-swarm/agentctl.py start <task-id> --author <ROLE> --body "Start: ..."` / `python .codex-swarm/agentctl.py block <task-id> --author <ROLE> --body "Blocked: ..."`
 - Verify: `python .codex-swarm/agentctl.py verify <task-id>`
 - PR artifacts (branch_pr): `python .codex-swarm/agentctl.py pr open <task-id> --branch task/<task-id>/<slug> --author <ROLE>` / `python .codex-swarm/agentctl.py pr update <task-id>` / `python .codex-swarm/agentctl.py pr note <task-id> --author <ROLE> --body "..."`
-- Commit: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
+- Commit: `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` -> `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean`
 
 ### DOCS
 
 - Task docs: `python .codex-swarm/agentctl.py task doc set <task-id> --section Summary --text "..."` (repeat per section or use `--file`)
 - PR notes: `python .codex-swarm/agentctl.py pr note <task-id> --author DOCS --body "..."`
-- Commit: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
+- Commit: `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` -> `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean`
 
 ### REVIEWER
 
@@ -86,7 +86,7 @@ Use `python .codex-swarm/agentctl.py role <ROLE>` to print a single block from t
 ### CREATOR
 
 - Task bookkeeping: `python .codex-swarm/agentctl.py task update <task-id> ...` / `python .codex-swarm/agentctl.py start <task-id> --author CREATOR --body "Start: ..."`
-- Commits: `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..."` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path-prefix>`
+- Commits: `python .codex-swarm/agentctl.py guard clean` -> `python .codex-swarm/agentctl.py guard scope --allow <path>` -> `python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean` / `python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> ..." --allow <path> --require-clean`
 
 ### REDMINE
 
@@ -108,6 +108,9 @@ Notes:
 - `.env` at the repo root is loaded automatically (without overwriting existing environment variables).
 - Writes (export/finish/etc.) auto-run lint on the snapshot.
 - Use `--lint` with read-only commands like `task list`/`task show` when you need validation.
+- `task new` blocks duplicate titles for active tasks; pass `--allow-duplicate` to override.
+- Comment-driven commits require explicit `--commit-allow` or `--commit-auto-allow`.
+- `task doc set`/`pr update`/`finish` update task README metadata; expect `.codex-swarm/tasks/<task-id>/README.md` diffs.
 
 ## Error output
 
@@ -149,6 +152,7 @@ python .codex-swarm/agentctl.py start <task-id> --author CODER --body "Start: ..
 python .codex-swarm/agentctl.py block <task-id> --author CODER --body "Blocked: ... " --commit-from-comment --commit-auto-allow
 python .codex-swarm/agentctl.py task set-status <task-id> DONE --author CODER --body "Done: ... " --commit-from-comment --commit-auto-allow
 python .codex-swarm/agentctl.py finish <task-id> --author INTEGRATOR --body "Verified: ... " --commit-from-comment --commit-auto-allow --status-commit --status-commit-auto-allow
+# If you omit --commit-auto-allow, pass --commit-allow <path> (repeatable).
 # if status_commit_policy=warn|confirm, add --confirm-status-commit to acknowledge
 
 # run per-task verify commands (declared on the task)
@@ -159,10 +163,12 @@ python .codex-swarm/agentctl.py verify <task-id> --skip-if-unchanged
 python .codex-swarm/agentctl.py upgrade --force
 
 # before committing, validate staged allowlist + message quality
-python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --auto-allow
+python .codex-swarm/agentctl.py guard clean
+python .codex-swarm/agentctl.py guard scope --allow <path>
+python .codex-swarm/agentctl.py guard commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --allow <path> --require-clean
 
 # if you want a safe wrapper that also runs `git commit`
-python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --allow <path-prefix>
+python .codex-swarm/agentctl.py commit <task-id> -m "✨ <suffix> detailed changelog: change A; change B; change C" --allow <path> --require-clean
 
 # optional git hooks (opt-in; never auto-installed)
 python .codex-swarm/agentctl.py hooks install
