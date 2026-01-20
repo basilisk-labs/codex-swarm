@@ -7,7 +7,7 @@ owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["config", "agentctl"]
 doc_version: 2
-doc_updated_at: "2026-01-13T12:44:56+00:00"
+doc_updated_at: "2026-01-20T08:41:04+00:00"
 doc_updated_by: "agentctl"
 description: "Review repo configs and agent guidance to propose settings that belong in config.json and how agentctl should toggle them."
 ---
@@ -38,5 +38,5 @@ No code changes; revert this task README or delete the task if the analysis is n
 
 ## Notes
 
-Inspected agentctl constants (VERIFY_REQUIRED_TAGS, TASK_DOC_REQUIRED_SECTIONS, WORKTREES_DIRNAME, GENERIC_COMMIT_TOKENS) and docs that describe workflow_mode and config.json usage.
+Recommendations were implemented by later config/agentctl tasks (202601131304-D4ZA6S, 202601131304-7JXJF7, 202601131304-MV3TPX).
 
