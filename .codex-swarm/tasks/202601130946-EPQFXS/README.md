@@ -1,13 +1,15 @@
 ---
 id: "202601130946-EPQFXS"
 title: "Deduplicate agent JSON rules + batch ops guidance"
-status: "DOING"
+status: "DONE"
 priority: "normal"
 owner: "CODER"
 depends_on: []
 tags: ["agents", "docs", "agentctl"]
+commit: { hash: "8cfe0247cfd6d2fb41ac672fec0b91d5f9a40e8c", message: "✨ EPQFXS record agent JSON dedup completion" }
 comments:
   - { author: "CODER", body: "Start: deduplicate shared guidance in agent JSON files and add batch task add/finish guidance in docs." }
+  - { author: "CODER", body: "verified: not run (docs-only) | details: agent JSONs reference shared rules and batch ops guidance is documented." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:47:55+00:00"
 doc_updated_by: "agentctl"

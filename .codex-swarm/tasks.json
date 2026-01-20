@@ -4327,7 +4327,7 @@
     {
       "id": "202601130946-EPQFXS",
       "title": "Deduplicate agent JSON rules + batch ops guidance",
-      "status": "DOING",
+      "status": "DONE",
       "priority": "normal",
       "owner": "CODER",
       "depends_on": [],
@@ -4336,17 +4336,25 @@
         "docs",
         "agentctl"
       ],
+      "commit": {
+        "hash": "8cfe0247cfd6d2fb41ac672fec0b91d5f9a40e8c",
+        "message": "✨ EPQFXS record agent JSON dedup completion"
+      },
       "comments": [
         {
           "author": "CODER",
           "body": "Start: deduplicate shared guidance in agent JSON files and add batch task add/finish guidance in docs."
+        },
+        {
+          "author": "CODER",
+          "body": "verified: not run (docs-only) | details: agent JSONs reference shared rules and batch ops guidance is documented."
         }
       ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T10:09:52+00:00",
+      "doc_updated_at": "2026-01-20T08:47:55+00:00",
       "doc_updated_by": "agentctl",
       "description": "Trim shared guidance in .codex-swarm/agents/*.json to role-specific content and point to AGENTS.md and agentctl.md; update docs to encourage batch task add/finish to reduce backend writes.",
-      "doc": "## Summary\n\nDeduplicate agent JSON instructions to role-specific content and add batch task add/finish guidance.\n\n## Context\n\nAgent JSON files repeated common workflow rules; centralizing shared guidance in AGENTS.md and agentctl.md reduces prompt duplication. Batch task operations encourage write_tasks usage to reduce repeated writes.\n\n## Scope\n\n- Simplify .codex-swarm/agents/*.json to role-specific guidance with references to AGENTS.md and .codex-swarm/agentctl.md.\n- Add batch task add/finish guidance in AGENTS.md and .codex-swarm/agentctl.md.\n\n## Risks\n\nOver-trimming could remove role-specific constraints; ensure shared rules remain in AGENTS.md and agentctl.md.\n\n## Verify Steps\n\nManual: review agent JSONs for role-specific content and confirm batch guidance appears in AGENTS.md and .codex-swarm/agentctl.md.\n\n## Rollback Plan\n\nRevert the AGENTS.md, .codex-swarm/agentctl.md, and .codex-swarm/agents/*.json changes.\n\n## Notes\n\nDocumentation-only change; no runtime behavior updates."
+      "doc": "## Summary\n\nAgent JSON guidance is trimmed to role-specific content with shared rules in AGENTS.md/agentctl.md; batch ops guidance is documented.\n\n## Context\n\nAgent JSON files repeated common workflow rules; centralizing shared guidance in AGENTS.md and agentctl.md reduces prompt duplication. Batch task operations encourage write_tasks usage to reduce repeated writes.\n\n## Scope\n\n- Simplify .codex-swarm/agents/*.json to role-specific guidance with references to AGENTS.md and .codex-swarm/agentctl.md.\n- Add batch task add/finish guidance in AGENTS.md and .codex-swarm/agentctl.md.\n\n## Risks\n\nOver-trimming could remove role-specific constraints; ensure shared rules remain in AGENTS.md and agentctl.md.\n\n## Verify Steps\n\nrg -n \"Follow shared workflow rules\" .codex-swarm/agents/*.json\\nrg -n \"batch\" AGENTS.md .codex-swarm/agentctl.md\n\n## Rollback Plan\n\nRevert the AGENTS.md, .codex-swarm/agentctl.md, and .codex-swarm/agents/*.json changes.\n\n## Notes\n\nSuperseded by agent/dedup cleanup tasks (202601131304-E1625C, 202601071301-JGRGE3) and agentctl docs updates."
     },
     {
       "id": "202601131117-K6PMW1",
@@ -5715,6 +5723,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "654b036fde7f1f32f433d4426cbf523e5761aea4aea9bac77bf59d041d815a2b"
+    "checksum": "0c38821677da31ac1a40ffc33b0228fc5eb4c9272ae99a447be6f6bfb7f4250e"
   }
 }
