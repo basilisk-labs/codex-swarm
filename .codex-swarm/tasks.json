@@ -5735,12 +5735,144 @@
       "doc_updated_by": "agentctl",
       "description": "Review current framework functionality and identify which capabilities can move into recipes to keep the core minimal.",
       "doc": "## Summary\n\nAudited the framework and recipe system, confirmed current recipe documentation/CLI coverage, and identified candidates to move into recipes to keep the core minimal.\n\n## Context\n\nGoal was to validate recipe documentation/behavior and map which framework capabilities should be recipes vs core primitives.\n\n## Scope\n\nReviewed AGENTS.md, RECIPES.md, recipes.py, docs/05-workflow.md, docs/06-agents.md, docs/07-tasks-and-backends.md, docs/09-commands.md, docs/recipes-inventory.json, and the roadmap recipe manifest/scenarios; mapped core vs recipe candidates.\n\n## Risks\n\nAudit is advisory; moving features to recipes must preserve agentctl guardrails and no-task-writes constraints.\n\n## Verify Steps\n\nReviewed the recipe docs and CLI sources plus workflow/task docs to build the core-vs-recipes map.\n\n## Rollback Plan\n\nNo code changes; revert the task doc/finish commits if the audit record must be removed.\n\n## Notes\n\nRecommendations delivered in response; no implementation changes executed."
+    },
+    {
+      "id": "202601200656-BZKZ6Z",
+      "title": "Simplify core; move extensions to recipes",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Subtasks: 202601200656-J6NW39 (core minimum + permissions), 202601200657-E52CV8 (migration plan), 202601200657-W1Y6ND (phase 1), 202601200657-VNFXH3 (phase 2), 202601200657-Y0P8RY (phase 3 cleanup)."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:56:54+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Define the minimal core agent/task workflow, allow recipe tool/agentctl usage with guardrails, and plan the migration of extension features into recipes."
+    },
+    {
+      "id": "202601200656-J6NW39",
+      "title": "Define core minimum and recipe permissions",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "docs"
+      ],
+      "commit": {
+        "hash": "6a935ba8cde99e26ae1e49cb20e1ea8294296797",
+        "message": "✨ J6NW39 codify core minimum and recipe permissions"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "verified: close: core minimum defined | details: tools allowed by default; recipe agentctl usage permitted under guardrails."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:59:25+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update AGENTS.md and RECIPES.md to codify the minimal task workflow, allow tools by default, and allow recipe-driven agentctl usage under guardrails.",
+      "doc": "## Summary\n\nDefined the core minimum agent/task workflow and updated recipe rules to allow tools by default and permit agentctl usage under guardrails.\n\n## Context\n\nNeeded to formalize the minimal core behavior while shifting extensions into recipes and loosening tool/agentctl permissions for recipe scenarios.\n\n## Scope\n\nUpdated AGENTS.md to add a core-minimum section and recipe-driven agentctl allowance; updated RECIPES.md to allow tools by default and to permit agentctl usage with confirmation.\n\n## Risks\n\nAllowing recipe-driven agentctl use increases risk of misuse; strict confirmation and guardrails must be enforced in scenarios.\n\n## Verify Steps\n\nReviewed AGENTS.md and RECIPES.md updates for consistency with guardrails and recipe policies.\n\n## Rollback Plan\n\nRevert commit 6a935ba8cde9 to restore the previous core minimum and recipe permission rules.\n\n## Notes\n\nTools are still explicit; only the default allowance changed, not the confirmation requirement."
+    },
+    {
+      "id": "202601200657-E52CV8",
+      "title": "Plan migration of extensions to recipes",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200656-J6NW39"
+      ],
+      "tags": [
+        "recipes",
+        "planning"
+      ],
+      "commit": {
+        "hash": "5826e825cf6f8399b6dd8d946dcf261ca84ddc00",
+        "message": "✅ J6NW39 verified: close: core minimum defined | details: tools allowed by default; recipe agentctl usage permitted under guardrails."
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: close: migration plan defined | details: phases and dependencies recorded."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:00:25+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Produce a phased migration plan with dependencies for moving non-core features into recipes while keeping agentctl and safety guardrails intact.",
+      "doc": "## Summary\n\nDefined a phased migration plan to move extension features into recipes while keeping the core minimal.\n\n## Context\n\nThe framework should keep only agent runtime and guardrails; all higher-level workflows must be implemented as recipes.\n\n## Scope\n\nPhase 1 (202601200657-W1Y6ND): move planning/analysis helpers into recipes (roadmap/spec/decomposition).\\nPhase 2 (202601200657-VNFXH3): move QA/test planning, release checklists, docs scaffolding into recipes.\\nPhase 3 (202601200657-Y0P8RY): prune core to agent runtime + agentctl guardrails; update docs and inventory.\n\n## Risks\n\nRisk of breaking existing workflows if recipe replacements are incomplete; maintain core fallbacks until recipes are validated.\n\n## Verify Steps\n\nReview the phase plan with stakeholders; confirm dependency order in task list.\n\n## Rollback Plan\n\nDo not remove core behaviors until recipe replacements are validated; revert any migration commit that removes core functionality prematurely.\n\n## Notes\n\nDependencies are strictly sequential: J6NW39 -> E52CV8 -> W1Y6ND -> VNFXH3 -> Y0P8RY."
+    },
+    {
+      "id": "202601200657-VNFXH3",
+      "title": "Phase 2 migration: QA, release, and docs recipes",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200657-W1Y6ND"
+      ],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:57:16+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Move QA/test planning, release checklists, and docs scaffolding into recipes; keep core limited to agent/task runtime."
+    },
+    {
+      "id": "202601200657-W1Y6ND",
+      "title": "Phase 1 migration: planning and analysis recipes",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200657-E52CV8"
+      ],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:57:11+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Move planning/analysis helpers (roadmaps, spec drafting, decomposition) into recipes and remove any redundant core logic."
+    },
+    {
+      "id": "202601200657-Y0P8RY",
+      "title": "Phase 3 migration: core cleanup",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200657-VNFXH3"
+      ],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:57:21+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Trim the core framework to the minimum runtime after recipe migration; remove or demote remaining extension hooks."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "798e1ef3e44d7817a5f53e084591d797904e861218b1e2085fc119a42b28351e"
+    "checksum": "c3cfabed50a5de57c2863c30a7762f7337fa67384c87e05579663335c3f907ac"
   }
 }
