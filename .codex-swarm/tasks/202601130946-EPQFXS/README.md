@@ -9,13 +9,13 @@ tags: ["agents", "docs", "agentctl"]
 comments:
   - { author: "CODER", body: "Start: deduplicate shared guidance in agent JSON files and add batch task add/finish guidance in docs." }
 doc_version: 2
-doc_updated_at: "2026-01-13T10:09:52+00:00"
+doc_updated_at: "2026-01-20T08:47:55+00:00"
 doc_updated_by: "agentctl"
 description: "Trim shared guidance in .codex-swarm/agents/*.json to role-specific content and point to AGENTS.md and agentctl.md; update docs to encourage batch task add/finish to reduce backend writes."
 ---
 ## Summary
 
-Deduplicate agent JSON instructions to role-specific content and add batch task add/finish guidance.
+Agent JSON guidance is trimmed to role-specific content with shared rules in AGENTS.md/agentctl.md; batch ops guidance is documented.
 
 ## Context
 
@@ -32,7 +32,7 @@ Over-trimming could remove role-specific constraints; ensure shared rules remain
 
 ## Verify Steps
 
-Manual: review agent JSONs for role-specific content and confirm batch guidance appears in AGENTS.md and .codex-swarm/agentctl.md.
+rg -n "Follow shared workflow rules" .codex-swarm/agents/*.json\nrg -n "batch" AGENTS.md .codex-swarm/agentctl.md
 
 ## Rollback Plan
 
@@ -40,5 +40,5 @@ Revert the AGENTS.md, .codex-swarm/agentctl.md, and .codex-swarm/agents/*.json c
 
 ## Notes
 
-Documentation-only change; no runtime behavior updates.
+Superseded by agent/dedup cleanup tasks (202601131304-E1625C, 202601071301-JGRGE3) and agentctl docs updates.
 
