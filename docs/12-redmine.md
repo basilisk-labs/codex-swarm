@@ -3,11 +3,30 @@
 ## Summary
 Redmine is a canonical backend option for tasks. When enabled, Redmine issues store the task source of truth, while [`.codex-swarm/tasks/`](../.codex-swarm/tasks/) acts as an offline cache layer.
 
+## Enable or Disable via Recipe
+Redmine support is delivered as a recipe so it can be enabled or disabled on demand.
+
+Enable (recipe scenario):
+- Run the `redmine-backend` recipe mini-CLI (for example, `install` or `enable`).
+- It writes `.codex-swarm/backends/redmine/backend.json` and updates `.codex-swarm/config.json` with `tasks_backend.config_path`.
+- It may run a connectivity check (for example, `verify-connection`) before activation.
+
+Disable (recipe scenario):
+- Run the `redmine-backend` recipe mini-CLI `disable` scenario.
+- It resets `tasks_backend.config_path` to `.codex-swarm/backends/local/backend.json`.
+- Local task data stays intact in [`.codex-swarm/tasks/`](../.codex-swarm/tasks/).
+
 ## Canonical Mapping
 - Task IDs map to the `task_id` custom field in Redmine.
 - Redmine issue IDs are not stored locally; issues are resolved via the `task_id` custom field.
 - When Redmine is unreachable, `agentctl` falls back to the local cache (if enabled).
 - Use `python .codex-swarm/agentctl.py sync redmine` to reconcile changes after connectivity returns.
+
+## Routing Flow
+1) Agents call `agentctl` for task operations (`task add`, `task update`, `task doc set`, `sync redmine`).
+2) `agentctl` loads the active backend from `.codex-swarm/config.json`.
+3) The Redmine backend writes to Redmine and updates the local cache under [`.codex-swarm/tasks/`](../.codex-swarm/tasks/).
+4) The local backend remains the base store and offline cache regardless of remote activation.
 
 ## Custom Fields
 Configure these custom fields in Redmine and map their IDs in `backend.json`:
