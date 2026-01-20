@@ -1,14 +1,15 @@
 ---
 id: "202601041253-00002"
 title: "Restructure agent registry into JSON files"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: ["agents"]
 verify: null
-commit: { hash: "645a960e59145717d77f4bfab367c2a14234cc03", message: "Legacy completion (backfill)" }
-comments: []
+commit: { hash: "31504cd01c8c3787e14531465e9f9c0278c1f78f", message: "✨ 00002 document agent registry JSON completion" }
+comments:
+  - { author: "REDMINE", body: "verified: not run (docs-only) | details: agent registry stored as JSON under .codex-swarm/agents and referenced by AGENTS.md." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:40:58+00:00"
 doc_updated_by: "agentctl"

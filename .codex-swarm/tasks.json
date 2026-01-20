@@ -27,7 +27,7 @@
     {
       "id": "202601041253-00002",
       "title": "Restructure agent registry into JSON files",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "REDMINE",
       "depends_on": [],
@@ -36,16 +36,22 @@
       ],
       "verify": null,
       "commit": {
-        "hash": "645a960e59145717d77f4bfab367c2a14234cc03",
-        "message": "Legacy completion (backfill)"
+        "hash": "31504cd01c8c3787e14531465e9f9c0278c1f78f",
+        "message": "✨ 00002 document agent registry JSON completion"
       },
-      "comments": [],
+      "comments": [
+        {
+          "author": "REDMINE",
+          "body": "verified: not run (docs-only) | details: agent registry stored as JSON under .codex-swarm/agents and referenced by AGENTS.md."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-11T08:06:07+00:00",
+      "doc_updated_at": "2026-01-20T08:40:58+00:00",
       "doc_updated_by": "agentctl",
       "description": "Split every reusable agent prompt into a dedicated JSON file under .AGENTS for easier maintenance.",
       "dirty": false,
-      "id_source": "custom"
+      "id_source": "custom",
+      "doc": "## Summary\n\nAgent registry now lives as individual JSON files under .codex-swarm/agents, with AGENTS.md as the shared source of truth.\n\n## Scope\n\n- Split agent prompts into JSON files in .codex-swarm/agents.\\n- Keep AGENTS.md as the shared rule set referenced by each role.\n\n## Risks\n\nLow: structural/docs change only; risk limited to misaligned agent JSON content.\n\n## Verify Steps\n\nNot run (docs-only); confirmed .codex-swarm/agents/*.json exists for registered roles.\n\n## Rollback Plan\n\nRevert commits that introduced .codex-swarm/agents and restore the prior registry layout.\n\n## Notes\n\nSuperseded by completed agent JSON registry work (e.g., 202601041253-0000A, 202601041253-0002T)."
     },
     {
       "id": "202601041253-00003",
@@ -5652,12 +5658,25 @@
       "doc_updated_by": "agentctl",
       "description": "Correct malformed depends_on entries in tasks.json and confirm lint passes.",
       "doc": "## Summary\n\nFix malformed depends_on entries so task lint passes cleanly.\n\n## Scope\n\n- Replace malformed depends_on values for 202601191449-RM6JRR and 202601191449-XTMQRZ.\\n- Re-export tasks.json and confirm task lint passes.\n\n## Risks\n\nLow: metadata-only change; risk limited to dependency metadata.\n\n## Verify Steps\n\nNot run (metadata fix); will run task lint after export.\n\n## Rollback Plan\n\nRevert the commit(s) to restore prior depends_on values if needed."
+    },
+    {
+      "id": "202601200839-ZWPK78",
+      "title": "Review open tasks for closure",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:39:58+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Audit open tasks, close those already implemented or obsolete, and report remaining items for review."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "fc235b1491a42d8a93a6cefb020007898e01f0b8d1dfb0b8413ea98ff9c3eea4"
+    "checksum": "aad084f738af0fed6b7279a0a88baa1ca57905148cc20d72c01131b85201d287"
   }
 }
