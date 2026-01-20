@@ -1,11 +1,14 @@
 ---
 id: "202601201257-ZA4XF2"
 title: "Ignore new files during agent work"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "5eefd8af89c15b70f12d81d7e6b8e3663e5e26ed", message: "🔧 ZA4XF2 ignore new files in agent rules; document task scope and verification" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: AGENTS.md updated with ignore-new-files rule | details: task doc sections set; no tests required." }
 doc_version: 2
 doc_updated_at: "2026-01-20T12:58:42+00:00"
 doc_updated_by: "agentctl"
