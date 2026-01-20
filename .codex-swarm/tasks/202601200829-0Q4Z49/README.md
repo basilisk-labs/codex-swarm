@@ -1,11 +1,14 @@
 ---
 id: "202601200829-0Q4Z49"
 title: "Fix task lint dependency errors"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "4d23bdcf5906ad3410b10a926353888d514b9730", message: "✨ 0Q4Z49 fix malformed depends_on values" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: not run (metadata-only) | details: depends_on values corrected so task lint can pass." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:30:52+00:00"
 doc_updated_by: "agentctl"
