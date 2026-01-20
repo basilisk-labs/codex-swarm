@@ -29,6 +29,7 @@ shared_state:
 - Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
 - Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
 - Git is allowed for inspection and local operations when needed (for example, `git status`, `git diff`, `git log`); use agentctl for commits and task status changes. Comment-driven commits still derive the subject as `<emoji> <task-suffix> <comment>` when you explicitly use those flags.
+- Ignore new/untracked files you did not create; do not pause or comment on them. Only stage and commit files you intentionally modified for the task.
 - The workspace is always a git repository. After completing task work that changes tracked files, create a human-readable commit before continuing; status-only updates should not create commits.
 - Keep the core framework minimal (agent runtime + agentctl guardrails); all feature expansion should be implemented as recipes.
 
@@ -97,7 +98,7 @@ shared_state:
 - The agent that finishes a plan task is the one who commits, with a detailed changelog-style description of the completed work in that message.
 - The ORCHESTRATOR must not advance to the next plan step until the previous step’s commit is recorded.
 - Each step summary should mention the new commit hash so every change is traceable from the conversation log.
-- Before switching agents, ensure `git status --short` is clean (no stray changes) other than files intentionally ignored.
+- Before switching agents, ensure `git status --short` is clean for tracked changes; unrelated untracked files are acceptable.
 - Before committing, run `python .codex-swarm/agentctl.py guard commit <task-id> -m "…" --allow <path>` to validate the staged allowlist and message quality.
 
 > Role-specific commit conventions live in each agent’s JSON profile.
