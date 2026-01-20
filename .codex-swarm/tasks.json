@@ -5521,7 +5521,7 @@
     {
       "id": "202601200756-3RRHDD",
       "title": "Roadmap: stabilize agent workflow",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [
@@ -5530,10 +5530,21 @@
         "202601200757-DVXJJ7"
       ],
       "tags": [],
+      "commit": {
+        "hash": "f8d83caf343e2cc6e67466bce323b4d50fba8091",
+        "message": "✨ 3RRHDD document roadmap tracking task"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: not run (tracking only) | details: all roadmap subtasks are complete."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-20T07:56:15+00:00",
+      "doc_updated_at": "2026-01-20T08:22:13+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Define a small roadmap to reduce delays/errors in task+file workflows. Subtasks: 202601200756-M04JPT (align task-creation rules), 202601200757-VW6406 (templates/checklists), 202601200757-DVXJJ7 (agentctl preflight warnings)."
+      "description": "Define a small roadmap to reduce delays/errors in task+file workflows. Subtasks: 202601200756-M04JPT (align task-creation rules), 202601200757-VW6406 (templates/checklists), 202601200757-DVXJJ7 (agentctl preflight warnings).",
+      "doc": "## Summary\n\nTrack completion of the workflow-stability roadmap tasks.\n\n## Scope\n\n- 202601200756-M04JPT: align task-creation authority.\\n- 202601200757-VW6406: add templates/checklists.\\n- 202601200757-DVXJJ7: add agentctl preflight warnings.\n\n## Risks\n\nLow: tracking-only task; no runtime changes.\n\n## Verify Steps\n\nNot run (tracking only).\n\n## Rollback Plan\n\nReopen the task or revert the closure commit if tracking needs to be undone."
     },
     {
       "id": "202601200756-M04JPT",
@@ -5612,6 +5623,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "5e24c8c48917b24532b7d6152983922b92a02c9d9b91396f144d1774521dde7a"
+    "checksum": "68379a49080973422390c91e982df87014d9b5fdd32c1f00c0ee8478f0e88b97"
   }
 }
