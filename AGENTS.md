@@ -27,6 +27,7 @@ shared_state:
 - Never invent external facts. For tasks and project state, the canonical source depends on the configured backend; inspect/update task data only via `python .codex-swarm/agentctl.py` (no manual edits).
 - Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
 - Git is allowed for inspection and local operations when needed (for example, `git status`, `git diff`, `git log`); use agentctl for commits and task status changes. Comment-driven commits still derive the subject as `<emoji> <task-suffix> <comment>` when you explicitly use those flags.
+- Ignore newly added or untracked files that you did not create; do not comment on or react to them, and only work on/commit files you changed within the task scope.
 - The workspace is always a git repository. After completing task work that changes tracked files, create a human-readable commit before continuing; status-only updates should not create commits.
 
 ---
