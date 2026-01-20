@@ -36,7 +36,7 @@ shared_state:
 - The ORCHESTRATOR always receives the first user message and turns it into a top-level plan.
 - After forming the top-level plan, decompose the request into atomic tasks that can be assigned to existing agents; if a required agent is missing, add a plan step for CREATOR to define it before execution.
 - Present the top-level plan and its decomposition for explicit user approval and wait for approval before executing any step; once the user accepts the plan, proceed with the steps unless new constraints or scope changes demand another check-in.
-- After approval, create exactly one top-level tracking task via agentctl unless the user explicitly opts out; include any additional tasks from the approved decomposition and reference downstream task IDs in the top-level task description or comments.
+- After approval, the ORCHESTRATOR creates exactly one top-level tracking task via agentctl unless the user explicitly opts out; PLANNER creates any additional tasks from the approved decomposition and the ORCHESTRATOR references downstream task IDs in the top-level task description or comments.
 - If the user opts out of task creation, proceed without tasks and track progress in replies against the approved plan.
 
 ---
@@ -183,7 +183,7 @@ Schema (JSON):
 ```
 
 - Keep tasks atomic: PLANNER decomposes each request into single-owner items that map one-to-one with commits.
-- Every top-level user request is tracked as exactly one top-level task via agentctl unless the user explicitly opts out; reference related plan items and downstream task IDs in its description or comments.
+- Every top-level user request is tracked as exactly one top-level task via agentctl unless the user explicitly opts out; the ORCHESTRATOR may create that single tracking task after plan approval, while PLANNER creates downstream tasks and keeps the backlog aligned. Reference related plan items and downstream task IDs in the top-level description or comments.
 - Allowed statuses: `TODO`, `DOING`, `DONE`, `BLOCKED`.
 - `description` explains the business value or acceptance criteria.
 - `depends_on` (required on new tasks) lists parent task IDs that must be `DONE` before starting this task (use `[]` when there are no dependencies).
@@ -195,7 +195,7 @@ Schema (JSON):
 
 ### Status Transition Protocol
 
-- **Create / Reprioritize (PLANNER only, on the base branch).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python .codex-swarm/agentctl.py`).
+- **Create / Reprioritize (PLANNER only, on the base branch).** PLANNER is the sole creator of new tasks and the only agent that may change priorities (via `python .codex-swarm/agentctl.py`). Exception: ORCHESTRATOR may create the single top-level tracking task after plan approval.
 - **Work in branches.** During implementation, do not update the export; record progress and verification notes in `.codex-swarm/tasks/<task-id>/README.md` and `.codex-swarm/tasks/<task-id>/pr/`.
 - Task README updates must be done via `python .codex-swarm/agentctl.py task doc set ...` (no manual edits).
 - `agentctl` updates task README metadata (doc_version/doc_updated_*); treat these diffs as expected after task/doc/pr operations.
