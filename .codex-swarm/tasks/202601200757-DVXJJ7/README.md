@@ -1,11 +1,14 @@
 ---
 id: "202601200757-DVXJJ7"
 title: "Agentctl preflight warnings for workflow_mode + PR artifacts"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: []
+commit: { hash: "4d6d802bc749080310d8b289b3c4612efe1cfc68", message: "✨ DVXJJ7 warn on direct-mode PR usage and stale meta" }
+comments:
+  - { author: "CODER", body: "verified: not run | details: manual review only for warning paths in agentctl pr commands and pr_check." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:20:55+00:00"
 doc_updated_by: "agentctl"

@@ -5562,15 +5562,26 @@
     {
       "id": "202601200757-DVXJJ7",
       "title": "Agentctl preflight warnings for workflow_mode + PR artifacts",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "CODER",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "4d6d802bc749080310d8b289b3c4612efe1cfc68",
+        "message": "✨ DVXJJ7 warn on direct-mode PR usage and stale meta"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "verified: not run | details: manual review only for warning paths in agentctl pr commands and pr_check."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-20T07:57:27+00:00",
+      "doc_updated_at": "2026-01-20T08:20:55+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Add lightweight preflight checks/warnings for direct vs branch_pr mismatches and missing PR artifact updates."
+      "description": "Add lightweight preflight checks/warnings for direct vs branch_pr mismatches and missing PR artifact updates.",
+      "doc": "## Summary\n\nAdd preflight warnings for workflow_mode mismatches and stale PR artifacts in agentctl.\n\n## Scope\n\n- Warn when running pr open/update/check/note in workflow_mode=direct.\\n- Warn when pr_check detects stale or missing PR meta head_sha.\n\n## Risks\n\nLow: warnings only; no behavior changes to success/failure paths.\n\n## Verify Steps\n\nNot run (manual inspection only).\n\n## Rollback Plan\n\nRevert the commit(s) to remove the warning hooks in agentctl."
     },
     {
       "id": "202601200757-VW6406",
@@ -5601,6 +5612,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "6226e4d0799e1906e77491ade6a4bc11813d06e627256f3f4a3dc1a6a8be1ccd"
+    "checksum": "5e24c8c48917b24532b7d6152983922b92a02c9d9b91396f144d1774521dde7a"
   }
 }
