@@ -5745,12 +5745,36 @@
       "doc_updated_by": "agentctl",
       "description": "Audit open tasks, close those already implemented or obsolete, and report remaining items for review.",
       "doc": "## Summary\n\nReviewed open tasks, closed those already implemented or obsolete, and left remaining items for follow-up.\n\n## Scope\n\n- Closed 202601041253-00002, 202601131236-DBW16S, 202601191459-E89YQT, 202601121711-GZ15T6, 202601130946-EPQFXS.\\n- Updated tags for recent DONE tasks (E89YQT scope).\\n- Verified lint and task list after cleanup.\n\n## Risks\n\nLow: metadata/closure updates only; risk is closing a task that needs future follow-up.\n\n## Verify Steps\n\npython .codex-swarm/agentctl.py task lint\\npython .codex-swarm/agentctl.py task list\n\n## Rollback Plan\n\nReopen any task that was closed in error and revert the closure commits."
+    },
+    {
+      "id": "202601200915-E1P7ZG",
+      "title": "Validate Redmine sync using env backend",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "3ef44b04eb4159bdf9530fc59e5d542b995c47dd",
+        "message": "✨ E1P7ZG record Redmine env sync report"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: Redmine sync pull/push executed using .env credentials via sandbox cache | details: pulled 11 tasks; push reported no dirty tasks; backend config restored."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:44:39+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Run Redmine sync using .env credentials with isolated cache, capture scenario steps and report, and restore local backend config.",
+      "doc": "## Summary\n\nValidated Redmine sync using .env credentials via sandbox cache and confirmed pull/push behavior without modifying local tasks.\n\n## Context\n\nUser requested a real Redmine backend check using .env credentials; sync ran via the sandbox backend config to isolate cache and protect local backend settings.\n\n## Scope\n\nSwitched tasks_backend.config_path to .codex-swarm/backends/redmine/backend.sandbox.json, ran sync pull/push, restored config to .codex-swarm/backends/local/backend.json, and removed .codex-swarm/tasks-redmine-cache.\n\n## Risks\n\nNetwork calls to Redmine could write if dirty cache exists; verified no dirty tasks were present (push reported none).\n\n## Verify Steps\n\n1) python .codex-swarm/agentctl.py sync redmine --direction pull (with tasks_backend.config_path set to the sandbox backend)\n2) python .codex-swarm/agentctl.py sync redmine --direction push --yes (with tasks_backend.config_path set to the sandbox backend)\n\n## Rollback Plan\n\nReset tasks_backend.config_path to .codex-swarm/backends/local/backend.json and delete .codex-swarm/tasks-redmine-cache if present.\n\n## Notes\n\nScenario:\n1) Set tasks_backend.config_path to .codex-swarm/backends/redmine/backend.sandbox.json.\n2) Ran sync pull against Redmine.\n3) Ran sync push with --yes.\n4) Restored tasks_backend.config_path to .codex-swarm/backends/local/backend.json.\n5) Deleted .codex-swarm/tasks-redmine-cache.\n\nReport:\n- Pull: OK, pulled 11 task(s).\n- Push: Info, no dirty tasks to push.\n- Cache cleaned; backend config restored."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4a6f60bb009f07f094a271f6b6b22cf1dca74ad364a3886a1054cdc9f4576613"
+    "checksum": "c0b9ef9f15beaabbbdc5e8dbe0ed74b29306b7defc3de0324e0b02edffed249f"
   }
 }

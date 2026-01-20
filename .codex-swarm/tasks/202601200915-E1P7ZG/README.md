@@ -1,11 +1,14 @@
 ---
 id: "202601200915-E1P7ZG"
 title: "Validate Redmine sync using env backend"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "3ef44b04eb4159bdf9530fc59e5d542b995c47dd", message: "✨ E1P7ZG record Redmine env sync report" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: Redmine sync pull/push executed using .env credentials via sandbox cache | details: pulled 11 tasks; push reported no dirty tasks; backend config restored." }
 doc_version: 2
 doc_updated_at: "2026-01-20T09:44:39+00:00"
 doc_updated_by: "agentctl"
