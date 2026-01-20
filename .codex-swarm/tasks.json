@@ -5715,21 +5715,32 @@
     {
       "id": "202601200839-ZWPK78",
       "title": "Review open tasks for closure",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "ae783cd66b4c68769622d88127a3cb7aad34100b",
+        "message": "✨ ZWPK78 document open-task review scope"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: task lint and task list run | details: closed implemented/obsolete tasks and recorded remaining backlog."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-20T08:39:58+00:00",
+      "doc_updated_at": "2026-01-20T08:50:22+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Audit open tasks, close those already implemented or obsolete, and report remaining items for review."
+      "description": "Audit open tasks, close those already implemented or obsolete, and report remaining items for review.",
+      "doc": "## Summary\n\nReviewed open tasks, closed those already implemented or obsolete, and left remaining items for follow-up.\n\n## Scope\n\n- Closed 202601041253-00002, 202601131236-DBW16S, 202601191459-E89YQT, 202601121711-GZ15T6, 202601130946-EPQFXS.\\n- Updated tags for recent DONE tasks (E89YQT scope).\\n- Verified lint and task list after cleanup.\n\n## Risks\n\nLow: metadata/closure updates only; risk is closing a task that needs future follow-up.\n\n## Verify Steps\n\npython .codex-swarm/agentctl.py task lint\\npython .codex-swarm/agentctl.py task list\n\n## Rollback Plan\n\nReopen any task that was closed in error and revert the closure commits."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "82ad95e2a4344ec47fe9538b8d5212889a36d0bb3ccf8a38610fc1886d83d7ff"
+    "checksum": "6e41009e511e363c94147aa4c7dda040936211e4e305ab180a4c9a529ff44b6f"
   }
 }

@@ -1,11 +1,14 @@
 ---
 id: "202601200839-ZWPK78"
 title: "Review open tasks for closure"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: []
+commit: { hash: "ae783cd66b4c68769622d88127a3cb7aad34100b", message: "✨ ZWPK78 document open-task review scope" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: task lint and task list run | details: closed implemented/obsolete tasks and recorded remaining backlog." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:50:22+00:00"
 doc_updated_by: "agentctl"
