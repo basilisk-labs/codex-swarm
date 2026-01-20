@@ -5575,21 +5575,32 @@
     {
       "id": "202601200757-VW6406",
       "title": "Add task README/comment templates and workflow checklists",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "DOCS",
       "depends_on": [],
       "tags": [],
+      "commit": {
+        "hash": "4ca627e3dc386c1349747199e507fc94df337988",
+        "message": "✨ VW6406 add workflow templates and checklists"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "verified: not run (docs-only) | details: added templates and checklists in docs/05-workflow.md."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-20T07:57:08+00:00",
+      "doc_updated_at": "2026-01-20T08:17:44+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Provide templates for required task README sections and status comments, plus direct/branch_pr checklists to reduce workflow errors."
+      "description": "Provide templates for required task README sections and status comments, plus direct/branch_pr checklists to reduce workflow errors.",
+      "doc": "## Summary\n\nAdd README section templates, status comment templates, and workflow checklists to reduce task/doc errors.\n\n## Scope\n\n- Add template guidance for required task README sections.\\n- Add status comment templates (Start/Blocked/Verified).\\n- Add direct/branch_pr checklists in workflow docs.\n\n## Risks\n\nLow: documentation-only changes; risk is outdated guidance if workflows shift.\n\n## Verify Steps\n\nNot run (docs-only).\n\n## Rollback Plan\n\nRevert the commit(s) and remove the templates/checklists from workflow docs."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "4a12ac806dc3157ff6053f00f4bfd54fd736f532d4d4a12c75b2e5cab32a4fcf"
+    "checksum": "6226e4d0799e1906e77491ade6a4bc11813d06e627256f3f4a3dc1a6a8be1ccd"
   }
 }

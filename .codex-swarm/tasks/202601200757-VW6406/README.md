@@ -1,11 +1,14 @@
 ---
 id: "202601200757-VW6406"
 title: "Add task README/comment templates and workflow checklists"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: []
+commit: { hash: "4ca627e3dc386c1349747199e507fc94df337988", message: "✨ VW6406 add workflow templates and checklists" }
+comments:
+  - { author: "DOCS", body: "verified: not run (docs-only) | details: added templates and checklists in docs/05-workflow.md." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:17:44+00:00"
 doc_updated_by: "agentctl"
