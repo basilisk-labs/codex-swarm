@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Recipes helper CLI for Codex Swarm.
 
-Implements scan/show/compile/explain for recipe manifests and scenarios.
+Implements scan/show/compile/explain/refresh for recipe manifests and scenarios.
 """
 
 from __future__ import annotations
@@ -117,6 +117,14 @@ def optional_str_list(value: object) -> list[str] | None:
         if item.strip():
             items.append(item.strip())
     return items
+
+
+def coerce_inputs(value: object | None, field: str) -> JsonDict:
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        fail(EXIT_SCHEMA_INVALID, f"{field} must be an object")
+    return cast(JsonDict, value)
 
 
 def normalize_relative_path(path_value: str, field: str) -> str:
@@ -650,6 +658,7 @@ def compile_bundle(
     strict: bool,
     context_mode: str | None,
     recipes_dir: Path,
+    inputs_override: JsonDict | None = None,
 ) -> None:
     recipe_dir = recipes_dir / slug
     manifest_path = recipe_dir / "manifest.json"
@@ -667,7 +676,9 @@ def compile_bundle(
     scenario_path = recipe_dir / expect_str(scenario.get("path"), "scenario.path")
     scenario_md = scenario_path.read_text(encoding="utf-8")
     inputs: JsonDict = {}
-    if inputs_path is not None:
+    if inputs_override is not None:
+        inputs = coerce_inputs(inputs_override, "inputs")
+    elif inputs_path is not None:
         inputs = read_json(inputs_path)
     missing_inputs: set[str] = set()
     input_errors: list[str] = []
@@ -814,6 +825,44 @@ def explain_bundle(
     print(render_bundle_md(bundle))
 
 
+def refresh_bundle(
+    bundle_path: Path,
+    out_path: Path | None,
+    out_md_path: Path | None,
+    recipes_dir: Path,
+    validate_env: bool,
+    validate_inputs_flag: bool,
+    strict: bool,
+    context_mode: str | None,
+) -> None:
+    bundle = read_json(bundle_path)
+    recipe = expect_dict(bundle.get("recipe"), "bundle.recipe")
+    slug = expect_str(recipe.get("slug"), "bundle.recipe.slug")
+    scenario = expect_dict(bundle.get("scenario"), "bundle.scenario")
+    scenario_id = expect_str(scenario.get("id"), "bundle.scenario.id")
+    inputs = coerce_inputs(bundle.get("inputs"), "bundle.inputs")
+    target_out = out_path or bundle_path
+    target_md = out_md_path
+    if target_md is None:
+        candidate = bundle_path.with_suffix(".md")
+        if candidate.exists():
+            target_md = candidate
+    compile_bundle(
+        slug=slug,
+        scenario_id=scenario_id,
+        inputs_path=None,
+        out_path=target_out,
+        out_md_path=target_md,
+        stdout=False,
+        validate_env=validate_env,
+        validate_inputs_flag=validate_inputs_flag,
+        strict=strict,
+        context_mode=context_mode,
+        recipes_dir=recipes_dir,
+        inputs_override=inputs,
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="recipes.py", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -855,6 +904,17 @@ def build_parser() -> argparse.ArgumentParser:
     explain_parser.add_argument("--recipes-dir", default=".codex-swarm/recipes")
     explain_parser.set_defaults(func=handle_explain)
 
+    refresh_parser = subparsers.add_parser("refresh", help="Refresh an existing bundle.json in place")
+    refresh_parser.add_argument("--bundle", required=True)
+    refresh_parser.add_argument("--out")
+    refresh_parser.add_argument("--out-md")
+    refresh_parser.add_argument("--validate-env", action=argparse.BooleanOptionalAction, default=True)
+    refresh_parser.add_argument("--validate-inputs", action=argparse.BooleanOptionalAction, default=True)
+    refresh_parser.add_argument("--strict", action=argparse.BooleanOptionalAction, default=False)
+    refresh_parser.add_argument("--context-mode", choices=["references_only", "inline_small", "inline_with_snippets"])
+    refresh_parser.add_argument("--recipes-dir", default=".codex-swarm/recipes")
+    refresh_parser.set_defaults(func=handle_refresh)
+
     return parser
 
 
@@ -887,6 +947,19 @@ def handle_explain(args: argparse.Namespace) -> None:
         slug=args.slug,
         scenario_id=args.scenario,
         inputs_path=Path(args.inputs) if args.inputs else None,
+        recipes_dir=Path(args.recipes_dir),
+        validate_env=args.validate_env,
+        validate_inputs_flag=args.validate_inputs,
+        strict=args.strict,
+        context_mode=args.context_mode,
+    )
+
+
+def handle_refresh(args: argparse.Namespace) -> None:
+    refresh_bundle(
+        bundle_path=Path(args.bundle),
+        out_path=Path(args.out) if args.out else None,
+        out_md_path=Path(args.out_md) if args.out_md else None,
         recipes_dir=Path(args.recipes_dir),
         validate_env=args.validate_env,
         validate_inputs_flag=args.validate_inputs,
