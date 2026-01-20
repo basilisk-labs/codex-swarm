@@ -32,6 +32,61 @@ python .codex-swarm/recipes.py scan --recipes-dir .codex-swarm/recipes --output 
 ```
 Commit `docs/recipes-inventory.json` and refresh it whenever manifests change.
 
+## Global recipes bundle
+
+The global bundle is a generated file that aggregates all recipes, scenarios, tools, and context snapshots so agents can load a single source of truth.
+It is generated and **not** committed. Default location: `.codex-swarm/recipes/bundle.json`.
+
+Build the bundle:
+```bash
+python .codex-swarm/recipes.py bundle build --out .codex-swarm/recipes/bundle.json
+```
+
+Read the bundle:
+```bash
+python .codex-swarm/recipes.py bundle show --bundle .codex-swarm/recipes/bundle.json --summary
+python .codex-swarm/recipes.py bundle show --bundle .codex-swarm/recipes/bundle.json --recipe <slug>
+```
+
+Bundle format (recipes-bundle@1):
+```json
+{
+  "bundle_version": "recipes-bundle@1",
+  "generated_at": "2026-01-20T12:00:00Z",
+  "recipes": [
+    {
+      "slug": "feature-spec-to-tasks",
+      "name": "Task to roadmap",
+      "summary": "...",
+      "tags": ["planning"],
+      "version": "0.2.0",
+      "entrypoints": { "ide": {}, "cli": {} },
+      "env": [],
+      "requires": {},
+      "safety": {},
+      "tools": [],
+      "tool_plan": [],
+      "context": { "policy": {}, "files": [], "warnings": [] },
+      "scenarios": [
+        {
+          "id": "from-issue",
+          "title": "From issue text",
+          "path": "scenarios/from-issue.md",
+          "prompt_md": "...",
+          "inputs_schema": {},
+          "outputs": [],
+          "required_agents": []
+        }
+      ]
+    }
+  ]
+}
+```
+
+Notes:
+- Context snapshots use each recipe's context policy and enforce limits.
+- Default context mode is `inline_small`; override with `--context-mode` if needed.
+
 ## Bundle refresh
 
 To refresh an existing bundle in place:
