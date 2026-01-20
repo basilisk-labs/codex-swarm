@@ -5906,12 +5906,99 @@
       "doc_updated_by": "agentctl",
       "description": "Document the core vs recipes backend strategy (local backend stays in core; remote backends via recipes) and define the mini-CLI contract for recipe tools, aligned with agentctl-style outputs and errors.",
       "doc": "## Summary\n\nDocumented the recipe mini-CLI contract and clarified the core/local backend strategy in the docs.\n\n## Context\n\nNeeded to codify the minimal core (local backend) and require recipe tools to expose a formal mini-CLI interface.\n\n## Scope\n\nUpdated AGENTS.md with the local-backend core rule; added a recipe mini-CLI contract and structured output format in RECIPES.md; noted backend strategy in docs/07-tasks-and-backends.md.\n\n## Risks\n\nDocumentation changes may need alignment as recipe tooling evolves; enforce the mini-CLI contract in future recipe implementations.\n\n## Verify Steps\n\nReviewed the updated documentation sections for consistency with core and recipe guardrails.\n\n## Rollback Plan\n\nRevert commit c9a7cc449afd to remove the documentation updates.\n\n## Notes\n\nMini-CLI JSON output format is now documented in RECIPES.md and should be used for new recipe tools."
+    },
+    {
+      "id": "202601200742-F4TREY",
+      "title": "Plan Redmine backend recipe migration",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "2ada67f606a03c73e9f91bb20fdc88e17a512913",
+        "message": "✅ NNSHSS verified: close: redmine migration steps and dependencies recorded."
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Subtasks: 202601200743-6CQN5R (recipe spec), 202601200743-NNSHSS (migration steps)."
+        },
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: close: redmine backend audit and recipe migration plan complete."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:47:41+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Audit the current Redmine backend and define a recipe-based replacement (scenarios, inputs, outputs, guardrails) so Redmine support can be enabled or disabled.",
+      "doc": "## Summary\n\nAudited the Redmine backend and defined the recipe-based replacement plan with scenarios, inputs, and migration steps.\n\n## Context\n\nGoal: move Redmine backend into a recipe so it is optional and user-enabled, while keeping local backend in core.\n\n## Scope\n\nReviewed current Redmine backend implementation (.codex-swarm/backends/redmine/backend.py, backend.json) and agentctl sync behavior. Defined recipe specification (202601200743-6CQN5R) and migration steps (202601200743-NNSHSS).\n\n## Risks\n\nRedmine backend migration requires careful handling of config and custom fields; recipe must enforce safe defaults and explicit confirmation for sync push.\n\n## Verify Steps\n\nReviewed redmine backend code and agentctl sync command behavior; confirmed recipe plan covers install/disable/sync/verify flows.\n\n## Rollback Plan\n\nLeave core local backend untouched; migration can be abandoned by keeping local backend config and not installing the recipe payload.\n\n## Notes\n\nNext step is implementing the redmine-backend recipe and updating docs/12-redmine.md to reference it."
+    },
+    {
+      "id": "202601200743-6CQN5R",
+      "title": "Define Redmine recipe spec",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "docs"
+      ],
+      "commit": {
+        "hash": "5d34f59acf32f0143b800f61fbe21adc5514414b",
+        "message": "✨ F4TREY scaffold Redmine recipe migration tasks"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "verified: close: redmine recipe spec defined with scenarios, inputs, outputs, and mini-cli contract."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:46:04+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Write the Redmine recipe specification: manifest, scenarios, inputs schema, outputs, and mini-CLI contract.",
+      "doc": "## Summary\n\nSpecified the Redmine backend recipe structure, scenarios, inputs, outputs, and mini-CLI contract.\n\n## Context\n\nRedmine must be optional and enabled via recipes; the recipe needs a self-contained mini-CLI aligned with agentctl-style outputs.\n\n## Scope\n\nRecipe slug: redmine-backend.\\nScenarios: install (copy backend files + set config), disable (switch to local backend), status (show current backend + env), sync-pull (agentctl sync redmine --direction pull), sync-push (agentctl sync redmine --direction push --yes), verify-connection (ping Redmine API).\\nInputs schema: redmine_url, api_key, project_id, assignee_id (optional), owner_agent (optional), status_map, custom_fields, cache_dir, conflict_policy, confirm_push.\\nOutputs: .codex-swarm/backends/redmine/backend.json, .codex-swarm/backends/redmine/backend.py, updated .codex-swarm/config.json, run artifacts under .codex-swarm/.runs/<run_id>/artifacts/*.\\nMini-CLI: node or python runner with commands (install|disable|status|sync|verify) and --json output; errors follow RECIPES.md format; exit non-zero on failure.\n\n## Risks\n\nRecipe runner will need network access; misconfiguration of custom fields can corrupt sync. Ensure scenario prompts and inputs validation are strict.\n\n## Verify Steps\n\nReview existing Redmine backend settings and confirm the recipe outputs cover backend.json, backend.py, and config updates.\n\n## Rollback Plan\n\nKeep local backend as default; recipe disable scenario restores config to local backend and removes redmine backend files if needed.\n\n## Notes\n\nRunner should support --json output and emit artifacts list for install/sync actions; use agentctl for task operations."
+    },
+    {
+      "id": "202601200743-NNSHSS",
+      "title": "Phase Redmine backend to recipe",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200743-6CQN5R"
+      ],
+      "tags": [
+        "recipes",
+        "planning"
+      ],
+      "commit": {
+        "hash": "b09bec2ae55a0afa1f5864ffd4cbdc133a73b55d",
+        "message": "✅ 6CQN5R verified: close: redmine recipe spec defined with scenarios, inputs, outputs, and mini-cli contract."
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: close: redmine migration steps and dependencies recorded."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:46:49+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Define the migration steps and dependencies for replacing the Redmine backend with a recipe-driven integration.",
+      "doc": "## Summary\n\nDefined migration steps and dependencies for moving Redmine backend functionality into a recipe.\n\n## Context\n\nWe want optional Redmine integration without core backend coupling, using recipe-managed enable/disable flows.\n\n## Scope\n\n1) Extract redmine backend files into recipe payload (backend.py, backend.json).\\n2) Add recipe runner (mini-CLI) with install/disable/status/sync/verify commands.\\n3) Update docs to point to recipe enable/disable and remove redmine backend from core listing.\\n4) Validate that local backend remains default; update config via agentctl during install/disable.\\n5) Add recipe to inventory and provide sample inputs schema.\\nDependencies: recipe spec (202601200743-6CQN5R) before implementation; docs update after runner is in place.\n\n## Risks\n\nMigration can break existing Redmine users if install/disable flows are not robust; ensure fallback to local backend is reversible and documented.\n\n## Verify Steps\n\nReview the migration steps with the recipe spec to ensure all required backend behaviors are covered.\n\n## Rollback Plan\n\nKeep core local backend untouched; re-enable local backend via recipe disable command or config reset if migration fails.\n\n## Notes\n\nImplementation task should include updating docs/12-redmine.md to point to the recipe enable/disable workflow."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "6ded8a11831c7f4d85ba7b9fc40e84c502477c790cf1e405e1bd0314cac5e2c6"
+    "checksum": "265595f4d7bacf8762e9d9512f81c2888a9e16d4ed9227f14e518b1614bde522"
   }
 }
