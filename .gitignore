@@ -13,3 +13,4 @@ dmypy.json
 .codex-swarm/tasks.json
 .codex-swarm/.runs
 .codex-swarm/cache
+.codex-swarm/recipes/bundle.json

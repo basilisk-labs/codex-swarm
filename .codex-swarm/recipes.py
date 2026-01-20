@@ -48,6 +48,9 @@ BINARY_EXTENSIONS = {
 
 TEMPLATE_PATTERN = re.compile(r"<([a-zA-Z0-9_-]+)>")
 REPO_ROOT = Path(__file__).resolve().parent.parent
+RECIPES_BUNDLE_VERSION = "recipes-bundle@1"
+DEFAULT_BUNDLE_PATH = ".codex-swarm/recipes/bundle.json"
+DEFAULT_BUNDLE_CONTEXT_MODE = "inline_small"
 
 
 class RecipeError(RuntimeError):
@@ -825,6 +828,190 @@ def explain_bundle(
     print(render_bundle_md(bundle))
 
 
+def load_scenario_docs(scenario: JsonDict, recipe_dir: Path) -> JsonDict:
+    scenario_id = expect_str(scenario.get("id"), "scenario.id")
+    scenario_path_value = expect_str(scenario.get("path"), "scenario.path")
+    scenario_path = recipe_dir / scenario_path_value
+    prompt_md = scenario_path.read_text(encoding="utf-8")
+    inputs_schema_path = optional_str(scenario.get("inputs_schema"))
+    inputs_schema: JsonDict | None = None
+    if inputs_schema_path is not None:
+        inputs_schema = read_json(recipe_dir / inputs_schema_path)
+    entry: JsonDict = {
+        "id": scenario_id,
+        "title": scenario.get("title"),
+        "path": scenario_path_value,
+        "prompt_md": prompt_md,
+        "inputs_schema": inputs_schema,
+        "outputs": scenario.get("outputs", []),
+        "required_agents": scenario.get("required_agents", []),
+    }
+    return entry
+
+
+def build_recipes_bundle(
+    recipes_dir: Path,
+    context_mode: str | None,
+    strict: bool,
+) -> JsonDict:
+    manifests = sorted(recipes_dir.glob("*/manifest.json"))
+    recipes: list[JsonDict] = []
+    for manifest_path in manifests:
+        slug = manifest_path.parent.name
+        try:
+            manifest = load_manifest(manifest_path, slug)
+            manifest = ensure_scenario_titles(manifest, manifest_path.parent)
+        except RecipeError as exc:
+            if strict:
+                raise
+            print(f"Skipping {slug}: {exc}", file=sys.stderr)
+            continue
+        recipe_dir = manifest_path.parent
+        context_policy = normalize_context_policy(manifest.get("context"))
+        if context_mode is not None:
+            inline_policy = expect_dict(context_policy.get("inline_policy"), "context.inline_policy")
+            inline_policy = dict(inline_policy)
+            inline_policy["mode"] = context_mode
+            context_policy["inline_policy"] = inline_policy
+        context, violation = build_context(context_policy, REPO_ROOT)
+        if violation and strict:
+            fail(EXIT_CONTEXT_VIOLATION, f"Context policy violation for recipe '{slug}'")
+        scenarios = [
+            load_scenario_docs(cast(JsonDict, item), recipe_dir)
+            for item in expect_list(manifest.get("scenarios"), "scenarios")
+        ]
+        recipe_entry: JsonDict = {
+            "slug": manifest.get("slug"),
+            "name": manifest.get("name"),
+            "summary": manifest.get("summary"),
+            "tags": manifest.get("tags"),
+            "version": manifest.get("version"),
+            "entrypoints": manifest.get("entrypoints"),
+            "env": manifest.get("env", []),
+            "requires": manifest.get("requires", {}),
+            "safety": manifest.get("safety", {}),
+            "tools": manifest.get("tools", []),
+            "tool_plan": build_tool_plan(manifest, recipe_dir),
+            "context": context,
+            "scenarios": scenarios,
+        }
+        recipes.append(recipe_entry)
+    return {"bundle_version": RECIPES_BUNDLE_VERSION, "generated_at": now_iso(), "recipes": recipes}
+
+
+def show_bundle_summary(bundle: JsonDict, as_json: bool) -> None:
+    recipes_raw = expect_list(bundle.get("recipes"), "bundle.recipes")
+    summaries: list[JsonDict] = []
+    for item in recipes_raw:
+        recipe = expect_dict(item, "bundle.recipes[]")
+        scenarios_raw = expect_list(recipe.get("scenarios"), "recipe.scenarios")
+        scenarios = []
+        for scenario_item in scenarios_raw:
+            scenario = expect_dict(scenario_item, "recipe.scenarios[]")
+            scenarios.append(
+                {
+                    "id": scenario.get("id"),
+                    "title": scenario.get("title"),
+                }
+            )
+        summaries.append(
+            {
+                "slug": recipe.get("slug"),
+                "name": recipe.get("name"),
+                "summary": recipe.get("summary"),
+                "tags": recipe.get("tags"),
+                "scenarios": scenarios,
+            }
+        )
+    if as_json:
+        print(json.dumps({"recipes": summaries}, indent=2, ensure_ascii=True))
+        return
+    print(f"Recipes: {len(summaries)}")
+    for recipe in summaries:
+        slug = recipe.get("slug")
+        name = recipe.get("name")
+        summary = recipe.get("summary")
+        print(f"- {slug}: {name}")
+        if summary:
+            print(f"  Summary: {summary}")
+        tags = recipe.get("tags") or []
+        if isinstance(tags, list) and tags:
+            print(f"  Tags: {', '.join(str(t) for t in tags)}")
+        scenarios = recipe.get("scenarios") or []
+        if isinstance(scenarios, list) and scenarios:
+            labels = ", ".join(
+                f"{item.get('id')}: {item.get('title')}" for item in scenarios if isinstance(item, dict)
+            )
+            if labels:
+                print(f"  Scenarios: {labels}")
+
+
+def show_bundle_recipe(bundle: JsonDict, slug: str, as_json: bool) -> None:
+    recipes_raw = expect_list(bundle.get("recipes"), "bundle.recipes")
+    target: JsonDict | None = None
+    for item in recipes_raw:
+        recipe = expect_dict(item, "bundle.recipes[]")
+        if recipe.get("slug") == slug:
+            target = recipe
+            break
+    if target is None:
+        fail(EXIT_SCHEMA_INVALID, f"Recipe '{slug}' not found in bundle")
+    if as_json:
+        print(json.dumps(target, indent=2, ensure_ascii=True))
+        return
+    print(f"Recipe: {target.get('name')} ({target.get('slug')})")
+    print(f"Summary: {target.get('summary')}")
+    tags = target.get("tags") or []
+    if isinstance(tags, list) and tags:
+        print(f"Tags: {', '.join(str(t) for t in tags)}")
+    version = target.get("version")
+    if version:
+        print(f"Version: {version}")
+    entrypoints = target.get("entrypoints")
+    if entrypoints:
+        print("Entrypoints:")
+        print(json.dumps(entrypoints, indent=2, ensure_ascii=True))
+    env = target.get("env") or []
+    if isinstance(env, list) and env:
+        print(f"Env: {', '.join(str(e) for e in env)}")
+    tools = target.get("tools") or []
+    if isinstance(tools, list) and tools:
+        print("Tools:")
+        for tool in tools:
+            if not isinstance(tool, dict):
+                continue
+            print(f"- {tool.get('id')}: {tool.get('command')}")
+    tool_plan = target.get("tool_plan") or []
+    if isinstance(tool_plan, list) and tool_plan:
+        print("Tool plan:")
+        print(json.dumps(tool_plan, indent=2, ensure_ascii=True))
+    context = target.get("context") or {}
+    if isinstance(context, dict) and context:
+        print("Context snapshot:")
+        print(json.dumps(context, indent=2, ensure_ascii=True))
+    scenarios = target.get("scenarios") or []
+    if isinstance(scenarios, list) and scenarios:
+        print("Scenarios:")
+        for scenario in scenarios:
+            if not isinstance(scenario, dict):
+                continue
+            print(f"## {scenario.get('id')} - {scenario.get('title')}")
+            prompt = scenario.get("prompt_md")
+            if isinstance(prompt, str) and prompt.strip():
+                print(prompt.rstrip())
+            schema = scenario.get("inputs_schema")
+            if isinstance(schema, dict):
+                print("Inputs schema:")
+                print(json.dumps(schema, indent=2, ensure_ascii=True))
+            outputs = scenario.get("outputs")
+            if outputs:
+                print("Outputs:")
+                print(json.dumps(outputs, indent=2, ensure_ascii=True))
+            required_agents = scenario.get("required_agents")
+            if required_agents:
+                print(f"Required agents: {', '.join(str(a) for a in required_agents)}")
+
+
 def refresh_bundle(
     bundle_path: Path,
     out_path: Path | None,
@@ -915,6 +1102,28 @@ def build_parser() -> argparse.ArgumentParser:
     refresh_parser.add_argument("--recipes-dir", default=".codex-swarm/recipes")
     refresh_parser.set_defaults(func=handle_refresh)
 
+    bundle_parser = subparsers.add_parser("bundle", help="Build or show the global recipes bundle")
+    bundle_sub = bundle_parser.add_subparsers(dest="bundle_command", required=True)
+
+    bundle_build = bundle_sub.add_parser("build", help="Build the global recipes bundle")
+    bundle_build.add_argument("--out", default=DEFAULT_BUNDLE_PATH)
+    bundle_build.add_argument(
+        "--context-mode",
+        choices=["references_only", "inline_small", "inline_with_snippets"],
+        default=DEFAULT_BUNDLE_CONTEXT_MODE,
+    )
+    bundle_build.add_argument("--recipes-dir", default=".codex-swarm/recipes")
+    bundle_build.add_argument("--strict", action=argparse.BooleanOptionalAction, default=True)
+    bundle_build.set_defaults(func=handle_bundle_build)
+
+    bundle_show = bundle_sub.add_parser("show", help="Show bundle summary or recipe documentation")
+    bundle_show.add_argument("--bundle", required=True)
+    show_mode = bundle_show.add_mutually_exclusive_group(required=True)
+    show_mode.add_argument("--summary", action="store_true")
+    show_mode.add_argument("--recipe")
+    bundle_show.add_argument("--json", action="store_true")
+    bundle_show.set_defaults(func=handle_bundle_show)
+
     return parser
 
 
@@ -966,6 +1175,23 @@ def handle_refresh(args: argparse.Namespace) -> None:
         strict=args.strict,
         context_mode=args.context_mode,
     )
+
+
+def handle_bundle_build(args: argparse.Namespace) -> None:
+    bundle = build_recipes_bundle(
+        recipes_dir=Path(args.recipes_dir),
+        context_mode=args.context_mode,
+        strict=args.strict,
+    )
+    write_json(Path(args.out), bundle)
+
+
+def handle_bundle_show(args: argparse.Namespace) -> None:
+    bundle = read_json(Path(args.bundle))
+    if args.summary:
+        show_bundle_summary(bundle, bool(args.json))
+    elif args.recipe:
+        show_bundle_recipe(bundle, str(args.recipe), bool(args.json))
 
 
 def main() -> int:
