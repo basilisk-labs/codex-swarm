@@ -5835,7 +5835,7 @@
     {
       "id": "202601200657-W1Y6ND",
       "title": "Phase 1 migration: planning and analysis recipes",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "med",
       "owner": "ORCHESTRATOR",
       "depends_on": [
@@ -5845,10 +5845,21 @@
         "recipes",
         "workflow"
       ],
+      "commit": {
+        "hash": "ce9a0aff3c97eb72fed6c4889ed3000b186ba71b",
+        "message": "✨ W1Y6ND add spec-to-tasks recipe"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: close: spec-to-tasks recipe added | details: inventory refreshed."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-20T06:57:11+00:00",
+      "doc_updated_at": "2026-01-20T07:12:56+00:00",
       "doc_updated_by": "agentctl",
-      "description": "Move planning/analysis helpers (roadmaps, spec drafting, decomposition) into recipes and remove any redundant core logic."
+      "description": "Move planning/analysis helpers (roadmaps, spec drafting, decomposition) into recipes and remove any redundant core logic.",
+      "doc": "## Summary\n\nAdded the spec-to-tasks recipe to move spec decomposition into recipes and refreshed the recipes inventory.\n\n## Context\n\nPhase 1 migration aims to move planning/decomposition helpers into recipes rather than core logic.\n\n## Scope\n\nCreated the spec-to-tasks recipe (manifest, scenario, inputs, runner) and updated docs/recipes-inventory.json via recipes.py scan.\n\n## Risks\n\nRunner uses heuristic parsing of spec sections; complex specs may require manual refinement of the task draft.\n\n## Verify Steps\n\nRan python .codex-swarm/recipes.py scan --recipes-dir .codex-swarm/recipes --output docs/recipes-inventory.json to refresh the catalog.\n\n## Rollback Plan\n\nRevert commit ce9a0aff3c97 to remove the spec-to-tasks recipe and inventory update.\n\n## Notes\n\nPhase 1 now includes roadmap and spec decomposition recipes; further planning recipes can be added as needed."
     },
     {
       "id": "202601200657-Y0P8RY",
@@ -5873,6 +5884,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "c3cfabed50a5de57c2863c30a7762f7337fa67384c87e05579663335c3f907ac"
+    "checksum": "54811020ad92f46a7a0450c1ebac0979464ebec87506e585b4cf684456085cc1"
   }
 }
