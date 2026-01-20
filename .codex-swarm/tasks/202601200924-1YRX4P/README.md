@@ -1,11 +1,12 @@
 ---
 id: "202601200924-1YRX4P"
 title: "Orchestrator reads global bundle"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["agents", "recipes"]
+commit: { hash: "fd7b8cd355edd6c825de15c80511ceabeb28b3e7", message: "✅ 1YRX4P orchestrator: read global bundle" }
 doc_version: 2
 doc_updated_at: "2026-01-20T09:25:15+00:00"
 doc_updated_by: "agentctl"

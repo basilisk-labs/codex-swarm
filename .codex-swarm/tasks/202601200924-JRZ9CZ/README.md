@@ -1,11 +1,12 @@
 ---
 id: "202601200924-JRZ9CZ"
 title: "Document global bundle usage for agents"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "recipes"]
+commit: { hash: "2765924aa6ce9914af70f55930c1302daa750f7c", message: "✅ JRZ9CZ docs: add bundle read guidance" }
 doc_version: 2
 doc_updated_at: "2026-01-20T09:25:09+00:00"
 doc_updated_by: "agentctl"

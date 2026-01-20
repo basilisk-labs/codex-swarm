@@ -6241,12 +6241,78 @@
       "doc_updated_by": "agentctl",
       "description": "Implement recipes.py bundle build/show to generate a global recipes bundle with context and allowed commands.",
       "doc": "## Summary\n\nImplement a global recipes bundle CLI that aggregates all recipes with context and allowed commands.\n\n## Context\n\nAgents need a single bundle to know available recipes, scenarios, tools, and context without loading per-scenario bundles.\n\n## Scope\n\n- Add recipes.py bundle build/show commands.\n- Aggregate per-recipe context snapshots, tools, and scenario docs.\n- Default output to .codex-swarm/recipes/bundle.json (not committed).\n- Ignore the bundle file in .gitignore.\n\n## Risks\n\nGlobal bundle size may grow; ensure context limits are enforced and errors are clear.\n\n## Verify Steps\n\nReview recipes.py help and bundle build output structure.\n\n## Rollback Plan\n\nRevert recipes.py and .gitignore changes.\n\n## Notes\n\nNo tool execution; bundle is metadata only."
+    },
+    {
+      "id": "202601200924-1YRX4P",
+      "title": "Orchestrator reads global bundle",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "recipes"
+      ],
+      "commit": {
+        "hash": "fd7b8cd355edd6c825de15c80511ceabeb28b3e7",
+        "message": "✅ 1YRX4P orchestrator: read global bundle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:25:15+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update ORCHESTRATOR workflow to read global bundle summary and per-recipe docs via recipes.py bundle show.",
+      "doc": "## Summary\n\nUpdate ORCHESTRATOR workflow to read the global bundle summary and recipe details via CLI.\n\n## Context\n\nThe orchestrator should explicitly load bundle summary and per-recipe docs before execution.\n\n## Scope\n\n- Update ORCHESTRATOR.json to call recipes.py bundle show --summary and --recipe when needed.\n\n## Risks\n\nWording could imply implicit tool execution; maintain explicit confirmation requirement.\n\n## Verify Steps\n\nReview ORCHESTRATOR.json for updated instructions.\n\n## Rollback Plan\n\nRevert ORCHESTRATOR.json changes."
+    },
+    {
+      "id": "202601200924-JRZ9CZ",
+      "title": "Document global bundle usage for agents",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs",
+        "recipes"
+      ],
+      "commit": {
+        "hash": "2765924aa6ce9914af70f55930c1302daa750f7c",
+        "message": "✅ JRZ9CZ docs: add bundle read guidance"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:25:09+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update AGENTS.md and RECIPES.md with instructions for agents to read global bundle summary and per-recipe docs.",
+      "doc": "## Summary\n\nDocument how agents read the global recipes bundle via CLI summary and per-recipe views.\n\n## Context\n\nAgents should have a clear, standard way to discover available recipes and read full recipe docs.\n\n## Scope\n\n- Update AGENTS.md with bundle read guidance.\n- Update RECIPES.md with agent-facing usage notes.\n\n## Risks\n\nDocs could imply implicit tool execution; keep explicit confirmation language.\n\n## Verify Steps\n\nReview AGENTS.md and RECIPES.md for accuracy.\n\n## Rollback Plan\n\nRevert documentation changes."
+    },
+    {
+      "id": "202601200924-REXHR8",
+      "title": "Connect agents to global bundle",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200924-JRZ9CZ",
+        "202601200924-1YRX4P"
+      ],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "fd7b8cd355edd6c825de15c80511ceabeb28b3e7",
+        "message": "✅ 1YRX4P orchestrator: read global bundle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:25:24+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Ensure agents/orchestrator read the global recipes bundle via CLI summary and per-recipe docs.",
+      "doc": "## Summary\n\nConnect agents to the global recipes bundle via CLI summary and per-recipe views.\n\n## Context\n\nAgents need a standard discovery path for available recipes and detailed docs.\n\n## Scope\n\n- Add bundle read guidance to AGENTS.md and RECIPES.md.\n- Update ORCHESTRATOR workflow to read bundle summary and per-recipe docs.\n\n## Risks\n\nDocs could be misread as implicit execution; keep explicit confirmation language.\n\n## Verify Steps\n\nReview AGENTS.md, RECIPES.md, and ORCHESTRATOR.json for consistency.\n\n## Rollback Plan\n\nRevert docs and workflow changes."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "6b8c2d099d6345d4817921e65a935b8026e105f18f4cc686e25ce4e7e09e8dfd"
+    "checksum": "0b5e89f2e5c80ea0ed532f781f011c2297b9e52f368b758c909cdec0ff0aaa72"
   }
 }
