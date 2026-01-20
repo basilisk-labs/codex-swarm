@@ -1,11 +1,14 @@
 ---
 id: "202601200656-K1JF4D"
 title: "Align main to target commit"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["git"]
+commit: { hash: "4d5c13c7db1fdca3b48233d52b7e8508c7b724a5", message: "✨ K1JF4D document main alignment task" }
+comments:
+  - { author: "ORCHESTRATOR", body: "verified: local and origin main resolve to 95f1a8e via git rev-parse after push | details: feature/recipe untouched." }
 doc_version: 2
 doc_updated_at: "2026-01-20T06:59:14+00:00"
 doc_updated_by: "agentctl"

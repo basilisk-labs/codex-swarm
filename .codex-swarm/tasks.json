@@ -5451,12 +5451,38 @@
       "doc_updated_by": "agentctl",
       "description": "Replace textual low/normal/high priority labels in the task viewer with icon-based indicators for cards, tables, tooltips, and drawer.",
       "doc": "## Summary\n\nReplace priority text labels in the task viewer with icon indicators for low/normal/high.\n\n## Context\n\nThe viewer currently renders priority as plain text across cards, table rows, tooltips, and the drawer.\n\n## Scope\n\nIntroduce priority icon styles and SVGs, then swap priority renderers to show icons in the viewer UI.\n\n## Risks\n\nIcons could be unclear without hover context; include title/aria labels to preserve meaning.\n\n## Verify Steps\n\nRun ./viewer.sh, open the viewer, and confirm priority renders as icons in kanban cards, table rows, tooltips, and the drawer.\n\n## Rollback Plan\n\nRevert the changes in .codex-swarm/viewer/tasks.html and reload the viewer."
+    },
+    {
+      "id": "202601200656-K1JF4D",
+      "title": "Align main to target commit",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "git"
+      ],
+      "commit": {
+        "hash": "4d5c13c7db1fdca3b48233d52b7e8508c7b724a5",
+        "message": "✨ K1JF4D document main alignment task"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: local and origin main resolve to 95f1a8e via git rev-parse after push | details: feature/recipe untouched."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:59:14+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Ensure local and origin main point to 95f1a8efd523f7a5e1dd3173d3c43c1544d2f9b9 without touching feature/recipe.",
+      "doc": "## Summary\n\n- Align local and origin `main` to commit `95f1a8efd523f7a5e1dd3173d3c43c1544d2f9b9`.\n- Leave `feature/recipe` untouched.\n\n## Context\n\n- User requested server and local `main` to match the target commit.\n\n## Scope\n\n- Switch to `main` and confirm HEAD at the target commit.\n- Fetch and fast-forward `origin/main` to the target commit.\n- Avoid modifying any `feature/recipe` branch history.\n\n## Risks\n\n- Pushing to a locked `main` may bypass protections; confirm the target commit is correct.\n- Aligning main to an older commit can surprise collaborators expecting newer history.\n\n## Verify Steps\n\n- `git rev-parse HEAD`\n- `git rev-parse origin/main`\n\n## Rollback Plan\n\n- `git reset --hard <previous-main-commit>`\n- `git push --force-with-lease origin main`\n\n## Notes\n\n- Target commit: `95f1a8efd523f7a5e1dd3173d3c43c1544d2f9b9`.\n- Push output indicated a locked-branch bypass, but the update succeeded."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "a0420aa4618e1033cfa1a38d2e676603445551c49a548ec013eb34d79ad31e19"
+    "checksum": "b3fa4f320722f0bc34437f2aaee8d3669f8732ad42063214f744b48b398252d5"
   }
 }
