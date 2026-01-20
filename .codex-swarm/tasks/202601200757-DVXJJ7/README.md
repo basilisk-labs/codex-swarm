@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
-tags: []
+tags: ["agentctl", "workflow"]
 commit: { hash: "4d6d802bc749080310d8b289b3c4612efe1cfc68", message: "✨ DVXJJ7 warn on direct-mode PR usage and stale meta" }
 comments:
   - { author: "CODER", body: "verified: not run | details: manual review only for warning paths in agentctl pr commands and pr_check." }

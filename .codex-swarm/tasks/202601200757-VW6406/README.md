@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
-tags: []
+tags: ["docs", "workflow"]
 commit: { hash: "4ca627e3dc386c1349747199e507fc94df337988", message: "✨ VW6406 add workflow templates and checklists" }
 comments:
   - { author: "DOCS", body: "verified: not run (docs-only) | details: added templates and checklists in docs/05-workflow.md." }

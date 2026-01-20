@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["workflow", "tasks"]
 commit: { hash: "1f8ef7274ff0f392ffb2fff899b57eec77568571", message: "✨ JGAM8S document agent workflow delay analysis" }
 comments:
   - { author: "ORCHESTRATOR", body: "verified: not run (analysis-only) | details: findings delivered and roadmap tasks completed." }

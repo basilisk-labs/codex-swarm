@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
-tags: []
+tags: ["tasks", "agentctl"]
 commit: { hash: "4d23bdcf5906ad3410b10a926353888d514b9730", message: "✨ 0Q4Z49 fix malformed depends_on values" }
 comments:
   - { author: "ORCHESTRATOR", body: "verified: not run (metadata-only) | details: depends_on values corrected so task lint can pass." }

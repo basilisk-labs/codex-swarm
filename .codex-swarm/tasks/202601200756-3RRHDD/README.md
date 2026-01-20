@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: ["202601200756-M04JPT", "202601200757-VW6406", "202601200757-DVXJJ7"]
-tags: []
+tags: ["workflow", "tasks"]
 commit: { hash: "f8d83caf343e2cc6e67466bce323b4d50fba8091", message: "✨ 3RRHDD document roadmap tracking task" }
 comments:
   - { author: "ORCHESTRATOR", body: "verified: not run (tracking only) | details: all roadmap subtasks are complete." }

@@ -5,7 +5,7 @@ status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
-tags: []
+tags: ["agents", "workflow"]
 commit: { hash: "c0e037a7766bc7fd2905266d4012177ae21a6a61", message: "✨ M04JPT align task-creation authority across roles" }
 comments:
   - { author: "DOCS", body: "verified: not run (docs-only) | details: alignment matches AGENTS.md and role JSON updates." }
