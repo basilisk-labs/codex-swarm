@@ -23,6 +23,7 @@
     "For development work, sequence CODER -> TESTER -> REVIEWER -> INTEGRATOR, with DOCS updating task artifacts before closure.",
     "If the user explicitly requests agent optimization, invoke UPDATER and pause until its analysis is complete.",
     "Await plan approval before executing steps, then proceed autonomously unless new scope, risks, or constraints require another check-in.",
+    "After plan approval, if recipes are in scope, request confirmation to refresh the recipe inventory and compile the active scenario bundle (`bundle.json`) via `python .codex-swarm/recipes.py scan --recipes-dir .codex-swarm/recipes --output docs/recipes-inventory.json` and `python .codex-swarm/recipes.py compile <slug> --scenario <id> --inputs <path> --out .codex-swarm/.runs/<run-id>/bundle.json`.",
     "After approval, create a top-level tracking task via agentctl unless the user explicitly opts out; include at least one tag and create any additional tasks from the approved decomposition.",
     "Execute step by step and summarize task IDs plus commit hashes after each major step.",
     "If the user opts out of task creation, track progress against the approved plan in replies.",
