@@ -5626,19 +5626,6 @@
       "description": "Summarize how the feature-spec-to-tasks recipe works, including inputs, steps, outputs, and usage guidance."
     },
     {
-      "id": "202601191552-YK34EX",
-      "title": "Tmp tag check",
-      "status": "TODO",
-      "priority": "low",
-      "owner": "ORCHESTRATOR",
-      "depends_on": [],
-      "tags": [],
-      "doc_version": 2,
-      "doc_updated_at": "2026-01-19T15:52:45+00:00",
-      "doc_updated_by": "agentctl",
-      "description": "Tmp"
-    },
-    {
       "id": "202601200542-534F3X",
       "title": "Implement roadmap recipe runner",
       "status": "DONE",
@@ -5721,12 +5708,39 @@
       "doc_updated_by": "agentctl",
       "description": "Rewrite the feature-spec-to-tasks recipe docs (README/scenarios/input schemas) in English, align them with the roadmap purpose, and document recipe formats and the recipe list in RECIPES.md and commands docs.",
       "doc": "## Summary\n\nRewrote the roadmap recipe documentation and input schemas in English, aligned them to roadmap outputs, and documented recipe layout and inventory usage.\n\n## Context\n\nStandardized the feature-spec-to-tasks recipe to focus on roadmap generation and ensured documentation matches current recipe formats and policies.\n\n## Scope\n\nUpdated recipe README, scenarios, and input schemas; documented recipe layout and inventory generation in RECIPES.md; added commands note in docs/09-commands.md.\n\n## Risks\n\nDocumentation can drift if the runner or manifest changes; the inventory list must be regenerated after recipe updates.\n\n## Verify Steps\n\nReviewed updated recipe docs and schemas; confirmed the recipes scan command is documented for the inventory list.\n\n## Rollback Plan\n\nRevert commit f91c90b84720 to restore the prior documentation and schemas.\n\n## Notes\n\nDocumentation-only changes; no runtime behavior updates in this task."
+    },
+    {
+      "id": "202601200647-D3VJSZ",
+      "title": "Audit framework vs recipes",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "88f3b03eed1a74880d868fc3f6a0551841912fbd",
+        "message": "✅ 5Z2HCA export tasks.json after roadmap recipe closure"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: close: framework vs recipe audit completed | details: core/recipe split and migration candidates identified."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:49:04+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Review current framework functionality and identify which capabilities can move into recipes to keep the core minimal.",
+      "doc": "## Summary\n\nAudited the framework and recipe system, confirmed current recipe documentation/CLI coverage, and identified candidates to move into recipes to keep the core minimal.\n\n## Context\n\nGoal was to validate recipe documentation/behavior and map which framework capabilities should be recipes vs core primitives.\n\n## Scope\n\nReviewed AGENTS.md, RECIPES.md, recipes.py, docs/05-workflow.md, docs/06-agents.md, docs/07-tasks-and-backends.md, docs/09-commands.md, docs/recipes-inventory.json, and the roadmap recipe manifest/scenarios; mapped core vs recipe candidates.\n\n## Risks\n\nAudit is advisory; moving features to recipes must preserve agentctl guardrails and no-task-writes constraints.\n\n## Verify Steps\n\nReviewed the recipe docs and CLI sources plus workflow/task docs to build the core-vs-recipes map.\n\n## Rollback Plan\n\nNo code changes; revert the task doc/finish commits if the audit record must be removed.\n\n## Notes\n\nRecommendations delivered in response; no implementation changes executed."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "c319d5dfcdba0c20f66ee3605f01f15f3b18ff7ffb9dc30d17e7c9fa87c8a47e"
+    "checksum": "798e1ef3e44d7817a5f53e084591d797904e861218b1e2085fc119a42b28351e"
   }
 }
