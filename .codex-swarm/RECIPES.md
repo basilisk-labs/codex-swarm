@@ -41,6 +41,37 @@ If a recipe provides a local runner, prefer standard env var names:
 
 Avoid legacy prefixes such as `CYBOS`.
 
+## Recipe mini-CLI contract
+
+If a recipe ships executable tooling, it should provide a mini-CLI that can be run directly from the recipe folder.
+The mini-CLI must:
+- cover all recipe actions used by agents (single `run` command is fine if only one action exists);
+- provide `--help` usage text and example outputs in the recipe `README.md`;
+- emit a structured response format aligned with agentctl format expectations.
+
+Recommended output format (stdout JSON when `--json` is provided):
+```json
+{
+  "status": "ok",
+  "recipe": "slug",
+  "scenario": "id",
+  "run_id": "run-123",
+  "artifacts": { "id": "path" },
+  "warnings": [],
+  "pending_actions": []
+}
+```
+Error format (stdout JSON on failure):
+```json
+{
+  "status": "error",
+  "code": "INVALID_INPUTS",
+  "message": "Describe the failure in one sentence.",
+  "details": { "field": "spec_text" }
+}
+```
+Exit codes must be non-zero for errors. Human-readable output is allowed by default, but JSON output must be stable and machine-readable.
+
 ## agentctl usage
 
 Recipes may invoke `python .codex-swarm/agentctl.py` when the scenario/bundle explicitly requires task changes and the user confirms.

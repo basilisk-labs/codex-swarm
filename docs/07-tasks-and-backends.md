@@ -3,6 +3,10 @@
 ## Summary
 Tasks are routed through `agentctl`, which uses the active backend plugin to decide the source of truth. When `backend=local`, the canonical store is [`.codex-swarm/tasks/`](../.codex-swarm/tasks/). When `backend=redmine`, Redmine is canonical and the local folder acts as a cache/offline layer.
 
+## Backend strategy
+- Core stays minimal and always includes the local backend.
+- Remote backends (for example, Redmine) should be delivered as recipes that can be enabled or disabled on demand.
+
 ## Task Identity
 - Canonical task ID format: `YYYYMMDDHHMM-<RAND>`
 - Example: `202601031816-7F3K2Q`

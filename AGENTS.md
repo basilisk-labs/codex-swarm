@@ -39,6 +39,7 @@ shared_state:
 - Create, update, and close tasks only via `python .codex-swarm/agentctl.py`.
 - Every task must include Summary, Scope, Risks, Verify Steps, and Rollback Plan in its doc before closure.
 - Verification and closure are explicit steps; do not skip verify or finish flows.
+- Keep the local backend in core; any remote backends (for example, Redmine) must be delivered as recipes that can be enabled or disabled.
 
 ---
 
