@@ -5624,12 +5624,109 @@
       "doc_updated_at": "2026-01-19T15:51:18+00:00",
       "doc_updated_by": "agentctl",
       "description": "Summarize how the feature-spec-to-tasks recipe works, including inputs, steps, outputs, and usage guidance."
+    },
+    {
+      "id": "202601191552-YK34EX",
+      "title": "Tmp tag check",
+      "status": "TODO",
+      "priority": "low",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-19T15:52:45+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Tmp"
+    },
+    {
+      "id": "202601200542-534F3X",
+      "title": "Implement roadmap recipe runner",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "recipes"
+      ],
+      "commit": {
+        "hash": "cdb841383165163e845dc4204580b8f052c3d08c",
+        "message": "✨ 202601200542-534F3X implement roadmap recipe runner"
+      },
+      "comments": [
+        {
+          "author": "CODER",
+          "body": "verified: close: roadmap runner generates roadmap, plan, and task draft | details: manifest outputs updated; recipe inventory refreshed."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:10:52+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update the recipe manifest and runner script to generate a complete roadmap from a top-level task, rename env vars away from CYBOS, and refresh the recipes inventory output.",
+      "doc": "## Summary\n\nUpdated the recipe manifest and runner to generate a full roadmap, plus refreshed the recipe inventory output.\n\n## Context\n\nThe roadmap recipe needed a real end-to-end runner that emits roadmap, plan, and tasks draft artifacts with RECIPE_* env vars.\n\n## Scope\n\nUpdated the manifest outputs and tool env vars; rewrote run-feature.js to generate roadmap markdown, milestones, and task draft; regenerated docs/recipes-inventory.json.\n\n## Risks\n\nThe generated roadmap is heuristic and may need manual adjustment for complex tasks; changes to outputs require inventory refresh.\n\n## Verify Steps\n\nRan python .codex-swarm/recipes.py scan --recipes-dir .codex-swarm/recipes --output docs/recipes-inventory.json; ran the runner with sample inputs to confirm roadmap and artifacts are created.\n\n## Rollback Plan\n\nRevert commit cdb841383165 to restore the previous runner, manifest, and inventory.\n\n## Notes\n\nRunner remains local-only and deterministic with no network access."
+    },
+    {
+      "id": "202601200542-5Z2HCA",
+      "title": "Overhaul roadmap recipe and documentation",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "cdb841383165163e845dc4204580b8f052c3d08c",
+        "message": "✨ 202601200542-534F3X implement roadmap recipe runner"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Subtasks: 202601200542-E5CDTX (docs updates), 202601200542-534F3X (runner/manifest updates)."
+        },
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: close: roadmap recipe overhaul complete | details: docs and schemas aligned; runner and manifest updated; inventory refreshed."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:11:30+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update the recipe catalog and docs, standardize recipe file formats, switch the feature-spec-to-tasks recipe to English-only, remove CYBOS env var names, and make the recipe produce a full roadmap from a top-level task.",
+      "doc": "## Summary\n\nDelivered the roadmap recipe overhaul, including English docs, standardized inputs/outputs, a working runner, and refreshed recipe inventory.\n\n## Context\n\nRequired to formalize recipe formats and ensure the roadmap recipe truly generates detailed roadmap artifacts with standard env vars.\n\n## Scope\n\nCoordinated doc/schema updates, manifest and runner implementation, and recipe catalog refresh across the roadmap recipe.\n\n## Risks\n\nRecipe documentation can drift as formats evolve; inventory must be regenerated after manifest changes.\n\n## Verify Steps\n\nReviewed subtask outputs; ran recipes scan and the roadmap runner with sample inputs to validate artifact creation.\n\n## Rollback Plan\n\nRevert commits f91c90b84720 and cdb841383165 to undo the docs and runner changes; regenerate the inventory as needed.\n\n## Notes\n\nSubtasks completed: 202601200542-E5CDTX (docs), 202601200542-534F3X (runner and manifest)."
+    },
+    {
+      "id": "202601200542-E5CDTX",
+      "title": "Update recipe docs and prompts",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "docs"
+      ],
+      "commit": {
+        "hash": "f91c90b847200d91fc5dadfdff39f83ae31a0126",
+        "message": "✨ 202601200542-E5CDTX update roadmap recipe docs"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "verified: close: roadmap recipe docs in English | details: updated scenarios and input schemas; documented layout and inventory workflow."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T06:10:23+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Rewrite the feature-spec-to-tasks recipe docs (README/scenarios/input schemas) in English, align them with the roadmap purpose, and document recipe formats and the recipe list in RECIPES.md and commands docs.",
+      "doc": "## Summary\n\nRewrote the roadmap recipe documentation and input schemas in English, aligned them to roadmap outputs, and documented recipe layout and inventory usage.\n\n## Context\n\nStandardized the feature-spec-to-tasks recipe to focus on roadmap generation and ensured documentation matches current recipe formats and policies.\n\n## Scope\n\nUpdated recipe README, scenarios, and input schemas; documented recipe layout and inventory generation in RECIPES.md; added commands note in docs/09-commands.md.\n\n## Risks\n\nDocumentation can drift if the runner or manifest changes; the inventory list must be regenerated after recipe updates.\n\n## Verify Steps\n\nReviewed updated recipe docs and schemas; confirmed the recipes scan command is documented for the inventory list.\n\n## Rollback Plan\n\nRevert commit f91c90b84720 to restore the prior documentation and schemas.\n\n## Notes\n\nDocumentation-only changes; no runtime behavior updates in this task."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "7adb4de4999094a6ee8e5aefa4383a9e0866ecc79d54aae6b184ca536b868fbd"
+    "checksum": "c319d5dfcdba0c20f66ee3605f01f15f3b18ff7ffb9dc30d17e7c9fa87c8a47e"
   }
 }
