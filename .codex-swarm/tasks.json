@@ -4550,7 +4550,7 @@
     {
       "id": "202601131236-DBW16S",
       "title": "Analyze config.json candidates for agent settings",
-      "status": "TODO",
+      "status": "DONE",
       "priority": "normal",
       "owner": "ORCHESTRATOR",
       "depends_on": [],
@@ -4558,11 +4558,21 @@
         "config",
         "agentctl"
       ],
+      "commit": {
+        "hash": "aa582ef95d06d25813f66a951325ffb2c747f296",
+        "message": "✨ DBW16S record config analysis completion"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "verified: not run (analysis-only) | details: config recommendations implemented in later config/agentctl tasks."
+        }
+      ],
       "doc_version": 2,
-      "doc_updated_at": "2026-01-13T12:44:56+00:00",
+      "doc_updated_at": "2026-01-20T08:41:04+00:00",
       "doc_updated_by": "agentctl",
       "description": "Review repo configs and agent guidance to propose settings that belong in config.json and how agentctl should toggle them.",
-      "doc": "## Summary\n\nPropose config.json additions (verify requirements, task doc sections, comment requirements, branch/worktree paths, commit guard tuning, base_branch) plus agentctl toggles to switch them.\n\n## Context\n\nUser asked to analyze the repo and suggest which settings should move into config.json so agents can honor them and switch them via agentctl.\n\n## Scope\n\nReviewed config usage in .codex-swarm/config.json, .codex-swarm/agentctl.py, AGENTS.md, and key docs; produced a prioritized list of candidate config keys and example agentctl toggles. No code changes.\n\n## Risks\n\nRecommendations require agentctl changes; too many knobs may drift from AGENTS.md if not kept in sync.\n\n## Verify Steps\n\nrg -n \"VERIFY_REQUIRED_TAGS|TASK_DOC_REQUIRED_SECTIONS|WORKTREES_DIRNAME|GENERIC_COMMIT_TOKENS\" .codex-swarm/agentctl.py\nrg -n \"workflow_mode|config.json\" AGENTS.md README.md docs/08-branching-and-pr-artifacts.md\n\n## Rollback Plan\n\nNo code changes; revert this task README or delete the task if the analysis is no longer needed.\n\n## Notes\n\nInspected agentctl constants (VERIFY_REQUIRED_TAGS, TASK_DOC_REQUIRED_SECTIONS, WORKTREES_DIRNAME, GENERIC_COMMIT_TOKENS) and docs that describe workflow_mode and config.json usage."
+      "doc": "## Summary\n\nPropose config.json additions (verify requirements, task doc sections, comment requirements, branch/worktree paths, commit guard tuning, base_branch) plus agentctl toggles to switch them.\n\n## Context\n\nUser asked to analyze the repo and suggest which settings should move into config.json so agents can honor them and switch them via agentctl.\n\n## Scope\n\nReviewed config usage in .codex-swarm/config.json, .codex-swarm/agentctl.py, AGENTS.md, and key docs; produced a prioritized list of candidate config keys and example agentctl toggles. No code changes.\n\n## Risks\n\nRecommendations require agentctl changes; too many knobs may drift from AGENTS.md if not kept in sync.\n\n## Verify Steps\n\nrg -n \"VERIFY_REQUIRED_TAGS|TASK_DOC_REQUIRED_SECTIONS|WORKTREES_DIRNAME|GENERIC_COMMIT_TOKENS\" .codex-swarm/agentctl.py\nrg -n \"workflow_mode|config.json\" AGENTS.md README.md docs/08-branching-and-pr-artifacts.md\n\n## Rollback Plan\n\nNo code changes; revert this task README or delete the task if the analysis is no longer needed.\n\n## Notes\n\nRecommendations were implemented by later config/agentctl tasks (202601131304-D4ZA6S, 202601131304-7JXJF7, 202601131304-MV3TPX)."
     },
     {
       "id": "202601131302-D94Z3G",
@@ -5677,6 +5687,6 @@
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "aad084f738af0fed6b7279a0a88baa1ca57905148cc20d72c01131b85201d287"
+    "checksum": "ea9f4d9a39e6646ed06c9da983d6e312d7939d5f6730f99148c4d10718e8c4c6"
   }
 }
