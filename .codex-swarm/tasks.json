@@ -5504,12 +5504,92 @@
       "doc_updated_by": "agentctl",
       "description": "Reduce accidental file staging, prevent duplicate tasks, and clarify agentctl task doc mutations in agent workflows and tooling.",
       "doc": "## Summary\n\n- Tighten staging/commit guardrails to prevent accidental file inclusion.\n- Block duplicate active task titles unless explicitly overridden.\n- Document agentctl-managed README metadata updates for agents.\n\n## Context\n\n- Agents were frequently staging extra files, creating duplicate tasks, and misattributing README metadata changes.\n\n## Scope\n\n- Add `guard scope` to fail when changes exist outside an allowlist.\n- Switch auto-allow to file-level and require explicit `--commit-auto-allow`.\n- Add duplicate-title detection to `task new` with `--allow-duplicate` override.\n- Update agent/docs guidance to use strict allowlists and expect README metadata updates.\n\n## Risks\n\n- Stricter guardrails may block workflows that relied on implicit auto-allow.\n- Duplicate-title detection can prevent legitimate reuse of titles without `--allow-duplicate`.\n\n## Verify Steps\n\n- Not run (manual review only).\n\n## Rollback Plan\n\n- Revert the commits for this task to restore previous guard/allowlist behavior.\n\n## Notes\n\n- This task intentionally prioritizes safety over convenience."
+    },
+    {
+      "id": "202601200747-JGAM8S",
+      "title": "Analyze agent workflow delays/risks",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:47:12+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Review agent behavior around task/file operations, identify delay/error hotspots, and propose mitigations."
+    },
+    {
+      "id": "202601200756-3RRHDD",
+      "title": "Roadmap: stabilize agent workflow",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200756-M04JPT",
+        "202601200757-VW6406",
+        "202601200757-DVXJJ7"
+      ],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:56:15+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Define a small roadmap to reduce delays/errors in task+file workflows. Subtasks: 202601200756-M04JPT (align task-creation rules), 202601200757-VW6406 (templates/checklists), 202601200757-DVXJJ7 (agentctl preflight warnings)."
+    },
+    {
+      "id": "202601200756-M04JPT",
+      "title": "Align task-creation authority across ORCHESTRATOR/PLANNER",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [],
+      "commit": {
+        "hash": "c0e037a7766bc7fd2905266d4012177ae21a6a61",
+        "message": "✨ M04JPT align task-creation authority across roles"
+      },
+      "comments": [
+        {
+          "author": "DOCS",
+          "body": "verified: not run (docs-only) | details: alignment matches AGENTS.md and role JSON updates."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:11:05+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Resolve conflicting guidance on who creates top-level tasks; update AGENTS.md and role JSONs to match a single rule.",
+      "doc": "## Summary\n\nAlign task-creation authority: ORCHESTRATOR creates the single top-level tracking task after plan approval; PLANNER creates downstream tasks.\n\n## Scope\n\n- Clarify ORCHESTRATOR vs PLANNER task-creation responsibilities in AGENTS.md.\\n- Update ORCHESTRATOR.json and PLANNER.json to match the shared rule.\n\n## Risks\n\nLow: documentation-only alignment; no runtime behavior changes.\n\n## Verify Steps\n\nNot run (docs-only).\n\n## Rollback Plan\n\nRevert the commit(s) and restore the previous wording in AGENTS.md and role JSONs."
+    },
+    {
+      "id": "202601200757-DVXJJ7",
+      "title": "Agentctl preflight warnings for workflow_mode + PR artifacts",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:57:27+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add lightweight preflight checks/warnings for direct vs branch_pr mismatches and missing PR artifact updates."
+    },
+    {
+      "id": "202601200757-VW6406",
+      "title": "Add task README/comment templates and workflow checklists",
+      "status": "TODO",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T07:57:08+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Provide templates for required task README sections and status comments, plus direct/branch_pr checklists to reduce workflow errors."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "83901a4bc8fd53aba0f5cb77b5af5e250bb7fb84680736319918be98c8a11452"
+    "checksum": "4a12ac806dc3157ff6053f00f4bfd54fd736f532d4d4a12c75b2e5cab32a4fcf"
   }
 }
