@@ -8,9 +8,10 @@ It applies to all agents and the IDE integration that consume recipe bundles.
 - Treat the compiled bundle (`bundle.json`) as the single source of truth.
 - Never invent missing inputs or environment values. Missing data must surface as `Pending Actions`.
 - Do not execute tools implicitly; tool execution is always an explicit, user-confirmed step.
+- Tools declared in the manifest are allowed by default; no extra opt-in is required.
 - Do not read or write outside the allowlists defined by the recipe manifest and bundle policy.
 - No network calls unless the manifest explicitly allows them (default: deny).
-- Never write to `.codex-swarm/tasks/**` or `.codex-swarm/tasks.json`.
+- Never write directly to `.codex-swarm/tasks/**` or `.codex-swarm/tasks.json`; use `agentctl` if a recipe requires task operations and the user confirms.
 
 ## Recipe layout
 
@@ -39,6 +40,14 @@ If a recipe provides a local runner, prefer standard env var names:
 - `RECIPE_RUN_ID` (optional)
 
 Avoid legacy prefixes such as `CYBOS`.
+
+## agentctl usage
+
+Recipes may invoke `python .codex-swarm/agentctl.py` when the scenario/bundle explicitly requires task changes and the user confirms.
+Guardrails still apply:
+- follow AGENTS.md rules;
+- never edit task files directly;
+- report the commands and outcomes back to the ORCHESTRATOR.
 
 ## Scenario prompts
 

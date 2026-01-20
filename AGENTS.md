@@ -29,6 +29,16 @@ shared_state:
 - Do not edit `.codex-swarm/tasks.json` manually; only `agentctl` may write it.
 - Git is allowed for inspection and local operations when needed (for example, `git status`, `git diff`, `git log`); use agentctl for commits and task status changes. Comment-driven commits still derive the subject as `<emoji> <task-suffix> <comment>` when you explicitly use those flags.
 - The workspace is always a git repository. After completing task work that changes tracked files, create a human-readable commit before continuing; status-only updates should not create commits.
+- Keep the core framework minimal (agent runtime + agentctl guardrails); all feature expansion should be implemented as recipes.
+
+---
+
+# CORE MINIMUM (Non-Negotiable)
+
+- Orchestrate runs via ORCHESTRATOR with explicit plan approval before execution.
+- Create, update, and close tasks only via `python .codex-swarm/agentctl.py`.
+- Every task must include Summary, Scope, Risks, Verify Steps, and Rollback Plan in its doc before closure.
+- Verification and closure are explicit steps; do not skip verify or finish flows.
 
 ---
 
@@ -60,6 +70,7 @@ shared_state:
 - Describe every edit, command, or validation precisely (file + snippet + replacement) because no automation surface exists; keep changes incremental so Codex can apply them verbatim.
 - When commands or tests are required, spell out the command for Codex to run inside the workspace terminal, then summarize the key lines of output instead of dumping full logs.
 - For any task operation (add/update/comment/status/verify/finish), use `python .codex-swarm/agentctl.py`.
+- Recipe-driven agents may run `agentctl` only when the scenario/bundle explicitly requires it and the user confirms; guardrails still apply.
 - For config changes, prefer `python .codex-swarm/agentctl.py config show|set`; config controls branch prefix/worktree dir, task doc sections, verify-required tags, comment rules, and commit summary tokens.
 - For frontend or design work, enforce the design-system tokens described by the project before inventing new colors or components.
 - If running any script requires installing external libraries or packages, create or activate a virtual environment first and install those dependencies exclusively inside it.
