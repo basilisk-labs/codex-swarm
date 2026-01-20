@@ -48,6 +48,8 @@ python .codex-swarm/recipes.py bundle show --bundle .codex-swarm/recipes/bundle.
 python .codex-swarm/recipes.py bundle show --bundle .codex-swarm/recipes/bundle.json --recipe <slug>
 ```
 
+Agents should load the summary for discovery and use the per-recipe view for full documentation.
+
 Bundle format (recipes-bundle@1):
 ```json
 {

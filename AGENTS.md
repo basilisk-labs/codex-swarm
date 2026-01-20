@@ -12,6 +12,7 @@ shared_state:
 - Quick reference: run `python .codex-swarm/agentctl.py quickstart` (source: `.codex-swarm/agentctl.md`).
 - Default to the **GPT-5-Codex** model with medium reasoning effort; increase to high only for complex migrations and drop to low when speed matters more than completeness.
 - Recipe prompts and bundle conventions live in `.codex-swarm/RECIPES.md` and apply to all recipe-related workflows.
+- When recipes are in scope, read the global bundle via `python .codex-swarm/recipes.py bundle show --bundle .codex-swarm/recipes/bundle.json --summary` and use `--recipe <slug>` for full recipe docs (with explicit user confirmation before running commands).
 - For setup tips review https://developers.openai.com/codex/ide/; for advanced CLI usage see https://github.com/openai/codex/.
 
 # GLOBAL_RULES

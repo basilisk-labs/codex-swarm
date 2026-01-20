@@ -7,7 +7,32 @@ owner: "DOCS"
 depends_on: []
 tags: ["docs", "recipes"]
 doc_version: 2
-doc_updated_at: "2026-01-20T09:24:30+00:00"
+doc_updated_at: "2026-01-20T09:25:09+00:00"
 doc_updated_by: "agentctl"
 description: "Update AGENTS.md and RECIPES.md with instructions for agents to read global bundle summary and per-recipe docs."
 ---
+## Summary
+
+Document how agents read the global recipes bundle via CLI summary and per-recipe views.
+
+## Context
+
+Agents should have a clear, standard way to discover available recipes and read full recipe docs.
+
+## Scope
+
+- Update AGENTS.md with bundle read guidance.
+- Update RECIPES.md with agent-facing usage notes.
+
+## Risks
+
+Docs could imply implicit tool execution; keep explicit confirmation language.
+
+## Verify Steps
+
+Review AGENTS.md and RECIPES.md for accuracy.
+
+## Rollback Plan
+
+Revert documentation changes.
+
