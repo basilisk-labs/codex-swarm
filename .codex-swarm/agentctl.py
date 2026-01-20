@@ -4441,6 +4441,15 @@ def pr_dir(task_id: str) -> Path:
     return workflow_task_dir(task_id) / "pr"
 
 
+def warn_if_direct_mode_pr_command(action: str, *, quiet: bool) -> None:
+    if quiet or not is_direct_mode():
+        return
+    print(
+        f"⚠️ {action}: workflow_mode='direct' treats PR artifacts as optional; "
+        "use workflow_mode='branch_pr' for enforced PR workflows."
+    )
+
+
 def task_readme_template(task_id: str) -> str:
     title = task_title(task_id)
     header = f"# {task_id}: {title}" if title else f"# {task_id}"
@@ -4801,6 +4810,7 @@ def cmd_pr_open(args: argparse.Namespace) -> None:
     if not task_id:
         die("task_id must be non-empty", code=2)
     author = (args.author or "").strip()
+    warn_if_direct_mode_pr_command("pr open", quiet=bool(args.quiet))
     if is_branch_pr_mode() and not author:
         die("--author is required in workflow_mode='branch_pr' (e.g., --author CODER)", code=2)
     if not author:
@@ -4875,6 +4885,7 @@ def cmd_pr_update(args: argparse.Namespace) -> None:
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
+    warn_if_direct_mode_pr_command("pr update", quiet=bool(args.quiet))
 
     target = pr_dir(task_id)
     if not target.exists():
@@ -4946,6 +4957,16 @@ def pr_check(
         die(f"Unknown branch: {pr_branch}", code=2)
     if not git_branch_exists(base_ref):
         die(f"Unknown base branch: {base_ref}", code=2)
+    if not quiet:
+        meta_head = str(meta.get("head_sha") or "").strip()
+        current_head = git_rev_parse(pr_branch)
+        if meta_head and meta_head != current_head:
+            print(
+                f"⚠️ {task_id}: PR meta head_sha differs from {pr_branch}; "
+                f"run `python .codex-swarm/agentctl.py pr update {task_id}`"
+            )
+        if not meta_head:
+            print(f"⚠️ {task_id}: PR meta head_sha missing; run `python .codex-swarm/agentctl.py pr update {task_id}`")
     parsed_task_id = parse_task_id_from_task_branch(pr_branch)
     if is_branch_pr_mode() and parsed_task_id != task_id:
         die(
@@ -4995,6 +5016,7 @@ def cmd_pr_check(args: argparse.Namespace) -> None:
     task_id = args.task_id.strip()
     if not task_id:
         die("task_id must be non-empty", code=2)
+    warn_if_direct_mode_pr_command("pr check", quiet=bool(args.quiet))
     pr_check(task_id, branch=args.branch, base=args.base, quiet=bool(args.quiet))
 
 
@@ -5045,6 +5067,7 @@ def cmd_pr_note(args: argparse.Namespace) -> None:
         die("--author is required (e.g., --author CODER)", code=2)
     if not body:
         die("--body is required", code=2)
+    warn_if_direct_mode_pr_command("pr note", quiet=bool(args.quiet))
 
     target = pr_dir(task_id)
     review_path = target / "review.md"
