@@ -1,11 +1,12 @@
 ---
 id: "202601200917-FQRW89"
 title: "Update ORCHESTRATOR for global recipes bundle"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["agents", "recipes"]
+commit: { hash: "36dea396b5c5d9e3c99d19c2782c6941c987cb6d", message: "✅ FQRW89 orchestrator: refresh global recipes bundle" }
 doc_version: 2
 doc_updated_at: "2026-01-20T09:18:12+00:00"
 doc_updated_by: "agentctl"

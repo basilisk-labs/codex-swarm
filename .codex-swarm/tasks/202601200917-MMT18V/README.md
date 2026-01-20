@@ -1,11 +1,12 @@
 ---
 id: "202601200917-MMT18V"
 title: "Add global recipes bundle CLI"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["recipes", "cli", "context"]
+commit: { hash: "66fca3f2b17e97b9144a62891e912dcd08a9c343", message: "✅ MMT18V recipes: add global bundle build/show" }
 doc_version: 2
 doc_updated_at: "2026-01-20T09:17:58+00:00"
 doc_updated_by: "agentctl"

@@ -6152,12 +6152,101 @@
       "doc_updated_by": "agentctl",
       "description": "Update RECIPES.md to describe the refresh command and how it updates bundle.json and bundle.md.",
       "doc": "## Summary\n\nDocument the recipe bundle refresh command in RECIPES.md.\n\n## Context\n\nUsers need a stable, documented way to refresh bundle.json without manual compile steps.\n\n## Scope\n\n- Add a Bundle refresh section to RECIPES.md.\n- Explain refresh behavior and bundle.md update rules.\n\n## Risks\n\nDocs could drift from CLI behavior if examples are inaccurate.\n\n## Verify Steps\n\nReview RECIPES.md for accuracy and English-only wording.\n\n## Rollback Plan\n\nRevert RECIPES.md changes.\n\n## Notes\n\nKeep examples minimal and consistent with recipes.py flags."
+    },
+    {
+      "id": "202601200917-0V45NT",
+      "title": "Global recipes bundle with context",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200917-MMT18V",
+        "202601200917-3FGMJZ",
+        "202601200917-FQRW89"
+      ],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "36dea396b5c5d9e3c99d19c2782c6941c987cb6d",
+        "message": "✅ FQRW89 orchestrator: refresh global recipes bundle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:18:20+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Ship a global recipes bundle, its CLI views, and orchestrator refresh guidance.",
+      "doc": "## Summary\n\nShip a global recipes bundle with context and CLI viewing modes.\n\n## Context\n\nAgents should load a single bundle that describes all recipes, allowed commands, and documentation.\n\n## Scope\n\n- Implement bundle build/show in recipes.py.\n- Document bundle format and CLI usage.\n- Update ORCHESTRATOR workflow to refresh the bundle.\n\n## Risks\n\nBundle could be large; enforce context limits and avoid network access.\n\n## Verify Steps\n\nReview recipes.py, RECIPES.md, and ORCHESTRATOR.json for consistency.\n\n## Rollback Plan\n\nRevert code and docs changes.\n\n## Notes\n\nSubtasks: 202601200917-MMT18V, 202601200917-3FGMJZ, 202601200917-FQRW89."
+    },
+    {
+      "id": "202601200917-3FGMJZ",
+      "title": "Document global recipes bundle",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs",
+        "recipes"
+      ],
+      "commit": {
+        "hash": "eb7726cde89b054b7a86c61486e1f2bf161fc263",
+        "message": "✅ 3FGMJZ docs: document global recipes bundle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:18:05+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Document the global recipes bundle format and CLI usage in RECIPES.md.",
+      "doc": "## Summary\n\nDocument the global recipes bundle format and CLI usage.\n\n## Context\n\nUsers need to know how to build the bundle and how to read summary vs recipe details.\n\n## Scope\n\n- Add global bundle section to RECIPES.md.\n- Document bundle build and bundle show commands.\n\n## Risks\n\nDocs could drift from CLI behavior if examples are inaccurate.\n\n## Verify Steps\n\nReview RECIPES.md for accuracy and English-only wording.\n\n## Rollback Plan\n\nRevert RECIPES.md changes."
+    },
+    {
+      "id": "202601200917-FQRW89",
+      "title": "Update ORCHESTRATOR for global recipes bundle",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "recipes"
+      ],
+      "commit": {
+        "hash": "36dea396b5c5d9e3c99d19c2782c6941c987cb6d",
+        "message": "✅ FQRW89 orchestrator: refresh global recipes bundle"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:18:12+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update ORCHESTRATOR workflow to refresh the global recipes bundle on startup.",
+      "doc": "## Summary\n\nUpdate ORCHESTRATOR workflow to refresh the global recipes bundle on startup.\n\n## Context\n\nGlobal bundle should stay current and be refreshed explicitly at run start.\n\n## Scope\n\n- Update ORCHESTRATOR.json to run recipes.py bundle build with confirmation.\n\n## Risks\n\nWording could imply implicit tool execution; must keep explicit confirmation.\n\n## Verify Steps\n\nReview ORCHESTRATOR.json for updated instructions.\n\n## Rollback Plan\n\nRevert ORCHESTRATOR.json changes."
+    },
+    {
+      "id": "202601200917-MMT18V",
+      "title": "Add global recipes bundle CLI",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "cli",
+        "context"
+      ],
+      "commit": {
+        "hash": "66fca3f2b17e97b9144a62891e912dcd08a9c343",
+        "message": "✅ MMT18V recipes: add global bundle build/show"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T09:17:58+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Implement recipes.py bundle build/show to generate a global recipes bundle with context and allowed commands.",
+      "doc": "## Summary\n\nImplement a global recipes bundle CLI that aggregates all recipes with context and allowed commands.\n\n## Context\n\nAgents need a single bundle to know available recipes, scenarios, tools, and context without loading per-scenario bundles.\n\n## Scope\n\n- Add recipes.py bundle build/show commands.\n- Aggregate per-recipe context snapshots, tools, and scenario docs.\n- Default output to .codex-swarm/recipes/bundle.json (not committed).\n- Ignore the bundle file in .gitignore.\n\n## Risks\n\nGlobal bundle size may grow; ensure context limits are enforced and errors are clear.\n\n## Verify Steps\n\nReview recipes.py help and bundle build output structure.\n\n## Rollback Plan\n\nRevert recipes.py and .gitignore changes.\n\n## Notes\n\nNo tool execution; bundle is metadata only."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "508984a6d25c9453d3b049f42a4e8ad34923dbe17cc12942979822052fafe8d5"
+    "checksum": "6b8c2d099d6345d4817921e65a935b8026e105f18f4cc686e25ce4e7e09e8dfd"
   }
 }
