@@ -1,11 +1,12 @@
 ---
 id: "202601200752-H5S8KV"
 title: "Update ORCHESTRATOR recipe bundle refresh"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["agents", "recipes", "workflow"]
+commit: { hash: "ec30cb74b634231a4b8b3b5bc27b72537f056ad8", message: "✅ H5S8KV orchestrator: refresh recipe bundle.json at run start" }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:12:10+00:00"
 doc_updated_by: "agentctl"

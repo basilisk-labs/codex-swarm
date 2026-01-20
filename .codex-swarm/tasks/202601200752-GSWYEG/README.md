@@ -1,11 +1,12 @@
 ---
 id: "202601200752-GSWYEG"
 title: "Document backend routing and Redmine enablement"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["docs", "recipes", "workflow"]
+commit: { hash: "f968c09c52df03372b3362bf7544998c869e49db", message: "✅ GSWYEG docs: clarify backend routing and Redmine enablement" }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:12:03+00:00"
 doc_updated_by: "agentctl"

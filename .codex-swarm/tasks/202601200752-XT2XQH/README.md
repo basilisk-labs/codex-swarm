@@ -1,11 +1,12 @@
 ---
 id: "202601200752-XT2XQH"
 title: "Clarify backend routing and recipe bundle refresh"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["recipes", "workflow"]
+commit: { hash: "ec30cb74b634231a4b8b3b5bc27b72537f056ad8", message: "✅ H5S8KV orchestrator: refresh recipe bundle.json at run start" }
 comments:
   - { author: "ORCHESTRATOR", body: "Subtasks: 202601200752-GSWYEG (docs routing), 202601200752-H5S8KV (orchestrator bundle refresh)." }
 doc_version: 2

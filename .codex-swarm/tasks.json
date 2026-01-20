@@ -5993,12 +5993,83 @@
       "doc_updated_by": "agentctl",
       "description": "Define the migration steps and dependencies for replacing the Redmine backend with a recipe-driven integration.",
       "doc": "## Summary\n\nDefined migration steps and dependencies for moving Redmine backend functionality into a recipe.\n\n## Context\n\nWe want optional Redmine integration without core backend coupling, using recipe-managed enable/disable flows.\n\n## Scope\n\n1) Extract redmine backend files into recipe payload (backend.py, backend.json).\\n2) Add recipe runner (mini-CLI) with install/disable/status/sync/verify commands.\\n3) Update docs to point to recipe enable/disable and remove redmine backend from core listing.\\n4) Validate that local backend remains default; update config via agentctl during install/disable.\\n5) Add recipe to inventory and provide sample inputs schema.\\nDependencies: recipe spec (202601200743-6CQN5R) before implementation; docs update after runner is in place.\n\n## Risks\n\nMigration can break existing Redmine users if install/disable flows are not robust; ensure fallback to local backend is reversible and documented.\n\n## Verify Steps\n\nReview the migration steps with the recipe spec to ensure all required backend behaviors are covered.\n\n## Rollback Plan\n\nKeep core local backend untouched; re-enable local backend via recipe disable command or config reset if migration fails.\n\n## Notes\n\nImplementation task should include updating docs/12-redmine.md to point to the recipe enable/disable workflow."
+    },
+    {
+      "id": "202601200752-GSWYEG",
+      "title": "Document backend routing and Redmine enablement",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "docs",
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "f968c09c52df03372b3362bf7544998c869e49db",
+        "message": "✅ GSWYEG docs: clarify backend routing and Redmine enablement"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:12:03+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Clarify how agentctl routes tasks between local storage and optional Redmine integration, and document enable/disable flow via recipes.",
+      "doc": "## Summary\n\nDocument backend routing and Redmine recipe enable/disable flow.\n\n## Context\n\nClarify how agentctl routes tasks after Redmine activation and reinforce that the local backend remains the base store and cache.\n\n## Scope\n\n- Update docs/07 to emphasize local base store plus remote optionality.\n- Update docs/12 with recipe enable/disable steps and routing flow details.\n\n## Risks\n\nDocs could imply implicit tool execution or confuse canonical vs cache roles.\n\n## Verify Steps\n\nReview docs/07 and docs/12 for accuracy and English-only wording.\n\n## Rollback Plan\n\nRevert the documentation changes.\n\n## Notes\n\nNo code or behavior changes."
+    },
+    {
+      "id": "202601200752-H5S8KV",
+      "title": "Update ORCHESTRATOR recipe bundle refresh",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "ec30cb74b634231a4b8b3b5bc27b72537f056ad8",
+        "message": "✅ H5S8KV orchestrator: refresh recipe bundle.json at run start"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:12:10+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Require ORCHESTRATOR to refresh recipes inventory and bundle.json at run start when recipes are involved (after plan approval).",
+      "doc": "## Summary\n\nUpdate ORCHESTRATOR workflow to refresh recipe bundle.json at run start with explicit confirmation.\n\n## Context\n\nUser expects the orchestrator to keep recipe bundles fresh while still honoring the rule that tool execution requires confirmation.\n\n## Scope\n\n- Update .codex-swarm/agents/ORCHESTRATOR.json workflow to include recipes.py scan and compile before execution.\n- Reference bundle.json location under .codex-swarm/.runs/<run-id>/.\n\n## Risks\n\nThe new step could be misread as an implicit tool run; it must explicitly require confirmation.\n\n## Verify Steps\n\nReview ORCHESTRATOR.json to confirm the added workflow step is accurate and constrained.\n\n## Rollback Plan\n\nRevert the JSON change.\n\n## Notes\n\nNo runtime behavior changes implemented in code."
+    },
+    {
+      "id": "202601200752-XT2XQH",
+      "title": "Clarify backend routing and recipe bundle refresh",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "ec30cb74b634231a4b8b3b5bc27b72537f056ad8",
+        "message": "✅ H5S8KV orchestrator: refresh recipe bundle.json at run start"
+      },
+      "comments": [
+        {
+          "author": "ORCHESTRATOR",
+          "body": "Subtasks: 202601200752-GSWYEG (docs routing), 202601200752-H5S8KV (orchestrator bundle refresh)."
+        }
+      ],
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:12:17+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update docs for backend routing (local base + optional Redmine via recipes) and update ORCHESTRATOR to refresh recipe bundles at run start.",
+      "doc": "## Summary\n\nClarify backend routing and ensure recipes bundle refresh is part of orchestrator startup.\n\n## Context\n\nUser wants local backend to remain the base store, with Redmine and other remotes as optional add-ons, plus an orchestrator workflow that refreshes recipe bundles at run start.\n\n## Scope\n\n- Update docs/07 and docs/12 to describe routing and Redmine enable/disable behavior.\n- Update ORCHESTRATOR workflow to refresh recipes inventory and bundle.json before execution (with confirmation).\n\n## Risks\n\nAmbiguous wording could lead to tool execution without explicit confirmation.\n\n## Verify Steps\n\nReview docs/07, docs/12, and ORCHESTRATOR.json for accuracy and consistency.\n\n## Rollback Plan\n\nRevert the documentation and workflow changes.\n\n## Notes\n\nNo code execution changes beyond documentation updates."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "265595f4d7bacf8762e9d9512f81c2888a9e16d4ed9227f14e518b1614bde522"
+    "checksum": "6bb42a458f48a8250a567b47cd1eca7e65a1f562be94335830042e7754f6d941"
   }
 }
