@@ -4,7 +4,7 @@ title: "Set priority for retrospective tasks"
 status: "DONE"
 priority: "normal"
 owner: "PLANNER"
-depends_on: ["[\"202601191449-YN9FWW\"]"]
+depends_on: ["202601191449-YN9FWW"]
 tags: ["tasks", "backlog"]
 commit: { hash: "872134c71b4267716ff48a35bccd34c9b9825c53", message: "✨ XTMQRZ normalize task priorities to low/normal/high" }
 comments:

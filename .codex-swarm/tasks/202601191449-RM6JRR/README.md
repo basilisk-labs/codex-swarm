@@ -4,7 +4,7 @@ title: "Normalize status indicators in docs"
 status: "DONE"
 priority: "normal"
 owner: "DOCS"
-depends_on: ["[\"202601191449-YN9FWW\"]"]
+depends_on: ["202601191449-YN9FWW"]
 tags: ["docs", "workflow"]
 commit: { hash: "8e1f29d9eff0ec9608ba8f7826ee08c14dfe1633", message: "✨ YN9FWW plan status normalization and retro priority tasks" }
 comments:
