@@ -6064,12 +6064,100 @@
       "doc_updated_by": "agentctl",
       "description": "Update docs for backend routing (local base + optional Redmine via recipes) and update ORCHESTRATOR to refresh recipe bundles at run start.",
       "doc": "## Summary\n\nClarify backend routing and ensure recipes bundle refresh is part of orchestrator startup.\n\n## Context\n\nUser wants local backend to remain the base store, with Redmine and other remotes as optional add-ons, plus an orchestrator workflow that refreshes recipe bundles at run start.\n\n## Scope\n\n- Update docs/07 and docs/12 to describe routing and Redmine enable/disable behavior.\n- Update ORCHESTRATOR workflow to refresh recipes inventory and bundle.json before execution (with confirmation).\n\n## Risks\n\nAmbiguous wording could lead to tool execution without explicit confirmation.\n\n## Verify Steps\n\nReview docs/07, docs/12, and ORCHESTRATOR.json for accuracy and consistency.\n\n## Rollback Plan\n\nRevert the documentation and workflow changes.\n\n## Notes\n\nNo code execution changes beyond documentation updates."
+    },
+    {
+      "id": "202601200825-37MWVG",
+      "title": "Auto-refresh recipe bundles in code",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [
+        "202601200825-9GKTY9",
+        "202601200825-RDDNMZ",
+        "202601200825-P6118N"
+      ],
+      "tags": [
+        "recipes",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "90401fcb0b8a347e9d7ec4d88eea5febb58b3c72",
+        "message": "✅ P6118N orchestrator: refresh bundle.json on startup"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:30:16+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Add a recipes.py refresh command, document it, and update ORCHESTRATOR to use it for startup bundle refreshes.",
+      "doc": "## Summary\n\nShip automatic recipe bundle refresh support in code and docs.\n\n## Context\n\nThe user requested auto-refresh of bundle.json at orchestrator start, backed by code and documentation.\n\n## Scope\n\n- Implement recipes.py refresh.\n- Document refresh usage in RECIPES.md.\n- Update ORCHESTRATOR workflow to prefer refresh with compile fallback.\n\n## Risks\n\nConflicting instructions could lead to tool execution without explicit confirmation.\n\n## Verify Steps\n\nReview recipes.py, RECIPES.md, and ORCHESTRATOR.json for consistency.\n\n## Rollback Plan\n\nRevert the code and documentation changes.\n\n## Notes\n\nSubtasks: 202601200825-9GKTY9, 202601200825-RDDNMZ, 202601200825-P6118N."
+    },
+    {
+      "id": "202601200825-9GKTY9",
+      "title": "Add recipes bundle refresh command",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "CODER",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "cli"
+      ],
+      "commit": {
+        "hash": "eae47d31c3f9fde6a8d986b6f416b4238868b944",
+        "message": "✅ 9GKTY9 recipes: add bundle refresh command"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:29:53+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Implement recipes.py refresh to rebuild an existing bundle.json using stored recipe, scenario, and inputs.",
+      "doc": "## Summary\n\nAdd a refresh command to recipes.py that rebuilds an existing bundle.json from its stored recipe, scenario, and inputs.\n\n## Context\n\nThe orchestrator should be able to refresh bundles in code without rerunning full compile when a bundle already exists.\n\n## Scope\n\n- Add a refresh subcommand to recipes.py.\n- Reuse stored bundle metadata to compile in place.\n- Update bundle.md if a sibling file exists or an explicit --out-md is provided.\n\n## Risks\n\nRefreshing a malformed bundle could fail or produce partial output; ensure validation is strict and errors are clear.\n\n## Verify Steps\n\nReview recipes.py for the refresh command behavior and ensure it does not execute tools.\n\n## Rollback Plan\n\nRevert recipes.py changes.\n\n## Notes\n\nNo changes to recipe manifests."
+    },
+    {
+      "id": "202601200825-P6118N",
+      "title": "Update ORCHESTRATOR to use bundle refresh",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "recipes"
+      ],
+      "commit": {
+        "hash": "90401fcb0b8a347e9d7ec4d88eea5febb58b3c72",
+        "message": "✅ P6118N orchestrator: refresh bundle.json on startup"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:30:07+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Revise ORCHESTRATOR workflow to use recipes.py refresh when a bundle exists, falling back to scan/compile otherwise.",
+      "doc": "## Summary\n\nUpdate ORCHESTRATOR workflow to refresh bundles via recipes.py refresh when a bundle exists.\n\n## Context\n\nAuto-refresh should be explicit and code-backed, without implying implicit tool execution.\n\n## Scope\n\n- Replace scan+compile-only guidance with scan+refresh (fallback to compile).\n- Keep confirmation requirement for any tool execution.\n\n## Risks\n\nThe workflow change could be misread as implicit execution; wording must remain explicit.\n\n## Verify Steps\n\nReview ORCHESTRATOR.json for the updated refresh guidance.\n\n## Rollback Plan\n\nRevert ORCHESTRATOR.json.\n\n## Notes\n\nNo runtime behavior changes beyond documented workflow."
+    },
+    {
+      "id": "202601200825-RDDNMZ",
+      "title": "Document recipe bundle refresh",
+      "status": "DONE",
+      "priority": "med",
+      "owner": "DOCS",
+      "depends_on": [],
+      "tags": [
+        "recipes",
+        "docs"
+      ],
+      "commit": {
+        "hash": "97ee8149d897bc6544a629c9623b3b7cb0e19cd2",
+        "message": "✅ RDDNMZ docs: document bundle refresh"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T08:29:59+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update RECIPES.md to describe the refresh command and how it updates bundle.json and bundle.md.",
+      "doc": "## Summary\n\nDocument the recipe bundle refresh command in RECIPES.md.\n\n## Context\n\nUsers need a stable, documented way to refresh bundle.json without manual compile steps.\n\n## Scope\n\n- Add a Bundle refresh section to RECIPES.md.\n- Explain refresh behavior and bundle.md update rules.\n\n## Risks\n\nDocs could drift from CLI behavior if examples are inaccurate.\n\n## Verify Steps\n\nReview RECIPES.md for accuracy and English-only wording.\n\n## Rollback Plan\n\nRevert RECIPES.md changes.\n\n## Notes\n\nKeep examples minimal and consistent with recipes.py flags."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "6bb42a458f48a8250a567b47cd1eca7e65a1f562be94335830042e7754f6d941"
+    "checksum": "508984a6d25c9453d3b049f42a4e8ad34923dbe17cc12942979822052fafe8d5"
   }
 }

@@ -1,11 +1,12 @@
 ---
 id: "202601200825-P6118N"
 title: "Update ORCHESTRATOR to use bundle refresh"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["agents", "recipes"]
+commit: { hash: "90401fcb0b8a347e9d7ec4d88eea5febb58b3c72", message: "✅ P6118N orchestrator: refresh bundle.json on startup" }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:30:07+00:00"
 doc_updated_by: "agentctl"

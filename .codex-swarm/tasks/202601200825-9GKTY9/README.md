@@ -1,11 +1,12 @@
 ---
 id: "202601200825-9GKTY9"
 title: "Add recipes bundle refresh command"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "CODER"
 depends_on: []
 tags: ["recipes", "cli"]
+commit: { hash: "eae47d31c3f9fde6a8d986b6f416b4238868b944", message: "✅ 9GKTY9 recipes: add bundle refresh command" }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:29:53+00:00"
 doc_updated_by: "agentctl"

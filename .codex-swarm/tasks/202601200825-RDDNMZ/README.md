@@ -1,11 +1,12 @@
 ---
 id: "202601200825-RDDNMZ"
 title: "Document recipe bundle refresh"
-status: "TODO"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
 depends_on: []
 tags: ["recipes", "docs"]
+commit: { hash: "97ee8149d897bc6544a629c9623b3b7cb0e19cd2", message: "✅ RDDNMZ docs: document bundle refresh" }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:29:59+00:00"
 doc_updated_by: "agentctl"
