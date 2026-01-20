@@ -32,6 +32,15 @@ python .codex-swarm/recipes.py scan --recipes-dir .codex-swarm/recipes --output 
 ```
 Commit `docs/recipes-inventory.json` and refresh it whenever manifests change.
 
+## Bundle refresh
+
+To refresh an existing bundle in place:
+```bash
+python .codex-swarm/recipes.py refresh --bundle .codex-swarm/.runs/<run-id>/bundle.json
+```
+The refresh command re-compiles the bundle using the stored `recipe.slug`, `scenario.id`, and `inputs`.
+If a sibling `bundle.md` exists, it is updated automatically; use `--out-md` to write elsewhere.
+
 ## Runner environment variables
 
 If a recipe provides a local runner, prefer standard env var names:

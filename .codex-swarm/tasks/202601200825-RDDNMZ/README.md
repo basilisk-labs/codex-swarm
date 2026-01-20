@@ -7,7 +7,36 @@ owner: "DOCS"
 depends_on: []
 tags: ["recipes", "docs"]
 doc_version: 2
-doc_updated_at: "2026-01-20T08:25:41+00:00"
+doc_updated_at: "2026-01-20T08:29:59+00:00"
 doc_updated_by: "agentctl"
 description: "Update RECIPES.md to describe the refresh command and how it updates bundle.json and bundle.md."
 ---
+## Summary
+
+Document the recipe bundle refresh command in RECIPES.md.
+
+## Context
+
+Users need a stable, documented way to refresh bundle.json without manual compile steps.
+
+## Scope
+
+- Add a Bundle refresh section to RECIPES.md.
+- Explain refresh behavior and bundle.md update rules.
+
+## Risks
+
+Docs could drift from CLI behavior if examples are inaccurate.
+
+## Verify Steps
+
+Review RECIPES.md for accuracy and English-only wording.
+
+## Rollback Plan
+
+Revert RECIPES.md changes.
+
+## Notes
+
+Keep examples minimal and consistent with recipes.py flags.
+
