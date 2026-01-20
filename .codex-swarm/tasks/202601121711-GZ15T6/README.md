@@ -1,15 +1,16 @@
 ---
 id: "202601121711-GZ15T6"
 title: "Polish cleanup scripts and tasks viewer"
-status: "DOING"
+status: "DONE"
 priority: "normal"
 owner: "REDMINE"
 depends_on: []
 tags: ["cleanup", "ui"]
 verify: null
-commit: null
+commit: { hash: "bce3d67d9cdd679eb3a63cc975c0a80a288c9509", message: "✨ GZ15T6 record cleanup/viewer polish completion" }
 comments:
   - { author: "CODER", body: "Polish tasks viewer UI (iOS palette, sticky header, order toggle, tooltip tags, metadata) and update clean scripts to remove dev files." }
+  - { author: "REDMINE", body: "verified: not run (docs-only) | details: cleanup scripts and viewer polish already present in repo." }
 doc_version: 2
 doc_updated_at: "2026-01-20T08:48:17+00:00"
 doc_updated_by: "agentctl"
