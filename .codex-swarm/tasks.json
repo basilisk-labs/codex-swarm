@@ -6307,12 +6307,33 @@
       "doc_updated_by": "agentctl",
       "description": "Ensure agents/orchestrator read the global recipes bundle via CLI summary and per-recipe docs.",
       "doc": "## Summary\n\nConnect agents to the global recipes bundle via CLI summary and per-recipe views.\n\n## Context\n\nAgents need a standard discovery path for available recipes and detailed docs.\n\n## Scope\n\n- Add bundle read guidance to AGENTS.md and RECIPES.md.\n- Update ORCHESTRATOR workflow to read bundle summary and per-recipe docs.\n\n## Risks\n\nDocs could be misread as implicit execution; keep explicit confirmation language.\n\n## Verify Steps\n\nReview AGENTS.md, RECIPES.md, and ORCHESTRATOR.json for consistency.\n\n## Rollback Plan\n\nRevert docs and workflow changes."
+    },
+    {
+      "id": "202601201253-0D9TS4",
+      "title": "Ignore untracked files in agent behavior",
+      "status": "DONE",
+      "priority": "normal",
+      "owner": "ORCHESTRATOR",
+      "depends_on": [],
+      "tags": [
+        "agents",
+        "workflow"
+      ],
+      "commit": {
+        "hash": "50d8ca97ab3fbd10d3a49bc149523701321904b9",
+        "message": "✨ 0D9TS4 normalize task doc headings"
+      },
+      "doc_version": 2,
+      "doc_updated_at": "2026-01-20T12:55:13+00:00",
+      "doc_updated_by": "agentctl",
+      "description": "Update agent instructions so new/untracked repo files are ignored and only task-owned changes are committed.",
+      "doc": "## Summary\nEnsure agents ignore new/untracked repository files and commit only their own changes.\n\n## Context\nCurrent guidance can treat unexpected files as blockers, causing agents to stop or react to unrelated additions.\n\n## Scope\n- Update shared agent guidance to ignore untracked/new files created by others.\n- Clarify that clean status requirements exclude unrelated untracked files.\n- Reinforce commit discipline to stage/commit only task-owned files.\n\n## Risks\n- Agents might overlook a relevant new file if it is actually part of their task.\n\n## Verify Steps\n- Review updated AGENTS.md guidance for the new rule.\n\n## Rollback Plan\n- Revert the AGENTS.md edits.\n\n## Notes\n- No code behavior changes; documentation-only."
     }
   ],
   "meta": {
     "schema_version": 1,
     "managed_by": "agentctl",
     "checksum_algo": "sha256",
-    "checksum": "0b5e89f2e5c80ea0ed532f781f011c2297b9e52f368b758c909cdec0ff0aaa72"
+    "checksum": "68c7a47406790671ff15621d9a308342779859648faf69f25cd2db36d065ff69"
   }
 }

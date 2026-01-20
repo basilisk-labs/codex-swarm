@@ -1,11 +1,12 @@
 ---
 id: "202601201253-0D9TS4"
 title: "Ignore untracked files in agent behavior"
-status: "TODO"
+status: "DONE"
 priority: "normal"
 owner: "ORCHESTRATOR"
 depends_on: []
 tags: ["agents", "workflow"]
+commit: { hash: "50d8ca97ab3fbd10d3a49bc149523701321904b9", message: "✨ 0D9TS4 normalize task doc headings" }
 doc_version: 2
 doc_updated_at: "2026-01-20T12:55:13+00:00"
 doc_updated_by: "agentctl"
