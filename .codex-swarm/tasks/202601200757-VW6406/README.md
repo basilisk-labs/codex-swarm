@@ -4,7 +4,7 @@ title: "Add task README/comment templates and workflow checklists"
 status: "TODO"
 priority: "med"
 owner: "DOCS"
-depends_on: ["[\"202601200756-3RRHDD\"]"]
+depends_on: []
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-20T07:57:08+00:00"

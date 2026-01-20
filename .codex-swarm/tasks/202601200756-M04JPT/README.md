@@ -4,7 +4,7 @@ title: "Align task-creation authority across ORCHESTRATOR/PLANNER"
 status: "TODO"
 priority: "med"
 owner: "DOCS"
-depends_on: ["[\"202601200756-3RRHDD\"]"]
+depends_on: []
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-20T08:11:05+00:00"

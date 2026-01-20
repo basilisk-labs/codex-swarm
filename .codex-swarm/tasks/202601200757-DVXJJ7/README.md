@@ -4,7 +4,7 @@ title: "Agentctl preflight warnings for workflow_mode + PR artifacts"
 status: "TODO"
 priority: "med"
 owner: "CODER"
-depends_on: ["[\"202601200756-3RRHDD\"]"]
+depends_on: []
 tags: []
 doc_version: 2
 doc_updated_at: "2026-01-20T07:57:27+00:00"
